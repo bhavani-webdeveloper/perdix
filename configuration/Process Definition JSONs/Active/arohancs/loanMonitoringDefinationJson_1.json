@@ -1,0 +1,1327 @@
+{
+    "stages": [{
+        "order": 1,
+        "code": "LUCSchedule",
+        "name": "LUC Schedule",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 2,
+        "code": "LUCReschedule",
+        "name": "LUC Reschedule",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    },{
+        "order": 3,
+        "code": "LUCEscalate",
+        "name": "LUC Escalate",
+        "stageType": "CAPTURE",
+        "allowedRoles": [
+            "WM"
+        ]
+    }],
+    "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Comment",
+        "required": [
+            "loanMonitoringDetails"
+        ],
+        "properties": {
+            "loanMonitoringDetails": {
+                "title": "Loan Monitoring Details",
+                "type": "object",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "loanAmount"
+                    ],
+                    "properties": {
+                        "loanSeries": {
+                            "title": "Loan Series",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                         "centreId": {
+                           "title": "Centre Id",
+                           "type": "number",
+                           "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                         },
+                         "branchName": {
+                            "title": "Branch Name",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                          },
+
+                        "loanProductCode": {
+                            "title": "Loan Product Code",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanProductName": {
+                            "title": "loanProductName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanPurposeCategory": {
+                            "title": "loanPurposeCategory",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanPurpose": {
+                            "title": "Loan Purpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "currentStage": {
+                            "title": "current Stage",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanAmount": {
+                            "title": "loanAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "disbursementDate": {
+                            "title": "Disbursement Date",
+                            "type": "date",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "numberOfAssetsDelivered": {
+                            "title": "numberOfAssetsDelivered",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "amountUtilizedForAssetsPurchase": {
+                            "title": "amountUtilizedForAssetsPurchase",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "percentage": {
+                            "title": "percentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "totalCreationAssetValue": {
+                            "title": "totalCreationAssetValue",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "isAssetsOrdered": {
+                            "title": "isAssetsOrdered",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "reasonForNotOrderingAssets": {
+                            "title": "reasonForNotOrderingAssets",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucDone": {
+                            "title": "Luc Done",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucRescheduled": {
+                            "title": "lucRescheduled",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucRescheduleReason": {
+                            "title": "lucRescheduleReason",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucRescheduledDate": {
+                            "title": "lucRescheduledDate",
+                            "type": "date",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucEscalated": {
+                            "title": "lucEscalated",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucEscalatedReason": {
+                            "title": "lucEscalatedReason",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanId": {
+                            "title": "loanId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "accountNumber": {
+                            "title": "accountNumber",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "customerId": {
+                            "title": "customerId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "customerName": {
+                            "title": "customerName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "urn": {
+                            "title": "urn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "socialImpactDetailsId": {
+                            "title": "socialImpactDetailsId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "proprietoryName": {
+                            "title": "proprietoryName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "proprietoryUrn": {
+                            "title": "proprietoryUrn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "address": {
+                            "title": "address",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 350,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "assignedToUser": {
+                            "title": "assignedToUser",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "lucDate": {
+                            "title": "lucDate",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "bussinessName": {
+                            "title": "bussinessName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanAmountUsed": {
+                            "title": "loanAmountUsed",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "loanAmountPurpose": {
+                            "title": "loanAmountPurpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "verifiedBy": {
+                            "title": "verifiedBy",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+
+                        "amountUsedPercentage": {
+                            "title": "amountUsedPercentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+
+                        "intendedPurposeAmount": {
+                            "title": "intendedPurposeAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+
+                        "intendedPurposePercentage": {
+                            "title": "intendedPurposePercentage",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+
+                        "nonIntendedPurposeAmount": {
+                            "title": "nonIntendedPurposeAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+
+                        "nonIntendedPurposePercentage": {
+                            "title": "nonIntendedPurposePercentage",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "nonIntendedPurposeAmountSpentOn": {
+                            "title": "nonIntendedPurposeAmountSpentOn",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "repayedDebitAmount": {
+                            "title": "repayedDebitAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "monthlyInterestForDebit": {
+                            "title": "monthlyInterestForDebit",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "remainingAmountPurpose": {
+                            "title": "remainingAmountPurpose",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "remainingAmountUtilizedOn": {
+                            "title": "remainingAmountUtilizedOn",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "branchName": {
+                            "title": "branchName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "udf2": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "udf3": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf4": {
+                            "title": "udf4",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf5": {
+                            "title": "udf5",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf6": {
+                            "title": "udf6",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf7": {
+                            "title": "udf7",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf8": {
+                            "title": "udf8",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf9": {
+                            "title": "udf9",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf10": {
+                            "title": "udf10",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf11": {
+                            "title": "udf11",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf12": {
+                            "title": "udf12",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf13": {
+                            "title": "udf13",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf14": {
+                            "title": "udf14",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf15": {
+                            "title": "udf15",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf16": {
+                            "title": "udf16",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf17": {
+                            "title": "udf17",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf18": {
+                            "title": "udf18",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf19": {
+                            "title": "udf19",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"udf20": {
+                            "title": "udf20",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"photoImageId1": {
+                            "title": "photoImageId1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"photoImageId2": {
+                            "title": "photoImageId2",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"photoImageId3": {
+                            "title": "photoImageId3",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						
+						"photoImageId4": {
+                            "title": "photoImageId4",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"photoImageId5": {
+                            "title": "photoImageId5",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+						"isBiometricDone": {
+                            "title": "isBiometricDone",
+                            "type": "boolean",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "centreId": {
+                            "title": "centreId",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "presentOutStandingLoanAmount": {
+                            "title": "presentOutStandingLoanAmount",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "numberOfInstallmentsDue": {
+                            "title": "numberOfInstallmentsDue",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "statusOfLoanAccount": {
+                            "title": "statusOfLoanAccount",
+                            "type": "string",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        }
+                    }
+                }
+            },
+            "socialImpactDetails": {
+                "title": "Social Impact Details",
+                "type": "object",
+                "items": {
+                    "type": "object",
+                    "required": [
+                  
+                    ],
+                    "properties": {
+                        "totalNumberOfMen": {
+                            "title": "totalNumberOfMen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "averageSalaryOfMen": {
+                            "title": "averageSalaryOfMen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "menPartTimeEmployee": {
+                            "title": "menPartTimeEmployee",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "menFullTimeEmployee": {
+                            "title": "menFullTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "avgSkillLevelOfMen": {
+                            "title": "avgSkillLevelOfMen",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfFirstJobsMen": {
+                            "title": "noOfFirstJobsMen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "totalNumberOfWomen": {
+                            "title": "totalNumberOfWomen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "averageSalaryOfWomen": {
+                            "title": "averageSalaryOfWomen",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "womenPartTimeEmployee": {
+                            "title": "womenPartTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "womenFullTimeEmployee": {
+                            "title": "womenFullTimeEmployee",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "avgSkillLevelOfWomen": {
+                            "title": "avgSkillLevelOfWomens",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfFirstJobsWomen": {
+                            "title": "noOfFirstJobsWomen",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "preLoanMonthlyRevenue": {
+                            "title": "preLoanMonthlyRevenue",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "preLoanMonthlyNetIncome": {
+                            "title": "preLoanMonthlyNetIncome",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "preLoanProprietorSalary": {
+                            "title": "preLoanProprietorSalary",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "preLoanNumberOfCustomersOrBuyers": {
+                            "title": "preLoanNumberOfCustomersOrBuyers",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "postLoanMonthlyRevenue": {
+                            "title": "postLoanMonthlyRevenue",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "postLoanMonthlyNetIncome": {
+                            "title": "postLoanMonthlyNetIncome",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "postLoanProprietorSalary": {
+                            "title": "postLoanProprietorSalary",
+                            "type": "number",
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "postLoanNumberOfCustomersOrBuyers": {
+                            "title": "postLoanNumberOfCustomersOrBuyers",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfJobsAdded": {
+                            "title": "noOfJobsAdded",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfWomenInAddedJobs": {
+                            "title": "noOfWomenInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfMenInAddedJobs": {
+                            "title": "noOfMenInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "noOfFreshersInAddedJobs": {
+                            "title": "noOfFreshersInAddedJobs",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "avgSalaryOfNewJoinees": {
+                            "title": "avgSalaryOfNewJoinees",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        }
+                    }
+                }
+            },
+            "machineDetails": {
+                "title": "Machine Details",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                     ],
+                    "properties": {
+                        "make": {
+                            "title": "make",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "type": {
+                            "title": "type",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "year": {
+                            "title": "year",
+                            "type": "date",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "model": {
+                            "title": "model",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "serialNumber": {
+                            "title": "serialNumber",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "assetType": {
+                            "title": "assetType",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "hypothecationLabelBeenApplied": {
+                            "title": "hypothecationLabelBeenApplied",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "companyNameInOriginalInvoice": {
+                            "title": "companyNameInOriginalInvoice",
+                            "type": "number",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "udf1": {
+                            "title": "udf1",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "udf2": {
+                            "title": "udf2",
+                            "type": "string",
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "hypothecatedTo": {
+                            "title": "hypothecatedTo",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        }
+                    }
+                }
+            },
+			"loanMonitoringDocuments": {
+                "title": "Loan Monitoring Documents",
+                "type": "array",
+                "maxItems": null,
+                "items": {
+                    "type": "object",
+                    "required": [
+                     ],
+                    "properties": {
+                        "documentName": {
+                            "title": "documentName",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "documentSl": {
+                            "title": "Document Serial Number",
+                            "type": "number",
+                            "minLength": 1,
+                            "maxLength": 4,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        },
+                        "documentId": {
+                            "title": "Document File Id",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                             "captureStages": [
+                                "LUCSchedule",
+                                "LUCEscalate",
+                                "LUCReschedule"
+                                
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
