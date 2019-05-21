@@ -220,7 +220,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
-                    titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                    titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Member')",
                     startEmpty: true,
                     items: [
                         {

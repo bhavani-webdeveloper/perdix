@@ -403,7 +403,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "familyDetails.familyMembers": {
                             "startEmpty":true,
-                            titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                            titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Member')",
                             onArrayAdd: function(value, form, model, formCtrl, event) {
                                 if ((model.customer.familyMembers.length - 1) === 0) {
                                     model.customer.familyMembers[0].relationShip = 'Self';

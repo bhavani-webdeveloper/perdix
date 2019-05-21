@@ -639,7 +639,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                     "title": "T_FAMILY_DETAILS",
                     "items": [{
                         key: "customer.familyMembers",
-                        titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                        titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Member')",
                         type: "array",
                         items: [{
                             key: "customer.familyMembers[].customerId",
