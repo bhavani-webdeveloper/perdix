@@ -2656,7 +2656,7 @@ define([],function(){
                                 if(model.loanAccount.cbCheckIgnore == "YES") {
                                     irfNavigator.goBack();
                                 } else {
-                                    if(model.currentStage == 'ScreeningReview'){
+                                    if(model.currentStage == 'ScreeningReview' || 'Screening'){
                                         // irfNavigator.go({
                                         //     'state': 'Page.Adhoc',
                                         //     'pageName': 'shramsarathi.dashboard.loans.LoanOriginationDashboard',
