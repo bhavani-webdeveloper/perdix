@@ -871,6 +871,14 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                             condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
                             title: "Enroll as customer",
                             onClick: function(model, formCtrl, context) {
+                            if(model.customer.urnNo){
+                                PageHelper.showErrors({
+                                    'data': {
+                                        'error': "Existing customer cannot be enrolled again"
+                                    }
+                                });
+                            }
+                            else{
                                 model.family = {};
                                 model.family = model.customer;
                                 model.family.familydata = model.customer.familyMembers[context.arrayIndex];
@@ -880,6 +888,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                                     pageData: model.family
                                     //pageData:model.customer.familyMembers[context.arrayIndex]
                                 });
+                            }
                             }
                         }, {
                             key: "customer.familyMembers[].incomes",
