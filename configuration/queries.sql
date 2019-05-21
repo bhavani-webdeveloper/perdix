@@ -100,3 +100,6 @@ getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_manda
 getInsuranceDocuments.list = SELECT product_code as `productCode`,document_code as `documentCode`,is_mandatory as `isMandatory` from insurance_documents_master where product_code = :productCode
 getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id
 productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
+customerDetails.list = SELECT l.customer_id as `customerId` , lcr.customer_id  as `applicantCustomerId`, c.customer_type as `customerType` FROM `loan_accounts` l 
+left join loan_customer_relation lcr on l.id=lcr.loan_id AND lcr.relation='Applicant' left join customer c on l.customer_id=c.id WHERE l.id = :loan_id
+customerInfo.list = SELECT * from customer where id = :customer_id
