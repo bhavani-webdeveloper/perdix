@@ -2018,11 +2018,17 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "orderNo": 23,
                         "enumCode": "no_of_payments"
                     },
-                    "Liabilities.liabilities.liabilityLoanPurpose": {
-                        "type": "lov",
-                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
-                        "autolov": true
+                    "Liabilities.liabilities.liabilityLoanPurpose":{
+                        "title":"LOAN_PURPOSE",
+                        "key":"customer.liabilities[].liabilityLoanPurpose",
+                        "type":"select",
+                        "enumCode":"liability_loan_purpose",
                     },
+                    // "Liabilities.liabilities.liabilityLoanPurpose": {
+                    //     "type": "lov",
+                    //     "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                    //     "autolov": true
+                    // },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {

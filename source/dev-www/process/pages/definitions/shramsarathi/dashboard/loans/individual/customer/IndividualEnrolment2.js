@@ -341,7 +341,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
-                                    "readonly":true
+                                    "readonly":false
                                 },
                                 "IndividualInformation.caste":{
                                     "enumcode": "caste",
@@ -2108,7 +2108,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         // "type": "lov",
                         // "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
                         // "autolov": true,
-                        "title":"LOAN_PURPOSE_2",
+                        "title":"LOAN_PURPOSE",
                         "key":"customer.liabilities[].liabilityLoanPurpose",
                         "type":"select",
                         "enumCode":"liability_loan_purpose",

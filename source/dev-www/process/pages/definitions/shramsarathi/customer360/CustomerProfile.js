@@ -198,7 +198,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME",
-                                    "readonly":true
+                                    "readonly":false
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
@@ -1977,10 +1977,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                      "enumCode": "no_of_payments" 
                     },
                     "Liabilities.liabilities.liabilityLoanPurpose":{
-                        "type": "lov",
-                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
-                        "autolov": true
+                        "title":"LOAN_PURPOSE",
+                        "key":"customer.liabilities[].liabilityLoanPurpose",
+                        "type":"select",
+                        "enumCode":"liability_loan_purpose",
                     },
+                    // "Liabilities.liabilities.liabilityLoanPurpose":{
+                    //     "type": "lov",
+                    //     "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                    //     "autolov": true
+                    // },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
