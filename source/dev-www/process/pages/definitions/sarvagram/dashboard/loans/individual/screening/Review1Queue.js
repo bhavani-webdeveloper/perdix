@@ -1,6 +1,8 @@
-irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.Review1Queue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
+define({
+    pageUID: "sarvagram.dashboard.loans.individual.screening.Review1Queue",
+    pageType: "Engine",
+	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
+	$pageFn:	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		
 		return {
 			"type": "search-list",
@@ -199,4 +201,4 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 			}
 		};
 	}
-]);
+})
