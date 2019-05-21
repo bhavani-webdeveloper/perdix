@@ -2105,9 +2105,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
 
                     "Liabilities.liabilities.liabilityLoanPurpose":{
-                        "type": "lov",
-                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
-                        "autolov": true
+                        // "type": "lov",
+                        // "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                        // "autolov": true,
+                        "title":"LOAN_PURPOSE_2",
+                        "key":"customer.liabilities[].liabilityLoanPurpose",
+                        "type":"select",
+                        "enumCode":"liability_loan_purpose",
                     },
                     "Liabilities.liabilities.frequencyOfInstallment":{
                         "required":false,
