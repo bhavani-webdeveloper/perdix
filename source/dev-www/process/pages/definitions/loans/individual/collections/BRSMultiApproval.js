@@ -236,18 +236,18 @@ define({
                                     }
                                     siteCode = SessionStore.getGlobalSetting('siteCode');
                                     var reqData = { "loanCollectionSummaryDTOs": temp };
-                                    if(siteCode == 'witfin'){
-                                    if (instrument == 'CASH') {
-                                        reqData.stage = 'Deposit';
+                                    if (siteCode == 'witfin') {
+                                        if (instrument == 'CASH') {
+                                            reqData.stage = 'Deposit';
+                                        } else {
+                                            reqData.stage = 'Rejected';
+                                        }
                                     } else {
-                                        reqData.stage = 'Rejected';
-                                    }
-                                    }else{
-                                    if (instrument == 'CASH'|| instrument == 'CHQ') {
-                                        reqData.stage = 'Deposit';
-                                    } else {
-                                        reqData.stage = 'Rejected';
-                                    }
+                                        if (instrument == 'CASH' || instrument == 'CHQ') {
+                                            reqData.stage = 'Deposit';
+                                        } else {
+                                            reqData.stage = 'Rejected';
+                                        }
                                     }
 
                                     Utils.confirm("Are You Sure?")
