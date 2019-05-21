@@ -48,7 +48,12 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         }
                     },
                     "leadInteractions.leadInteractions.customerResponse":{
-                        "required": true
+                        "required": false,
+                        "type": "select",
+                        "titleMap":{
+                            "Interested":"Interested",
+                            "NotInterested":"NotInterested"
+                        }
                     },
                     "sourceDetails.agentName": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'BUYING / SELLING AGENT(BROKER)'",
@@ -73,7 +78,17 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "orderNo": 60
                     },
                     "productDetails.loanPurpose1": {
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "titleMap": {
+                            "Business Loan": "Business Loan",
+                            "Farm Loan": "Farm Loan",
+                            "Housing Loan": "Housing Loan",
+                            "Personal Loan": "Personal Loan"
+                        }
+                    },
+                    "leadProfile.contactDetails.alternateMobileNo":{
+                        "required": true,
+                        "title": "WHATSAPP_NUMBER"
                     },
                     "productDetails.loanPurpose2": {
                         "orderNo": 30
@@ -88,6 +103,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "type": "date",
                         "onChange": "actions.changeStatus(modelValue, form, model)"
                     },
+                    "productDetails.productEligibility.eligibleForProduct":{
+                        "required": false
+                    },
                     "productDetails.productRejectionReason":{
                         "condition" : "model.lead.eligibleForProduct === 'NO' "
 
@@ -100,11 +118,14 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "readonly":false,
                         "required":true
                     },
-                    "leadInteractions.leadInteractions.customerResponse":{
-                        "type":"string"
-                    },
+                    // "leadInteractions.leadInteractions.customerResponse":{
+                    //     "type":"string"
+                    // },
                     "productDetails.productRejectionReason.productRejectReason":{
                         "enumCode":"lead_reject_reason_other"
+                    },
+                    "productDetails.productRejectionReason.productRejectAdditinalRemarks":{
+                        "required": true
                     },
                     "leadProfile.leadDetails.enterpriseDetails.businessName":{
                         "required":true
@@ -199,10 +220,15 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "leadInteractions.leadInteractions.interactionDate",
                     "leadInteractions.leadInteractions.loanOfficerId",
                     "leadInteractions.leadInteractions.typeOfInteraction",
+                    "leadInteractions.leadInteractions.leadSource",
                     "leadInteractions.leadInteractions.customerResponse",
                     "leadInteractions.leadInteractions.additionalRemarks",
                     "leadInteractions.leadInteractions.location",
                     "leadInteractions.leadInteractions.picture",
+                    "levelling",
+                    "levelling.segment",
+                    "levelling.segmentType",
+                    "levelling.filterQuestionnaire",
                     "actionbox",
                     "actionbox.save",
                     "actionbox.submit"
@@ -216,6 +242,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
 
+                
+
                     var self = this;
                     var formRequest = {
                         "overrides": getOverrides (model),
@@ -226,12 +254,13 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "options": {
                             "repositoryAdditions": {
                                 "productDetails": {
+                                    "orderNo": 20,
                                     "items": {
                                         "parentLoanAccount": {
                                             "key": "lead.parentLoanAccount",
                                             "title": "PARENT_LOAN_ACCOUNT",
                                             "condition": "model.lead.loanPurpose1==='Insurance Loan'",
-                                            "orderNo": 40
+                                            "orderNo": 40,
                                         },
                                         "vehicleRegistrationNumber": {
                                             "key": "lead.vehicleRegistrationNumber",
@@ -239,6 +268,15 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                             "condition": "model.lead.interestedInProduct==='YES' && (model.lead.loanPurpose1 == 'Purchase - Used Vehicle' || model.lead.loanPurpose1 == 'Refinance')",
                                             "orderNo": 45
                                         },
+                                        // "loanPurpose1":{
+                                        //     // "type": "select",
+                                        //     "titleMap": {
+                                        //         "Business Loan": "Business Loan",
+                                        //         "Farm Loan": "Farm Loan",
+                                        //         "Housing Loan": "Housing Loan",
+                                        //         "Personal Loan": "Personal Loan"
+                                        //     }
+                                        // },
                                         "transactionType": {
                                             "key": "lead.transactionType",
                                             "title": "TRANSACTION_TYPE",
@@ -282,18 +320,19 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                                 "productRejectReason": {
                                                     key: "lead.productRejectReason",
                                                     type: "select",
-                                                    enumCode:"lead_reject_reason",
-                                                    
+                                                    enumCode:"lead_reject_reason"
                                                 },
                                                 "productRejectAdditinalRemarks": {
                                                     key: "lead.productRejectAdditinalRemarks",
-                                                    title:"REMARKS"
+                                                    title:"REMARKS",
+                                                    required: true
                                                 },
                                             }
                                         },
                                     }
                                 },
                                 "sourceDetails":{
+                                    // "orderNo": 30,
                                     "items":{
                                         "referredBy2":{
                                             "key": "lead.referredBy",
@@ -302,7 +341,26 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                         }
                                     }
                                 },
+                                "leadInteractions":{
+                                    "orderNo": 30,
+                                    "items":{
+                                        "leadInteractions":{
+                                            "items":{
+                                                "leadSource":{
+                                                    "key":"",
+                                                    "type": "select",
+                                                    "title": "LEAD_SOURCE",
+                                                    "titleMap":{
+                                                        "Open Market Sourcing":"Open Market Sourcing",
+                                                        "Reference":"Reference"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "leadProfile":{
+                                    "orderNo": 10,
                                     "items":{
                                         "leadDetails":{
                                             "items":{
@@ -328,6 +386,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                                                 "branchId": {
                                                                     "key": "lead.branchName",
                                                                     "type": "select",
+                                                                    "title": "BRANCH",
                                                                     "screenFilter": true,
                                                                     "readonly": true
                                                                 },
@@ -411,9 +470,31 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                             }
                                         }
                                     }
-                                }
-                                
-                                
+                                },
+                                "levelling":{
+                                    "type": "box",
+                                    "title": "LEVELLING",
+                                    "orderNo": 40,
+                                    "items":{
+                                        "segment":{
+                                            "key": "",
+                                            "type": "select",
+                                            "title": "SEGMENT",
+                                            // "enumCode": "dealer"
+                                        },
+                                        "segmentType":{
+                                            "key": "",
+                                            "type": "select",
+                                            "title": "SEGMENT_TYPE",
+                                            // "enumCode": "dealer"
+                                        },
+                                        "filterQuestionnaire":{
+                                            "key": "",
+                                            "type": "text",
+                                            "title": "FILTER_QUESTIONNAIRE",
+                                        }
+                                    }
+                                } 
                             }
                         }
                     };
@@ -442,7 +523,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 model.lead = model.leadProcess.lead;
                                 self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
                             });
-
+                            model.lead.leadInteractions[0].typeOfInteraction = "Visit";
                     }
                     //this.form.push(actionbox);
 
