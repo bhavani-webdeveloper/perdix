@@ -60,7 +60,7 @@ define(
                             "excludes": [
                                 "NewVehicleDetails.category",
                                 "NewVehicleDetails.segment",
-                                "VehicleLoanIncomesInformation",
+                                //"VehicleLoanIncomesInformation",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
