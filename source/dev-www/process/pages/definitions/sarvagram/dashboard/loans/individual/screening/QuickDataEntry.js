@@ -6,16 +6,16 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanProcessts = LoanProcess["LoanProcess"];
     var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
-
     return {
-        pageUID: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
+        /* Quick Data Entry is same as ScreeningInput like shramsarathi,maitreya,intellecash*/
+        pageUID: "sarvagram.dashboard.loans.individual.screening.QuickDataEntry",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
-                "title": "SCREENING_INPUT",
-                "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                "title": "QUICK_DATA_ENTRY",
+                "subTitle": "QUICK_DATA_ENTRY",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {

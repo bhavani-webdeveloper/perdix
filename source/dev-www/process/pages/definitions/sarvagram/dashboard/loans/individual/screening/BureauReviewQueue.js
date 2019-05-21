@@ -1,7 +1,8 @@
-
-irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.ScreeningReviewQueue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+define({
+    pageUID: "sarvagram.dashboard.loans.individual.screening.BureauReviewQueue",
+	pageType: "Engine",
+	dependencies:["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
+	$pageFn:function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
@@ -12,7 +13,7 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 	    }
 		return {
 			"type": "search-list",
-			"title": "SCREENING_REVIEW_QUEUE",
+			"title": "BUREAU_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
@@ -179,11 +180,11 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ScreeningReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.BureauReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.BureauReview",
 									pageId: item.loanId
 								});
 							},
@@ -197,4 +198,5 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 			}
 		};
 	}
-]);
+});
+

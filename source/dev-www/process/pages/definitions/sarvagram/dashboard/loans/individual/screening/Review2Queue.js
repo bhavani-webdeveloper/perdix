@@ -1,9 +1,9 @@
-irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue"), 
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.Review2Queue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		return {
 			"type": "search-list",
-			"title": "VP_CREDIT_RISK_REVIEW", 
+			"title": "REVIEW2_QUEUE", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// var currBranch = SessionStore.getCurrentBranch();
@@ -184,16 +184,16 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.CentralRiskReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.Review2', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "sarvagram.dashboard.loans.individual.screening.CentralRiskReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.Review2",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue"
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.Review2Queue"
 								});
 							},
 							isApplicable: function(item, index) {

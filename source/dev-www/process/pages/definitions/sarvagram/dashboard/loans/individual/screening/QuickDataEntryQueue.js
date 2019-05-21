@@ -1,5 +1,5 @@
 define({
-    pageUID: "sarvagram.dashboard.loans.individual.screening.ScreeningQueue",
+    pageUID: "sarvagram.dashboard.loans.individual.screening.QuickDataEntryQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -13,7 +13,7 @@ define({
         }
         return {
             "type": "search-list",
-            "title": "SCREENING_QUEUE",
+            "title": "QUICK_DATA_ENTRY_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
@@ -207,11 +207,11 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('sarvagram.dashboard.loans.individual.screening.QuickDataEntry', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.QuickDataEntry",
                                     pageId: item.loanId
                                 });
                             },

@@ -1,14 +1,9 @@
-irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screening.CentralRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screening.Review1'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator","Scoring",
     function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator,Scoring) {
         $log.info("Inside LoanBookingBundle");
-
-        return {
-            "type": "page-bundle",
-            "title": "VP_CREDIT_RISK_REVIEW",
-            "subTitle": "",
-            "readonly": true,
-            "bundleDefinition": [{
+        var getBundleDefinition = function() {
+            var definition = [{
                 pageName: 'sarvagram.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'APPLICANT',
                 pageClass: 'applicant',
@@ -44,35 +39,28 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                 maximum: 1,
                 order: 50
             }, 
-            // {
-            //     pageName: 'loans.individual.screening.PersonalDiscussion',
-            //     title: 'PERSONAL_DISCUSSION',
-            //     pageClass: 'personal-discussion',
-            //     minimum: 1,
-            //     maximum: 1,
-            //     order: 52
-            // }, 
             {
-                pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
+                pageName: 'loans.individual.screening.PersonalDiscussion',
+                title: 'PERSONAL_DISCUSSION',
+                pageClass: 'personal-discussion',
+                minimum: 1,
+                maximum: 1,
+                order: 52
+            },
+             {
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.PortfolioAnalysis',
                 title: 'Customer History',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
-                order: 52
-            },{
+                order: 55
+            }, {
                 pageName: 'sarvagram.dashboard.loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
                 minimum: 1,
                 maximum: 1,
                 order: 60
-            }, {
-                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.SummaryView',
-                title: 'SummaryView',
-                pageClass: 'summaryView',
-                minimum: 1,
-                maximum: 1,
-                order: 5
             }, {
                 pageName: 'sarvagram.dashboard.loans.individual.screening.Summary',
                 title: 'SUMMARY',
@@ -95,13 +83,29 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                 maximum: 1,
                 order: 80
             }, {
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.SummaryView',
+                title: 'SummaryView',
+                pageClass: 'summaryView',
+                minimum: 1,
+                maximum: 1,
+                order: 5
+            }, {
                 pageName: 'sarvagram.dashboard.loans.individual.screening.detail.PortfolioAnalyticsView',
                 title: 'Portfolio Analytics',
                 pageClass: 'portfolio-analytics',
                 minimum: 1,
                 maximum: 1,
                 order: 90
-            }],
+            }];
+            return definition;
+        };
+
+        return {
+            "type": "page-bundle",
+            "title": "REVIEW1",
+            "subTitle": "",
+            "readonly": true,
+            "bundleDefinition": getBundleDefinition(),
             "bundlePages": [],
             "offline": true,
             "getOfflineDisplayItem": function(value, index) {
@@ -133,7 +137,7 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
-                bundleModel.currentStage = "CentralRiskReview";
+                bundleModel.currentStage = "FieldAppraisalReview";
                 var deferred = $q.defer();
 
                 var $this = this;
@@ -172,7 +176,7 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                             };
 
 
-                            if (res.currentStage != 'CentralRiskReview') {
+                            if (res.currentStage != 'FieldAppraisalReview') {
                                 PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 irfNavigator.goBack();
                                 return;
@@ -208,18 +212,19 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                                     }
                                 }
                             });
-
-                            $this.bundlePages.push({
-                                pageClass: 'summaryView',
-                                model: {
-                                    cbModel: {
-                                        customerId: res.customerId,
-                                        loanId: bundleModel.loanId,
-                                        scoreName: 'RiskScore3',
-                                        customerDetail: bundleModel.customer_detail
+                            if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                                $this.bundlePages.push({
+                                    pageClass: 'summaryView',
+                                    model: {
+                                        cbModel: {
+                                            customerId: res.customerId,
+                                            loanId: bundleModel.loanId,
+                                            scoreName: 'RiskScore3',
+                                            customerDetail: bundleModel.customer_detail
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
 
                             $this.bundlePages.push({
                                 pageClass: 'applicant',
@@ -280,7 +285,7 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                                         }
                                         
                                     }
-                            }); 
+                                });
 
                             $this.bundlePages.push({
                                 pageClass: 'loan-recommendation',
@@ -289,6 +294,7 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                                     loanAccount:res
                                 }
                             });
+
 
                             $this.bundlePages.push({
                                 pageClass: 'loan-review',
@@ -323,13 +329,13 @@ irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screen
                     .finally(function() {
                         PageHelper.hideLoader();
                     })
-                  
+                 
                 }
                 return deferred.promise;
             },
             "post_pages_initialize": function(bundleModel) {
                 $log.info("Inside post_page_initialize");
-                BundleManager.broadcastEvent('origination-stage', 'CentralRiskReview');
+                BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
 
             },
             eventListeners: {
