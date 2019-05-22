@@ -298,6 +298,13 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                             pageName: 'loans.individual.ActivateLoan',
                                             pageId: [item.accountNumber,item.partner].join(".")
                                         })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'KGFS') { 
+                                            return true
+                                        }
+                                        
                                     }
                                 },
                                 {
