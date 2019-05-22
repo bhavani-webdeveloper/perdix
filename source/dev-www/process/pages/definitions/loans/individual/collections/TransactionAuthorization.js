@@ -11,7 +11,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     $log.info("Transaction Authorization Page got initialized");
 
                     model.EMIAllocation = SessionStore.getGlobalSetting("EMIAllocation");
-
+                    var siteCode = SessionStore.getGlobalSetting('siteCode');
+                    model.siteCode = siteCode;
                     if (!model._transAuth) {
                         $log.info("Screen directly launched hence redirecting to queue screen");
                         $state.go('Page.Engine', {
@@ -188,8 +189,22 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             {
                                 key: "_transAuth.transactionName",
                                 title: "TRANSACTION_NAME",
-                                //readonly: true
+                                readonly: true,
+                                condition :"model.siteCode != 'witfin'"
+
+
+
                             },
+                            {
+                                key: "_transAuth.transactionName",
+                                title: "TRANSACTION_NAME",
+                                type : "select",
+                                enumCode: "transaction_name",
+                                condition :"model.siteCode == 'witfin'"
+                                
+
+                            },
+
                             {
                                 key: "_transAuth.repaymentDate",
                                 title: "REPAYMENT_DATE",

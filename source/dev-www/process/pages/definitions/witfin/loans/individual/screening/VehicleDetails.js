@@ -1605,13 +1605,13 @@ define(
                                        "type": "number",
                                        "readonly": "true"
                                     },
-                                    "fuelConsumptionPerHour": {
-                                        "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
-                                        "title": "FUEL_CONSUMPTION_PER_HOUR",
-                                        "type": "number",
-                                        "readonly": "true",
-                                        "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
-                                    },
+                                    // "fuelConsumptionPerHour": {
+                                    //     "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
+                                    //     "title": "FUEL_CONSUMPTION_PER_HOUR",
+                                    //     "type": "number",
+                                    //     "readonly": "true",
+                                    //     "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
+                                    // },
                                     "validation": {
                                         "key": "loanAccount.vehicleLoanDetails.validation",
                                         "title": "VALIDATION",
