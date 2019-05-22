@@ -417,7 +417,7 @@
             "personalProfile": {
                 "title": "Personal Profile",
                 "type": "object",
-                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified","religion","caste"],
+                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified"],
                 "properties": {
                     "urnNo": {
                         "title": "URN",
