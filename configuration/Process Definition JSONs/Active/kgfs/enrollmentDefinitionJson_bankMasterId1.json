@@ -182,6 +182,11 @@
                             "title": "udf5",
                             "type": "string",
                             "captureStages": ["Completed"]
+                        },
+                        "enrolledUrnNo":{
+                            "title": "URN NO",
+                            "type": "string",
+                            "captureStages": ["Stage01", "Stage02", "Completed"]
                         }
                     }
                 }
@@ -419,7 +424,7 @@
             "personalProfile": {
                 "title": "Personal Profile",
                 "type": "object",
-                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified","religion","caste"],
+                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified"],
                 "properties": {
                     "urnNo": {
                         "title": "URN",
@@ -677,11 +682,6 @@
                         "type": "string",
                         "refCodeCategory": "religion",
                         "captureStages": ["Stage02", "Completed"]
-                    },
-                    "minimumOneFamilyMember":{
-                        "title":"Minimum One Family Member",
-                        "type":"string",
-                        "captureStages":["Stage02","Completed"]
                     },
                     "caste": {
                         "title": "Caste",
@@ -1430,9 +1430,9 @@
             "fingerPrint": {
                 "title": "Finger Print",
                 "type": "object",
-                "required": ["fingerPrintisRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
+                "required": ["fingerPrintIsRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
                 "properties": {
-                    "fingerPrintisRequired": {
+                    "fingerPrintIsRequired": {
                         "title": "Finger Print is Required",
                         "type": "boolean",
                         "captureStages": ["Stage02", "Completed"]
