@@ -131,6 +131,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "References",   
                             ],
                             "overrides": {
+                                "IndividualInformation.centreId1":{
+                                    "required":true
+                                },
                                 "BankAccounts.customerBankAccounts.customerNameAsInBank":{
                                     "required": true
                                 },
@@ -278,7 +281,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Screening": {
                             "excludes": [
                             //    "IndividualFinancials",
-                                "HouseVerification.latitude",
+                                //"HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 //"IndividualReferences",
@@ -287,6 +290,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName"
                             ],
                             "overrides": {
+                                // "IndividualInformation.centreId":{
+                                //     "required":true
+                                // },
                                "BankAccounts.customerBankAccounts.customerNameAsInBank":{
                                 "required": true
                                },
@@ -3667,6 +3673,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     type: "select",
                                     readonly: true,
                                     title: "CENTRE_NAME",
+                                    required: true,
                                     filter: {
                                         "parentCode": "branch_id"
                                     },

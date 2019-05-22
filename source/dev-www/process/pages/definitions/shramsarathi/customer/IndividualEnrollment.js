@@ -126,11 +126,21 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 "ContactInformation.mailingPostoffice",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
+                                "ContactInformation.mailSameAsResidence",
                                 "HouseVerification.date"
                             ], 
                             "overrides": {
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
+                                },
+                                "ContactInformation.residentialAddressFieldSet": {
+                                    "title": "SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet": {
+                                    "title": "DESTINATION_ADDRESS"
                                 },
                                 // "BankAccounts.customerBankAccounts.customerNameAsInBank": {
                                 //     "required": true
@@ -306,6 +316,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                             "overrides": {
                                 "KYC.addressProofFieldSet": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
@@ -2651,7 +2664,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 

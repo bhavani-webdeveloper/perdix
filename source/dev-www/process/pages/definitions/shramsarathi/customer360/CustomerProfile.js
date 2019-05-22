@@ -129,6 +129,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "ContactInformation.careOf",
                                 "ContactInformation.postOffice",
                                 "ContactInformation.mailingPostoffice",
+                                "ContactInformation.mailSameAsResidence",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
@@ -140,6 +141,17 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
+                            "Liabilities.liabilities.frequencyOfInstallment":{
+                                "required": false,
+                            },
+
+                            "ContactInformation.residentialAddressFieldSet": {
+                                "title": "SOURCE_ADDRESS"
+                            },
+                            "ContactInformation.permanentAddressFieldSet": {
+                                "title": "DESTINATION_ADDRESS"
+                            },
+                            
                             "BankAccounts.customerBankAccounts.customerNameAsInBank":{
                                 "required": true
                             },
@@ -191,14 +203,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId": {
                                     "readonly": true,
-                                    "title": "ZONE_ID"
+                                    "title": "ZONE_ID",
+                                    "required":true
                                 },
                                 "IndividualInformation.customerBranchId":{
                                     "readonly":true
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME",
-                                    "readonly":false
+                                    "readonly":false,
+                                    "required": true
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
@@ -264,6 +278,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                             "overrides": {
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
@@ -356,11 +373,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "Screening": {
                             "excludes": [
                                // "IndividualFinancials",
-                                "HouseVerification.latitude",
+                                //"HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "IndividualReferences",
-                                "IndividualInformation.centreId",
+                                //"IndividualInformation.centreId",
                                 "References",
                                 "KYC.firstName",
                             ],
@@ -374,10 +391,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "EnterpriseFinancials.currentAsset.value":{
                                     "type":"amount"
                                 },
-
                                 "IndividualInformation.centreId": {
                                     "required": true,
-                                    "readonly": false,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -2605,7 +2620,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 
