@@ -28,27 +28,23 @@ irf.pageCollection.factory(irf.page("loans.individual.ActivateLoan"),
                     title: "Activate"
                 }]
             }],
-            schema: function() {
-                return SchemaResource.getDisbursementSchema().$promise;
-            },
+            
             actions: {
                 submit: function(model, form, formName) {
-                    $log.info("on submit action ....");
-                    LoanAccount.activateLoan({
-						"accountId": model.activateLoan.accountNumber
-					}, function (data) {
-						$log.info("Loan Activation successful");
-						PageHelper.showProgress("loan-activation", "Loan Activation successful", 3000);
-                        $state.go("Page.Engine", {
-                            "pageName": "loans.individual.Queue",
-                            "pageId": null
-                        });
-						
-					}, function (res) {
-						PageHelper.hideLoader();
-						PageHelper.showErrors(res);
-						PageHelper.showProgress('loan-activation', 'Error while activating loan.', 2000);
-					});
+                    $log.info("Inside submit");
+                    PageHelper.showLoader();                    
+                    var promise = LoanAccount.activateLoan({
+                        "accountId": model.activateLoan.accountNumber
+                    }).$promise;
+                    promise.then(function(data) { /* SUCCESS */
+                            $log.info(data)
+                            PageHelper.showProgress("activateAccount", 'Account activated successfully.', 5000);
+                        }, function(resData) {
+                            PageHelper.showProgress("activateAccount", "Fail to activate account", 5000);
+                        })
+                        .finally(function() {
+                            PageHelper.hideLoader();
+                        })
                 }
             }
         };

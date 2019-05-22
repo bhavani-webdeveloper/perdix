@@ -296,7 +296,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
                                             pageName: 'loans.individual.ActivateLoan',
-                                            pageId: [item.accountNumber,item.partner].join(".")
+                                            pageId: [item.accountNumber]
                                         })
                                     },
                                     isApplicable: function(item, index){
