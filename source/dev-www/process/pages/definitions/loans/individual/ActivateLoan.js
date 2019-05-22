@@ -27,7 +27,21 @@ irf.pageCollection.factory(irf.page("loans.individual.ActivateLoan"),
                     type: "submit",
                     title: "Activate"
                 }]
-            }],
+            }], schema: {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "activateLoan": {
+                        "type": "object",
+                        "properties": {
+                            "accountNumber": {
+                                "type": "string",
+                                "title": "ACCOUNT_DETAILS"
+                            },                           
+                        },
+                    },
+                },
+            },
             
             actions: {
                 submit: function(model, form, formName) {
