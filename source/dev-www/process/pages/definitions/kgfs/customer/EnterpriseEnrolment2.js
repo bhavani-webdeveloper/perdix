@@ -711,7 +711,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "enumCode": "businessActivity1",
                                         "parentEnumCode": "businessType",
                                         "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf1",
-                                        "condition": "model.siteCode == 'KGFS'",
+                                        "condition": "model.siteCode == 'KGFS' || model.siteCode == 'kgfs'",
                                     },
                                     "udf3": {
                                         "key": "customer.enterpriseDocuments[].udf3",
@@ -722,7 +722,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "enumCode": "businessSector1",
                                         "parentEnumCode": "businessActivity1",
                                         "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf2",
-                                        "condition": "model.siteCode == 'KGFS'",
+                                        "condition": "model.siteCode == 'KGFS' || model.siteCode == 'kgfs'",
                                     },
                                     "udf4": {
                                         "title": "ITR_AVAILABLE",
@@ -1545,7 +1545,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "items":{
                                     'monthlySalesCal': {
                                         key: "customer.enterprise.monthlySalesCal",
-                                        title: "MONTHLY_SALES",
+                                        title: "AVERAGE_MONTHLY_SALES",
                                         "type": "number",
                                         "readonly": true
                                     },
@@ -1734,8 +1734,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "isStaticTable":true,
-                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1855,8 +1853,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "isStaticTable":true,
-                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1950,8 +1946,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "isStaticTable":true,
-                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -3577,7 +3571,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {
-                                if (index < 8) {
+                                if (expenditure.billDocId == 'BusinessExpense') {
                                     model.customer.monthlyBusinessExpense.push(expenditure)
                                 }
                                 else {
@@ -3977,10 +3971,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             }
                         })
                         _.forEach(model.customer.monthlyBusinessExpense, function (expenses) {
+                                expenses.billDocId = 'BusinessExpense'
                                 model.customer.expenditures.push(expenses)
                         })
                         _.forEach(model.customer.personalExpenses, function (expenses) {
+                            expenses.billDocId = 'PersonalExpense'
                                 model.customer.expenditures.push(expenses)
+                        })
+                        var otherIncome = model.customer.otherBusinessIncomes;
+                        model.customer.otherBusinessIncomes = [];
+                        _.forEach(otherIncome, function (income) {
+                            income.otherBusinessIncomeDate = '2017-11-01'
+                            model.customer.otherBusinessIncomes.push(income)
                         })
                         var customerLiabilityRepayment = []
                         _.forEach(model.customer.liabilityRepayment, function (liability) {
