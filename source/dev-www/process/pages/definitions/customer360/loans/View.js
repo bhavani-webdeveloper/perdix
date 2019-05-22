@@ -291,6 +291,21 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return isApplicableValue('isFreezeAccountAccess');
                                     }
+                                },{ 
+                                    name: "ACTIVATE_ACCOUNT",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.individual.ActivateLoan',
+                                            pageId: [item.accountNumber]
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'KGFS') { 
+                                            return true
+                                        }
+                                        
+                                    }
                                 },
                                 {
                                     name: "ACH_REGISTRATION",
