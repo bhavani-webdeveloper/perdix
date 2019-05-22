@@ -1430,9 +1430,9 @@
             "fingerPrint": {
                 "title": "Finger Print",
                 "type": "object",
-                "required": ["fingerPrintisRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
+                "required": ["fingerPrintIsRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
                 "properties": {
-                    "fingerPrintisRequired": {
+                    "fingerPrintIsRequired": {
                         "title": "Finger Print is Required",
                         "type": "boolean",
                         "captureStages": ["Stage02", "Completed"]
