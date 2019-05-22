@@ -215,6 +215,11 @@
                             "minimum": 0,
                             "maximum": 100,
                             "captureStages": ["Completed"]
+                        },
+                        "billDocId":{
+                            "title": "Expenditure Type",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"] 
                         }
                     }
                 }
