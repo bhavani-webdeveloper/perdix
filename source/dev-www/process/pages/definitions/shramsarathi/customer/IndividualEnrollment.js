@@ -208,16 +208,20 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         var centres = SessionStore.getCentres();
                                         var centreCode = formHelper.enum('centre').data;
                                         var out = [];
+                                        var branchId= model.customer.customerBranchId || "";
                                         if (centres && centres.length) {
                                             for (var i = 0; i < centreCode.length; i++) {
-                                                for (var j = 0; j < centres.length; j++) {
-                                                    if (centreCode[i].value == centres[j].id) {
+                                                // for (var j = 0; j < centres.length; j++) {
+                                                //     if (centreCode[i].value == centres[j].id) {
+                                                    if(branchId == centreCode[i].parentCode ){
                                                         out.push({
                                                             name: centreCode[i].name,
                                                             id: centreCode[i].value
                                                         })
                                                     }
-                                                }
+                                                      
+                                                //     }
+                                                // }
                                             }
                                         }
                                         return $q.resolve({
