@@ -147,12 +147,6 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
-                            "IndividualFinancials.expenditures":{
-                                   onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
-                                       var index = model.customer.expenditures.length -1;
-                                       model.customer.expenditures[index].frequency="Monthly";
-                                   }
-                               },
                             "Liabilities.liabilities.frequencyOfInstallment":{
                                 "required": false,
                             },
