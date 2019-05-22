@@ -291,6 +291,14 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     isApplicable: function(item, index){
                                         return isApplicableValue('isFreezeAccountAccess');
                                     }
+                                },{ 
+                                    name: "ACTIVATE_ACCOUNT",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.individual.ActivateLoan',
+                                            pageId: [item.accountNumber,item.partner].join(".")
+                                        })
+                                    }
                                 },
                                 {
                                     name: "ACH_REGISTRATION",
