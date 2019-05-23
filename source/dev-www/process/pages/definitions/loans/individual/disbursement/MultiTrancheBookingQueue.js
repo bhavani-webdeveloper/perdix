@@ -37,7 +37,7 @@ define({
                             }
                         },
                         "entity_name": {
-                            "title": "Entity Name",
+                            "title": "ENTITY_NAME",
                             "type": "string",
                             "x-schema-form": {
                                 "type": "select"
