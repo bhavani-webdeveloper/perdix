@@ -119,13 +119,13 @@ define({
 							title: 'Lead Name',
 							data: 'leadName'
 						}, {
-							title: 'Address Line1',
+							title: 'ADDRESS_LINE1',
 							data: 'addressLine1'
 						}, {
 							title: 'City/Town Village',
 							data: 'cityTownVillage'
 						}, {
-							title: 'Area',
+							title: 'AREA',
 							data: 'area'
 						}, {
 							title: 'Pincode',

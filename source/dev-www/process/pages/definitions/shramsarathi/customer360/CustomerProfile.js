@@ -134,6 +134,12 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.place",
                                 "HouseVerification.date"
                             ], "overrides": {
+                                "IndividualFinancials.expenditures":{
+                                    onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                        var index = model.customer.expenditures.length -1;
+                                        model.customer.expenditures[index].frequency="Monthly";
+                                    }
+                                },
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
                                     if (model.customer.dateOfBirth) {
@@ -3351,8 +3357,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"incomesfrequency",
-                                                            "orderNo":40
+                                                            "enumCode":"incomesfrequency", 
+                                                            "orderNo":40,
+
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",

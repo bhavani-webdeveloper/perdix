@@ -74,7 +74,6 @@ define({
                         if(model.UIUDF.income!=undefined || model.UIUDF.income.length>0){
                             var incomeEarned=0;
                             var annualExpenses=0;
-
                            // model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
 
                             for(var i=0;i<model.UIUDF.income.length;i++){
@@ -90,7 +89,9 @@ define({
                                 annualExpenses+=model.UIUDF.expenditures[i].annualExpenses;
                             }
 
-                            model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
+                            setTimeout(function(){
+                                model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
+                            },1000);
                         }
                         else
                         {
