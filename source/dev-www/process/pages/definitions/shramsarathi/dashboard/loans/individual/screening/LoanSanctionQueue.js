@@ -133,7 +133,7 @@ define({
 							data: 'id'
 						},
 						{
-							title: 'HUB_NAME',
+							title: 'BRANCH_NAME',
 							data: 'branchName'
 						},
 						{
