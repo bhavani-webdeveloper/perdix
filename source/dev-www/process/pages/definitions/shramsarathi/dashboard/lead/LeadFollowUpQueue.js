@@ -44,7 +44,7 @@ define({
 							"type": "string"
 						},
 						"cityTownVillage": {
-							"title": "CITY/_TOWN_VILLAGE",
+							"title": "CITY_TOWN_VILLAGE",
 							"type": "string"
 						},
 						"followUpDate": {
@@ -190,7 +190,7 @@ define({
 							title: 'ID',
 							data: 'id'
 						}, {
-							title: 'Lead Name',
+							title: 'LEAD_NAME',
 							data: 'leadName'
 						},
 						//  {
@@ -198,16 +198,16 @@ define({
 						// 	data: 'businessName'
 						// },
 						 {
-							title: 'Follow Up Date',
+							title: 'FOLLOWUP_DATE',
 							data: 'followUpDate'
 						}, {
-							title: 'Address Line1',
+							title: 'ADDRESS_LINE1',
 							data: 'addressLine1'
 						}, {
-							title: 'CityTownVillage',
+							title: 'CITY_TOWN_VILLAGE',
 							data: 'cityTownVillage'
 						}, {
-							title: 'Pincode',
+							title: 'PIN_CODE',
 							data: 'pincode'
 						}]
 					},

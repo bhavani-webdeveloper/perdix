@@ -68,7 +68,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                                 readonly: true,
                             },{
                                 key: "lead.leads[].cityTownVillage",
-                                "title": "CITY/_TOWN_VILLAGE",
+                                "title": "CITY_TOWN_VILLAGE",
                                 readonly: true,
                             },{
                                 key: "lead.leads[].mobileNo",
