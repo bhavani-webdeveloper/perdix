@@ -252,11 +252,22 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     ];
                 },
             },
-            {
+             {
                 "key":"bankDepositSummary.bankBranchDetails",
                 "title":"DEPOSITED_BANK_BRANCH",
                 required:true
-            }
+            },
+            {
+                title: "Bank Challan",
+                key: "bankDepositSummary.challanFileId",
+                type: "file",
+                fileType: "application/pdf",
+                category: "Loan",
+                subCategory: "DOC1",
+                using: "scanner",
+                required:true
+            },
+
             ]
         },{
             "type": "actionbox",
