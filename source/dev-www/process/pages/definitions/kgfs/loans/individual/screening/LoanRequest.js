@@ -678,6 +678,7 @@ define([],function(){
                         },
                         "LoanRecommendation.interestRate": {
                             "title":"INTEREST_RATE1",
+                            condition:"model.flag",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
@@ -713,10 +714,8 @@ define([],function(){
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
                             "orderNo":140,
-                            onChange:function(value,form,model){
-                                computeEstimatedEMI(model);
-                                model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
-                            }
+                            "title":"INTEREST_RATE",
+                            condition:"model.flag"
                         },                        
                         "PreliminaryInformation.productType": {
                         "required": true,
@@ -794,6 +793,11 @@ define([],function(){
                                 }
                                 if(valueObj.amount_from == valueObj.amount_to){
                                     model.additions.amountPlaceHolder = valueObj.amount_from;
+                                }
+                                if(valueObj.max_interest_rate != 0 && valueObj.max_interest_rate != 0 && valueObj.max_interest_rate == valueObj.min_interest_rate){
+                                    model.loanAccount.expectedInterestRate = valueObj.max_interest_rate;
+                                    model.loanAccount.interestRate = valueObj.max_interest_rate
+                                    model.flag = false
                                 }
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
                                 model.additions.number_of_guarantors = valueObj.number_of_guarantors ? valueObj.number_of_guarantors : 0;
@@ -1172,6 +1176,7 @@ define([],function(){
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
                     "PreliminaryInformation.expectedInterestRate",
+                    "PreliminaryInformation.expectedInterestRate1",
                     "PreliminaryInformation.modeOfDisbursement",
                     "PreliminaryInformation.collectionPaymentType",        
 
@@ -1236,6 +1241,7 @@ define([],function(){
                     "LoanRecommendation.loanAmountRecommended",
                     "LoanRecommendation.tenure",
                     "LoanRecommendation.interestRate",
+                    "LoanRecommendation.interestRate1",
                     "LoanRecommendation.expectedEmi",
 
                     "LoanMitigants",
@@ -1279,6 +1285,7 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.customerId = null;
+                    model.flag = true;
                     model.loanAccount = model.loanProcess.loanAccount;
                     if(model.loanAccount.currentStage == 'Screening' && !_.hasIn(model.loanAccount, 'id')){
                         model.loanAccount.isBusinessCaptured = false;
@@ -1470,6 +1477,15 @@ define([],function(){
                                                 "title": "LOAN_PRODUCT",
                                                 "type": "lov",
                                                 "enumCode":"loan_product",
+                                                onChange:function(value,form,model){
+                                                    LoanProducts.getProductData({"productCode":value})
+                                                    .$promise
+                                                    .then(function(res){
+                                                        console.log(res)
+                                                    },function(res){
+
+                                                    })
+                                                },
                                                 "orderNo": 10
                                             },
                                             "loanPurpose3": {
@@ -1505,6 +1521,14 @@ define([],function(){
                                                 "type": "select",
                                                 "enumCode":"mode_of_disbursement",
                                                 "orderNo": 150
+                                            },
+                                            "expectedInterestRate1":{
+                                                "required": true,
+                                                "key":"loanAccount.expectedInterestRate",
+                                                "orderNo":140,
+                                                "readonly":true,
+                                                "title":"INTEREST_RATE",
+                                                "condition":"!model.flag" 
                                             }
                                         }
                             },
@@ -1515,6 +1539,12 @@ define([],function(){
                                         "title":"LOAN_AMOUNT_RECOMMENDED",
                                         "type":"amount",
                                         "orderNo":20
+                                    },
+                                    "interestRate1":{
+                                        "key":"loanAccount.interestRate",
+                                        "title":"INTEREST_RATE",
+                                        "readonly":true,
+                                        condition:"!model.flag",
                                     },
                                     "expectedEmi":{
                                         "key":"loanAccount.emiRequested",
