@@ -1260,7 +1260,23 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             type: "amount",
                             required: true,
                             condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
-                        }, {
+                        },
+                        {
+                            key: "lead.productCategory",
+                            type: "select",
+                            required: true,
+                            title:"Interested in Product Category",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct =='Yes')",
+                            titleMap: {
+                                "Consumer": "Consumer",
+                                "JEWEL": "JEWEL",
+                                "MEL": "MEL",
+                                "Personal": "Personal",
+                                "Group":"Group"
+                            },
+                           // condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
+                        },
+                         {
                             key: "lead.loanPurpose1",
                             condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
@@ -1476,8 +1492,11 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
 
                 submit: function (model, form, formName) {
                     $log.info("Inside submit()");
-                    model.lead.productCategory = "Asset";
-                    model.lead.productSubCategory = "Loan";
+                    if(!(model.siteCode == 'KGFS' || model.siteCode == 'kgfs'))
+                    {
+                        model.lead.productCategory = "Asset";
+                        model.lead.productSubCategory = "Loan";
+                    }
                     $log.warn(model);
                     var sortFn = function (unordered) {
                         var out = {};
@@ -1508,7 +1527,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             return false;
                         }
                         var maxLeadFollowUpDate = moment(model.currentDate).add(30, "d").format("YYYY-MM-DD");
-                        if(model.lead.followUpDate && model.lead.followUpDate > maxLeadFollowUpDate){
+                        if(model.lead.followUpDate && model.lead.followUpDateLeadGeneration > maxLeadFollowUpDate){
                             PageHelper.showErrors({data:{error:"Follow up date cannot be more than 30 days from current date"}});
                             return false;
                         }
