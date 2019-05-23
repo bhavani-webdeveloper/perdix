@@ -732,6 +732,33 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     }).$promise;
                                     return promise;
                                 },
+                                "onSelect": function(valueObj, model, context) {
+                                    var rowIndex = context.arrayIndex;
+                                    PageHelper.showLoader();
+                                    Enrollment.EnrollmentById({
+                                        id: valueObj.id
+                                    }, function(resp, header) {
+                                        model.customer.familyMembers[rowIndex].gender = resp.gender;
+                                        model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
+                                        model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
+                                        model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
+                                        model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                        model.customer.familyMembers[rowIndex].enrolledUrnNo = resp.urnNo;
+                                        model.customer.familyMembers[rowIndex].relationShip = "";
+                                        var selfIndex = _.findIndex(resp.familyMembers, function(o) {
+                                            return o.relationShip.toUpperCase() == 'SELF'
+                                        });
+                                        if (selfIndex != -1) {
+                                            model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
+                                            model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
+                                        }
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                                    }, function(resp) {
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)
+                                    });
+                                },
                                 getListDisplayItem: function(data, index) {
                                     return [
                                         [data.firstName, data.fatherFirstName].join(' '),
@@ -2281,6 +2308,33 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                         'firstName': inputModel.first_name,
                                     }).$promise;
                                     return promise;
+                                },
+                                "onSelect": function(valueObj, model, context) {
+                                    var rowIndex = context.arrayIndex;
+                                    PageHelper.showLoader();
+                                    Enrollment.EnrollmentById({
+                                        id: valueObj.id
+                                    }, function(resp, header) {
+                                        model.customer.familyMembers[rowIndex].gender = resp.gender;
+                                        model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
+                                        model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
+                                        model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
+                                        model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                        model.customer.familyMembers[rowIndex].enrolledUrnNo = resp.urnNo;
+                                        model.customer.familyMembers[rowIndex].relationShip = "";
+                                        var selfIndex = _.findIndex(resp.familyMembers, function(o) {
+                                            return o.relationShip.toUpperCase() == 'SELF'
+                                        });
+                                        if (selfIndex != -1) {
+                                            model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
+                                            model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
+                                        }
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                                    }, function(resp) {
+                                        PageHelper.hideLoader();
+                                        irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000)
+                                    });
                                 },
                                 getListDisplayItem: function(data, index) {
                                     return [
