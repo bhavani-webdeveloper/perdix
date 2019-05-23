@@ -955,10 +955,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             return false;
                         }
 
-                        if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
-                            return false;
-                        }
+                        // if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
+                        //     PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
+                        //     return false;
+                        // }
 
                         if (model.repayment.transactionName == 'PenalInterestPayment' && Math.round(model.repayment.amount) > Math.round(model.cbsLoanData.bookedNotDuePenalInterest)  ) {
                             PageHelper.clearErrors();
