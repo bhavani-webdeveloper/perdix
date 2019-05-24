@@ -25,7 +25,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             model.siteCode = SessionStore.getGlobalSetting('siteCode');
             PageHelper.showLoader();
             model.bankDepositSummary = {};
-
+            model.loanCollections = [];
             var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
                 $log.info(res);
@@ -33,6 +33,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 model.loanAccounts = [];
                 for (var i=0; i< res.body.length;i++){
                     var cashDeposit = res.body[i];
+                    model.loanCollections.push(cashDeposit);
                     model.pendingCashDeposits.push(
                         {
                             loan_ac_no: cashDeposit.account_number,
@@ -335,6 +336,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                         loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
                     }
                 }
+
+                model.bankDepositSummary.loanCollections = _.cloneDeep(model.loanCollections);
                 var reqData = {
                     'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
                     'loanCollectionIds':_.cloneDeep(loanCollectionIds)
@@ -349,6 +352,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();
+                    PageHelper.showProgress('deposit-cash', 'Request is failed', 500);
                     PageHelper.showErrors(errorResponse);
                 });
             },
