@@ -750,6 +750,17 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                                 model.customer.familyMembers[rowIndex].id =  familyMembers.id
                                             }
                                         });    
+                                        _.forEach(model.customer.familyMembers,function(familyMember){
+                                            _.forEach(resp.familyMembers,function(secondaryFamilyMember){
+                                                if(secondaryFamilyMember.enrolledUrnNo == familyMember.enrolledUrnNo) {
+                                                PageHelper.showErrors({
+                                                    'data': {
+                                                        'error': "Same Family Member is already captured in Family Details."
+                                                    }
+                                                });
+                                                }
+                                            })
+                                        });
                                         var selfIndex = _.findIndex(resp.familyMembers, function(o) {
                                             return o.relationShip.toUpperCase() == 'SELF'
                                         });
