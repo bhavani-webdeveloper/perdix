@@ -16,41 +16,50 @@ define([],function(){
             
             
             //PMT calculation
-
             var setDeviation = function(model){
-                      /* Deviations and Mitigations grouping */
-                        // var checkMitigants = true;
-                        // if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
-                        // {
-                        //     if(_.hasIn(model.deviationMitigants[0], 'id'))
-                        //         checkMitigants=false;                            
-                        // }
-                        if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
-                            for (var i=0; i<model.deviationMitigants.length; i++){
-                                model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
-                            }
+                if(model.loanAccount.loanMitigants){
+                    _.forEach(model.loanAccount.loanMitigants,function(mitigation){
+                        if(!(mitigation.isCurrentMitigation)){
+                            mitigation.isCurrentMitigation = true
                         }
-                        else
-                        {
-                            if(_.isNull(model.loanAccount.loanMitigants))
-                            model.loanAccount.loanMitigants=[];
-                            if (model.deviationMitigants){
-                                for (var i=0; i<model.deviationMitigants.length; i++){
-                                    model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
-                                }                            
-                            }
-                        }
-                    /* End of Deviations and Mitigations grouping */
+                    })
+                }
             }
+
+            // var setDeviation = function(model){
+            //           /* Deviations and Mitigations grouping */
+            //             // var checkMitigants = true;
+            //             // if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
+            //             // {
+            //             //     if(_.hasIn(model.deviationMitigants[0], 'id'))
+            //             //         checkMitigants=false;                            
+            //             // }
+            //             if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
+            //                 for (var i=0; i<model.deviationMitigants.length; i++){
+            //                     model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+            //                 }
+            //             }
+            //             else
+            //             {
+            //                 if(_.isNull(model.loanAccount.loanMitigants))
+            //                 model.loanAccount.loanMitigants=[];
+            //                 if (model.deviationMitigants){
+            //                     for (var i=0; i<model.deviationMitigants.length; i++){
+            //                         model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+            //                     }                            
+            //                 }
+            //             }
+            //         /* End of Deviations and Mitigations grouping */
+            // }
             var setLoanMitigantsGroup = function(model) {
                 if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                     var loanMitigantsGrouped = {};
                     for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
                         var item = model.loanAccount.loanMitigants[i];
-                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                        if (item.isCurrentMitigation && !_.hasIn(loanMitigantsGrouped, item.parameter)){
                             loanMitigantsGrouped[item.parameter] = [];
+                            loanMitigantsGrouped[item.parameter].push(item);
                         }
-                        loanMitigantsGrouped[item.parameter].push(item);
                     }
                     model.loanMitigantsGrouped=loanMitigantsGrouped;
                     model.deviationMitigants  = model.loanAccount.loanMitigants;
@@ -1390,20 +1399,21 @@ define([],function(){
 
 
                      /* Deviations and Mitigations grouping */
-                    if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
-                        var loanMitigantsGrouped = {};
-                        for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
-                            var item = model.loanAccount.loanMitigants[i];
-                            if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
-                                loanMitigantsGrouped[item.parameter] = [];
-                            }
-                            loanMitigantsGrouped[item.parameter].push(item);
-                        }
-                        model.loanMitigantsGrouped=loanMitigantsGrouped;
-                        model.deviationMitigants  = model.loanAccount.loanMitigants;
-                        model.loanAccount.loanMitigants = null;                        
+                     setLoanMitigantsGroup(model);
+                    // if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                    //     var loanMitigantsGrouped = {};
+                    //     for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                    //         var item = model.loanAccount.loanMitigants[i];
+                    //         if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                    //             loanMitigantsGrouped[item.parameter] = [];
+                    //         }
+                    //         loanMitigantsGrouped[item.parameter].push(item);
+                    //     }
+                    //     model.loanMitigantsGrouped=loanMitigantsGrouped;
+                    //     model.deviationMitigants  = model.loanAccount.loanMitigants;
+                    //     model.loanAccount.loanMitigants = null;                        
 
-                    }
+                    // }
                     /* End of Deviations and Mitigations grouping */
                      /* Collateral */
                     if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
@@ -2089,7 +2099,7 @@ define([],function(){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
                        
-                        setDeviation(model);                                                    
+                       // setDeviation(model);                                                    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -2112,14 +2122,14 @@ define([],function(){
                                     }
                                 }
                                 /* ornamentsAppraisals */
-                                setLoanMitigantsGroup(model);
+                               // setLoanMitigantsGroup(model);
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount}); 
                                 BundleManager.pushEvent('new-loanAccount-id', model._bundlePageObj, {loanId: model.loanAccount.id});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
                             }, function (err) {
-                                setLoanMitigantsGroup(model);
+                               // setLoanMitigantsGroup(model);
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
@@ -2192,16 +2202,40 @@ define([],function(){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         } 
-                        if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
-                            model.loanAccount.loanMitigants = [];
+                        // if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
+                        //     model.loanAccount.loanMitigants = [];
+                        // }
+                        model.mitigationCheked = false
+                        if(model.deviationMitigants){
+                            _.forEach(model.deviationMitigants,function(mitigation){
+                                if(mitigation.isCurrentMitigation && !mitigation.mitigatedStatus){
+                                    model.mitigationCheked = true
+                                    //return false;  
+                                }
+                            })
                         }
-                        setDeviation(model);
-                        validateDeviationForm(model);
-                        if(_.isArray(validateDeviation) && validateDeviation.length > 0 && model.loanAccount.currentStage != 'Screening') {
-                            model.loanAccount.loanMitigants=[];
+                        if(model.mitigationCheked){
                             PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                             return false;
                         }
+                        if(model.deviationMitigants){
+                            _.forEach(model.deviationMitigants,function(mitigation){
+                                if (!_.hasIn(model.loanAccount.loanMitigants, mitigation.id))
+                                {
+                                    model.loanAccount.loanMitigants.push(mitigation)
+                                } 
+                            })
+                        }
+                        setDeviation(model);
+                        
+                        
+                       // setDeviation(model);
+                       // validateDeviationForm(model);
+                        // if(_.isArray(validateDeviation) && validateDeviation.length > 0 && model.loanAccount.currentStage != 'Screening') {
+                        //     model.loanAccount.loanMitigants=[];
+                        //     PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
+                        //     return false;
+                        // }
                       
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                model.loanAccount.loanMitigants=[];

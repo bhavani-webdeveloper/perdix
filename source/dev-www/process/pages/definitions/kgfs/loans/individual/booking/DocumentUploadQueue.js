@@ -68,6 +68,15 @@ define({
                                 "type": "select"
                             }
                         },
+                        "productCategory": {
+                            "title": "PRODUCT_CATEGORY",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "loan_product_category_master",
+                                "parentEnumCode":"booking_loan_type",
+                            }
+                        },
                         "partner_code": {
                             "title": "PARTNER_CODE",
                             "type":["string","null"],
@@ -144,6 +153,7 @@ define({
                         'loanType':searchOptions.loanType,
                         'partnerCode': searchOptions.partner_code,
                         'page': pageOpts.pageNo,
+                        'productCategory':searchOptions.productCategory,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
                 },

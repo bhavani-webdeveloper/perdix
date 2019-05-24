@@ -42,8 +42,8 @@ define({
                             }
                         },
                         "applicantName": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string"
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
                         },
                         "urn": {
                             "title": "URN_NO",
@@ -55,6 +55,15 @@ define({
                             "type": "string",
                             "x-schema-form": {
                                 "type": "select"
+                            }
+                        },
+                        "productCategory": {
+                            "title": "PRODUCT_CATEGORY",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "loan_product_category_master",
+                                "parentEnumCode":"booking_loan_type",
                             }
                         },
                         "partner_code": {
@@ -82,6 +91,7 @@ define({
                         'urn': searchOptions.urn,
                         'loanType':searchOptions.loanType,
                         'partnerCode': searchOptions.partner_code,
+                        'productCategory':searchOptions.productCategory,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;
