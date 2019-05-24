@@ -44,9 +44,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation":{
                                     "readonly":true
                                 },                             
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
                                 "loanInformation":{
                                     "readonly":true
                                 },
@@ -845,22 +842,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.mobilePhone":{
                             "required": true,
-                            "title":"MOBILE_NO"
+                            "title":"MOBILE_NO",
+                            "readonly":true
 
                         },
                         "ContactInformation.landLineNo":{
                             "key":"customer.landLineNo",
-                            "title":"ALTERNATE_MOBILE_NO"
+                            "title":"ALTERNATE_MOBILE_NO",
+                            "readonly":true
 
                         },
                         "ContactInformation.email":{
-                            "title":"EMAIL_ID"
+                            "title":"EMAIL_ID",
+                            "readonly":true
                         },
                         "ContactInformation.doorNo":{
-                            "title":"DOOR_BUILDING"
+                            "title":"DOOR_BUILDING",
+                            "readonly":true
                         },
                         "ContactInformation.mailingDoorNo":{
-                            "title":"DOOR_BUILDING"
+                            "title":"DOOR_BUILDING",
+                            "readonly":true
                         },
                         "ContactInformation.mailingPincode": {
                             condition: "!model.customer.mailSameAsResidence",
@@ -869,6 +871,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             autolov: true,
                             "resolver": "MailingPincodeLOVConfiguration",
                             "searchHelper": formHelper,
+                            "readonly":true
 
                         },
                         "ContactInformation.pincode": {
@@ -878,20 +881,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             autolov: true,
                             "resolver": "PincodeLOVConfiguration",
                             "searchHelper": formHelper,
+                            "readonly":true
                         },
                         "ContactInformation.locality":{
-                            title:"LOCALITY1"
+                            title:"LOCALITY1",
+                            "readonly":true
+                        },
+                        "ContactInformation.street":{
+                            "readonly":true
+                        },
+                        "ContactInformation.villageName":{
+                            "readonly":true
+                        },
+                        "ContactInformation.postOffice":{
+                            "readonly":true
+                        },
+                        "ContactInformation.district":{
+                            "readonly":true
+                        },
+                        "ContactInformation.landmark":{
+                            "readonly":true
+                        },                        
+                        "ContactInformation.state":{
+                            "readonly":true
                         },
                         "ContactInformation.permanentAddressFieldSet": {
                             condition: "!model.customer.residentialAddressAlsoBusinessAddress",
+                            "readonly":true
                         },
                         "ContactInformation.permanentAddressFieldSet": {
                             condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailSameAsResidence":{
                             "onChange": function (modelValue, form, model) {
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
-                            }
+                            },
+                            "readonly":true
                         },
                         "ContactInformation.residentialAddressAlsoBusinessAddress":{
                             "onChange": function (modelValue, form, model) {                               
@@ -901,29 +927,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.mailingDoorNo":{
                             title:"DOOR_BUILDING",
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingStreet":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingLocality":{
                             title:"LOCALITY1",
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingVillageName":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailinglandmark":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingPostoffice":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingDistrict":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "ContactInformation.mailingState":{
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                            "readonly":true
                         },
                         "BankAccounts.customerBankAccounts": {
                             "onArrayAdd": function (modelValue, form, model, formCtrl, $event) {
@@ -1454,7 +1488,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "stdCode":{
                                             orderNo: 145,
                                             key: "customer.stdCode",
-                                            title:"STD_CODE"
+                                            title:"STD_CODE",
+                                            "readonly":true
                                         },
                                         "contactDetailsAlsoBusinessContactDetails":{
                                             title:"CONTACT_DETAILS_ALSO_BUSINESS_CONTACT_DETAILS",
@@ -1462,7 +1497,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             orderNo:50,
                                             "schema":{  
                                                "default":false
-                                            }
+                                            },
+                                            "readonly":true
                                         },
                                         "residentialAddressAlsoBusinessAddress":{
                                             "key":"customer.fcuStatus",
@@ -1476,13 +1512,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "mailinglandmark":{
                                             "key":"customer.previousRentDetails",
                                             "orderNo":185,
-                                            "title":"LANDMARK"
+                                            "title":"LANDMARK",
+                                            "readonly":true
                                         },
                                         "mailingVillageName":{
                                             "key":"customer.nickName",
                                             "orderNo":205,
                                             "title":"VILLAGE_NAME"
-                                        }
+                                        },
+                                        "readonly":true
                                     }
                                 },
                                 
