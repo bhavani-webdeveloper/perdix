@@ -19,8 +19,8 @@ define([],function(){
             var setDeviation = function(model){
                 if(model.loanAccount.loanMitigants){
                     _.forEach(model.loanAccount.loanMitigants,function(mitigation){
-                        if(!(mitigation.isCurrentMitigation)){
-                            mitigation.isCurrentMitigation = true
+                        if(!(mitigation.currentMitigation)){
+                            mitigation.currentMitigation = true
                         }
                     })
                 }
@@ -56,7 +56,7 @@ define([],function(){
                     var loanMitigantsGrouped = {};
                     for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
                         var item = model.loanAccount.loanMitigants[i];
-                        if (item.isCurrentMitigation && !_.hasIn(loanMitigantsGrouped, item.parameter)){
+                        if (item.currentMitigation && !_.hasIn(loanMitigantsGrouped, item.parameter)){
                             loanMitigantsGrouped[item.parameter] = [];
                             loanMitigantsGrouped[item.parameter].push(item);
                         }
@@ -793,6 +793,7 @@ define([],function(){
                                         var currentDate = moment(Utils.getCurrentDate(),"YYYY-MM-DD");
                                         if( date < currentDate)
                                             resp.body.splice(i,1);
+                                        resp.body[i].productCode.fil
                                     }
                                     deferred.resolve(resp);
                                 }),function(err){
@@ -2290,7 +2291,7 @@ define([],function(){
                         model.mitigationCheked = false
                         if(model.deviationMitigants){
                             _.forEach(model.deviationMitigants,function(mitigation){
-                                if(mitigation.isCurrentMitigation && !mitigation.mitigatedStatus){
+                                if(mitigation.currentMitigation && !mitigation.mitigatedStatus){
                                     model.mitigationCheked = true
                                     //return false;  
                                 }
