@@ -2152,6 +2152,12 @@ define([],function(){
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
+                        if(_.hasIn(model.loanProcess, 'applicantEnrolmentProcess'))
+                            if(model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus)
+                                model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus="true";
+                            else
+                                model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus="false";
+
                         if(model.loanAccount.productCategory  == 'MEL' && model.customerId !=null && model.loanAccount.customerId != model.customerId)
                         model.loanProcess.loanAccount.customerId = model.customerId;
 
@@ -2310,6 +2316,13 @@ define([],function(){
                         model.review.targetStage='';
                         model.loanProcess.stage='';
                     } 
+
+                         if(_.hasIn(model.loanProcess, 'applicantEnrolmentProcess'))
+                            if(model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus)
+                                model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus="true";
+                            else
+                                model.loanProcess.applicantEnrolmentProcess.customer.fcuStatus="false";
+
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;

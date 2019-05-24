@@ -1426,6 +1426,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                    
+                    if(model.customer.fcuStatus)
+                        model.customer.fcuStatus=true;
+                    else
+                        model.customer.fcuStatus=false;
                      if (typeof model.customer.udf == "undefined" || model.customer.udf == null) {                    
                     model.customer.udf = {};
                     model.customer.udf.userDefinedFieldValues = {};
