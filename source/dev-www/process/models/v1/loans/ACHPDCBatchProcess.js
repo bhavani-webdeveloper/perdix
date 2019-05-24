@@ -15,15 +15,14 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 			method: 'GET',
 			url: endpoint + '/fetchDemandBatchList'
 		}),
-		fetchDemandDetails: {
+		fetchDemandDetails: searchResource({
 			method: 'GET',
-			url: endpoint + '/fetchDemandDetails',
-			isArray: true
-		},
+			url: endpoint + '/fetchDemandDetails'
+		}),
 		submitDemandForRepayment: {
 			method: 'POST',
-			url: endpoint + '/submitDemandForRepayment',
-			isArray: true
+			url: endpoint + '/submitDemandForRepayment'
+
 		},
 		fetchDemandStatus: {
 			method: 'GET',
@@ -61,6 +60,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, $q, PageHelp
 			method: 'POST',
 			url: endpoint + '/submitDemandForRepaymentUpload'
 		},
+		submitLoanAndDemandForRepayment: {
+			method: 'POST',
+			url: endpoint + '/submitLoanAndDemandForRepayment'
+		}
 
 	});
 

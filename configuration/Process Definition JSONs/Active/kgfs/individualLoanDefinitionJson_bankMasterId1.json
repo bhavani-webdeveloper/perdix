@@ -191,8 +191,7 @@
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"Sanction",
-          "isAccountOpening":false,
-          "isPreAccountOpening":true,
+          "isAccountOpening":true,
           "allowedRoles":[
              "WM"
           ]
@@ -204,7 +203,7 @@
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":true,
+        "isAccountOpening":false,
         "multipleLoanNotAllowedForLoanType":true,
         "allowedRoles":[
            "WM"
