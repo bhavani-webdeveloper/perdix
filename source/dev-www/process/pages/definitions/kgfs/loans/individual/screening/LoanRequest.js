@@ -692,7 +692,8 @@ define([],function(){
                             }
                         },
                         "LoanRecommendation.tenure": {
-                            onChange:function(value,form,model){
+                            condition : "model.loanAccount.productCategory != 'MEL'",
+                            onChange:function(value,form,model){    
                                 computeEMI(model);
                             }
                         },
@@ -793,7 +794,21 @@ define([],function(){
                                         var currentDate = moment(Utils.getCurrentDate(),"YYYY-MM-DD");
                                         if( date < currentDate)
                                             resp.body.splice(i,1);
-                                        resp.body[i].productCode.fil
+                                        if((model.loanAccount.productCategory == 'MEL') && !(['T516', 'T515','T585','T586','T903','T963'].indexOf(resp.body[i].productCode) >= 0)){
+                                            resp.body.splice(i,1);
+                                        }
+
+
+
+                                        // _.filter(resp.body, function (item) {
+                                        //     if(['T516', 'T515','T585','T586','T903','T963'].indexOf(item.productCode) >= 0){
+
+                                        //     }
+                                        //     else{
+
+                                        //     }
+                                        //   })
+                                          
                                     }
                                     deferred.resolve(resp);
                                 }),function(err){
@@ -1271,6 +1286,7 @@ define([],function(){
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmountRecommended",
                     "LoanRecommendation.tenure",
+                    "LoanRecommendation.tenure1",
                     "LoanRecommendation.interestRate",
                     "LoanRecommendation.interestRate1",
                     "LoanRecommendation.expectedEmi",
@@ -1610,7 +1626,10 @@ define([],function(){
                                                 "orderNo":140,
                                                 "readonly":true,
                                                 "title":"INTEREST_RATE",
-                                                "condition":"!model.flag" 
+                                                "condition":"!model.flag" ,
+                                                onChange:function(value,form,model){
+                                                    computeEstimatedEMI(model);
+                                                }
                                             },
                                             "tenureRequested1":{
                                                 "key":"loanAccount.tenureRequested",
@@ -1638,6 +1657,16 @@ define([],function(){
                                         "title":"INTEREST_RATE",
                                         "readonly":true,
                                         condition:"!model.flag",
+                                    },
+                                    "tenure1":{
+                                        "key":"loanAccount.tenure",
+                                        "title":"DURATION_IN_MONTHS",
+                                        "enumCode":"tenure",
+                                        "type": "select",
+                                        condition : "model.loanAccount.productCategory == 'MEL'",
+                                        onChange:function(value,form,model){
+                                            computeEMI(model);
+                                        }
                                     },
                                     "expectedEmi":{
                                         "key":"loanAccount.emiRequested",
