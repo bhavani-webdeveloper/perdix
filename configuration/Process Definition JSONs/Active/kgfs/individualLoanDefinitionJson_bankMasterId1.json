@@ -3883,8 +3883,8 @@
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
-                   "isCurrentMitigation":{
-                     "title":"isCurrentMitigation",
+                   "currentMitigation":{
+                     "title":"CurrentMitigation",
                      "type":"boolean",
                      "captureStages":[
                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","BusinessTeamReview","CreditOfficerReview","CreditManagerReview","CBOCreditHeadReview","CEOMDReview"]
