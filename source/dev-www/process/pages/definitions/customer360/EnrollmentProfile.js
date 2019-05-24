@@ -745,6 +745,11 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                         model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
                                         model.customer.familyMembers[rowIndex].enrolledUrnNo = resp.urnNo;
                                         model.customer.familyMembers[rowIndex].relationShip = "";
+                                        _.forEach(resp.familyMembers,function(familyMembers){
+                                            if (resp.urnNo == familyMembers.enrolledUrnNo){
+                                                model.customer.familyMembers[rowIndex].id =  familyMembers.id
+                                            }
+                                        });    
                                         var selfIndex = _.findIndex(resp.familyMembers, function(o) {
                                             return o.relationShip.toUpperCase() == 'SELF'
                                         });
