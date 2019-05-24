@@ -119,6 +119,17 @@ define([],function(){
                 }
                 return true;
             };
+            var nomineeDetails = function(customerId,valueObj, model, context){
+                Queries.getCustomerInfo(customerId).then(function(res){
+                    model.loanAccount.nominees[context.arrayIndex].nomineePincode = res[0].pincode;
+                    model.loanAccount.nominees[context.arrayIndex].nomineeDistrict = res[0].district;
+                    model.loanAccount.nominees[context.arrayIndex].nomineeState = res[0].state;
+                    model.loanAccount.nominees[context.arrayIndex].nomineeLocality = res[0].locality;
+                }
+                ,function(res){
+                    
+                })
+            };
 
             var validateDeviation=[];            
             var validateDeviationForm = function(model){
@@ -709,6 +720,7 @@ define([],function(){
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
+                            condition : "model.loanAccount.productCategory != 'MEL'",
                             onChange:function(value,form,model){
                                 computeEstimatedEMI(model);
                             }
@@ -948,13 +960,15 @@ define([],function(){
                                 return out;
                             }
                             applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            model.selfCustomerId = applicantCustomer.id;
                             if (!applicantCustomer) {
                                 return out;
                             }
-
                             for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
                                 if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
                                     out.push({
+                                        customrId:applicantCustomer.familyMembers[i].customerId,
+                                        enrolledUrnNo:applicantCustomer.familyMembers[i].enrolledUrnNo,
                                         name: applicantCustomer.familyMembers[i].familyMemberFirstName,
                                         dob: applicantCustomer.familyMembers[i].dateOfBirth,
                                         relationship: applicantCustomer.familyMembers[i].relationShip,
@@ -970,10 +984,16 @@ define([],function(){
                             });
                         },
                         onSelect: function (valueObj, model, context) {
-                            //add to the witnees array.
                             if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
                                 model.loanAccount.nominees[context.arrayIndex] = [];
                             }
+                            if(valueObj.enrolledUrnNo){
+                                nomineeDetails(valueObj.customrId,valueObj, model, context);
+                            }
+                            else{
+                                nomineeDetails(model.selfCustomerId,valueObj, model, context);
+                            }
+                            //add to the witnees array
                             model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
                             model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
                             model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
@@ -1183,6 +1203,7 @@ define([],function(){
                     "PreliminaryInformation.loanPurpose2",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.tenureRequested",
+                    "PreliminaryInformation.tenureRequested1",
                     "PreliminaryInformation.comfortableEMI",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.expectedInterestRate1",
@@ -1589,7 +1610,18 @@ define([],function(){
                                                 "readonly":true,
                                                 "title":"INTEREST_RATE",
                                                 "condition":"!model.flag" 
-                                            }
+                                            },
+                                            "tenureRequested1":{
+                                                "key":"loanAccount.tenureRequested",
+                                                "title": "TENURE_REQUESETED",
+                                                "type": "select",
+                                                "enumCode":"tenure",
+                                                condition : "model.loanAccount.productCategory == 'MEL'",
+                                                onChange:function(value,form,model){
+                                                    computeEstimatedEMI(model);
+                                                },
+                                                "orderNo": 70
+                                            },
                                         }
                             },
                             "LoanRecommendation":{
