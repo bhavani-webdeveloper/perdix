@@ -293,6 +293,12 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 										pageId:item.id,
 										pageData: {currentStage: item.currentStage}
 									});
+								} else if(model.siteCode == 'shramsarathi') {
+									$state.go("Page.Engine",{
+										pageName:"shramsarathi.customer360.CustomerProfile",
+										pageId:item.id,
+										pageData: {currentStage: item.currentStage}
+									});
 								} else {
 									$state.go("Page.Engine",{
 										pageName:"customer.IndividualEnrollment",
