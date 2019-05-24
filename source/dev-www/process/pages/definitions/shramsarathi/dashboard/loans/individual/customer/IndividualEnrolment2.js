@@ -285,7 +285,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 //"IndividualReferences",
-                                "IndividualInformation.centreId",
+                                //"IndividualInformation.centreId",
                                 //"References",
                                 "KYC.firstName"
                             ],
@@ -348,6 +348,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":false
+                                },
+                                "IndividualInformation.centreId":{
+                                    "title": "ZONE_NAME",
+                                    "readonly":true
                                 },
                                 "IndividualInformation.caste":{
                                     "enumcode": "caste",
@@ -4166,6 +4170,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 actions: {
                     save: function (model, formCtrl, form, $event) {
+                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
@@ -4261,6 +4266,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     proceed: function (model, form, formName) {
+                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
@@ -4343,6 +4349,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
+                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;

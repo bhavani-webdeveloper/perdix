@@ -227,7 +227,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "readonly": true
                                     }, "doorNo": {
                                         "key": "applicant.customer.doorNo",
-                                        "title": "DOOR_NO",
+                                        "title": "HAMLET_FALA",
                                         "readonly": true
                                     },
                                     "pincode": {
@@ -240,12 +240,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     },
                                     "locality": {
                                         "key": "applicant.customer.locality",
-                                        "title": "LOCALITY",
+                                        "title": "AREA",
                                         "readonly": true
                                     },
                                     "villageName": {
                                         "key": "applicant.customer.villageName",
-                                        "title": "VILLAGE_NAME",
+                                        "title": "VILLAGE",
                                         "enumCode": "village",
                                         "readonly": true
                                     },
