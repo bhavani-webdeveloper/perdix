@@ -1272,7 +1272,8 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                 "JEWEL": "JEWEL",
                                 "MEL": "MEL",
                                 "Personal": "Personal",
-                                "Group":"Group"
+                                "Group":"Group",
+                                "Others":"Others"
                             },
                            // condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
                         },

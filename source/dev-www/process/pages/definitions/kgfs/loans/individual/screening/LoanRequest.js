@@ -1498,6 +1498,56 @@ define([],function(){
                                                 },
                                                 "orderNo": 10
                                             },
+                                            "loanPurpose1":{
+                                                key: "loanAccount.loanPurpose1",
+                                                type: "lov",
+                                                autolov: true,
+                                                title:"LOAN_PURPOSE_1",
+                                                bindMap: {
+                                                },
+                                                outputMap: {
+                                                    "purpose1": "loanAccount.loanPurpose1"
+                                                },
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model) {
+                                                    if(model.loanAccount.productCode != null)
+                                                        return Queries.getLoanPurpose1(model.loanAccount.productCode);
+                                                    else
+                                                        return Queries.getAllLoanPurpose1();
+                
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.purpose1
+                                                    ];
+                                                },
+                                                onSelect: function(result, model, context) {
+                                                    model.loanAccount.loanPurpose2 = '';
+                                                }
+                                            },
+                                            "loanPurpose2":{
+                                                key: "loanAccount.loanPurpose2",
+                                                type: "lov",
+                                                autolov: true,
+                                                title:"LOAN_PURPOSE_2",
+                                                bindMap: {
+                                                },
+                                                outputMap: {
+                                                    "purpose2": "loanAccount.loanPurpose2"
+                                                },
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model) {
+                                                    if(model.loanAccount.productCode != null)
+                                                        return Queries.getLoanPurpose2(model.loanAccount.productCode, model.loanAccount.loanPurpose1);
+                                                    else
+                                                        return Queries.getAllLoanPurpose2(model.loanAccount.loanPurpose1);
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.purpose2
+                                                    ];
+                                                }
+                                            },
                                             "loanPurpose3": {
                                                 "key":"loanAccount.loanPurpose3",
                                                 "title": "LOAN_PURPOSE_3",
