@@ -735,9 +735,12 @@ define([],function(){
                         },
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
-                            "orderNo":140,
+                            "orderNo":139,
                             "title":"INTEREST_RATE",
-                            condition:"model.flag"
+                            condition:"model.flag",
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
+                            }
                         },                        
                         "PreliminaryInformation.productType": {
                         "required": true,
@@ -1623,7 +1626,7 @@ define([],function(){
                                             "expectedInterestRate1":{
                                                 "required": true,
                                                 "key":"loanAccount.expectedInterestRate",
-                                                "orderNo":140,
+                                                "orderNo":139,
                                                 "readonly":true,
                                                 "title":"INTEREST_RATE",
                                                 "condition":"!model.flag" ,
