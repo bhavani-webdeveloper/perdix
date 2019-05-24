@@ -11,44 +11,47 @@
 
       }
    },
-   "schemes":["http"],
-   "host": "sit.perdix.co.in:8080",
+   "schemes":[  
+      "http"
+   ],
+   "host":"sit.perdix.co.in:8080",
    "basePath":"/sit_kgfs_perdix-server",
-   "securityDefinitions":{
-      "oauth2":{
+   "securityDefinitions":{  
+      "oauth2":{  
          "type":"oauth2",
          "flow":"password",
          "tokenUrl":"http://sit.perdix.co.in:8080/sit_kgfs_perdix-server/oauth/token",
-         "scopes": {
-            "read": "Grants read access",
-            "write": "Grants write access"
+         "scopes":{  
+            "read":"Grants read access",
+            "write":"Grants write access"
          }
       }
    },
-   "components": {
-      "securitySchemes": {
-         "bearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
+   "components":{  
+      "securitySchemes":{  
+         "bearerAuth":{  
+            "type":"http",
+            "scheme":"bearer",
+            "bearerFormat":"JWT"
          }
       }
    },
-   "security": [{
-      "bearerAuth": []
-   }],
-   "tags":[
-     
+   "security":[  
+      {  
+         "bearerAuth":[  
+
+         ]
+      }
+   ],
+   "tags":[  
       {  
          "name":"partner-loan-collections",
          "description":"Loan Collections API"
       },
-      
       {  
          "name":"partner-individualloanprocess",
          "description":"Individual Loan Process API"
       },
-      
       {  
          "name":"partner-group-process",
          "description":"Group Process API"
@@ -58,8 +61,7 @@
          "description":"Enrollments API"
       }
    ],
-   "paths":{ 
-
+   "paths":{  
       "/api/partner/enrollments":{  
          "get":{  
             "tags":[  
@@ -557,165 +559,165 @@
             }
          }
       },
-       "/api/partner/loanaccounts/grouprepayment": {
-      "post": {
-        "tags": [
-          "partner-loan-collections"
-        ],
-        "summary": "Group repayment",
-        "description": "Group Repayment of multiple loans.",
-        "operationId": "groupRepaymentUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "repaymentCompositeDTO",
-            "description": "repaymentCompositeDTO",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RepaymentCompositeDTO"
+      "/api/partner/loanaccounts/grouprepayment":{  
+         "post":{  
+            "tags":[  
+               "partner-loan-collections"
+            ],
+            "summary":"Group repayment",
+            "description":"Group Repayment of multiple loans.",
+            "operationId":"groupRepaymentUsingPOST_1",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"repaymentCompositeDTO",
+                  "description":"repaymentCompositeDTO",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/RepaymentCompositeDTO"
+                  }
+               }
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"Group repayment of multiple loans completed successfully.",
+                  "schema":{  
+                     "$ref":"#/definitions/RepaymentCompositeDTO"
+                  }
+               },
+               "201":{  
+                  "description":"Created"
+               },
+               "401":{  
+                  "description":"Unauthorized"
+               },
+               "500":{  
+                  "description":"Internal server error"
+               },
+               "403":{  
+                  "description":"Forbidden"
+               },
+               "404":{  
+                  "description":"Not Found"
+               }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Group repayment of multiple loans completed successfully.",
-            "schema": {
-              "$ref": "#/definitions/RepaymentCompositeDTO"
+         }
+      },
+      "/api/partner/loanaccounts/grouprepayment/{partnerCode}/{groupCode}/{isLegacy}":{  
+         "get":{  
+            "tags":[  
+               "partner-loan-collections"
+            ],
+            "summary":"Fetch Group details",
+            "description":"Group details featch for given PartnerCode and Group Code.",
+            "operationId":"findGroupRepaymentDetailsUsingGET_1",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "name":"partnerCode",
+                  "in":"path",
+                  "description":"partnerCode",
+                  "required":true,
+                  "type":"string"
+               },
+               {  
+                  "name":"groupCode",
+                  "in":"path",
+                  "description":"groupCode",
+                  "required":true,
+                  "type":"string"
+               },
+               {  
+                  "name":"isLegacy",
+                  "in":"path",
+                  "description":"isLegacy",
+                  "required":true,
+                  "type":"boolean"
+               }
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"Group details featch for given PartnerCode and Group Code.",
+                  "schema":{  
+                     "$ref":"#/definitions/LoanOdSummaryDto"
+                  }
+               },
+               "401":{  
+                  "description":"Unauthorized"
+               },
+               "500":{  
+                  "description":"Internal server error"
+               },
+               "403":{  
+                  "description":"Forbidden"
+               },
+               "404":{  
+                  "description":"Not Found"
+               }
             }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal server error"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/partner/loanaccounts/grouprepayment/{partnerCode}/{groupCode}/{isLegacy}": {
-      "get": {
-        "tags": [
-          "partner-loan-collections"
-        ],
-        "summary": "Fetch Group details",
-        "description": "Group details featch for given PartnerCode and Group Code.",
-        "operationId": "findGroupRepaymentDetailsUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "partnerCode",
-            "in": "path",
-            "description": "partnerCode",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "groupCode",
-            "in": "path",
-            "description": "groupCode",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "isLegacy",
-            "in": "path",
-            "description": "isLegacy",
-            "required": true,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Group details featch for given PartnerCode and Group Code.",
-            "schema": {
-              "$ref": "#/definitions/LoanOdSummaryDto"
+         }
+      },
+      "/api/partner/loanaccounts/repay":{  
+         "post":{  
+            "tags":[  
+               "partner-loan-collections"
+            ],
+            "summary":"Repay loan",
+            "description":"Repayment of loan.",
+            "operationId":"loanRepaymentUsingPOST_1",
+            "consumes":[  
+               "application/json"
+            ],
+            "produces":[  
+               "application/json"
+            ],
+            "parameters":[  
+               {  
+                  "in":"body",
+                  "name":"repaymentDTO",
+                  "description":"repaymentDTO",
+                  "required":true,
+                  "schema":{  
+                     "$ref":"#/definitions/RepaymentDTO"
+                  }
+               }
+            ],
+            "responses":{  
+               "200":{  
+                  "description":"Repayment completed successfully.",
+                  "schema":{  
+                     "$ref":"#/definitions/RepaymentDTO"
+                  }
+               },
+               "201":{  
+                  "description":"Created"
+               },
+               "401":{  
+                  "description":"Unauthorized"
+               },
+               "500":{  
+                  "description":"Internal server error"
+               },
+               "403":{  
+                  "description":"Forbidden"
+               },
+               "404":{  
+                  "description":"Not Found"
+               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal server error"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/partner/loanaccounts/repay": {
-      "post": {
-        "tags": [
-          "partner-loan-collections"
-        ],
-        "summary": "Repay loan",
-        "description": "Repayment of loan.",
-        "operationId": "loanRepaymentUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "repaymentDTO",
-            "description": "repaymentDTO",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RepaymentDTO"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Repayment completed successfully.",
-            "schema": {
-              "$ref": "#/definitions/RepaymentDTO"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal server error"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
+         }
+      },
       "/api/partner/enrollments/findInternal":{  
          "get":{  
             "tags":[  
@@ -1205,11 +1207,13 @@
             "tags":[  
                "partner-enrollments"
             ],
-            "security": [
-                    {
-                        "api_key": []
-                    }
-                ],
+            "security":[  
+               {  
+                  "api_key":[  
+
+                  ]
+               }
+            ],
             "summary":"Get Partner Customer by id",
             "operationId":"getUsingGET_6",
             "consumes":[  
@@ -1854,7 +1858,7 @@
                "200":{  
                   "description":"Successfully loan disburse",
                   "schema":{  
-                     "$ref":"#/definitions/LoanDisbursementCompositeDTO"
+                     "$ref":"#/definitions/MultiLoanDisbursementCompositeDTO"
                   }
                },
                "201":{  
@@ -1904,7 +1908,7 @@
                "200":{  
                   "description":"Batch Disbursement Confirmation updated successfully",
                   "schema":{  
-                     "type":"string"
+                     "$ref":"#/definitions/StatusDTO"
                   }
                },
                "201":{  
@@ -2764,6 +2768,7 @@
                "200":{  
                   "description":"Successfully retrieved disbursement list.",
                   "schema":{  
+                     "type":"array",
                      "$ref":"#/definitions/DisbursementDTO"
                   }
                },
@@ -2810,7 +2815,8 @@
                "200":{  
                   "description":"Request for dsc override completed ",
                   "schema":{  
-                     "$ref":"#/definitions/LoanCustomerRelationDTO"
+                     "type":"array",
+                     "$ref":"#/definitions/DSCIntegrationDTO"
                   }
                },
                "201":{  
@@ -3775,7 +3781,6 @@
             }
          }
       }
-     
    },
    "definitions":{  
       "CustomerLiabilityRepayment":{  
@@ -3875,7 +3880,6 @@
             }
          }
       },
-      
       "LoanInsuranceDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -4156,7 +4160,6 @@
             }
          }
       },
-      
       "EnterpriseGstFilingDTO":{  
          "properties":{  
             "customerId":{  
@@ -4213,7 +4216,6 @@
             }
          }
       },
-      
       "NomineeDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -4320,7 +4322,6 @@
             }
          }
       },
-      
       "RoleDTO":{  
          "properties":{  
             "authorities":{  
@@ -4345,7 +4346,6 @@
             }
          }
       },
-     
       "EnterpriseBureauDetailsDTO":{  
          "properties":{  
             "bureau":{  
@@ -4679,7 +4679,6 @@
             }
          }
       },
-     
       "EnrollmentWorkFlowDTO":{  
          "properties":{  
             "customerId":{  
@@ -4877,7 +4876,6 @@
             }
          }
       },
-      
       "GroupProcessCompositeDTO":{  
          "properties":{  
             "group":{  
@@ -4910,8 +4908,7 @@
                "type":"string"
             }
          }
-      },     
-      
+      },
       "ChmIdencheckResponseDTO":{  
          "properties":{  
             "description":{  
@@ -4978,7 +4975,6 @@
             }
          }
       },
-     
       "CollectionDemandDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -5083,7 +5079,6 @@
             }
          }
       },
-      
       "MultiLoanDisbursementCompositeDTO":{  
          "properties":{  
             "loanAccountDisbursementSchedules":{  
@@ -5104,6 +5099,69 @@
             },
             "successResponse":{  
                "type":"boolean"
+            }
+         }
+      },
+      "LoanCustomerRelationDTO":{  
+         "properties":{  
+            "customerId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "customerSnapshotId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "dscId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "dscLimitInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "dscOverrideRemarks":{  
+               "type":"string"
+            },
+            "dscOverrideRequestFileId":{  
+               "type":"string"
+            },
+            "dscOverrideRequestRemarks":{  
+               "type":"string"
+            },
+            "dscStatus":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "psychometricCompleted":{  
+               "type":"string"
+            },
+            "psychometricRequired":{  
+               "type":"string"
+            },
+            "relation":{  
+               "type":"string"
+            },
+            "relationshipWithApplicant":{  
+               "type":"string"
+            },
+            "teleCallingDetailsSnapshotId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "urn":{  
+               "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
             }
          }
       },
@@ -5163,7 +5221,6 @@
             }
          }
       },
-      
       "IndividualLoanSummaryDTO":{  
          "properties":{  
             "_priority":{  
@@ -5318,7 +5375,6 @@
             }
          }
       },
-     
       "DisbursementCompositeDTO":{  
          "properties":{  
             "disbursementDTOs":{  
@@ -5332,7 +5388,6 @@
             }
          }
       },
-      
       "LoanCollectionSummaryDTO":{  
          "properties":{  
             "accountCode":{  
@@ -5415,7 +5470,6 @@
             }
          }
       },
-     
       "BulkIndividualLoanProcessCompositeDTO":{  
          "properties":{  
             "loanAccounts":{  
@@ -5606,7 +5660,6 @@
             }
          }
       },
-      
       "EnterpriseCustomerRelationDTO":{  
          "properties":{  
             "businessInvolvement":{  
@@ -5652,7 +5705,6 @@
             }
          }
       },
-     
       "GroupFieldDTO":{  
          "properties":{  
             "captureStage":{  
@@ -5688,7 +5740,6 @@
             }
          }
       },
-      
       "HouseHoldLinkDTO":{  
          "properties":{  
             "alert":{  
@@ -5706,7 +5757,6 @@
             }
          }
       },
-      
       "CustomerLiabilityRepaymentDTO":{  
          "properties":{  
             "actualRepaymentDate":{  
@@ -5765,7 +5815,6 @@
             }
          }
       },
-      
       "BcAccountDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -5908,7 +5957,6 @@
             }
          }
       },
-     
       "VehiclePastValuationDTO":{  
          "properties":{  
             "financier":{  
@@ -5939,7 +5987,6 @@
             }
          }
       },
-      
       "CollateralDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -6118,7 +6165,6 @@
             }
          }
       },
-           
       "CheckerGroupMemberDTO":{  
          "properties":{  
             "borrowerIlliterate":{  
@@ -6344,8 +6390,6 @@
             }
          }
       },
-      
-      
       "MapOfstringAndFieldDTO":{  
          "type":"object",
          "additionalProperties":{  
@@ -6612,7 +6656,6 @@
             }
          }
       },
-      
       "CustomerDTO":{  
          "properties":{  
             "aadhaarNo":{  
@@ -7505,7 +7548,6 @@
             }
          }
       },
-     
       "LoanMonitoringCompositeDTO":{  
          "properties":{  
             "loanMonitoringAction":{  
@@ -7533,7 +7575,6 @@
             }
          }
       },
-      
       "CollectionDemandSummaryCompositeDTO":{  
          "properties":{  
             "collectionDemandSummary":{  
@@ -7550,7 +7591,6 @@
             }
          }
       },
-     
       "LenderContactDetailsDTO":{  
          "properties":{  
             "contactPersonName":{  
@@ -8138,7 +8178,6 @@
             }
          }
       },
-      
       "LoanDisbursementCompositeDTO":{  
          "properties":{  
             "disbursementProcessAction":{  
@@ -8170,7 +8209,6 @@
             }
          }
       },
-      
       "FinancialSummaryDTO":{  
          "properties":{  
             "availableSurplus":{  
@@ -8223,7 +8261,6 @@
             }
          }
       },
-      
       "JlgLoanDetails":{  
          "properties":{  
             "accountNumber":{  
@@ -8389,7 +8426,6 @@
             }
          }
       },
-     
       "PreclosureRequestDetails":{  
          "properties":{  
             "accountNumber":{  
@@ -8424,8 +8460,6 @@
             }
          }
       },
-      
-      
       "UrnLinkResponseDTO":{  
          "properties":{  
             "familyMemberName":{  
@@ -8466,7 +8500,6 @@
             }
          }
       },
-            
       "LoanAccountSummaryDTO":{  
          "properties":{  
             "accountId":{  
@@ -8611,8 +8644,6 @@
             }
          }
       },
-     
-      
       "CustomerLeadDTO":{  
          "properties":{  
             "addressLine1":{  
@@ -8838,7 +8869,6 @@
             }
          }
       },
-      
       "CibilLoanSummaryInfoDTO":{  
          "properties":{  
             "accountType":{  
@@ -8878,8 +8908,6 @@
             }
          }
       },
-      
-      
       "JlgGroupMemberDTO":{  
          "properties":{  
             "borrowerIlliterate":{  
@@ -9130,7 +9158,6 @@
             }
          }
       },
-     
       "CustomerBankMasterDTO":{  
          "properties":{  
             "bankName":{  
@@ -9605,7 +9632,6 @@
             }
          }
       },
-      
       "EnterpriseCardSalesDTO":{  
          "properties":{  
             "cardSalesMultiple":{  
@@ -9804,8 +9830,7 @@
                "format":"int32"
             }
          }
-      }     
-      ,
+      },
       "DisbursementDTO":{  
          "properties":{  
             "accountId":{  
@@ -10303,7 +10328,6 @@
             }
          }
       },
-      
       "InsuranceUdfsDTO":{  
          "properties":{  
             "id":{  
@@ -10335,7 +10359,6 @@
             }
          }
       },
-     
       "GroupLoanWorkFlowDTO":{  
          "properties":{  
             "groupId":{  
@@ -10393,7 +10416,6 @@
             }
          }
       },
-     
       "CustomerDocumentsDTO":{  
          "properties":{  
             "customerId":{  
@@ -10437,7 +10459,6 @@
             }
          }
       },
-      
       "EnterpriseAssetsDTO":{  
          "properties":{  
             "assetCategory":{  
@@ -10808,7 +10829,6 @@
             }
          }
       },
-     
       "PayeeNameValidationReqDTO":{  
          "properties":{  
             "beneficiaryAccValidationReq":{  
@@ -10897,8 +10917,6 @@
             }
          }
       },
-      
-     
       "VehicleLoanIncomesDTO":{  
          "properties":{  
             "id":{  
@@ -11808,7 +11826,6 @@
             }
          }
       },
-      
       "LoanMonitoringSchemaDTO":{  
          "properties":{  
             "$schema":{  
@@ -12092,7 +12109,6 @@
             }
          }
       },
-     
       "MissingRequiredFieldDTO":{  
          "properties":{  
             "errorMessage":{  
@@ -12136,7 +12152,6 @@
             }
          }
       },
-
       "CheckerTransactionHistory":{  
          "properties":{  
             "accountCreatedAt":{  
@@ -12410,8 +12425,6 @@
             }
          }
       },
-     
-     
       "BankDepositSummaryDTO":{  
          "properties":{  
             "bankAccountNumber":{  
@@ -12471,8 +12484,6 @@
             }
          }
       },
-      
-      
       "CibilLoanDetailsDTO":{  
          "properties":{  
             "accountStatus":{  
@@ -12683,7 +12694,6 @@
             }
          }
       },
-     
       "RepaymentDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -12894,7 +12904,6 @@
             }
          }
       },
-      
       "RepaymentBatchHeaderDTO":{  
          "properties":{  
             "id":{  
@@ -13063,7 +13072,6 @@
             }
          }
       },
-     
       "LoanAccountDisbursementScheduleDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -13663,7 +13671,6 @@
             }
          }
       },
-     
       "OtherBusinessIncomeDTO":{  
          "properties":{  
             "additionalDetails":{  
@@ -13693,7 +13700,6 @@
             }
          }
       },
-      
       "LoanProductTenureSlabDTO":{  
          "properties":{  
             "id":{  
@@ -13713,7 +13719,6 @@
             }
          }
       },
-      
       "NewLoanDemandScheduleDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -13909,7 +13914,7 @@
             }
          }
       },
-	  "MEFamilyMappingDTO":{  
+      "MEFamilyMappingDTO":{  
          "properties":{  
             "capturedDate":{  
                "type":"string"
@@ -14108,8 +14113,7 @@
                "format":"int32"
             }
          }
-      },    
-     
+      },
       "CurrentAssetsDTO":{  
          "properties":{  
             "assetCategory":{  
@@ -14288,7 +14292,6 @@
             }
          }
       },
-      
       "IndividualLoanDocumentDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -14333,7 +14336,6 @@
             }
          }
       },
-     
       "EnrollmentDefinitionDTO":{  
          "properties":{  
             "cbValidationStage":{  
@@ -14353,11 +14355,9 @@
             }
          }
       },
-      
       "JSONObject":{  
 
       },
-      
       "CollectionDemandSummaryDTO":{  
          "properties":{  
             "bankId":{  
@@ -14445,7 +14445,6 @@
             }
          }
       },
-      
       "BankMasterSummaryDTO":{  
          "properties":{  
             "applicationDate":{  
@@ -14463,7 +14462,6 @@
             }
          }
       },
-     
       "HighmarkPersonalInfoVariationDTO":{  
          "properties":{  
             "highmarkLoanDetailsId":{  
@@ -14496,7 +14494,6 @@
             }
          }
       },
-      
       "DedupeRequestDetailDTO":{  
          "properties":{  
             "customerName":{  
@@ -14562,7 +14559,6 @@
             }
          }
       },
-     
       "InsurancePolicyCompositDTO":{  
          "properties":{  
             "insurancePolicyDetailsDTO":{  
@@ -14570,7 +14566,6 @@
             }
          }
       },
-     
       "JlgAccountDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -14610,7 +14605,6 @@
             }
          }
       },
-     
       "RepaymentProcessCompositeDTO":{  
          "properties":{  
             "loanCollection":{  
@@ -14636,7 +14630,6 @@
             }
          }
       },
-      
       "LoanDisbursementDefinitionDTO":{  
          "properties":{  
             "fourthStage":{  
@@ -14653,7 +14646,6 @@
             }
          }
       },
-      
       "HighmarkLoanAccountDetailsDTO":{  
          "properties":{  
             "accountStatus":{  
@@ -14931,7 +14923,6 @@
             }
          }
       },
-     
       "HighMarkInterfaceSummaryDTO":{  
          "properties":{  
             "cbCheckValid":{  
@@ -14972,7 +14963,6 @@
             }
          }
       },
-      
       "RepaymentBatchDetails":{  
          "properties":{  
             "accountNumber":{  
@@ -15074,7 +15064,6 @@
             }
          }
       },
-      
       "PreclosureRequestDetailsDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -15374,8 +15363,6 @@
             }
          }
       },
-      
-      
       "ChmHubVerificationDTO":{  
          "properties":{  
             "customerId":{  
@@ -15402,7 +15389,6 @@
             }
          }
       },
-     
       "FixedAssetsMachinaryDTO":{  
          "properties":{  
             "customerId":{  
@@ -15525,7 +15511,6 @@
             }
          }
       },
-      
       "EnterpriseProductSalesDTO":{  
          "properties":{  
             "costPrice":{  
@@ -15653,7 +15638,6 @@
             }
          }
       },
-     
       "PartnerLoanDemandScheduleDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -16148,7 +16132,6 @@
             }
          }
       },
-     
       "LoanDemandScheduleDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -16707,7 +16690,6 @@
             }
          }
       },
-
       "IndividualLoanWorkFlowDTO":{  
          "properties":{  
             "loanId":{  
@@ -16750,7 +16732,6 @@
             }
          }
       },
-     
       "LoanOdSummaryDto":{  
          "properties":{  
             "accountBalance":{  
@@ -16882,7 +16863,6 @@
             }
          }
       },
-     
       "CibilResponseDTO":{  
          "properties":{  
             "cibilLoanDetails":{  
@@ -17012,7 +16992,6 @@
             }
          }
       },
-     
       "FieldDTO":{  
          "properties":{  
             "captureStages":{  
@@ -17051,7 +17030,6 @@
             }
          }
       },
-      
       "PhysicalAssetDTO":{  
          "properties":{  
             "address":{  
@@ -17116,7 +17094,6 @@
             }
          }
       },
-      
       "SocialImpactDetailsDTO":{  
          "properties":{  
             "averageSalaryOfMen":{  
@@ -17345,7 +17322,6 @@
             }
          }
       },
-      
       "CheckerTransactionHistoryDTO":{  
          "properties":{  
             "accountCreatedAt":{  
@@ -17654,7 +17630,6 @@
             }
          }
       },
-      
       "CashTransferToBranch":{  
          "properties":{  
             "amountInPaisa":{  
@@ -17746,7 +17721,6 @@
             }
          }
       },
-      
       "VehicleLoanDetailsDTO":{  
          "properties":{  
             "accident":{  
@@ -18500,7 +18474,6 @@
             }
          }
       },
-     
       "EnrollmentUDFDTO":{  
          "properties":{  
             "id":{  
@@ -18681,8 +18654,6 @@
             }
          }
       },
-
-     
       "LoanDisbursementSchemaDTO":{  
          "properties":{  
             "$schema":{  
@@ -18708,8 +18679,6 @@
             }
          }
       },
-      
-      
       "VehicleAssetConditionDTO":{  
          "properties":{  
             "componentCondition":{  
@@ -18741,7 +18710,6 @@
                "format":"int32"
             }
          }
-           
       },
       "IndividualLoanAccountHistoryDTO":{  
          "properties":{  
@@ -18753,7 +18721,6 @@
             }
          }
       },
-      
       "DSCIntegrationDTO":{  
          "properties":{  
             "apiType":{  
@@ -19032,7 +18999,6 @@
             }
          }
       },
-     
       "LiabilityDTO":{  
          "properties":{  
             "customerId":{  
@@ -19160,7 +19126,6 @@
             "type":"object"
          }
       },
-     
       "VehicleAccessoriesDTO":{  
          "properties":{  
             "accessoryAvailable":{  
@@ -19533,7 +19498,6 @@
             }
          }
       },
-     
       "IndividualLoanSchemaDTO":{  
          "properties":{  
             "$schema":{  
@@ -19636,7 +19600,6 @@
             }
          }
       },
-     
       "LoanAccount":{  
          "properties":{  
             "accountNumber":{  
@@ -20235,7 +20198,6 @@
             }
          }
       },
-     
       "CustomerLicenceDetailsDTO":{  
          "properties":{  
             "customerId":{  
@@ -20570,7 +20532,7 @@
                "type":"string"
             }
          }
-      },     
+      },
       "FileInfo":{  
          "properties":{  
             "category":{  
@@ -20715,7 +20677,6 @@
             }
          }
       },
-      
       "UserAttendanceDTO":{  
          "properties":{  
             "biometricAuthentication":{  
@@ -20912,7 +20873,6 @@
             }
          }
       },
-      
       "BranchMaster":{  
          "properties":{  
             "abgBranchCode":{  
@@ -21060,7 +21020,6 @@
             }
          }
       },
-      
       "AddressDTO":{  
          "properties":{  
             "address1":{  
@@ -21089,7 +21048,6 @@
             }
          }
       },
-     
       "LeadErrorMessageDTO":{  
          "properties":{  
             "errorMessage":{  
@@ -21100,7 +21058,6 @@
             }
          }
       },
-      
       "LoanActionSummaryDTO":{  
          "properties":{  
             "action":{  
@@ -21291,7 +21248,6 @@
             }
          }
       },
-      
       "UserDefinedDateFieldDTO":{  
          "properties":{  
             "captureStage":{  
@@ -21408,8 +21364,7 @@
                "type":"string"
             }
          }
-      },     
-      
+      },
       "BranchMasterDTO":{  
          "properties":{  
             "abgBranchCode":{  
@@ -21570,7 +21525,6 @@
             }
          }
       },
-      
       "IncomeThroughSalesDTO":{  
          "properties":{  
             "amount":{  
@@ -21609,7 +21563,6 @@
             }
          }
       },
-      
       "ReferenceCodeDTO":{  
          "properties":{  
             "classifier":{  
@@ -21655,7 +21608,6 @@
             }
          }
       },
-      
       "EnterpriseDTO":{  
          "properties":{  
             "anyPartnerOfPresentBusiness":{  
@@ -21954,8 +21906,6 @@
             }
          }
       },
-     
-    
       "JlgGroupDTO":{  
          "properties":{  
             "bankId":{  
@@ -22279,7 +22229,6 @@
             }
          }
       },
-     
       "LoanOriginationCompositeDTO":{  
          "properties":{  
             "applicants":{  
@@ -22539,4 +22488,4 @@
          }
       }
    }
-  } 
+}
