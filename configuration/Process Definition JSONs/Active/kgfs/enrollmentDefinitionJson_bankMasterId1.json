@@ -616,6 +616,11 @@
                         "type": "boolean",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "fcuStatus": {
+                        "title":"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
+                        "type": "string",
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
                     "firstName": {
                         "title": "First Name",
                         "type": "string",
@@ -910,12 +915,7 @@
                         "minLength": 12,
                         "maxLength": 12,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
-                    },
-                    "fcuStatus": {
-                        "title":"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
-                        "type": "string",
-                        "captureStages": ["Stage01","Stage02" ,"Completed"]
-                    },
+                    },                    
                     "addressProof": {
                         "title": "Address Proof",
                         "type": "string",

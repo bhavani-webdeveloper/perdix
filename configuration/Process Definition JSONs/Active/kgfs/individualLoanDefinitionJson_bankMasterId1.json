@@ -306,6 +306,15 @@
                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
                    ]
                 },
+                "fcuStatus":{
+                   "title":"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
+                   "type":"string",
+                   "minLength":1,
+                   "maxLength":100,
+                   "captureStages":[
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                   ]
+                },
                 "productCode":{
                    "title":"Product Code",
                    "type":"string",
