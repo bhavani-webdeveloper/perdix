@@ -712,15 +712,6 @@
                       "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                    ]
                 },
-                "fcuStatus":{
-                  "title":"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
-                  "type":"number",
-                  "minimum":0,
-                  "maximum":10000000,
-                  "captureStages":[
-                     "Screening", "Sanction", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
-                  ]
-                },
              "loanCycle":{
                    "title":"loanCycle",
                    "type":"number",

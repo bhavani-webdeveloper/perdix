@@ -923,7 +923,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "onChange": function (modelValue, form, model) {                               
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
                             },
-                            "readonly":true,
                             condition:"model.loanProcess.loanAccount.productCategory == 'MEL' && model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "ContactInformation.mailingDoorNo":{

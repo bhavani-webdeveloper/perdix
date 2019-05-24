@@ -912,7 +912,7 @@
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "fcuStatus": {
-                        "title": "fcuStatus",
+                        "title":"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
                         "type": "string",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
