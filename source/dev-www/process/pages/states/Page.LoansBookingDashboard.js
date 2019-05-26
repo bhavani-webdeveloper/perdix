@@ -24,17 +24,6 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             "Page/Engine/loans.individual.booking.DocumentUploadQueue"
         ]
     }
-    if(siteCode == 'witfin') {
-        fullDefinition.items = [
-            "Page/Engine/witfin.loans.individual.booking.LoanInput",
-            "Page/Engine/loans.individual.booking.InitiationQueue",
-            "Page/Engine/loans.individual.booking.PendingForPartnerQueue",
-            "Page/Engine/loans.individual.booking.PendingQueue",
-            "Page/Engine/loans.individual.booking.LinkedAccountVerificationQueue",
-            "Page/Engine/loans.individual.booking.DocumentUploadQueue",
-            "Page/Engine/loans.individual.booking.PendingVerificationQueue"
-        ]
-    }
 
     PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
         $scope.dashboardDefinition = resp;
