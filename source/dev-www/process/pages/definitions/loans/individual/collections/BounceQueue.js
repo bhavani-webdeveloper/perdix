@@ -65,36 +65,18 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 },
                 {
                     "key": "centre",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
+                    "type":"select",
+                    "enumCode":"usercentre",
+                    "condition": "!model.pageConfig.IncludeUserFilter",
+                    title:"CENTRE",
+                    required:true,
                 },
                 {
-                    key: "centreName",
-                    type: "lov",
-                    autolov: false,
-                    required:true,
-                    title:"CENTRE",
-                    condition: "model.pageConfig.isAllBranchAllowed===false",
-                    bindMap: {
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var centres = SessionStore.getCentres();
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": centres.length
-                            },
-                            body: centres
-                        });
-                    },
-                    onSelect: function(valueObj, model, context){
-                        model.centre = valueObj.centreCode;
-                        model.centreName = valueObj.centreName;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.centreName
-                        ];
-                    }
+                    "key": "centre",
+                    "type":"select",
+                    "enumCode":"usercentre",
+                    "condition": "model.pageConfig.IncludeUserFilter",
+                    title:"CENTRE"
                 },
                 {
                     "key": "promisreToPayDate"
@@ -231,7 +213,41 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                             isApplicable: function(item, index){
                                 return true;
                             }
-                        }
+                        },
+                        {
+                            name: "COLLECT_ADHOC_CHARGES",
+                            desc: "",
+                            fn: function(item, index){
+                                $state.go("Page.Engine",{
+                                    pageName:"loans.individual.collections.ChargeFee",
+                                    pageId:item.accountId
+                                });
+                            },
+                            isApplicable: function(item, index){
+                                var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                if(siteCode == 'witfin') { 
+                                    return true
+                                }else{
+                                    return false
+                                }                                     }
+                        },
+                        {
+							name: "View Details",
+							desc: "",
+							fn: function(item, index){
+								$state.go('Page.Engine', {
+									pageName: 'customer360.loans.LoanDetails',
+									pageId: item.loanId
+								})
+							},
+							isApplicable: function(item, index){
+								var siteCode = SessionStore.getGlobalSetting('siteCode');
+								if (siteCode=='witfin'){
+									return true;
+								}
+								return false;
+							}
+						},
                     ];
                 }
             }

@@ -5,19 +5,53 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
         pageUID: "witfin.lead.LeadGeneration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User", "Agent"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User, Agent) {
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
             // var leadProcessTs = new LeadProcess();
+            var configFile = function(){
+                return {
+                    "lead.currentStage": {
+                        "Inprocess": {
+                            "overrides": {
+                                "leadProfile": {
+                                    "readonly": true
+                                }
+                            },
+                             "excludes": [
+                            //     "previousInteractions"
+                             ]
+                        },
+                        "BulkUpload": {
+                            "excludes": [
+                            "productDetails"
+                            ]
+                        },
+                    },
+                    "siteCode": {
+                        "sambandh": {
+                            "excludes": [
+                            "previousInteractions"
+                            ]
+                        }
+                    }
+    
+    
+                }
+
+            }
 
             var getOverrides = function (model) {
                 return {
                     "leadProfile.individualDetails.age": {
                         "readonly" : true
+                    },
+                    "leadProfile.centreId": {
+                        "enumCode": "usercentre"
                     },
                     "leadProfile.leadDetails.individualDetails.gender": {
                         "required": true
@@ -26,7 +60,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "required": true
                     },
                     "leadProfile.centerName": {
-                        "lovonly": true
+                        "type": "select",
+                        "enumCode": "centre",
+                        parentEnumCode: "branch_id",
+                        parentValueExpr: "model.lead.branchId",
                     },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
@@ -50,7 +87,32 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     },
                     "sourceDetails.agentName": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'BUYING / SELLING AGENT(BROKER)'",
-                        "enumCode": "agent"
+                        "type":"lov",
+                        "lovonly":true,
+                        "inputMap": {
+                            "agentName": {
+                                "key": "lead.agentName", 
+                                "type": "string"
+                            }            
+                        },
+                        "outputMap": {
+                            'agentName': "lead.agentName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var promise = Agent.search({
+                                'agentName': inputModel.agentName,
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.agentName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.lead.agentName = valueObj.agentName;
+                        }
                     },
                     "sourceDetails.referredBy2": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)'",
@@ -92,8 +154,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
             var getIncludes = function (model) {
                 return [
                     "leadProfile",
-                    "leadProfile.branchName",
-                    "leadProfile.centerName",
+                    "leadProfile.branchId",
+                    "leadProfile.centreId",
                     "sourceDetails",
                     "sourceDetails.leadSource",
                     "sourceDetails.referredBy",
@@ -220,9 +282,18 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 deferred.resolve(Lead.getConfigFile())
 
                                 console.log(model.lead.getLead());
+                                if (model.lead.currentStage == 'Inprocess') {
+                                    model.lead.leadInteractions1 = model.lead.leadInteractions;
+                                    model.lead.leadInteractions = [{
+                                        "interactionDate": Utils.getCurrentDate(),
+                                        "loanOfficerId": SessionStore.getUsername() + ''
+                                    }];
+                                }
 
                                 promise.then(function(resp) {
-                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                                    IrfFormRequestProcessor.buildFormDefinition('LeadGeneration', formRequest,configFile(), model).then(function(form){
+                                        self.form = form;
+                                    });
                                     PageHelper.hideLoader();
                                 })
 
@@ -232,7 +303,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                             .subscribe(function(value){
                                 model.leadProcess = value;
                                 model.lead = model.leadProcess.lead;
-                                self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                                IrfFormRequestProcessor.buildFormDefinition('LeadGeneration', formRequest).then(function(form){
+                                    self.form = form;
+                                });
                             });
 
                     }

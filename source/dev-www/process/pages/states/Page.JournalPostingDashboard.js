@@ -63,7 +63,7 @@ irf.pages.controller("JournalPostingDashboardCtrl",
                         'page': 1,
                         'per_page': 1,
                         'transactionType':"Entry",
-                        'currentStage': "branchPostingSearch"
+                        'currentStage': "Completed"
                     }).$promise.then(function(response, headerGetter) {
                     beMenu.data = Number(response.headers['x-total-count']);
                 }, function() {

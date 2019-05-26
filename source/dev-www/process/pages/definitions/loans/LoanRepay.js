@@ -304,7 +304,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName",
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
@@ -312,6 +312,27 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Prepayment":"Prepayment",
                                     "PenalInterestPayment":"PenalInterestPayment"
                                 },
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
+                                    } else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'witfin'",
+                                enumCode: "transaction_name",
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
                                         model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
@@ -683,15 +704,24 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                condition:"model.siteCode == 'witfin'",
                                 type: "select",
+                                enumCode:"reason_for_delay"
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
+                                required: true,
+                                type: "select",
+                                condition:"model.siteCode != 'witfin'",
                                 titleMap: [{
                                     "name": "Business",
                                     "value": "Business"
                                 },
-                                    {
+                                {
                                         "name": "Personal",
                                         "value": "Personal"
-                                    }],
+                                }],
 
                             },
                             {
@@ -755,6 +785,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         "value": "Others"
                                     }],
                             },
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType =='Business'",
+                            //     // enumCode: "business_overdue_reasons"
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
+
+                            // },
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType=='Personal'",
+                            //     // enumCode: "personal_overdue_reasons",
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
+                            // },
                             {
                                 key: "repayment.reasons",
                                 title: "OVERDUE_REASON",
@@ -896,15 +955,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             return false;
                         }
 
-                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) > Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + model.repayment.netPayoffAmount - model.repayment.amount + " due is there", 5000);
-                            return false;
-                        }
-
-                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) < Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + model.repayment.amount - model.repayment.netPayoffAmount + " amount paying", 5000);
-                            return false;
-                        }
+                        // if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
+                        //     PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
+                        //     return false;
+                        // }
 
                         if (model.repayment.transactionName == 'PenalInterestPayment' && Math.round(model.repayment.amount) > Math.round(model.cbsLoanData.bookedNotDuePenalInterest)  ) {
                             PageHelper.clearErrors();

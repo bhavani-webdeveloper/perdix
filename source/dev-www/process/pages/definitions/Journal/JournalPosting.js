@@ -158,10 +158,11 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                 "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
                             },
                             "BranchPostingEntry.ifscCode": {
-                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")',
+                                "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"',
                                 "resolver": "JournalIFSCLOVConfiguration",
                                 "type": "lov",
-                                "lovonly": true
+                                "lovonly": true,
+                                "required":true
                             },
                             "BranchPostingEntry.relatedAccountNo1": {
                                 "resolver": "JournalIFSCAccountNoConfiguration",
@@ -604,7 +605,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "relatedAccountNo": {
                                             "title": "RELATED_ACCOUNT_NO",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                         "relatedAccountNo1": {
                                             "title": "RELATED_ACCOUNT_NO",
@@ -648,7 +649,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "valueDate": {
                                             "title": "VALUE_DATE",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                         "instrumentBankName": {
                                             "title": "INSTRUMENT_BANK_NAME",
@@ -672,7 +673,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "ifscCode": {
                                             "title": "IFSC_CODE",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                     }
                                 }

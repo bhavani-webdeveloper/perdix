@@ -22,6 +22,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                     FinconPostingProcess = FinconPostingProcess['FinconPostingProcess'];
 
                     model.journal = model.journal || {};
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     model.entryType = [{
                         'name': 'Debit',
                         'value': 'Debit'
@@ -114,6 +115,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             "FinconAccounting.transactionSection.valueDate",
                             "FinconAccounting.transactionSection.billNumber",
                             "FinconAccounting.transactionSection.billDate",
+                            "FinconAccounting.transactionSection.costCentre",
                             "FinconAccounting.instrumentSection",
                             "FinconAccounting.instrumentSection.billUpload",
                             "FinconAccounting.instrumentSection.instrumentType",
@@ -132,6 +134,24 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             ""
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "FinconAccounting": {
+                                    "items": {
+                                        "transactionSection":{
+                                            "items": {
+                                                "costCentre": {
+                                                    "key": "journal.journalHeader.costCentre",
+                                                    "title": "COST_CENTRE",
+                                                    "type": "select",
+                                                    "orderNo": 80,
+                                                    "condition":"model.siteCode=='witfin'",
+                                                    "enumCode": "cost_centre"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [{
                                 "type": "actionbox",
                                 "orderNo": 1200,
@@ -291,7 +311,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             model.showFeilds = false;
                             model.showFeild = false;
                             _.forEach(res.journalHeader.journalDetails ,function(journaldetail){
-                                journaldetail.glAcNo = "TESTGL101"
+                                journaldetail.glAcNo = journaldetail.glAcNo
                             })
                             if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
                                 model.showFeilds = true;

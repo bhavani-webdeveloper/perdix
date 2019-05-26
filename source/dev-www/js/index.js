@@ -22,6 +22,41 @@ var onBackKeyDown = function(e) {
     return false;
 }
 
+var CDVPermissionManager = {
+    getListOfPermissions: function(){
+        var cdvPermissions = cordova.plugins.permissions;
+        var listOfPermissions = [
+            cdvPermissions.BLUETOOTH,
+            cdvPermissions.BLUETOOTH_ADMIN,
+            cdvPermissions.ACCESS_COARSE_LOCATION,
+            cdvPermissions.ACCESS_FINE_LOCATION,
+            cdvPermissions.CAMERA,
+            cdvPermissions.FLASHLIGHT,
+            cdvPermissions.WRITE_EXTERNAL_STORAGE,
+            cdvPermissions.READ_EXTERNAL_STORAG,
+        ];
+        return listOfPermissions;
+    },
+    checkPermissions: function(success, error){
+        success = success || function(){};
+        error = error || function(){};
+
+        var listOfPermissions = this.getListOfPermissions();
+        var cdvPermissions = cordova.plugins.permissions;
+        cdvPermissions.hasPermission(listOfPermissions, function(status){
+            if (!status.hasPermission){
+                cdvPermissions.requestPermissions(listOfPermissions, function(status){
+                    if (!status.hasPermission) error(status)
+                    success(status);
+                }, function(error){
+                    error(status);
+                })
+            }
+        });
+    }
+
+}
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -41,16 +76,16 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         document.addEventListener("backbutton", onBackKeyDown, false);
+
+        /** 
+         * Ensuring required permissions are set for the application
+         */
+        if (cordova.plugins && cordova.plugins.permissions) {
+            CDVPermissionManager.checkPermissions();
+        }
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
         console.log('Received Event: ' + id);
     }
 };

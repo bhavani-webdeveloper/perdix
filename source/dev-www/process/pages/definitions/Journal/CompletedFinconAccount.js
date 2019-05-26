@@ -22,6 +22,7 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                     FinconPostingProcess = FinconPostingProcess['FinconPostingProcess'];
 
                                     model.journal = model.journal || {};
+                                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
                                     model.entryType = [{
                                         'name': 'Debit',
                                         'value': 'Debit'
@@ -107,6 +108,7 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                             "FinconAccounting.transactionSection.valueDate",
                                             "FinconAccounting.transactionSection.billNumber",
                                             "FinconAccounting.transactionSection.billDate",
+                                            "FinconAccounting.transactionSection.costCentre",
                                             "FinconAccounting.instrumentSection",
                                             "FinconAccounting.instrumentSection.billUpload",
                                             "FinconAccounting.instrumentSection.instrumentType",
@@ -125,6 +127,24 @@ irf.pageCollection.controller(irf.controller("Journal.CompletedFinconAccount"), 
                                             ""
                                         ],
                                         "options": {
+                                            "repositoryAdditions": {
+                                                "FinconAccounting": {
+                                                    "items": {
+                                                        "transactionSection":{
+                                                            "items": {
+                                                                "costCentre": {
+                                                                    "key": "journal.journalHeader.costCentre",
+                                                                    "title": "COST_CENTRE",
+                                                                    "type": "select",
+                                                                    "orderNo": 80,
+                                                                    "condition":"model.siteCode=='witfin'",
+                                                                    "enumCode": "cost_centre"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
                                             "additions": [{
                                                 "type": "actionbox",
                                                 "orderNo": 1200,

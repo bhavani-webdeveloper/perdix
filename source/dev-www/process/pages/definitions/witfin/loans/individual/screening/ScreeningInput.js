@@ -10,8 +10,8 @@ define(["perdix/domain/model/loan/LoanProcess",
     return {
         pageUID: "witfin.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
-        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
-        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator","irfProgressMessage"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator,irfProgressMessage) {
             return {
                 "type": "page-bundle",
                 "title": "SCREENING_INPUT",
@@ -256,6 +256,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     loanProcess.loanAccount.leadId = _leadId;
 
                                     }
+                                else{
+                                    PageHelper.showProgress('enrolment', 'Lead Id is Null', 7000);
+                                    irfNavigator.go({
+                                        'state': 'Page.Engine',
+                                        'pageName': 'witfin.lead.ReadyForScreeningQueue',
+                                    });
+
+                                    return false;
+                                }
+
+                                
                                 if (loanProcess.applicantEnrolmentProcess){
                                     $this.bundlePages.push({
                                         pageClass: "applicant",

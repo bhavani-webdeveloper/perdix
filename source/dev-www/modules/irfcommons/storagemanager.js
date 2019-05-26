@@ -661,6 +661,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("origination_stage", "origination_stage", codeToValue);
 			createEnum("investor_id", "investor_id", codeAsNumberToValue);
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
+			createEnum("lead_source","lead_source",codeToValue);
 			createEnum("loan_partner","partner_master",codeToValue);
 
 			return irfStorageService.storeMaster(masters);

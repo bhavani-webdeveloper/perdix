@@ -15,6 +15,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 var journalDetailsClass;
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.glAcNo = "";
                 model.entries = [];
                 model.glcodes = [];
@@ -59,12 +60,15 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                         console.log(err)
                     })
                 }
-                Journal.listAccountCode({
-                    'glType': 'LEDGER'
-                }).$promise.then(function(response) {
-                    model.glcodes = response.body;
-                    console.log(model.glcodes)
-                });
+                 Journal.listAccountCode({
+                     'glType': 'LEDGER',
+                     'page': 1,
+                     'per_page': 100,
+                 }).$promise.then(function(response) {
+                     model.glcodes = response.body;
+                     console.log(model.glcodes)
+                 });
+                
 
                 var pageDefPath = "perdix/domain/model/journal/finconaccounting/FinconPostingProcess";
                 var journaldetail = "perdix/domain/model/journal/finconaccounting/JournalDetail";
@@ -140,6 +144,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.transactionSection.valueDate",
                                 "FinconAccounting.transactionSection.billNumber",
                                 "FinconAccounting.transactionSection.billDate",
+                                "FinconAccounting.transactionSection.costCentre",
                                 "FinconAccounting.instrumentSection",
                                 "FinconAccounting.instrumentSection.billUpload",
                                 "FinconAccounting.instrumentSection.instrumentType",
@@ -159,6 +164,24 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 ""
                             ],
                             "options": {
+                                "repositoryAdditions": {
+                                    "FinconAccounting": {
+                                        "items": {
+                                            "transactionSection":{
+                                                "items": {
+                                                    "costCentre": {
+                                                        "key": "journal.journalHeader.costCentre",
+                                                        "title": "COST_CENTRE",
+                                                        "type": "select",
+                                                        "orderNo": 80,
+                                                        "condition":"model.siteCode=='witfin'",
+                                                        "enumCode": "cost_centre"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [{
                                     "condition": "!$stateParams.pageId",
                                     "type": "actionbox",
@@ -264,7 +287,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                         \
                                                         </td>\
                                                         <td class='col-xs-1'>\
-                                                            <input ng-model=\"d['transactionAmount']\" type='number' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
+                                                            <input ng-model=\"d['transactionAmount']\" type='number' step='any' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
                                                         </td>\
                                                         <td class='col-xs-3'>\
                                                             <div> \

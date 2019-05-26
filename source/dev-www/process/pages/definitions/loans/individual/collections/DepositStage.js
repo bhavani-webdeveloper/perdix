@@ -4,6 +4,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
 
     // var branch = SessionStore.getBranch();
     var branch = SessionStore.getCurrentBranch().branchName;
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
 
     var computeTotal = function(model){
         var totalAmount=0;
@@ -21,9 +22,10 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
             model.loggedInUser = SessionStore.getLoginname();
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
             PageHelper.showLoader();
             model.bankDepositSummary = {};
-
+            model.loanCollections = [];
             var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
                 $log.info(res);
@@ -31,6 +33,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 model.loanAccounts = [];
                 for (var i=0; i< res.body.length;i++){
                     var cashDeposit = res.body[i];
+                    model.loanCollections.push(cashDeposit);
                     model.pendingCashDeposits.push(
                         {
                             loan_ac_no: cashDeposit.account_number,
@@ -177,9 +180,16 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 "readonly": true
             },
             {
+                "key":"bankDepositSummary.depositId",
+                "type":"text",
+                "title":"REFERENCE",
+                "condition":"model.siteCode == 'witfin'"
+            },
+            {
                 "key":"bankDepositSummary.reference",
                 "type":"text",
-                "title":"REFERENCE"
+                "title":"REFERENCE",
+                "condition":"model.siteCode != 'witfin'"
             },
             {
                 key: "bankDepositSummary.bankAccountNumber",
@@ -209,6 +219,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 type: "lov",
                 "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
                 lovonly: true,
+                required:true,
                 inputMap: {
                     "ifscCode": {
                         "key": "bankDepositSummary.ifscCode"
@@ -242,10 +253,22 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     ];
                 },
             },
-            {
+             {
                 "key":"bankDepositSummary.bankBranchDetails",
-                "title":"DEPOSITED_BANK_BRANCH"
-            }
+                "title":"DEPOSITED_BANK_BRANCH",
+                required:true
+            },
+            {
+                title: "Bank Challan",
+                key: "bankDepositSummary.challanFileId",
+                type: "file",
+                fileType: "application/pdf",
+                category: "Loan",
+                subCategory: "DOC1",
+                using: "scanner",
+                required:true
+            },
+
             ]
         },{
             "type": "actionbox",
@@ -313,6 +336,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                         loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
                     }
                 }
+
+                model.bankDepositSummary.loanCollections = _.cloneDeep(model.loanCollections);
                 var reqData = {
                     'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
                     'loanCollectionIds':_.cloneDeep(loanCollectionIds)
@@ -327,6 +352,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
 
                 }, function(errorResponse){
                     PageHelper.hideLoader();
+                    PageHelper.showProgress('deposit-cash', 'Request is failed', 500);
                     PageHelper.showErrors(errorResponse);
                 });
             },

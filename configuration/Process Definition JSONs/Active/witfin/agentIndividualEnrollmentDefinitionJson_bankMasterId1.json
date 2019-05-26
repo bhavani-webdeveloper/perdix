@@ -1242,7 +1242,301 @@
                   }
                }
             }
-         }
+         },
+         "family": {
+            "title": "Family Details",
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "required": [
+              ],
+              "properties": {
+                "familyMemberFirstName": {
+                  "title": "First Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "familyMemberMiddleName": {
+                  "title": "Middle Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "familyMemberLastName": {
+                  "title": "Last Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "relationShip": {
+                  "title": "Relationship",
+                  "type": "string",
+                  "refCodeCategory": "relation",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "gender": {
+                  "title": "Gender",
+                  "type": "string",
+                  "enum": [
+                    "Male",
+                    "Female",
+                    "Others"
+                  ],
+                  "refCodeCategory": "gender",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                
+                "educationStatus": {
+                  "title": "Education Status",
+                  "type": "string",
+                  "refCodeCategory": "education",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "mobilePhone": {
+                  "title": "Mobile Phone",
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 10,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+          "noOfDependents": {
+                  "title": "noOfDependents",
+                  "type": "string",
+                  "minLength": 0,
+                  "maxLength": 100,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "maritalStatus": {
+                  "title": "Marital Status",
+                  "type": "string",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "contributionToExpenditure": {
+                  "title": "Contribution To Expenditure",
+                  "type": "bigDecimal",
+                  "minimum": 0,
+                  "maximum": 100000000,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "healthStatus": {
+                  "title": "Health Status",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "anualEducationFee": {
+                  "title": "anualEducationFee",
+                  "type": "bigDecimal",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "salary": {
+                  "title": "salary",
+                  "type": "bigDecimal",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "dateOfBirth": {
+                "title": "Date Of Birth",
+                "type": "string",
+                "format": "date",
+                "captureStages": [
+                  "BasicEnrolment",
+                  "Completed"
+                ]
+              },
+                "udfId1": {
+                  "title": "udf1",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                        ]
+                      },
+                "udfId2": {
+                  "title": "udf2",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "udfId3": {
+                  "title": "udf3",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "udfId4": {
+                  "title": "udf4",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "udfId5": {
+                  "title": "udf5",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                }
+              }
+            }
+          },
+          "familyHouseholdExpense": {
+            "title": "Household Expense Details",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "expenditureSource": {
+                  "title": "Expenditure Source",
+                  "type": "string",
+                   "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+          "billDocId": {
+                "title": "billDocId",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "captureStages": [
+                  "BasicEnrolment",
+                  "Completed"
+                ]
+              },
+                "annualExpenses": {
+                  "title": "Annual Expenses",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000000,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "frequency": {
+                  "title": "Frequency",
+                  "type": "string",
+                  "refCodeCategory": "frequency",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "expenseType": {
+                  "title": "Expense Type",
+                  "type": "string",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                }
+              }
+            }
+          },
+          "familyHouseholdIncome": {
+            "title": "Household Income Details",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "incomeSource": {
+                  "title": "Occupation",
+                  "type": "string",
+                  "refCodeCategory": "occupation",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "incomeEarned": {
+                  "title": "Income",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000000,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "frequency": {
+                  "title": "Frequency",
+                  "type": "string",
+                  "refCodeCategory": "frequency",
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                },
+                "monthsPerYear": {
+                  "title": "Per Year",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 366,
+                  "captureStages": [
+                    "BasicEnrolment",
+                    "Completed"
+                  ]
+                }
+              }
+            }
+          }
+         
       }
    }
 }

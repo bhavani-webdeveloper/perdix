@@ -20,15 +20,12 @@
      },
      {
         "order":2,
-        "code":"ScreeningReview",
-        "name":"Screening Review",
+        "code":"TeleVerification",
+        "name":"Tele Verification",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
+        "isAccountOpening":false
      },
      {
         "order":3,
@@ -41,37 +38,46 @@
      },
      {
         "order":4,
-        "code":"FieldInvestigation2",
-        "name":"Field Investigation",
+        "code":"ScreeningReview",
+        "name":"Screening Review",
         "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false
+        "sendSms":"Yes",
+        "smsCategory":"ScreeningReview",
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
      },
      {
         "order":5,
-        "code":"FieldInvestigation3",
-        "name":"Field Investigation",
+        "code":"BusinessApproval1",
+        "name":"Business Approval 1",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":false
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
      },
      {
         "order":6,
-        "code":"TeleVerification",
-        "name":"Tele Verification",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false
-     },
-     {
-        "order":7,
         "code":"CreditApproval1",
         "name":"Credit Approval 1",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+     {
+        "order":7,
+        "code":"CreditApproval2",
+        "name":"Credit Approval 2",
+        "stageType":"CAPTURE",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -80,10 +86,10 @@
      },
      {
         "order":8,
-        "code":"CreditApproval2",
-        "name":"Credit Approval 2",
+        "code":"CreditApproval3",
+        "name":"Credit Approval 3",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -92,42 +98,6 @@
      },
      {
         "order":9,
-        "code":"BusinessApproval1",
-        "name":"Business Approval 1",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":10,
-        "code":"CreditApproval3",
-        "name":"Credit Approval 3",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":11,
-        "code":"BusinessApproval2",
-        "name":"Business Approval 2",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":12,
         "code":"Rejected",
         "name":"Rejected",
         "stageType":"CAPTURE",
@@ -139,11 +109,11 @@
         ]
      },
      {
-        "order":13,
+        "order":10,
         "code":"LoanInitiation",
         "name":"Loan Input",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"Sanction",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -151,7 +121,7 @@
         ]
      },
      {
-        "order":14,
+        "order":11,
         "code":"PendingForPartner",
         "name":"Pending for Partner",
         "stageType":"CAPTURE",
@@ -163,19 +133,19 @@
         ]
      },
      {
-        "order":15,
+        "order":12,
         "code":"LoanBooking",
         "name":"Loan Booking",
         "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
+        "sendSms":"Yes",
+        "smsCategory":"Sanction",
         "isAccountOpening":true,
         "allowedRoles":[
            "WM"
         ]
      },
      {
-        "order":16,
+        "order":13,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
@@ -187,7 +157,7 @@
         ]
      },
      {
-        "order":17,
+        "order":14,
         "code":"DocumentVerification",
         "name":"Document Verification",
         "stageType":"CAPTURE",
@@ -199,7 +169,7 @@
         ]
      },
      {
-          "order": 18,
+          "order": 15,
           "code":"Completed",
           "name":"Completed",
           "stageType":"CAPTURE",
@@ -2797,6 +2767,7 @@
                  "maxLength":100,
                  "captureStages":[
                     "Screening",
+                    "ScreeningReview",
                     "VehicleValuation",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
@@ -2813,6 +2784,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2828,6 +2800,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2843,6 +2816,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2858,6 +2832,7 @@
                 "captureStages":[
                   "Screening",
                   "VehicleValuation",
+                  "ScreeningReview",
                   "FieldInvestigation1",
                   "FieldInvestigation2",
                   "FieldInvestigation3",
@@ -2873,6 +2848,7 @@
                 "captureStages":[
                   "Screening",
                   "VehicleValuation",
+                  "ScreeningReview",
                   "FieldInvestigation1",
                   "FieldInvestigation2",
                   "FieldInvestigation3",
@@ -2888,6 +2864,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2903,6 +2880,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2916,6 +2894,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2931,6 +2910,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2946,6 +2926,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2961,6 +2942,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2976,6 +2958,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -2989,6 +2972,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3004,6 +2988,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3019,6 +3004,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3032,6 +3018,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3047,6 +3034,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3062,6 +3050,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3075,6 +3064,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3088,6 +3078,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3101,6 +3092,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3114,6 +3106,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3127,6 +3120,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3140,6 +3134,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3153,6 +3148,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3166,6 +3162,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3179,6 +3176,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3192,6 +3190,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3207,6 +3206,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3220,6 +3220,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3235,6 +3236,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3250,6 +3252,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3265,6 +3268,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3280,6 +3284,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3295,6 +3300,7 @@
                 "captureStages":[
                    "Screening",
                    "VehicleValuation",
+                   "ScreeningReview",
                    "FieldInvestigation1",
                    "FieldInvestigation2",
                    "FieldInvestigation3",
@@ -3310,6 +3316,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3325,6 +3332,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3338,6 +3346,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3353,6 +3362,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3368,6 +3378,7 @@
                 "captureStages":[
                    "Screening",
                    "VehicleValuation",
+                   "ScreeningReview",
                    "FieldInvestigation1",
                    "FieldInvestigation2",
                    "FieldInvestigation3",
@@ -3383,6 +3394,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3398,6 +3410,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3413,6 +3426,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3426,6 +3440,7 @@
                 "captureStages":[
                    "Screening",
                    "VehicleValuation",
+                   "ScreeningReview",
                    "FieldInvestigation1",
                    "FieldInvestigation2",
                    "FieldInvestigation3",
@@ -3441,6 +3456,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3456,6 +3472,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3471,6 +3488,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3486,6 +3504,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3501,6 +3520,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3516,6 +3536,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3531,6 +3552,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3546,6 +3568,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3561,6 +3584,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3574,6 +3598,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3589,6 +3614,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3604,6 +3630,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3619,6 +3646,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3634,6 +3662,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3649,6 +3678,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3664,6 +3694,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3677,6 +3708,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3692,6 +3724,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3707,6 +3740,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3722,6 +3756,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3737,6 +3772,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3752,6 +3788,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3767,6 +3804,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3782,6 +3820,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3797,6 +3836,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3810,6 +3850,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3825,6 +3866,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3838,6 +3880,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3853,6 +3896,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3868,6 +3912,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3883,6 +3928,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3898,6 +3944,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3913,6 +3960,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3928,6 +3976,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3941,6 +3990,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3954,6 +4004,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3969,6 +4020,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3984,6 +4036,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -3997,6 +4050,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4012,6 +4066,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4027,6 +4082,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4042,6 +4098,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4055,6 +4112,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4070,6 +4128,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4083,6 +4142,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4098,6 +4158,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4113,6 +4174,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4126,6 +4188,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4139,6 +4202,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4152,6 +4216,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4165,6 +4230,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4178,6 +4244,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4193,6 +4260,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4206,6 +4274,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4221,6 +4290,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4236,6 +4306,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4251,6 +4322,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4266,6 +4338,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4281,6 +4354,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4296,6 +4370,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4311,6 +4386,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4326,6 +4402,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4341,6 +4418,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4356,6 +4434,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4371,6 +4450,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4386,6 +4466,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4401,6 +4482,7 @@
                  "captureStages":[
                     "Screening",
                     "VehicleValuation",
+                    "ScreeningReview",
                     "FieldInvestigation1",
                     "FieldInvestigation2",
                     "FieldInvestigation3",
@@ -4416,6 +4498,7 @@
                 "captureStages":[
                    "Screening",
                    "VehicleValuation",
+                   "ScreeningReview",
                    "FieldInvestigation1",
                    "FieldInvestigation2",
                    "FieldInvestigation3",
@@ -4443,6 +4526,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4456,6 +4540,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4469,6 +4554,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4497,6 +4583,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4512,6 +4599,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4525,6 +4613,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4538,6 +4627,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4551,6 +4641,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4563,6 +4654,7 @@
                     "type":"string",
                     "captureStages":[
                        "Screening",
+                       "ScreeningReview",
                        "VehicleValuation",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
@@ -4577,6 +4669,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4590,6 +4683,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4603,6 +4697,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4616,6 +4711,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4629,6 +4725,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4642,6 +4739,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4655,6 +4753,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4683,6 +4782,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4698,6 +4798,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4713,6 +4814,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4728,6 +4830,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4756,6 +4859,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4771,6 +4875,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4786,6 +4891,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4814,6 +4920,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4829,6 +4936,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4845,6 +4953,7 @@
                        "Screening",
                        "VehicleValuation",
                        "FieldInvestigation1",
+                       "ScreeningReview",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
@@ -4873,6 +4982,7 @@
                        "Screening",
                        "VehicleValuation",
                        "FieldInvestigation1",
+                       "ScreeningReview",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
                        "TeleVerification",
@@ -4885,6 +4995,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4913,6 +5024,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4926,6 +5038,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4954,6 +5067,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4969,6 +5083,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4982,6 +5097,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -4995,6 +5111,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -5008,6 +5125,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -5023,6 +5141,7 @@
                     "captureStages":[
                        "Screening",
                        "VehicleValuation",
+                       "ScreeningReview",
                        "FieldInvestigation1",
                        "FieldInvestigation2",
                        "FieldInvestigation3",
@@ -5747,7 +5866,19 @@
                     "CreditApproval2",
                     "CreditApproval3"
                  ]
-              }
+              },
+              "udf7":{
+               "type":"number",
+               "captureStages":[
+                  "Screening",
+                  "VehicleValuation",
+                  "FieldInvestigation1",
+                  "FieldInvestigation2",
+                  "FieldInvestigation3",
+                  "TeleVerification",
+                  "LoanInitiation"
+               ]
+            }
            }
         },
         "userDefinedDateFields":{

@@ -1,0 +1,11 @@
+ScreeningReview = Your loan application has been logged at Witfin. The credit risk team will contact you shortly.
+chequeClearance = Your EMI payment has cleared. Thank you.
+Disbursed = Your loan LOAN_ACCOUNT has been disbursed. Amount disbursed is Rs.DISBURSED_AMOUNT/-Thank you for choosing Witfin.
+LoanAccountClosed = Your loan account has been closed. Thank you for choosing Witfin.
+LoanBooking = You are ready for document execution. Please visit our office to sign all the papers.
+ODAccountCredit = Your REPAYMENT_TYPE payment of REPAYMENT_AMT amount has been posted to your account.
+ODCollection = You have paid REPAYMENT_AMT amount by REPAYMENT_TYPE against your overdue loan account. Your receipt number for this payment is: RECEIPT_NUMBER. Please note that this will be posted to your account subject to bank clearance.
+revisedRepayment = Your EMI payment has bounced. Your revised payment amount is REPAYMENT_AMT. Please deposit this immediately to our bank account to avoid further charges.
+Sanction = Your loan application has been approved. You have been sanctioned LOAN_NAME loan for TENURE months for LOAN_PURPOSE purpose.
+SentForDisbursement = Your loan has been sent for disbursement.
+UponRejection = Sorry we are unable to process your loan application at this time. Our sales team will contact you to provide an explanation.

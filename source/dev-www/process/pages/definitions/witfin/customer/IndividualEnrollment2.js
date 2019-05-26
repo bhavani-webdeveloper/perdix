@@ -103,13 +103,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts": {
                                     "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets":{
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "EnterpriseReferences",
+                               // "EnterpriseReferences",
                                 "IndividualReferences",
-                                "PhysicalAssets",
-                                "ResidenceVerification",
+                                //"PhysicalAssets",
+                                //"ResidenceVerification",
                                 "Liabilities",
                             ]
                         },
@@ -233,18 +242,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
+                                // "PhysicalAssets": {
+                                //     "readonly": true
+                                // },
+                                // "ResidenceVerification": {
+                                //     "readonly": true
+                                // },
+                                // "EnterpriseReferences":{
+                                //     "readonly": true
+                                // }
                             },
                             "excludes": [
                                 "ContactInformation.location",
+                                "PhysicalAssets",
+                                "EnterpriseReferences",
+                                "ResidenceVerification"
+
                             ]
                         },
                         "CreditAppraisal": {
@@ -915,7 +928,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"COMMENTS_OF_NEIGHBOUR"
                     },
                     "IndividualInformation.spouseFirstName":{
-                        "condition": "model.customer.maritalStatus.toLowerCase() == 'married'"
+                        "type":"string",
+                        "condition": "model.customer.maritalStatus.toLowerCase() == 'married'",
+                        "required":true
                     },
                     "IndividualInformation.spouseDateOfBirth":{
                         "condition": "model.customer.spouseDateOfBirth.toLowerCase() == 'married'"
@@ -998,6 +1013,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.maritalStatus": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
+                    "FamilyDetails.familyMembers.salary":{
+                        "title":"NET_ANNUAL_INCOME"
+                    },
                     "ContactInformation.locality": {
                         "readonly" : true
                     },
@@ -1035,7 +1053,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "KYC.addressProofNo": {
-                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                        onCapture: function(result, model, form) {
+                            var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            model.customer.addressProofNo = aadhaarData.uid;
+                            var customer_district = aadhaarData.dist;
+                            model.customer.district=customer_district.toUpperCase();
+                            model.customer.state = aadhaarData.state;
+                            if (aadhaarData.dob) {
+                                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+                                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                                    model.customer.dateOfBirth = aadhaarData.dob;
+                                } else {
+                                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                                }
+                                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            } else if (aadhaarData.yob) {
+                                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+                                if (model.customer.dateOfBirth) {
+                                    var dateOfBirth = moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat());
+                                    var month = dateOfBirth.format('MM');
+                                    var day = dateOfBirth.format('DD');
+                                    var year = dateOfBirth.format('YYYY');
+                                    model.customer.dateOfBirth = aadhaarData.yob + '-' + month + '-' + day;
+                                } else {
+                                    model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+                                }
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
                     },
                     "KYC.addressProof" :{
                         "readonly": true
@@ -1111,137 +1157,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "KYC.customerId": {
-                        type: "lov",
-                        key: "customer.id", 
-                         initialize: function(model, form, parentModel, context) {
-                            model.customerBranchId = parentModel.customer.customerBranchId;                        
-                        },
-                        "inputMap": {
-                            "firstName": {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
-                            },
-                            "urnNo": {
-                                "key": "customer.urnNo",
-                                "title": "URN_NO",
-                                "type": "string"
-                            },
-                            "customerBranchId": {
-                                "key": "customer.customerBranchId",
-                                "type": "select",
-                                "screenFilter": true,
-                                "readonly": true
-                            },
-                            "centreName": {
-                                "key": "customer.place",
-                                "title": "CENTRE_NAME",
-                                "type": "string",
-                                "readonly": true,
-
-                            },
-                            "centreId": {
-                                key: "customer.centreId",
-                                type: "lov",
-                                autolov: true,
-                                lovonly: true,
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                search: function (inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    // $log.info("hi");
-                                    // $log.info(centres);
-
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        id: centreCode[i].value
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function (valueObj, model, context) {
-                                    model.centreId = valueObj.id;
-                                    model.centreName = valueObj.name;
-                                },
-                                getListDisplayItem: function (item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                }
-                            },
-                        },
-                        "outputMap": {
-                            "urnNo": "customer.urnNo",
-                            "firstName": "customer.firstName"
-                        },
-                        "searchHelper": formHelper,
-                        "search": function (inputModel, form) {
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var branches = formHelper.enum('branch_id').data;
-                            var branchName;
-                            for (var i = 0; i < branches.length; i++) {
-                                if (branches[i].code == inputModel.customerBranchId)
-                                    branchName = branches[i].name;
-                            }
-                            var promise = Enrollment.search({
-                                'branchName': branchName || SessionStore.getBranch(),
-                                'firstName': inputModel.firstName,
-                                'centreId': inputModel.centreId,
-                                'customerType': "individual",
-                                'urnNo': inputModel.urnNo
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function (data, index) {
-                            return [
-                                [data.firstName, data.fatherFirstName].join(' | '),
-                                data.firstName,
-                                data.urnNo
-                            ];
-                        },
-                        onSelect: function (valueObj, model, context) {
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
-
-                            var enrolmentDetails = {
-                                'customerId': model.customer.id,
-                                'customerClass': model._bundlePageObj.pageClass,
-                                'firstName': model.customer.firstName
-                            };
-                            if (_.hasIn(model, 'customer.id')){
-                                BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
-                            }
-                            
-                            EnrolmentProcess.fromCustomerID(valueObj.id)
-                                .finally(function(){
-                                    PageHelper.showProgress('customer-load', 'Done.', 5000);
-                                })
-                                .subscribe(function(enrolmentProcess){
-                                    /* Updating the loan process */
-                                    model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
-                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-
-                                    /* Setting on the current page */
-                                    model.enrolmentProcess = enrolmentProcess;
-                                    model.customer = enrolmentProcess.customer;
-
-                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                })
-                        }
+                        "resolver": "IndividualCustomerIDLOVConfiguration",
+                        "autolov": false
                     },
                     "KYC.addressProofImageId": {
                         "offline": true
@@ -2137,13 +2054,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: err
-                                    }
-                                });
-                                //throw new Error('err');
-                                return false;
+                                // PageHelper.showErrors({
+                                //     data: {
+                                //         errors: err
+                                //     }
+                                // });
+                                // //throw new Error('err');
+                                // return false;
                             //    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();

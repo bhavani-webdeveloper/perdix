@@ -29,6 +29,8 @@ var fileSystem = {
 	}
 };
 
+if (irf.appConfig.FILESYSTEM_ENABLED) {
+
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 	navigator.webkitPersistentStorage.requestQuota(100*1024*1024, function(grantedBytes) {
@@ -63,6 +65,8 @@ if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 	}, function(e) {
 		alert("Storage permission denied, Please approve storage permission for continuous access. " + e);
 	});
+}
+
 }
 
 var MSIE = {

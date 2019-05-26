@@ -165,10 +165,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "TangibleNetWorth.enterpriseNetworth",
                     "TangibleNetWorth.enterpriseNetworth.tangibleNetworth",
                     "TangibleNetWorth.enterpriseNetworth.financialYear",
-                    "enterpriseDocuments",
-                    "enterpriseDocuments.enterpriseDocuments",
-                    "enterpriseDocuments.enterpriseDocuments.docType",
-                    "enterpriseDocuments.enterpriseDocuments.fileId",
+                    "EnterpriseDocuments",
+                    "EnterpriseDocuments.enterpriseDocuments",
+                    "EnterpriseDocuments.enterpriseDocuments.docType",
+                    "EnterpriseDocuments.enterpriseDocuments.fileId",
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
                     "BankAccounts.customerBankAccounts.ifscCode",
@@ -240,12 +240,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences": {
+                                        "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                      "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "IndividualReferences",
+                                    //"IndividualReferences",
                                     "Liabilities",
-                                    "BusinessVerification"
+                                    //"BusinessVerification"
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -746,10 +752,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "TeleVerification": {
                                 "overrides": {
-                                    "IndividualReferences":{
-                                        "readonly": true
-                                    }
-                                }
+                                    // "IndividualReferences":{
+                                    //     "readonly": true
+                                    // }
+                                },
+                                "excludes": [
+                                    "BusinessVerification",
+                                    "IndividualReferences"
+
+                                ]
                             },
                             // "ApplicationReview": {
                             //     "overrides": {
@@ -1045,6 +1056,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "EnterpriseInformation.customerBranchId" :{
                                 "readonly": true
                             },
+                            "EnterpriseDocuments":{
+                                "title": "Enterprise Documents",
+                                "condition":"model.customer.enterprise.enterpriseType == 'Enterprise'"
+
+                            },
+                            "EnterpriseDocuments.enterpriseDocuments" :{
+                                "title": "Enterprise Documnets"
+
+                            },
                             "BankAccounts": {
                                 "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
                             },
@@ -1167,7 +1187,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "type": "box",
                                     "title": "BUSINESS_VERIFICATION",
                                     "orderNo": 130,
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'",
+                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'",
                                     "items": {
                                         "businessVerification": {
                                             "key": "customer.fieldInvestigationDetails",
@@ -1444,7 +1464,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "orderNo": 1200,
                                     "items": [
                                         {
-                                            "type": "submit",
+                                            "type": "button",
                                             "title": "SUBMIT",
                                             "buttonType": "submit"
                                         }
@@ -1642,12 +1662,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: err
-                                    }
-                                });
-                                return false;
+                                // PageHelper.showErrors({
+                                //     data: {
+                                //         error: err
+                                //     }
+                                // });
+                                // return false;
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });

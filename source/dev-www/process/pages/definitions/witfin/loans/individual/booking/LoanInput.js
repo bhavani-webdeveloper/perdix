@@ -1,6 +1,9 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
-    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
+define([], function() {
+    return {
+        pageUID: "witfin.loans.individual.booking.LoanInput",
+        pageType: "Engine",
+        dependencies: ["$log","SessionStore","$state","LoanAccount","LoanProcess","$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition"],
+        $pageFn: function($log, SessionStore,$state,LoanAccount,LoanProcess,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
         var siteCode = SessionStore.getGlobalSetting('siteCode');
         var nonEditable = {
             "loanAccount.interestRate" : siteCode == 'IREPDhan',
@@ -28,6 +31,154 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             return true;
         };
 
+        var excelRate = function(nper, pmt, pv, fv, type, guess) {
+            // Sets default values for missing parameters
+            fv = typeof fv !== 'undefined' ? fv : 0;
+            pv = typeof pv !== 'undefined' ? pv : 0;
+            type = typeof type !== 'undefined' ? type : 0;
+            guess = typeof guess !== 'undefined' ? guess : 0.1;
+
+            // Sets the limits for possible guesses to any
+            // number between 0% and 100%
+            var lowLimit = 0;
+            var highLimit = 1;
+
+            // Defines a tolerance of up to +/- 0.00005% of pmt, to accept
+            // the solution as valid.
+            var tolerance = Math.abs(0.00000005 * pmt);
+
+            // Tries at most 40 times to find a solution within the tolerance.
+            for (var i = 0; i < 40; i++) {
+                // Resets the balance to the original pv.
+                var balance = pv;
+
+                // Calculates the balance at the end of the loan, based
+                // on loan conditions.
+                for (var j = 0; j < nper; j++) {
+                    if (type == 0) {
+                        // Interests applied before payment
+                        balance = balance * (1 + guess) + pmt;
+                    } else {
+                        // Payments applied before insterests
+                        balance = (balance + pmt) * (1 + guess);
+                    }
+                }
+
+                // Returns the guess if balance is within tolerance.  If not, adjusts
+                // the limits and starts with a new guess.
+                if (Math.abs(balance + fv) < tolerance) {
+                    return guess;
+                } else if (balance + fv > 0) {
+                    // Sets a new highLimit knowing that
+                    // the current guess was too big.
+                    highLimit = guess;
+                } else {
+                    // Sets a new lowLimit knowing that
+                    // the current guess was too small.
+                    lowLimit = guess;
+                }
+
+                // Calculates the new guess.
+                guess = (highLimit + lowLimit) / 2;
+            }
+
+            // Returns null if no acceptable result was found after 40 tries.
+            return null;
+        };
+            var calculateNominalRate = function(loanAmount, frequency, tenure, flatRate) {
+                
+                var frequencyFactor;
+                if (frequency && tenure && flatRate) {
+                    switch (frequency) {
+                        case 'D':
+                        case 'Daily':
+                            frequencyFactor = 365;
+                            break;
+                        case 'F':
+                        case 'Fortnightly':
+                            frequencyFactor = parseInt(365 / 15);
+                            break;
+                        case 'M':
+                        case 'Monthly':
+                            frequencyFactor = 12;
+                            break;
+                        case 'Q':
+                        case 'Quarterly':
+                            frequencyFactor = 4;
+                            break;
+                        case 'H':
+                        case 'Half Yearly':
+                            frequencyFactor = 2;
+                            break;
+                        case 'W':
+                        case 'Weekly':
+                            frequencyFactor = parseInt(365 / 7);
+                            break;
+                        case 'Y':
+                        case 'Yearly':
+                            frequencyFactor = 1;
+                            break;
+                        default:
+                            throw new Error("Invalid frequency");
+                    }
+                    var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
+                    var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
+                    var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    return {
+                        nominalRate: nominalRate,
+                        estimatedEmi: Math.round(estimatedEmi)
+                    };
+                } else {
+                    throw new Error("Invalid input for nominal rate calculation");
+                }
+            }
+
+            var calculateEffectiveIRR = function(loanAmount, frequency, tenure, lomsIRR) {
+                var frequencyFactor;
+                if (frequency && tenure && lomsIRR) {
+                    switch (frequency) {
+                        case 'D':
+                        case 'Daily':
+                            frequencyFactor = 365;
+                            break;
+                        case 'F':
+                        case 'Fortnightly':
+                            frequencyFactor = parseInt(365 / 15);
+                            break;
+                        case 'M':
+                        case 'Monthly':
+                            frequencyFactor = 12;
+                            break;
+                        case 'Q':
+                        case 'Quarterly':
+                            frequencyFactor = 4;
+                            break;
+                        case 'H':
+                        case 'Half Yearly':
+                            frequencyFactor = 2;
+                            break;
+                        case 'W':
+                        case 'Weekly':
+                            frequencyFactor = parseInt(365 / 7);
+                            break;
+                        case 'Y':
+                        case 'Yearly':
+                            frequencyFactor = 1;
+                            break;
+                        default:
+                            throw new Error("Invalid frequency");
+                    }
+                    var effectiveIRR = frequencyFactor * parseFloat(Math.pow(parseFloat(1 + parseFloat(lomsIRR / 100)), parseFloat(1/frequencyFactor))-1) * 100;
+                    effectiveIRR = Math.round( effectiveIRR * 100)/100;
+                    // var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
+                    // var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    return {
+                        effectiveIRR: effectiveIRR
+                    };
+                } else {
+                    throw new Error("Invalid input for Effective IRR calculation");
+                }
+            }
         var preLoanSaveOrProceed = function(model){
             var loanAccount = model.loanAccount;
 
@@ -97,10 +248,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if (model.loanAccount.guarantors && model.loanAccount.guarantors.length) {
                 for (var i in model.loanAccount.guarantors) {
                     var gua = model.loanAccount.guarantors[i];
-                    if (gua.guaUrnNo || gua.guaCustomerId) {
+                    if (gua.urn || gua.customerId) {
                         gua.relation = 'Guarantor';
                         gua.urn = gua.guaUrnNo;
-                        gua.customerId = gua.guaCustomerId;
+                        gua.customerId = gua.customerId;
                         model.loanAccount.loanCustomerRelations.push(gua);
                     }
                 }
@@ -236,6 +387,18 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             "title": "LOAN_INPUT",
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
+                // if ($stateParams.pageId) {
+                //     LoanProcessDetails.get($stateParams.loanId)
+                //         .subscribe(function(loanProcess){
+                //             model.loanProcess=loanProcess;
+                //         });
+                // } else {
+                //     LoanProcessDetails.createNewProcess()
+                //     .subscribe(function(loanProcess){
+                //         model.loanProcess=loanProcess;
+                        
+                //     });
+                // }
                 // TODO default values needs more cleanup
                 model.currentStage = 'LoanInitiation';
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -244,6 +407,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanHoldRequired = SessionStore.getGlobalSetting("loanHoldRequired");
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
+                    model.loanAccount.branchId=branchId;
                     model.additional = model.additional || {};
                     model.additional.branchName = branchName;
                     model.loanAccount.bankId = bankId;
@@ -251,6 +415,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.disbursementSchedules=model.loanAccount.disbursementSchedules || [];
                     model._currentDisbursement=model._currentDisbursement||{};
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
+                    model.loanAccount.dsaPayout=model.loanAccount.dsaPayout || {};
+                    model.loanAccount.fee3=model.loanAccount.fee3 || 0;
+                    model.loanAccount.fee4=model.loanAccount.fee4 ;
+                    model.loanAccount.fee5=model.loanAccount.fee5 ;
+                    model.loanAccount.securityEmiRequired=model.loanAccount.securityEmiRequired;
+                    model.loanAccount.dealIrr=model.loanAccount.dealIrr;
+                    
+                    model.loanAccount.vExpectedProcessingFee=Math.round(((model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount)* 100) / 100 || null;
+                    model.loanAccount.dsaPayoutFee=Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmount)*100)/100 || null;
+                    model.loanAccount.accountUserDefinedFields=model.loanAccount.accountUserDefinedFields||{};
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues=model.loanAccount.accountUserDefinedFields.userDefinedFieldValues || {};
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 || null;
+                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7=model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 || null;
+                   // model.loanAccount.expectedInterestRate=null;
+                    model.loanAccount.interestRate=model.loanAccount.interestRate;
                     PageHelper.showLoader();
                     Queries.getGlobalSettings("mainPartner").then(function(value) {
                         model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
@@ -264,7 +443,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
-                    model.loanAccount.guarantors = [];
+                    model.loanAccount.guarantors = model.loanAccount.guarantors ||[];
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
                     if(model.siteCode == 'IREPDhan'){
@@ -275,7 +454,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         model.loanAccount.interestRate = 26;
                     }
 
-                    PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanInput").then(function(data){
+                    
+
+                    PagesDefinition.getPageConfig("Page/Engine/witfin.loans.individual.booking.LoanInput").then(function(data){
                         $log.info(data);
                         model.pageConfig = data;
                         if(data.showLoanBookingDetails != undefined && data.showLoanBookingDetails !== null && data.showLoanBookingDetails !=""){
@@ -286,25 +467,29 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         //stateParams
                     });
                     //model.loanAccount.guarantors = [];
-                   for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
                         if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
                             model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
+                            if(!model.loanAccount.coBorrowers.length){
                                 model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
+                            }  
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                            if(!model.loanAccount.guarantors.length){
                                 model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
-                                guaCustomerId:model.loanAccount.loanCustomerRelations[i].customerId,
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
                                 });
-                            } 
+                            }
+                        }
                     }
                     /*for (var i in model.loanAccount.loanCustomerRelations) {
                         var lcR = model.loanAccount.loanCustomerRelations[i];
@@ -853,13 +1038,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 }
                             },
                             {
-                                key:"loanAccount.securityEmiRequired",
-                                type:"select",
-                                required: true,
-                                enumCode: "decisionmaker",
-                                "condition" : "model.siteCode != 'IREPDhan'"
-                            },
-                            {
                                 key:"loanAccount.processingFeePercentage",
                                 type:"number",
                                 "readonly" : nonEditable['loanAccount.processingFeePercentage'],
@@ -876,12 +1054,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 type:"amount",
                                 condition: "model.siteCode=='pahal'"
                             },
-                            {
-                                "key":"loanAccount.interestRate",
-                                "type":"number",
-                                "readonly" : nonEditable['loanAccount.interestRate'],
-                                "placeholderExpr":"model.additional.product.interestBracket"
-                            },
+                            // {
+                            //     "key":"loanAccount.interestRate",
+                            //     "type":"number",
+                            //     "readonly" : nonEditable['loanAccount.interestRate'],
+                            //     "placeholderExpr":"model.additional.product.interestBracket"
+                            // },
                             {
                                 "key": "loanAccount.loanApplicationDate",
                                 "title": "LOAN_APPLICATION_DATE",
@@ -937,10 +1115,308 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 }
                             },
+                            // {
+                            //     "key": "loanAccount.fixedIntrestRate",
+                            //     "title":"FIXED_INTREST_RETE",
+                            //     "type": "number"
+                            // },
                             {
-                                "key": "loanAccount.fixedIntrestRate",
-                                "title":"FIXED_INTREST_RETE",
-                                "type": "number"
+                                "key": "loanAccount.tenureRequested",
+                                "title":"TENURE_REQUESETED_IN_MONTHS",
+                                "required": true,
+                                onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                   // model.loanAccount.expectedInterestRate = null;
+                                }
+                            },
+                            {
+                                "key": "loanAccount.frequencyRequested",
+                                "type": "select",
+                                "title": "FREQUENCY_REQUESTED",
+                                "enumCode": "frequency",
+                                "required": true,
+                                onChange: function(modelValue, form, model) {
+                                    model.loanAccount.estimatedEmi = null;
+                                    //model.loanAccount.expectedInterestRate = null;
+                                    
+                                }
+                            },
+                            {
+                                        "key": "loanAccount.dsaPayout",
+                                        "type": "number",
+                                        "title": "DSA_PAYOUT_IN_PERCENTAGE",
+                                        "orderNo": 30,
+                                        onChange: function(modelValue, form, model) {
+                                            model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmount)*100)/100;
+                                        }
+                            },{
+                                        "key": "loanAccount.fee3",
+                                        "title": "ACTUAL_FRANKING",
+                                        "orderNo": 40
+                            },{
+                                        "key": "loanAccount.expectedPortfolioInsurancePremium",
+                                        "title": "PERSONAL_INSURANCE",
+                                        "orderNo": 50,
+                                        "readonly": true
+                            }, {
+                                        "key": "loanAccount.fee4",
+                                        "title": "VEHICLE_INSURANCE",
+                                        "orderNo": 60
+                            },{
+                                        "key": "loanAccount.fee5",
+                                        "title": "DOCUMENT_CHARGES",
+                                        "type": "number",
+                                        "orderNo": 70
+                            },{
+                                key:"loanAccount.securityEmiRequired",
+                                type:"select",
+                                required: true,
+                                enumCode: "decisionmaker",
+                                "condition" : "model.siteCode != 'IREPDhan'"
+                            },{
+                                "type": "button",
+                                "title": "CALCULATE_XIRR",
+                                "orderNo": 90,
+                                onClick: function(model, formCtrl) {
+                                    if (!model.loanAccount.securityEmiRequired) {
+                                        PageHelper.showProgress('securityEMI', 'Please Select Advance EMI Option', 3000);
+                                    } 
+                                    else {
+                                        model.loanAccount.dealIrr = null;
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = null;
+                                        var processFee;
+                                        var dsaPayout;
+                                        var frequency;
+                                        var frequencyRequested;
+                                        var advanceEmi = model.loanAccount.estimatedEmi;
+                                        processFee = Math.round(((model.loanAccount.processingFeePercentage / 100) * model.loanAccount.loanAmount)* 100) / 100;
+                                        dsaPayout = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmount)*100)/100;
+                                        frankingCharge = model.loanAccount.fee3;
+                                        model.loanAccount.vExpectedProcessingFee = processFee;
+                                        model.loanAccount.dsaPayoutFee = dsaPayout;
+                                        model.netDisbursementAmount = model.loanAccount.loanAmount - processFee - advanceEmi + dsaPayout;
+                                        switch (model.loanAccount.frequencyRequested) {
+                                            case 'Monthly':
+                                                frequency = "MONTH";
+                                                break;
+                                            case 'Weekly':
+                                                frequency = "WEEK";
+                                                break;
+                                            case 'Yearly':
+                                                frequency = "YEAR";
+                                                break;
+                                            case 'Fortnightly':
+                                                frequency = "FORTNIGHT";
+                                                break;
+                                            case 'Quarterly':
+                                                frequency = "QUARTER";
+                                                break;
+                                            case 'Daily':
+                                                frequency = "DAY";
+                                                break;
+                                        }
+                                        switch (model.loanAccount.frequencyRequested) {
+                                            case 'Daily':
+                                                frequencyRequested = 1;
+                                                break;
+                                            case 'Fortnightly':
+                                                frequencyRequested = 15;
+                                                break;
+                                            case 'Monthly':
+                                                frequencyRequested = 30;
+                                                break;
+                                            case 'Quarterly':
+                                                frequencyRequested = 120;
+                                                break;
+                                            case 'Weekly':
+                                                frequencyRequested = 7;
+                                                break;
+                                            case 'Yearly':
+                                                frequencyRequested = 365;
+                                        }
+
+                                        if (model.loanAccount.securityEmiRequired == 'YES') {
+                                            LoanProcess.findPreOpenSummary({
+                                                "amountMagnitude": model.loanAccount.loanAmount,
+                                                "branchId": model.loanAccount.branchId,
+                                                "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                "inputFees": [
+                                                    {
+                                                        "grossAmount": processFee - dsaPayout,
+                                                        "transactionDate": Utils.getCurrentDate(),
+                                                        "transactionName": "Processing Fee"
+                                                    }
+                                                ],
+                                                "inputMoratoriums": [],
+                                                "normalInterestRate": model.loanAccount.processingFeePercentage,
+                                                "openedOnDate": Utils.getCurrentDate(),
+                                                "productCode": "IRRTP",
+                                                "scheduledDisbursementAmount": model.loanAccount.loanAmount,
+                                                "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                "scheduledDisbursements": [],
+                                                "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                "tenureUnit": frequency,
+                                                "userSecurityDeposit": "0"
+                                            })
+                                            .$promise
+                                            .then(function (resp) {
+                                                $log.info(resp);
+                                                lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                var obj = calculateEffectiveIRR(model.loanAccount.loanAmount, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                model.loanAccount.dealIrr = obj.effectiveIRR;
+                                            },function (err) {
+                                                console.log(err);
+                                            });
+
+                                            LoanProcess.findPreOpenSummary({
+                                                "amountMagnitude": model.loanAccount.loanAmount,
+                                                "branchId": model.loanAccount.branchId,
+                                                "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                "inputFees": [{
+                                                    "grossAmount": processFee + dsaPayout,
+                                                    "transactionDate": Utils.getCurrentDate(),
+                                                    "transactionName": "Processing Fee"
+                                                }],
+                                                "inputMoratoriums": [],
+                                                "normalInterestRate": model.loanAccount.processingFeePercentage,
+                                                "openedOnDate": Utils.getCurrentDate(),
+                                                "productCode": "IRRTP",
+                                                "scheduledDisbursementAmount": model.loanAccount.loanAmount,
+                                                "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                "scheduledDisbursements": [],
+                                                "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                "tenureUnit": frequency,
+                                                "userSecurityDeposit": "0"
+                                            })
+                                            .$promise
+                                            .then(function (resp) {
+                                                $log.info(resp);
+                                                lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                var obj = calculateEffectiveIRR(model.loanAccount.loanAmount, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = obj.effectiveIRR;
+                                            },function (err) {
+                                                console.log(err);
+                                            });
+                                        }
+
+                                        else if (model.loanAccount.securityEmiRequired == 'NO') {
+                                            LoanProcess.findPreOpenSummary({
+                                                "amountMagnitude": model.loanAccount.loanAmount,
+                                                "branchId": model.loanAccount.branchId,
+                                                "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                "inputFees": [{
+                                                    "grossAmount": processFee - dsaPayout,
+                                                    "transactionDate": Utils.getCurrentDate(),
+                                                    "transactionName": "Processing Fee"
+                                                }],
+                                                "inputMoratoriums": [],
+                                                "normalInterestRate": model.loanAccount.processingFeePercentage,
+                                                "openedOnDate": Utils.getCurrentDate(),
+                                                "productCode": "IRRTP01",
+                                                "scheduledDisbursementAmount": model.loanAccount.loanAmount,
+                                                "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                "scheduledDisbursements": [],
+                                                "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                "tenureUnit": frequency,
+                                                "userSecurityDeposit": "0"
+                                            })
+                                            .$promise
+                                            .then(function (resp) {
+                                                $log.info(resp);
+                                                lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                var obj = calculateEffectiveIRR(model.loanAccount.loanAmount, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested,lomsIRR );
+                                                model.loanAccount.dealIrr = obj.effectiveIRR;
+                                            }, function (err) {
+                                                console.log(err);
+                                            });
+
+                                            LoanProcess.findPreOpenSummary({
+                                                "amountMagnitude": model.loanAccount.loanAmount,
+                                                "branchId": model.loanAccount.branchId,
+                                                "firstRepaymentDate": moment(Utils.getCurrentDate()).add(1, 'months').format("YYYY-MM-DD"),
+                                                "inputFees": [{
+                                                    "grossAmount": processFee + dsaPayout,
+                                                    "transactionDate": Utils.getCurrentDate(),
+                                                    "transactionName": "Processing Fee"
+                                                }],
+                                                "inputMoratoriums": [],
+                                                "normalInterestRate": model.loanAccount.processingFeePercentage,
+                                                "openedOnDate": Utils.getCurrentDate(),
+                                                "productCode": "IRRTP01",
+                                                "scheduledDisbursementAmount": model.loanAccount.loanAmount,
+                                                "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                "scheduledDisbursements": [],
+                                                "tenureMagnitude": model.loanAccount.tenureRequested,
+                                                "tenureUnit": frequency,
+                                                "userSecurityDeposit": "0"
+                                            })
+                                            .$promise
+                                            .then(function (resp) {
+                                                $log.info(resp);
+                                                lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                var obj = calculateEffectiveIRR(model.loanAccount.loanAmount, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = obj.effectiveIRR;
+                                            },function (err) {
+                                                console.log(err);
+                                            });
+                                        }
+                                        
+                                    }
+                                }
+                            },{
+                                        "key": "loanAccount.dealIrr",
+                                        "title": "NET_IRR",
+                                        "type": "number",
+                                        "orderNo": 110,
+                                        "readonly": true,
+                                        "required":true
+                            },{
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
+                                        "title": "GROSS_IRR",
+                                        "type": "string",
+                                        "orderNo": 110,
+                                        "readonly": true,
+                                        "required": true
+                            },{
+                                        "key": "loanAccount.vExpectedProcessingFee",
+                                        "title": "PROCESSING_FEE",
+                                        "type": "number",
+                                        "orderNo": 120,
+                                        "readonly": true
+                            },{
+                                        "key": "loanAccount.dsaPayoutFee",
+                                        "title": "DSA_PAYOUT",
+                                        "type": "number",
+                                        "orderNo": 130,
+                                        "readonly": true
+                            },{
+                                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
+                                "title": "FLAT_RATE",
+                                "type": "string",
+                                "required": true,
+                                "orderNo": 140
+                            },{
+                                "key": "loanAccount.interestRate",
+                                "type": "number",
+                                "required": true,
+                                "orderNo" : 150,
+                                "title": "INTEREST_RATE",
+                                "readonly": true
+                            },{
+                                "title": "CALCULATE_NOMINAL_RATE",
+                                "type": "button",
+                                "orderNo" : 160,
+                                "onClick": function(model, formCtrl) {
+                                    try{
+                                        var obj = calculateNominalRate(model.loanAccount.loanAmount, model.loanAccount.frequencyRequested, model.loanAccount.tenure, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
+                                        model.loanAccount.interestRate = obj.nominalRate;
+                                        model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                        model.loanAccount.interestRate=Math.round(model.loanAccount.interestRate * 100)/100;
+                                    } catch (e){
+                                        console.log(e);
+                                        PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
+                                    }
+                                }
                             }
                             /*{
                                 title: "BUSINESS_INCOME",
@@ -1334,11 +1810,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.otherFee",
                                 type:"amount"
                             },
-                            {
-                                "key":"loanAccount.interestRate",
-                                "type":"number",
-                                "placeholderExpr":"model.additional.product.interestBracket"
-                            },
+                            // {
+                            //     "key":"loanAccount.interestRate",
+                            //     "type":"number",
+                            //     "placeholderExpr":"model.additional.product.interestBracket"
+                            // },
                             {
                                 "key": "loanAccount.loanApplicationDate",
                                 "title": "LOAN_APPLICATION_DATE",
@@ -1944,7 +2420,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "outputMap": {
                                             "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
                                             "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName",
-                                            "id":"loanAccount.guarantors[arrayIndex].guaCustomerId"
+                                            "id":"loanAccount.guarantors[arrayIndex].customerId"
                                         },
                                         "searchHelper": formHelper,
                                         "search": function(inputModel, form) {
@@ -3065,7 +3541,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             .$promise
                             .then(function(res){
                                 model.loanAccount = res.loanAccount;
-                                $state.go("Page.Engine",{pageName:"loans.individual.booking.LoanInput", pageId: model.loanAccount.id}, {reload:true});
+                                $state.go("Page.Engine",{pageName:"witfin.loans.individual.booking.LoanInput", pageId: model.loanAccount.id}, {reload:true});
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
                             })
@@ -3364,4 +3840,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 }
             }
         };
-    }]);
+    }
+}
+})
