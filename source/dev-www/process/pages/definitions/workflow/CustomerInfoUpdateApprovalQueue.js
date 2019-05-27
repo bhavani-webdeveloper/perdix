@@ -227,7 +227,6 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
                             desc: "",
                             icon: "fa fa-pencil",
                             fn: function(item, model){
-								var pageName = currentStage == 'InfoUpdateInit' ? 'workflow.CustomerInfoUpdateInit': 'workflow.CustomerApprovalInit';
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     "pageName": 'workflow.CustomerInfoUpdateInit',
