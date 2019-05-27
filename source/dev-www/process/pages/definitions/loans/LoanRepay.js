@@ -410,6 +410,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         type: "amount"
                                     },
                                     {
+                                        key: "repayment.totalDue",
+                                        readonly: true,
+                                        title: "TOTAL_DEMAND_DUE",
+                                        type: "amount"
+                                    },
+                                    {
                                         key: "repayment.totalFeeDue",
                                         readonly: true,
                                         title: "TOTAL_FEE_DUE",
@@ -420,6 +426,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         readonly: true,
                                         title: "NET_PAYOFF_AMOUNT",
                                         type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.amount",
+                                        readonly: true,
+                                        condition:"model.siteCode == 'witfin'",
+                                        title: "Net Payoff Amount(with Due)",
+                                        type: "amount",
+
                                     },
                                     {
                                         type: "section",
