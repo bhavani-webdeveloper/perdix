@@ -3942,21 +3942,21 @@
                   "title": "udf10",
                   "type": "string",
                   "captureStages": [
-                     "ScreeningReview", "Application"
+                     "ScreeningReview", "Application","ApplicationReview","Televerification","CreditCommitteeReview","Sanction"
                   ]
                },
                "udf11": {
                   "title": "udf11",
                   "type": "string",
                   "captureStages": [
-                     "ScreeningReview", "Application"
+                     "ScreeningReview", "Application","ApplicationReview","Televerification","CreditCommitteeReview","Sanction"
                   ]
                },
                "udf12": {
                   "title": "udf12",
                   "type": "string",
                   "captureStages": [
-                     "ScreeningReview", "Application"
+                     "ScreeningReview", "Application","ApplicationReview","Televerification","CreditCommitteeReview","Sanction"
                   ]
                }
             }
@@ -4161,7 +4161,7 @@
                      "minimum": 1,
                      "maximum": 10000000,
                      "captureStages": [
-                        "Screening","ScreeningReview", "Sanction", "LoanBooking", "LoanInitiation","Application"
+                        "Screening","ScreeningReview", "Sanction", "LoanBooking", "LoanInitiation","Application","ApplicationReview","Televerification","CreditCommitteeReview"
                      ]
                   },
                   "disbursementAmount":{
@@ -4324,21 +4324,22 @@
                      "title":"modeOfDisbursement",
                      "type":"date",
                      "captureStages":[
-                        "ScreeningReview", "LoanBooking", "Application"
+                        "ScreeningReview", "LoanBooking", "Application","ApplicationReview","Televerification","CreditCommitteeReview","Sanction"
                      ]
                   },
                   "actualDisbursementDate":{
                      "title":"actualDisbursementDate",
                      "type":"date",
                      "captureStages":[
-                        "ScreeningReview", "LoanBooking", "Application"
+                        "ScreeningReview", "LoanBooking", "Application","ApplicationReview","Televerification","CreditCommitteeReview","Sanction"
                      ]
                   },
                   "firstRepaymentDate":{
                      "title":"REPAYMENT_DATE",
                      "type":"date",
                      "captureStages":[
-                        "Screening","ScreeningReview","Application","LoanBooking","ApplicationReview"
+                        "Screening","ScreeningReview","Application","LoanBooking","ApplicationReview",
+                        "Televerification","CreditCommitteeReview","Sanction"
                      ]
                   }
                }
