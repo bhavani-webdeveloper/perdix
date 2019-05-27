@@ -8,8 +8,8 @@ irf.pageCollection.controller(irf.controller("workflow.CustomerInfoUpdateDashboa
                 "iconClass": "fa fa-suitcase",
                 "items": [
                     "Page/Engine/workflow.CustomerInfoUpdateInit",
-                    "Page/Engine/workflow.CustomerApprovalQueue/InfoUpdateInit",
-                    "Page/Engine/workflow.CustomerApprovalQueue/InfoUpdateApprove"
+                    "Page/Engine/workflow.CustomerInfoUpdateApprovalQueue/Init",
+                    "Page/Engine/workflow.CustomerInfoUpdateApprovalQueue/Approve"
                 ]
             };
             debugger;
