@@ -9,6 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchId;
+				model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			},
 
 			definition: {
@@ -188,9 +189,26 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 									pageName: "loans.individual.screening.LoanOriginationQueue"
 								});
 							},
+							isApplicable: function(item, index) {								
+								return index.siteCode != 'witfin';
+							}
+						},{
+							name: "VIEW LOAN",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								irfNavigator.go({
+									state: "Page.Bundle",
+									pageName: "witfin.loans.individual.screening.LoanView",
+									pageId: item.loanId
+								},
+								{
+									state: "Page.Engine",
+									pageName: "loans.individual.screening.LoanOriginationQueue"
+								});
+							},
 							isApplicable: function(item, index) {
-
-								return true;
+								return index.siteCode == 'witfin';
 							}
 						}];
 					}
