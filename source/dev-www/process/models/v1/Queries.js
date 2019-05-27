@@ -352,6 +352,24 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getLoanRepaymentStatus = function(accountNumber) {
+            var deferred = $q.defer();
+            resource.getResult("loanRepaymentStatus.list", {
+                account_number: accountNumber
+            }, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getDepositList = function(depositUser) {
             var deferred = $q.defer();
             var request = {

@@ -17,13 +17,17 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     });
                     return;
                 }
-
+                
                 console.log(model._credit);
 
                 model.pageRules = {
                     forceToTransAuth: false
                 }
-
+                model.additional = {
+                    repaymentstatus : null,
+                    unclearedTransactionsCount : 0,
+                    repaymentamount : 0
+                };
                 if (model._credit.unapprovedAmount!=null && model._credit.unapprovedAmount > 0){
                     model.pageRules.forceToTransAuth = true;
                     model.pageRules.forceToTransAuthMessage = "Unapproved payments found!";
@@ -31,6 +35,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 }
 
                 model.workingDate = SessionStore.getCBSDate();
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
                 //PageHelper.showLoader();
                 irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
@@ -92,6 +97,21 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             function (errQuery) {
                             }
                         );
+                        Queries.getLoanRepaymentStatus(loanAccountNo)
+                        .then(
+                            function(res){
+                                var rows = res.body;
+                                var rowsCount = rows.length;
+                                model.additional.repaymentstatus = rows[0].repayment_status;
+                                var totalAmount = 0;
+                                for (var i=0;i<rowsCount;i++){
+                                    totalAmount= totalAmount + (rows[i].repayment_amount_in_paisa)/100;
+                                }
+                                model.additional.repaymentamount = totalAmount;
+                                model.additional.unclearedTransactionsCount = rowsCount;
+
+                            }
+                        );
                         irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
                     }, function (resData) {
                         irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
@@ -131,6 +151,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     "htmlClass": "alert alert-warning",
                     "condition": "model.pageRules.forceToTransAuth == true",
                     "html":"<h4><i class='icon fa fa-warning'></i>{{model.pageRules.forceToTransAuthMessage}}</h4>{{model.pageRules.forceToTransAuthSubMessage}}"
+                },
+                {
+                    "type": "section",
+                    "htmlClass": "alert alert-danger",
+                    "condition": "model.siteCode == 'witfin' && model.additional.repaymentstatus == 'Pending for Clearing'",
+                    "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unclearedTransactionsCount}} ACH or PDC Payment(s) are {{model.additional.repaymentstatus}} </h4>Payment(s) of {{ model.additional.repaymentamount | currency:'Rs.':2 }} is not yet Collected for this account.</h4>"
                 },
                 {
                     key: "_credit.instrumentType",
