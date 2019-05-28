@@ -107,23 +107,38 @@ define({
                             if (member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
-
-                        /*Household Assets field*/
-                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length;
-                        /* what assets i need to take*/
                         model.UIUDF.household_fields.total_Value = 0;
+                        /*Household Assets field*/
+                        var lengthOfPhysicalAssets = [];
                         _.each(model.customer.physicalAssets, function(Assets) {
-                            model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
+                            if (Assets.ownedAssetValue != null && Assets.ownedAssetValue != 0)
+                            lengthOfPhysicalAssets.push(Assets.ownedAssetValue)
+                            model.UIUDF.household_fields.total_Value +=  Assets.ownedAssetValue;
                         });
+
+                        model.UIUDF.household_fields.total_Assets = lengthOfPhysicalAssets.length;
+                        /* what assets i need to take*/
+                       
+                        // _.each(model.customer.physicalAssets, function(Assets) {
+                        //     model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
+                        // });
     
                         /*Cibil/highmark fields*/
                         
                         /* Current Assets */
-                        model.UIUDF.current_assets.assets = model.customer.currentAssets.length;
-                        model.UIUDF.current_assets.total = 0;
-                        _.each(model.customer.currentAssets,function(Asset){
-                            model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        model.UIUDF.current_assets.total = 0;  
+                        var lengthOfPhysicalAssets1 = [];
+                        _.each(model.customer.currentAssets, function(Assets) {
+                            if (Assets.assetValue != null && Assets.assetValue != 0)
+                            lengthOfPhysicalAssets1.push(Assets.assetValue)
+                            model.UIUDF.current_assets.total += Assets.assetValue;
                         });
+
+                        model.UIUDF.current_assets.assets = lengthOfPhysicalAssets1.length;
+                        
+                        // _.each(model.customer.currentAssets,function(Asset){
+                        //     model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        // });
 
                         /*Reference Check fields*/
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
@@ -933,8 +948,14 @@ define({
                                 getColumns: function() {
                                     return [{
                                         "title": "ASSET_TYPE",
-                                        "data": "nameOfOwnedAsset"
+                                        "data": "nameOfOwnedAsset",
+                                        render: function(data, type, full, meta) {
+                                            if (full.ownedAssetValue >0 && full.ownedAssetValue != 0)
+                                                return data
+                                            else return false
+                                        }
                                     }, 
+
                                     // {
                                     //     "title": "REGISTERED_OWNER",
                                     //     "data": "registeredOwner"
@@ -944,11 +965,13 @@ define({
                                         "title": "Asset Value",
                                         "data": "ownedAssetValue",
                                         render: function(data, type, full, meta) {
-                                            if (data)
-                                                return irfCurrencyFilter(data)
-                                            else return "NA"
+                                            if (full.ownedAssetValue >0 && full.ownedAssetValue != 0)
+                                            return irfCurrencyFilter(data)
+                                            else return false
                                         }
+                                       
                                     }, 
+                                
                                     // {
                                     //     "title": "AREA_UNITS_OF_ASSETS",
                                     //     "data": "unit"
@@ -1005,14 +1028,22 @@ define({
                                 getColumns: function() {
                                     return [{
                                         "title": "ASSET_TYPE",
-                                        "data": "assetType"
+                                        "data": "assetType",
+                                        render: function(data, type, full, meta) {
+                                            if (full.assetValue >0 && full.assetValue != 0)
+                                                return data
+                                            else return false
+                                        }
                                     },{
                                         "title": "Asset Value",
                                         "data": "assetValue",
                                         render: function(data, type, full, meta) {
-                                            if (data)
-                                                return irfCurrencyFilter(data)
-                                            else return "NA"
+                                            // if (data)
+                                            //     return irfCurrencyFilter(data)
+                                            // else return "NA"
+                                            if (full.assetValue >0 && full.assetValue != 0)
+                                            return irfCurrencyFilter(data)
+                                            else return false
                                         }
                                     }];
                                 },
