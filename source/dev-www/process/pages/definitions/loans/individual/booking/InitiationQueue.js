@@ -118,22 +118,7 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
                             });							
 						},
 						isApplicable: function(item, model){
-							return model.searchOptions.siteCode != 'sambandh' && model.searchOptions.siteCode != 'witfin';
-						}
-					},{
-						name: "LOAN_INPUT",
-						desc: "",
-						icon: "fa fa-book",
-						fn: function(item, index){
-							irfNavigator.go({
-                                'state': 'Page.Engine',
-                                'pageName': 'witfin.loans.individual.booking.LoanInput',
-                                'pageId': item.loanId,
-                                'pageData': item
-                            });							
-						},
-						isApplicable: function(item, model){
-							return model.searchOptions.siteCode == 'witfin';
+							return model.searchOptions.siteCode != 'sambandh';
 						}
 					},{
 						name: "LOAN_INPUT",
