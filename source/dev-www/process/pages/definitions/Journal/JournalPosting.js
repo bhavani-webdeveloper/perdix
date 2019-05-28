@@ -103,6 +103,8 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry.entryType",
                 "BranchPostingEntry.creditGLNo",
                 "BranchPostingEntry.debitGLNo",
+                "BranchPostingEntry.creditGLName",
+                "BranchPostingEntry.debitGLName",
                 "BranchPostingEntry.transactionAmount",
                 "BranchPostingEntry.billNo",
                 "BranchPostingEntry.billDate",
@@ -197,7 +199,19 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         "type": "button",
                                         "title": "PRINT VOUCHER",
                                         "onClick": "actions.printPDF(model, formCtrl, form, $event)"
-                                        }
+                                        },
+                                        "debitGLName": {
+                                            "key": "journal.journalEntryDto.debitGLName",
+                                            "title": "Debit GL Name",
+                                            "orderNo": 45,
+                                            "readonly":true
+                                        },
+                                        "creditGLName": {
+                                            "key": "journal.journalEntryDto.creditGLName",
+                                            "title": "Credit GL Name",
+                                            "orderNo": 55,
+                                            "readonly":true
+                                        },
                                     }
                                 }
                             },
@@ -328,6 +342,16 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                     model.branchProcess = journal;
                                     model.journal.journalEntryDto = {};
                                     model.journal.journalEntryDto = journal.journalEntryDto;
+                                    Journal.listAccountCode({
+                                        'productCode': model.journal.journalEntryDto.creditGLNo.split(":")[2]
+                                    }).$promise.then(function(response) {
+                                        model.journal.journalEntryDto.creditGLName = response.body[0].glName
+                                    });
+                                    Journal.listAccountCode({
+                                        'productCode': model.journal.journalEntryDto.debitGLNo.split(":")[2]
+                                    }).$promise.then(function(response) {
+                                        model.journal.journalEntryDto.debitGLName = response.body[0].glName       
+                                   });
                                     UIRepository.getPostingEntryUIRepository().$promise
                                     .then(function(repo){
                                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
@@ -357,7 +381,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                     console.log(form)
                                     self.form = form;
                                 });
-                                // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
+                                                               // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
                             })
                         }
 

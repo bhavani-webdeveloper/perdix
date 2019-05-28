@@ -57,6 +57,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
+                        if(model.loanAccount.loanClosedAt) {
+                        model.loanAccount.loanClosedAt = Utils.dateToLocalTZ(model.loanAccount.loanClosedAt).format("D-MMM-YYYY");
+                        } else {
+                            model.loanAccount.loanClosedAt = 'NA';
+                        }
                         model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
                         var promiseArray = [];
                         if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
@@ -569,6 +574,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "title": "ACCOUNT_OPEN_DATE",
                         "required":false,
                         "type": "string"
+                    },
+                    {
+                        "key": "loanAccount.loanClosedAt",
+                        "title": "LOAN_CLOSE_DATE",
+                        "required":false,
+                        "type": "string",
+                        "condition":"model.siteCode='witfin'"
                     },
                     {
                         "key": "cbsLoan.maturityDate",

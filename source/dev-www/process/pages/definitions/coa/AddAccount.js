@@ -21,6 +21,7 @@ define([], function() {
 
                     model.glAccount = model.glAccount || {};
                    // model.glAccount.category = _.upperFirst(model.glAccount.category);
+                    model.glAccount.productCode = null;
                     model.glAccount.category = _.startCase(_.toLower(model.glAccount.category));
                     if (!(model && model.glAccount && model.glAccount.id)) {
                         PageHelper.showLoader();
@@ -65,7 +66,7 @@ define([], function() {
                             }, {
                                 "title": "GL_PRODUCT_CODE",
                                 "key": "glAccount.productCode",
-                                "type": "text",
+                                "type": ["string","null"],
                                 "condition": "model.glAccount.glType == 'LEDGER'",
                                 "required": true
                             }, {

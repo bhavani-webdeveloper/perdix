@@ -64,6 +64,17 @@ define({
                                 }
 
                             })
+                            Journal.listAccountCode({
+                                'productCode': model.journal.creditGLNo
+                            }).$promise.then(function(response) {
+                                model.journal.creditGLName = response.body[0].glName
+                            });
+                            Journal.listAccountCode({
+                                'productCode': model.journal.debitGLNo
+                            }).$promise.then(function(response) {
+                                model.journal.debitGLName = response.body[0].glName       
+                           });
+
 
 
 
@@ -169,14 +180,22 @@ define({
                         getListDisplayItem: function(data, index) {
                             return [
                                 data.category,
+                                data.glName,
                                 data.productCode,
-                                data.glType
+                                data.glType 
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
                             model.journal.debitGLNo=valueObj.productCode;
+                            model.journal.debitGLName=valueObj.glName;
                         }
-                    }, {
+                    }, 
+                    {
+                        key: "journal.debitGLName",
+                        type: "String",
+                        readonly: true,
+                        "title": "Debit GL Name"
+                    },{
                         key: "journal.creditGLNo",
                         "type": "lov",
                         lovonly: true,
@@ -221,13 +240,21 @@ define({
                         getListDisplayItem: function(data, index) {
                             return [
                                 data.category,
+                                data.glName,
                                 data.productCode,
                                 data.glType
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
                             model.journal.creditGLNo=valueObj.productCode;
+                            model.journal.creditGLName=valueObj.glName;
                         }
+                    },
+                    {
+                        key: "journal.creditGLName",
+                        type: "String",
+                        readonly: true,
+                        "title": "Credit GL Name"
                     },{
                         key: "journal.journalBranches",
                         type: "tableview",
