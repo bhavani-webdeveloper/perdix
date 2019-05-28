@@ -22,6 +22,7 @@ try {
         throw new Exception("Excel Type required");
     }
 
+    $database = $json[$key]['database'];
     $tableName = $json[$key]['table'];
     $jsonColumns = $json[$key]['columns'];
 
@@ -50,10 +51,15 @@ try {
     }
     $insertTemplate = 'INSERT INTO ' . $tableName . '(' . join(', ', $colNames) . ') VALUES (' . join(', ', $questions) . ')';
 
-    DB::beginTransaction();
+    if (empty($database)) {
+        $connection = DB::connection("default");
+    } else {
+        $connection = DB::connection($database);
+    }
+    $connection->beginTransaction();
     try {
         if ($isTruncate == "true") {
-            DB::delete('DELETE FROM '. $tableName);
+            $connection->delete('DELETE FROM '. $tableName);
         }
         for ($n = 0; $n < sizeOf($rowData); $n++) {
             $values = [];
@@ -80,17 +86,17 @@ try {
                 }
                 array_push($values, $val);
             }
-            $res1 = DB::insert($insertTemplate, $values);
+            $res1 = $connection->insert($insertTemplate, $values);
         }
         if ($res1) {
-            DB::commit();
+            $connection->commit();
             $response->setStatusCode(200)->json(["message" => 'Excel uploaded sucessfully']);
         } else {
-            DB::rollback();
+            $connection->rollback();
             throw new Exception('Row ' . ($n + 1) . ' failed');
         }
     } catch (Exception $dbe) {
-        DB::rollback();
+        $connection->rollback();
         throw $dbe;
     }
 } catch (Exception $e) {
