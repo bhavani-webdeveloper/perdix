@@ -1191,7 +1191,7 @@ define([], function () {
                         model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = disbursementSchedules;
                     }
                     if (typeof model.loanAccount.firstRepaymentDate == "undefined" || model.loanAccount.firstRepaymentDate == "" || model.loanAccount.firstRepaymentDate == null) {
-                        model.loanAccount.firstRepaymentDate = moment(model.loanAccount.sanctionDate).add(30, "d").format("YYYY-MM-DD");
+                        model.loanAccount.firstRepaymentDate = moment(model['loanAccount']['disbursementSchedules']['0']['scheduledDisbursementDate']).add(30, "d").format("YYYY-MM-DD");
                     }
 
                     /* ornamentsAppraisals */
