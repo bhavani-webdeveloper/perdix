@@ -492,11 +492,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "type":"select",
                     },
                     {
-                        key:"loanAccount.portfolioInsurancePremium",
+                        key:"loanAccount.expectedPortfolioInsurancePremium",
                         condition:'model.additional.config.portfolioInsurancePremium && model.loanAccount.id',
                         readonly:true,
                         required:false,
-                        "title":"PORTFOLIO_INSURANCE_PREMIUM",
+                        "title":"EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
                         type:'amount',
                     },
                     {
@@ -510,8 +510,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "loanAccount.portfolioInsurancePremium",
                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                        "title": "INSURANCE",
-                        "readonly": true
+                        "title": "PORTFOLIO_INSURANCE_PREMIUM",
+                        "readonly": true,
+                        type:'amount'
                     },
                     {
                         "key": "loanAccount.commercialCibilCharge",
