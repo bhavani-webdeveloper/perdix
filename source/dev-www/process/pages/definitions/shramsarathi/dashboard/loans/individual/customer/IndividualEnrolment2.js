@@ -285,7 +285,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 //"IndividualReferences",
-                                //"IndividualInformation.centreId",
+                                "IndividualInformation.centreId",
                                 //"References",
                                 "KYC.firstName"
                             ],
