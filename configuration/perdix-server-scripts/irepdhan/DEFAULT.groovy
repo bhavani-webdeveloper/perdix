@@ -79,19 +79,11 @@ import java.math.*;
             portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndInsuranceRateCode(ageOfCustomer, null, customerTenureInYear,insuranceRateCode);
             if(portfolioInsuranceMaster != null){
                 customerPortFolioInsurancePremium =  portfolioInsuranceMaster.getPremium().multiply(loanAmount).divide(new BigDecimal(1000), 2, RoundingMode.CEILING);
-		customerPortFolioInsurancePremium  =  customerPortFolioInsurancePremium.add(customerPortFolioInsurancePremium.multiply(new BigDecimal(0.18)));
-                if(portfolioInsuranceMaster.getServiceTax() != null)
-                    customerPortfolioInsuranceServiceTax = portfolioInsuranceMaster.getServiceTax();
-                else
-                    customerPortfolioInsuranceServiceTax = new BigDecimal(0);
-
-                if(portfolioInsuranceMaster.getInsuranceServiceCharge() != null){
-                    customerPortfolioInsuranceServiceCharge = portfolioInsuranceMaster.getInsuranceServiceCharge();
-                }else{
-                     customerPortfolioInsuranceServiceCharge = new BigDecimal(0);
-                }
+                customerPortfolioInsuranceServiceTax = customerPortFolioInsurancePremium.multiply(new BigDecimal(0.18));
+                customerPortFolioInsurancePremium = customerPortFolioInsurancePremium.add(customerPortfolioInsuranceServiceTax);
+                customerPortfolioInsuranceServiceCharge = new BigDecimal(0);
             }
-        }        
+        }
         if(loanProduct.getSpouseInsuranceRequired().equals("YES")){
             if(customerData != null){
                 spouseGender = null;
