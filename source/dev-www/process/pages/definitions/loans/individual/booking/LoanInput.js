@@ -285,16 +285,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model._currentDisbursement=model._currentDisbursement||{};
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                     PageHelper.showLoader();
-                    Queries.getGlobalSettings("mainPartner").then(function(value) {
-                        model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
-                        model.mainPartner = value;
-                        $log.info("mainPartner:" + model.loanAccount.partnerCode);
-                    }, function(err) {
-                        $log.info("mainPartner is not available");
-                    }).finally(function(){
-                        PageHelper.hideLoader();
-                    });
-                    //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
+                    var value = SessionStore.getGlobalSetting("mainPartner");
+                    model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
+                    model.mainPartner = value;
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
                     model.loanAccount.guarantors = [];
@@ -315,6 +308,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.showLoanBookingDetails = data.showLoanBookingDetails;
                             model.BackedDatedDisbursement=data.BackedDatedDisbursement;
                             model.allowPreEmiInterest = data.allowPreEmiInterest;
+                            
+                            if (model.allowPreEmiInterest && model.loanAccount.disbursementSchedules.length > 0 && model.loanAccount.disbursementSchedules[0] && model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)  && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
+                                model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
+                                model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
+                            }
                         }
                         if(typeof data.conditionConfig != "undefined")
                         generateDynamicCondition(data.conditionConfig,model);
@@ -345,42 +343,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 });
                             } 
                     }
-                    /*for (var i in model.loanAccount.loanCustomerRelations) {
-                        var lcR = model.loanAccount.loanCustomerRelations[i];
-                        if (lcR.relation === 'Co-Applicant') {
-                            lcR.coBorrowerUrnNo = lcR.urn;
-                            model.loanAccount.coBorrowers.push(lcR);
-                        } else if (lcR.relation === 'Guarantor' && model.loanAccount.guarantors.length == 0) {
-                            lcR.guaUrnNo = lcR.urn;
-                            delete lcR.id;
-                            model.loanAccount.guarantors.push(lcR);
-                        }
-                    }*/
-                    /*
-{
-    customerId: null,
-    id: 9914,
-    loanId: 6140,
-    relation: 'Applicant',
-    relationShipWithApplicant: null,
-    urn: null,
-    version: 0
-}
-                    */
-
                     model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
                     if (model.loanAccount.nominees.length == 0)
                         model.loanAccount.nominees = [{nomineeFirstName:"",nomineeDoorNo:""}];
-                    // if(model.loanAccount.nominees){
-                    //     model.loanAccount.nominees[0].nomineeFirstName = model.loanAccount.nominees[0].nomineeFirstName || '';
-                    //     model.loanAccount.nominees[0].nomineeDoorNo = model.loanAccount.nominees[0].nomineeDoorNo || '';
-                    //     model.loanAccount.nominees[0].nomineeLocality = model.loanAccount.nominees[0].nomineeLocality || '';
-                    //     model.loanAccount.nominees[0].nomineeStreet = model.loanAccount.nominees[0].nomineeStreet || '';
-                    //     model.loanAccount.nominees[0].nomineePincode = model.loanAccount.nominees[0].nomineePincode || '';
-                    //     model.loanAccount.nominees[0].nomineeDistrict = model.loanAccount.nominees[0].nomineeDistrict || '';
-                    //     model.loanAccount.nominees[0].nomineeState = model.loanAccount.nominees[0].nomineeState || '';
-                    //     model.loanAccount.nominees[0].nomineeRelationship = model.loanAccount.nominees[0].nomineeRelationship || '';
-                    // }
                     if(model.siteCode != 'shramsarathi'){
                     model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
                     }else{
@@ -459,13 +424,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
                             model.additional.portfolioUrnSelector = "coapplicant";
                         }
-
-                        if(model.siteCode!='shramsarathi'){
-                        if (model.allowPreEmiInterest && model.loanAccount.disbursementSchedules.length > 0 && model.loanAccount.disbursementSchedules[0] && model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)  && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
-                            model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
-                            model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
-                        }
-                    }
 
                         model.linkedAccount={};
 
