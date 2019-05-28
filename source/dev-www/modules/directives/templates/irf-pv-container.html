@@ -77,8 +77,8 @@
     <div ng-if="section.type=='table'">
         <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
     </div>
-    <div ng-if="sectionData.type=='iterator'">
-        <irf-pv-iterator iterator-data="sectionData"></irf-pv-iterator>
+    <div ng-if="section.type=='iterator'">
+        <irf-pv-iterator iterator-data="section"></irf-pv-iterator>
     </div>
     <div ng-if="section.type=='container'" >
         <div ng-repeat="subSection in section.section">
@@ -119,8 +119,8 @@
             <div ng-if="subSection.type=='table'">
                 <irf-simple-summary-table irf-table-def='subSection.data'></irf-simple-summary-table>
             </div>
-            <div ng-if="sectionData.type=='iterator'">
-                <irf-pv-iterator iterator-data="sectionData"></irf-pv-iterator>
+            <div ng-if="subSection.type=='iterator'">
+                <irf-pv-iterator iterator-data="subSection"></irf-pv-iterator>
             </div>
         </div>
     </div>
