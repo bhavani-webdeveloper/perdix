@@ -1472,6 +1472,9 @@ define([],function(){
                         model.loanAccount.frequency="M";
                        }
                     }
+                    model.tempLoanAmountRequested=model.loanAccount.loanAmountRequested;
+                    model.tempLoanAmount=model.loanAccount.loanAmount;
+
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -2184,6 +2187,17 @@ define([],function(){
                             }                            
                         }
 
+                        if(model.loanAccount.currentStage == 'Application'){
+                          if(model.loanAccount.loanAmountRequested > model.tempLoanAmountRequested){
+                            PageHelper.showErrors({data:{error:"Loan Amount Requested should not be more than "+model.tempLoanAmountRequested}});
+                            return false;
+                          }
+                          if(model.loanAccount.loanAmount > model.tempLoanAmount){
+                            PageHelper.showErrors({data:{error:"Loan Amount Recommended should not be more than "+model.tempLoanAmount}});
+                            return false;
+                          }
+                        }
+
                         // model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
@@ -2407,6 +2421,17 @@ define([],function(){
                                 } 
                             }                            
                         }
+
+                        if(model.loanAccount.currentStage == 'Application'){
+                            if(model.loanAccount.loanAmountRequested > model.tempLoanAmountRequested){
+                              PageHelper.showErrors({data:{error:"Loan Amount Requested should not be more than "+model.tempLoanAmountRequested}});
+                              return false;
+                            }
+                            if(model.loanAccount.loanAmount > model.tempLoanAmount){
+                              PageHelper.showErrors({data:{error:"Loan Amount Recommended should not be more than "+model.tempLoanAmount}});
+                              return false;
+                            }
+                          }
 
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
