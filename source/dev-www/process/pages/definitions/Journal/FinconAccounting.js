@@ -52,6 +52,17 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                     })
                     model.totalAmount = creditSum - debitSum;
                 }
+
+                model.getGlName = function(d, journalDetails, index, glName,$item, $model, $label) {
+                    if(_.isUndefined(d.glAcNo)){
+                        model.journal.journalHeader.journalDetails[index].glAcName  = null
+                    }
+                    console.log(d, journalDetails, index);
+                    if(glName && d.glAcNo){
+                    model.journal.journalHeader.journalDetails[index].glAcName = glName.glName;
+                    }
+                }
+
                 model.getLoanAccountNumber = function(loanNumb) {
                     console.log(loanNumb)
                     return Queries.getloanAccountsByLikeAccountNumber(loanNumb).then(function(res) {
@@ -61,9 +72,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                     })
                 }
                  Journal.listAccountCode({
-                     'glType': 'LEDGER',
-                     'page': 1,
-                     'per_page': 100,
+                     'glType': 'LEDGER'
                  }).$promise.then(function(response) {
                      model.glcodes = response.body;
                      console.log(model.glcodes)
@@ -268,7 +277,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                             <div class='col-xs-12'> \
                                             <table class='text-center'>\
                                                 <thead>\
-                                                    <th class='col-xs-3'>GL_AC_NO</th>\
+                                                    <th class='col-xs-3'>GL AC NO</th>\
+                                                    <th class='col-xs-3'>GL AC Name</th>\
                                                     <th class='col-xs-1'>Type</th>\
                                                     <th class='col-xs-2'>Amount</th>\
                                                     <th class='col-xs-3'>Loan Account No</th>\
@@ -279,7 +289,12 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                     <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'>\
                                                         <td class='col-xs-3'>\
                                                             <div> \
-                                                                <input type=\"text\" class=\"form-control\" ng-change='myFun()' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
+                                                                <input type=\"text\" class=\"form-control\" ng-change='model.getGlName(d,model.journal.journalHeader.journalDetails,$index, $item)' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-on-select='model.getGlName(d,model.journal.journalHeader.journalDetails,$index, $item)' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
+                                                            </div>\
+                                                        </td>\
+                                                        <td class='col-xs-3'>\
+                                                            <div> \
+                                                                <input type=\"text\" disabled class=\"form-control\" ng-model=\"d['glAcName']\" uib-typeahead=\"glcode.glName as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \"  typeahead-editable='false' typeahead-on-select='model.glName(d,model.journal.journalHeader.journalDetails,$index)' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
                                                             </div>\
                                                         </td>\
                                                         <td class='col-xs-2'> \
@@ -337,6 +352,16 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 console.log(res);
                                 model.finconProcess = res
                                 model.journal.journalHeader = res.journalHeader;
+
+                                for(var i=0; i<model.journal.journalHeader.journalDetails.length; i++) {
+                                    if(model.journal.journalHeader.journalDetails[i].glAcNo) {
+                                        var glDetails = _.find(model.glcodes, {productCode: model.journal.journalHeader.journalDetails[i].glAcNo});
+                                        if(glDetails) {
+                                            model.journal.journalHeader.journalDetails[i].glAcName = glDetails.glName;
+                                        }
+                                    }
+                                }
+
                                 model.showFeilds = false;
                                 model.showFeild = false;
                                 if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
