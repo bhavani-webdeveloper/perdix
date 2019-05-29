@@ -227,17 +227,17 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         var branchId= model.customer.customerBranchId || "";
                                         if (centres && centres.length) {
                                             for (var i = 0; i < centreCode.length; i++) {
-                                                // for (var j = 0; j < centres.length; j++) {
-                                                //     if (centreCode[i].value == centres[j].id) {
-                                                    if(branchId == centreCode[i].parentCode ){
+                                                for (var j = 0; j < centres.length; j++) {
+                                                    if (centreCode[i].value == centres[j].id) {
+                                                   // if(branchId == centreCode[i].parentCode ){
                                                         out.push({
                                                             name: centreCode[i].name,
                                                             id: centreCode[i].value
                                                         })
-                                                    }
+                                                   // }
                                                       
-                                                //     }
-                                                // }
+                                                    }
+                                                }
                                             }
                                         }
                                         return $q.resolve({
