@@ -50,27 +50,27 @@ define({
                         },
                         "applicantName": {
                         "title": "CUSTOMER_NAME",
-                        "type": "string"
+                        "type": ["string", "null"]
                         },
                         "urn": {
                             "title": "URN_NO",
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanAccountNo": {
                             "title": "LOAN_ACCOUNT_NO",
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanType": {
                             "title": "LOAN_TYPE",
                             "enumCode": "booking_loan_type",
-                            "type": "string",
+                            "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select"
                             }
                         },
                         "productCategory": {
                             "title": "PRODUCT_CATEGORY",
-                            "type": "string",
+                            "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select",
                                 "enumCode": "loan_product_category_master",

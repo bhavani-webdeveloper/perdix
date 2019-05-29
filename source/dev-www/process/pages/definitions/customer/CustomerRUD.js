@@ -889,7 +889,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                             condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
                             title: "Enroll as customer",
                             onClick: function(model, formCtrl, context) {
-                            if(model.customer.urnNo){
+                            if(model.customer.familyMembers[context.arrayIndex].enrolledUrnNo){
                                 PageHelper.showErrors({
                                     'data': {
                                         'error': "Existing customer cannot be enrolled again"
