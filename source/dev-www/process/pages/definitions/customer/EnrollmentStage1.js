@@ -391,7 +391,13 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     title: "IDENTITY_PROOF",
                     items: [{
                         key: "customer.identityProof",
-                        type: "select"
+                        type: "select",
+                         onChange: function (value, form, model, event) {
+                                if(model.customer.identityProof == 'Aadhar card')
+                                    model.customer.identityProofNo=model.customer.aadhaarNo;
+                               else
+                                    model.customer.identityProofNo=null;
+                        } 
                     }, {
                         key: "customer.identityProofImageId",
                         type: "file",
@@ -448,7 +454,13 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     condition: "!model.customer.addressProofSameAsIdProof",
                     items: [{
                         key: "customer.addressProof",
-                        type: "select"
+                        type: "select",
+                        onChange: function (value, form, model, event) {
+                                if(model.customer.addressProof == 'Aadhar card')
+                                   model.customer.addressProofNo=model.customer.aadhaarNo;
+                               else
+                                   model.customer.addressProofNo=null;
+                        }
                     }, {
                         key: "customer.addressProofImageId",
                         type: "file",
