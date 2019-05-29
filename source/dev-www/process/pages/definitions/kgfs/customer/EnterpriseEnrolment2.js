@@ -56,15 +56,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if (productSale.totalSale) {
                         model.customer.enterprise.totalDailySales = round((productSale.totalSale + model.customer.enterprise.totalDailySales),2);
                         model.customer.enterprise.totalWeeklySales = model.customer.enterprise.totalDailySales * 4;
-                        model.customer.enterprise.totalMonthlySales = model.customer.enterprise.totalDailySales * 30;
+                        model.customer.enterprise.totalMonthlySales = round(model.customer.enterprise.totalDailySales * 30);
                     }
                     if (productSale.totalCost) {
                         model.customer.enterprise.totalDailyCost = round((productSale.totalCost + model.customer.enterprise.totalDailyCost),2);
                         model.customer.enterprise.totalWeeklyCost = model.customer.enterprise.totalDailyCost * 4;
-                        model.customer.enterprise.totalMonthlyCost = model.customer.enterprise.totalDailyCost * 30;
-                        grossmargin = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)),2);
-                        model.customer.enterprise.grossMarginSales = grossmargin;
-                        grossmarginCost = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)),2);
+                        model.customer.enterprise.totalMonthlyCost = round(model.customer.enterprise.totalDailyCost * 30);
+                        grossmargin = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)));
+                        model.customer.enterprise.grossMarginSales = (grossmargin*100);
+                        grossmarginCost = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)));
                         model.customer.enterprise.grossMarginCost = ((grossmarginCost/100));
                     }
                 }
@@ -96,7 +96,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     monthlySales.total = (monthlySales.Jan ? monthlySales.Jan : 0) + (monthlySales.Feb ? monthlySales.Feb : 0) + (monthlySales.Mar ? monthlySales.Mar : 0) + (monthlySales.Apr ? monthlySales.Apr : 0) +
                         (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.Aug ? monthlySales.Aug : 0) + (monthlySales.Sep ? monthlySales.Sep : 0) + (monthlySales.Oct ? monthlySales.Oct : 0) + (monthlySales.Nov ? monthlySales.Nov : 0) + (monthlySales.Dec ? monthlySales.Dec : 0);
-                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgAnnualSales + monthlySales.total;
+                    model.customer.enterprise.avgAnnualSales = round(model.customer.enterprise.avgAnnualSales + monthlySales.total);
                     model.customer.enterprise.avgMonthlySales = round(((model.customer.enterprise.avgAnnualSales/12)),2);
                 }
                     averageMonthlySale(model);
@@ -113,9 +113,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                // data.netBusinessIncome = 
             }
             var monthlySurpluse = function (model) {
-                model.customer.enterprise.avgDailySaleAmount = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
-                model.customer.enterprise.avgMonthlyNetIncome = round(((model.customer.enterprise.avgDailySaleAmount * (0.67))),2);
-                model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
+                model.customer.enterprise.avgDailySaleAmount = round((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0));
+                model.customer.enterprise.avgMonthlyNetIncome = round(model.customer.enterprise.avgDailySaleAmount * (0.67));
+                model.customer.enterprise.avgDailySaleAmount=round(model.customer.enterprise.avgDailySaleAmount);
+                model.loanAccount.estimatedEmi=round(model.loanAccount.estimatedEmi);
+                model.customer.enterprise.workingDaysInMonth = round(Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0)));
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
                 // model.customer.enterprise.employeeSalary = Math.round((x/y));
@@ -184,10 +186,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 monthlyBusinessExpense = model.customer.monthlyBusinessExpense;
                 total = 0;
                 for (i in monthlyBusinessExpense) {
-                    model.customer.enterprise.totalBusinessExpenses = model.customer.enterprise.totalBusinessExpenses + (monthlyBusinessExpense[i].annualExpenses ? monthlyBusinessExpense[i].annualExpenses : 0);
+                    model.customer.enterprise.totalBusinessExpenses = round(model.customer.enterprise.totalBusinessExpenses + (monthlyBusinessExpense[i].annualExpenses ? monthlyBusinessExpense[i].annualExpenses : 0));
                 }
-                model.customer.enterprise.netBusinessIncome = round((model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses),2);
-                model.customer.enterprise.netBusinessIncomeGrossMargin = round((model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales),2);
+                model.customer.enterprise.netBusinessIncome = round(model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses);
+                model.customer.enterprise.netBusinessIncomeGrossMargin = round((model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales));
+                model.customer.enterprise.monthlySalesCal=round(model.customer.enterprise.monthlySalesCal);
+                model.customer.enterprise.costOfGoodsSold=round(model.customer.enterprise.costOfGoodsSold);
+                model.customer.enterprise.grossProfit=round(model.customer.enterprise.grossProfit);
                 monthlySurpluse(model);
             }
 
@@ -196,7 +201,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 personalExpense = model.customer.personalExpenses;
                 total = 0;
                 for (i in personalExpense) {
-                    model.customer.enterprise.totalPersonalExpense = round((model.customer.enterprise.totalPersonalExpense + (personalExpense[i].annualExpenses ? personalExpense[i].annualExpenses : 0)),2);
+                    model.customer.enterprise.totalPersonalExpense = round((model.customer.enterprise.totalPersonalExpense + (personalExpense[i].annualExpenses ? personalExpense[i].annualExpenses : 0)));
                 }
                 monthlySurpluse(model);
             }
@@ -204,9 +209,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 model.customer.enterprise.totalMonthlyAdditionIncome = 0;
                 otherExpenses = model.customer.otherBusinessIncomes;
                 for (i in otherExpenses) {
-                    model.customer.enterprise.totalMonthlyAdditionIncome = model.customer.enterprise.totalMonthlyAdditionIncome + (otherExpenses[i].amount ? otherExpenses[i].amount : 0);
+                    model.customer.enterprise.totalMonthlyAdditionIncome =round(model.customer.enterprise.totalMonthlyAdditionIncome + (otherExpenses[i].amount ? otherExpenses[i].amount : 0));
                 }
-                model.customer.enterprise.additionalIncomeConsidered = round((Math.min(model.customer.enterprise.totalMonthlyAdditionIncome, model.customer.enterprise.netBusinessIncome)),2);
+                model.customer.enterprise.additionalIncomeConsidered = round((Math.min(model.customer.enterprise.totalMonthlyAdditionIncome, model.customer.enterprise.netBusinessIncome)));
                 monthlySurpluse(model);
             }
             var round = function(value, exp){
@@ -1506,7 +1511,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     },
                                     'grossMarginSales': {
                                         key: "customer.enterprise.grossMarginSales",
-                                        title: "GROSS_MARGIN_SALE",
+                                        title: "GROSS_MARGIN",
                                         "type": "number",
                                         required: true,
                                         readonly: true
@@ -2073,7 +2078,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                         model.customer.enterprise.totalLoanAmount = 0;
                                                         var liabilities =  model.customer.liabilityRepayment;
                                                         for(i in liabilities){
-                                                        model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1);
+                                                        model.customer.enterprise.totalLoanAmount = round(model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1));
                                                         }
                                                     }
                                                 },
@@ -2085,7 +2090,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                         model.customer.enterprise.totalEmiAmount = 0;
                                                         var liabilities =  model.customer.liabilityRepayment;
                                                         for(i in liabilities){
-                                                        model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                                                        model.customer.enterprise.totalEmiAmount = round(model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount);
                                                         }
                                                     }
                                                 }
@@ -2132,7 +2137,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                         model.customer.enterprise.totalLoanAmount = 0;
                                                         var liabilities =  model.customer.liabilityRepayment;
                                                         for(i in liabilities){
-                                                        model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1);
+                                                        model.customer.enterprise.totalLoanAmount = round(model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1));
                                                         }
                                                     }
                                                 },
@@ -2145,7 +2150,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                         model.customer.enterprise.totalEmiAmount = 0;
                                                         var liabilities =  model.customer.liabilityRepayment;
                                                         for(i in liabilities){
-                                                        model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                                                        model.customer.enterprise.totalEmiAmount = round(model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount);
                                                         }
                                                     }
                                                 }
@@ -2384,7 +2389,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "MonthlySalesCalculate.productSales.totalMonthlySales",
                     "MonthlySalesCalculate.productSales.totalMonthlyCost",
                     "MonthlySalesCalculate.productSales.grossMarginSales",
-                    "MonthlySalesCalculate.productSales.grossMarginCost",
                     "MonthlySalesCalculate.monthlySales",
                     "MonthlySalesCalculate.monthlySales.avgMonthlySales",
                     "MonthlySalesCalculate.monthlySales.avgAnnualSales",
@@ -3651,7 +3655,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 liability.udf1 = Number(liability.udf1);
                                 model.customer.liabilityRepayment.push(liability)
                                 model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liability.udf1);
-                                model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liability.emiAmount;
+                                model.customer.enterprise.totalEmiAmount = round(model.customer.enterprise.totalEmiAmount + liability.emiAmount);
                             })
                         }
                         if(model.customer.otherBusinessIncomes.length !=0){
