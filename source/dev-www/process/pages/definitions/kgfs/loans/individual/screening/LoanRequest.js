@@ -2346,31 +2346,7 @@ define([],function(){
                         } 
                         // if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
                         //     model.loanAccount.loanMitigants = [];
-                        // }
-                        model.mitigationCheked = false
-                        if(model.deviationMitigants){
-                            _.forEach(model.deviationMitigants,function(mitigation){
-                                if(mitigation.currentMitigation && !mitigation.mitigatedStatus){
-                                    model.mitigationCheked = true
-                                    //return false;  
-                                }
-                            })
-                        }
-                        if(model.mitigationCheked){
-                            PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
-                            return false;
-                        }
-                        if(model.deviationMitigants){
-                            _.forEach(model.deviationMitigants,function(mitigation){
-                                if (!_.hasIn(model.loanAccount.loanMitigants, mitigation.id))
-                                {
-                                    model.loanAccount.loanMitigants.push(mitigation)
-                                } 
-                            })
-                        }
-                        setDeviation(model);
-                        
-                        
+                        // }                        
                        // setDeviation(model);
                        // validateDeviationForm(model);
                         // if(_.isArray(validateDeviation) && validateDeviation.length > 0 && model.loanAccount.currentStage != 'Screening') {
@@ -2393,13 +2369,11 @@ define([],function(){
                                 trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                             }
                             if (trancheTotalAmount > model.loanAccount.loanAmount){
-                                model.loanAccount.loanMitigants=[];
-                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                               PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                                 return false;
                               }  
                             
                             if (trancheTotalAmount < model.loanAccount.loanAmount){
-                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                                 return false;
                             }
@@ -2446,7 +2420,7 @@ define([],function(){
                             for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
                                     if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
-                                        model.loanAccount.loanMitigants=[];
+                                       // model.loanAccount.loanMitigants=[];
                                         if(model.loanAccount.dataCheckChanges[i])
                                         {
                                             PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
@@ -2520,6 +2494,28 @@ define([],function(){
                                model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
                             }
                         }
+                        model.mitigationCheked = false
+                        if(model.deviationMitigants){
+                            _.forEach(model.deviationMitigants,function(mitigation){
+                                if(mitigation.currentMitigation && !mitigation.mitigatedStatus){
+                                    model.mitigationCheked = true
+                                    //return false;  
+                                }
+                            })
+                        }
+                        if(model.mitigationCheked){
+                            PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
+                            return false;
+                        }
+                        if(model.deviationMitigants){
+                            _.forEach(model.deviationMitigants,function(mitigation){
+                                if (!_.hasIn(model.loanAccount.loanMitigants, mitigation.id))
+                                {
+                                    model.loanAccount.loanMitigants.push(mitigation)
+                                } 
+                            })
+                        }
+                        setDeviation(model);
                         /* ornamentsAppraisals */
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
