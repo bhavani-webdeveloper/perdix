@@ -77,13 +77,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     "centre": {
                         "title": "CENTRE",
                         "type": ["integer", "null"],
-                        // "x-schema-form": {
-                        //     "type": "select",
-                        //     "enumCode": "centre",
-                        //     "parentEnumCode": "branch_id",
-                        //     "parentValueExpr": "model.branch",
-                        //     "screenFilter": true
-                        // }
+                        "x-schema-form": {
+                            "type": "select",
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
                     },
                     "promisreToPayDate":{
                         "title": "PROMISE_TO_PAY_DATE",

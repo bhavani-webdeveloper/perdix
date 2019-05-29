@@ -4,16 +4,22 @@ define([], function() {
         pageUID: "payment.PaymentCreateBatch",
         pageType: "Engine",
        
-   dependencies: ["$log", "irfElementsConfig", "Enrollment", "SessionStore", "formHelper", "$q",
-   "PageHelper", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Payment", "AuthTokenHelper", "$http", "$filter", "$httpParamSerializer", "irfProgressMessage",
+   dependencies: ["$log","$state", "irfElementsConfig", "Enrollment", "SessionStore", "formHelper", "$q",
+   "PageHelper","IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Payment", "AuthTokenHelper", "$http", "$filter", "$httpParamSerializer", "irfProgressMessage",
 ],
 
-$pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q,
+$pageFn: function($log, $state, elementsConfig, Enrollment, SessionStore, formHelper, $q,
    PageHelper, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Payment, AuthTokenHelper, $http, $filter, $httpParamSerializer, irfProgressMessage ) {
 
             var configFile = function() {
                 return {}
             }
+            var backToDashborad = function(){
+                $state.go("Page.Adhoc",{
+                    pageName:"payment.PaymentDashboard",
+                    pageId: null
+                 });
+            };
             var overridesFields = function() {
                 return {
                     "CreateBatch":{
@@ -26,7 +32,7 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                     "CreateBatch.debitAccountName":{
                         "resolver": "PaymentBankAccountsLOVConfiguration"
                     },
-                    "CreateBatch.modeOfPayment": {
+                    "CreateBatch.paymentMode": {
                         "required": false
                     }
                 }
@@ -35,7 +41,7 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                 return [                  
                     "CreateBatch",
                     "CreateBatch.paymentDate",
-                    "CreateBatch.modeOfPayment",
+                    "CreateBatch.paymentMode",
                     "CreateBatch.branchName",
                     "CreateBatch.spokeName",
                     "CreateBatch.debitAccountName",
@@ -60,7 +66,8 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                 initialize: function(model, form, formCtrl) {                   
                     var self = this;                                                     
                     model.authToken = AuthTokenHelper.getAuthData().access_token;
-                    model.userLogin = SessionStore.getLoginname();     
+                    model.userLogin = SessionStore.getLoginname();   
+                    model.allowMultipleDownloads = SessionStore.getGlobalSetting('payment.batch.allowMultipleDownloads');  
                       var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
@@ -86,12 +93,21 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                                     "notitle": true,
                                     "readonly": false,
                                     "onClick": function(model, formCtrl, form, $event) {
-                                        var reqdownload = {
-                                            auth_data:{auth_token:model.authToken},
-                                            report_name :"icici_integration_ircs",
-                                            filters: [{"parameter":"dispatch_name","operator":"=","value":model.payment.dispatchName}]
-                                        };  
-        
+
+                                        if(model._lastSelectedBankAccount.disbursement_payment_report_name){
+                                            var reqdownload = {
+                                                auth_data:{auth_token:model.authToken},
+                                                report_name : model._lastSelectedBankAccount.disbursement_payment_report_name,
+                                                filters: [{"parameter":"dispatch_id","operator":"=","value":model.dispatch.dispatchId}]
+                                            }; 
+                                        }else{
+                                            var reqdownload = {
+                                                auth_data:{auth_token:model.authToken},
+                                                report_name : "icici_integration_ircs",
+                                                filters: [{"parameter":"dispatch_name","operator":"=","value":model.payment.dispatchName}]
+                                            }; 
+                                        }
+
                                     $http.post(
                                         irf.BI_BASE_URL + '/newdownload.php',
                                         reqdownload, {
@@ -136,6 +152,11 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                                         }
                                         link.click();
                                         irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
+
+                                        model.allowMultipleDownloads
+                                        if(model.allowMultipleDownloads=='N'){
+                                            backToDashborad();
+                                        }
                                     }, function (err) {
                                         var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
                                         PageHelper.showErrors({
@@ -209,7 +230,7 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                         }                       
                         
                         model.payment.currentStage = "ReadyForManualDispatch";
-                        model.payment.paymentType = "Manual";
+                        //model.payment.paymentType = "Manual";
                         PageHelper.showLoader();
                         Payment.search(model.payment).$promise.then(function(resp) {  
                           // response = resp                         

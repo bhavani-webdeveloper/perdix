@@ -111,25 +111,25 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 },
                 getActions: function(){
                     return [
-                        // {
-                        //     name: "COLLECT_PAYMENT",
-                        //     desc: "",
-                        //     fn: function(item, index){
-                        //         entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
-                        //         $state.go('Page.Engine',
-                        //             {
-                        //                 pageName: 'loans.LoanRepay',
-                        //                 pageId: item.accountId,
-                        //                 pageData: {
-                        //                     'onlyDemandAllowed': true
-                        //                 }
-                        //             }
-                        //         );
-                        //     },
-                        //     isApplicable: function(item, index){
-                        //         return true;
-                        //     }
-                        // }
+                        {
+                            name: "COLLECT_PAYMENT",
+                            desc: "",
+                            fn: function(item, index){
+                                entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
+                                $state.go('Page.Engine',
+                                    {
+                                        pageName: 'loans.LoanRepay',
+                                        pageId: item.accountId,
+                                        pageData: {
+                                            'onlyDemandAllowed': true
+                                        }
+                                    }
+                                );
+                            },
+                            isApplicable: function(item, index){
+                                return true;
+                            }
+                        },
                         {
                             name: "COLLECTION_STATUS",
                             desc: "",

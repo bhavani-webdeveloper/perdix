@@ -105,7 +105,7 @@ self.renderForm = function() {
 			{
 				"title": "Preferred bank account",
 				"data": "isTransactionAccount",
-				"className": "text-right",
+				"className": "text-left",
 				//"render": currencyRightRender
 			}//•	Average Monthly deposit should show average monthly buyer deposit
 		];

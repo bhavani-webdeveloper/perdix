@@ -9,6 +9,7 @@ define({
 
         var branch = SessionStore.getBranch();
         var scoreName;
+        var $formCtrl;
 
         var prepareData = function(res, model) {
 
@@ -307,7 +308,7 @@ define({
                             "title": "Guarantor ID",
                             "condition": "model.customer_detail.guarantors.id[3]"
                         }, {
-                            "key": "customer.firstName",
+                            "key": "business.firstName",
                             "title": "Enterprise Name"
                         }, {
                             "key": "loanAccount.productCategory",
@@ -485,12 +486,14 @@ define({
 
         var prepareDataDeferred;
         var prepareDataPromise;
+        var $self;
 
         return {
             "type": "schema-form",
             "title": "",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                $formCtrl = formCtrl;
                 prepareDataDeferred = $q.defer();
                 prepareDataPromise = prepareDataDeferred.promise;
                 model.bundleModel = bundleModel;
@@ -505,6 +508,8 @@ define({
                 model.customer_detail = bundleModel.customer_detail;
                 model.loanAccount = bundleModel.loanAccount;
                 var $this = this;
+                $self = this;
+
                 var deferred = $q.defer();
 
                 scoreName = null;
@@ -534,7 +539,6 @@ define({
                 }
                 return deferred.promise;
             },
-            eventListeners: {},
             form: [{
                 type: 'section',
                 html: '<br><br><br><center>Loading...</center>'

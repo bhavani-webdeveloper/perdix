@@ -610,7 +610,7 @@ irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbur
                                 delete reqUpdateDisbData.additional;
                                 delete reqUpdateDisbData.arrayIndex;
                                 reqUpdateDisbData.disbursementProcessAction = "SAVE";
-                                IndividualLoan.updateDisbursement(reqUpdateDisbData,function(resp,header){
+                                IndividualLoan.updateDisbursementAndBatchDisbursement(reqUpdateDisbData,function(resp,header){
                                     var toSendData = [];
                                     toSendData.push(model.loanAccountDisbursementSchedule);
                                     var reqData = {};
@@ -618,6 +618,8 @@ irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbur
                                     reqData.stage = "DisbursementConfirmation";
                                     reqData.loanAccountDisbursementSchedules = toSendData;
                                     $log.info(reqData);
+                                    PageHelper.hideLoader();
+                                    backToQueue();
 
                                 },function(resp){
                                     PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
