@@ -11,6 +11,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
+            var coapplicantMinimumAge = SessionStore.getGlobalSetting("coapplicantMinimumAge");
+            var coapplicantMaximumAge = SessionStore.getGlobalSetting("coapplicantMaximumAge");
            /* var pageParams = {
                 readonly: true
             };*/
@@ -1549,13 +1551,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 outputMap:{},
                                                 searchHelper: formHelper,
                                                 search: function (inputModel, form, model, context) {
+                                                    debugger;
                                                     var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
                                                     var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
                                                     var out = [];
                                                     if(temp){
                                                    for(i=0;i<temp.length;i++)
                                                     {
+                                                        var age=moment().diff(moment(temp[i].dateOfBirth), 'years');
                                                        if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
+                                                         if(age >coapplicantMinimumAge && age < coapplicantMaximumAge)
                                                            out.push(temp[i]);
                                                        }
                                                     } 
