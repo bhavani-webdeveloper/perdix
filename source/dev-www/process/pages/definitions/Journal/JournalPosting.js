@@ -101,6 +101,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry.transactionName",
                 "BranchPostingEntry.transactionDescription",
                 "BranchPostingEntry.entryType",
+                "BranchPostingEntry.branchId",
                 "BranchPostingEntry.creditGLNo",
                 "BranchPostingEntry.debitGLNo",
                 "BranchPostingEntry.creditGLName",
@@ -211,6 +212,14 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                             "title": "Credit GL Name",
                                             "orderNo": 55,
                                             "readonly":true
+                                        },
+                                        "branchId" :{
+                                            "key": "journal.journalEntryDto.branchId",
+                                            "title": "BRANCH_NAME",
+                                            "orderNo": 35,
+                                            "type": "select",
+                                            "enumCode": "branch_id",
+                                            "readonly": true
                                         },
                                     }
                                 }
