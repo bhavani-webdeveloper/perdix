@@ -807,6 +807,50 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.location"
                             ]
                         },
+                        "Sanction": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "T_FAMILY_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                            ]
+                        },
                         "REJECTED": {
                             "overrides": {
                                 "KYC": {

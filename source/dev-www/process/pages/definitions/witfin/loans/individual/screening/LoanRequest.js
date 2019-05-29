@@ -660,6 +660,31 @@ define([], function() {
                                 }
                             }
                         },
+                        "Sanction": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
+                            "overrides": {
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":60
+                                }
+                            }
+                        },
 
                         "REJECTED": {
                             "excludes": [
