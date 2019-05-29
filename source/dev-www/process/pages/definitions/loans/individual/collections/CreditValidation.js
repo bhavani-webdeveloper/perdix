@@ -156,7 +156,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     "type": "section",
                     "htmlClass": "alert alert-danger",
                     "condition": "model.siteCode == 'witfin' && model.additional.repaymentstatus == 'Pending for Clearing'",
-                    "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unclearedTransactionsCount}} ACH or PDC Payment(s) are {{model.additional.repaymentstatus}} </h4>Payment(s) of {{ model.additional.repaymentamount | currency:'Rs.':2 }} is not yet Collected for this account.</h4>"
+                    "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unclearedTransactionsCount}} ACH or PDC Payment(s) are {{model.additional.repaymentstatus}} </h4>Payment(s) of {{ model.additional.repaymentamount | currency:'Rs.':2 }} is not yet Cleared for this account.</h4>"
                 },
                 {
                     key: "_credit.instrumentType",

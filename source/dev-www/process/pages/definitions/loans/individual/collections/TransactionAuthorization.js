@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils",
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils","Queries",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-                  SessionStore, $state, $stateParams, Masters, authService, Utils) {
+                  SessionStore, $state, $stateParams, Masters, authService, Utils,Queries) {
 
             return {
                 "type": "schema-form",
@@ -25,6 +25,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                     model.transInfo = {
                         backDatedTransaction: false,
                         unApprovedPaymentExists: false
+                    };
+                    model.additional = {
+                        repaymentstatus : null,
+                        unclearedTransactionsCount : 0,
+                        repaymentamount : 0
                     };
 
                     model.workingDate = SessionStore.getCBSDate();
@@ -148,6 +153,21 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     PageHelper.showErrors(resData);
                                     backToLoansList();
                                 })
+                                Queries.getLoanRepaymentStatus(loanAccountNo)
+                                 .then(
+                                function(res){
+                                var rows = res.body;
+                                var rowsCount = rows.length;
+                                model.additional.repaymentstatus = rows[0].repayment_status;
+                                var totalAmount = 0;
+                                for (var i=0;i<rowsCount;i++){
+                                    totalAmount= totalAmount + (rows[i].repayment_amount_in_paisa)/100;
+                                }
+                                model.additional.repaymentamount = totalAmount;
+                                model.additional.unclearedTransactionsCount = rowsCount;
+
+                              }
+                          );
                         })
 
                     $q.all([p2])
@@ -180,6 +200,12 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 "htmlClass": "alert alert-warning",
                                 "condition": "model.transInfo.unApprovedPaymentExists == true",
                                 "html":"<h4><i class='icon fa fa-warning'></i>Unappoved Payments exist during this Transaction</h4>There were some unapproved payments while this transaction was done."
+                            },
+                            {
+                                "type": "section",
+                                "htmlClass": "alert alert-danger",
+                                "condition": "model.siteCode == 'witfin' && model.additional.repaymentstatus == 'Pending for Clearing'",
+                                "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unclearedTransactionsCount}} ACH or PDC Payment(s) are {{model.additional.repaymentstatus}} </h4>Payment(s) of {{ model.additional.repaymentamount | currency:'Rs.':2 }} is not yet Cleared for this account.</h4>"
                             },
                             {
                                 key: "transAuth.customer_name",
