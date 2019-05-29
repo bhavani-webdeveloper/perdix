@@ -671,9 +671,6 @@ define([], function() {
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "DeductionsFromLoan": {
-                                    "readonly": true
-                                },
                                 "LoanDocuments": {
                                     "readonly": true
                                 },
