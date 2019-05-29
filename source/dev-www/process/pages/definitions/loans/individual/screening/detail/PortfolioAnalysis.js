@@ -563,7 +563,7 @@ define({
                                 }, 
                                 {
                                     "title": "Average Buyer Deposits",
-                                    "data": "Average_Bank_Deposits",
+                                    "data": "Average_Buyer_Deposits",
                                     "render": self.currencyRightRender
                                 },
                                 {
@@ -778,8 +778,8 @@ define({
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
                                 'Own_capital': balancesheet['Own capital'],
                                 'luc_status': params[13].data[0]['luc_status']?params[13].data[0]['luc_status']:"NA",
+            
                                 'HypothecationValue: Loan Amount':(params[0].data[0] && params[0].data[0]['HypothecationValue: Loan Amount'])?params[0].data[0]['HypothecationValue: Loan Amount']:"NA"
-                                
                             };
                             //'HypothecationValue:LoanAmount':(params[0].data[0] && params[0].data[0]['HypothecationValue:LoanAmount'])?params[0].data[0]['HypothecationValue:LoanAmount']:"NA"
                             var data={

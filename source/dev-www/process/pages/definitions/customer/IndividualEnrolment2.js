@@ -424,8 +424,10 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         items:[
                             {
                                 key:"customer.addressProof",
-                                readonly:true,
-                                //type:"select"
+                                //readonly:true,
+                                required:true,
+                                type:"select",
+                                "enumCode": "identity_proof"
                             },
                             {
                                 key:"customer.addressProofImageId",
@@ -433,6 +435,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 required: true,
                                 fileType:"application/pdf",
                                 using: "scanner"
+                            },
+                            {
+                                key:"customer.udf.userDefinedFieldValues.udf40",
+                               condition: "model.customer.addressProof === 'Aadhar Card'",
+                                type:"file",
+                                required: true,
+                                fileType:"application/pdf", 
+                                using: "scanner",
+                                title: "Aadhar Declaration",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
                             },
                             {
                                 key:"customer.addressProofNo",
@@ -608,6 +621,17 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                              type:"file",
                              fileType:"image/*"
                              }*/,
+                             {
+                                key:"customer.udf.userDefinedFieldValues.udf40",
+                               condition: "model.customer.addressProof === 'Aadhar Card'",
+                                type:"file",
+                                required: true,
+                                fileType:"application/pdf", 
+                                using: "scanner",
+                                title: "Aadhar Declaration",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "ADDRESSPROOF"
+                            },
                             {
                                 key:"customer.addressProofNo",
                                 type:"barcode",
@@ -859,7 +883,8 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     {
                         key:"customer.photoImageId",
                         type:"file",
-                        fileType:"image/*"
+                        fileType:"image/*",
+                        required:true
                     },
                     {
                         "key": "customer.existingLoan",

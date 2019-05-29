@@ -241,9 +241,9 @@ else{
     }
     create_zip($files_to_zip, $files_folder_path, $output_filename);
     foreach($files_to_zip AS $file_name) {
-        // unlink($files_folder_path.$file_name);
+        unlink($files_folder_path.$file_name);
     }
-    // rmdir($files_folder_path);
+    rmdir($files_folder_path);
     if ($show_log) {
          echo "\n\n".'<a href="allFormsDownload.php?file='.$attachment_zip_file.'&file_type=zip$download=auto" onclick="this.style.display=\'none\'">Download ZIP</a></pre>';
     } else {

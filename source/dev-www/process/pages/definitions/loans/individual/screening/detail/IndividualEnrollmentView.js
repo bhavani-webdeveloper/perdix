@@ -232,7 +232,18 @@ define({
                             "title": model.customer.addressProof,
                             "preview": "pdf",
                             "using": "scanner"
-                        }, {
+                        }, 
+                        {
+
+                            "key": "customer.udf.userDefinedFieldValues.udf40",
+                            "condition":"model.customer.addressProof === 'Aadhar Card'",
+                            "type": "file",
+                            "notitle": true,
+                            "title": "Aadhar Declaration",
+                            "preview": "pdf",
+                            "using": "scanner"
+                        }, 
+                        {
                             "key": "customer.houseVerificationPhoto",
                             "notitle": true,
                             "title": "House",

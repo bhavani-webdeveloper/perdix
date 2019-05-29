@@ -192,14 +192,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
                                 });
 
                                 $this.bundlePages.push({
-                                    pageClass: 'balance-sheet-history',
-                                    model: {
-                                        customerUrn: res.urnNo,
-                                        loanId: bundleModel.loanId
-                                    }
-                                });
-
-                                $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: res

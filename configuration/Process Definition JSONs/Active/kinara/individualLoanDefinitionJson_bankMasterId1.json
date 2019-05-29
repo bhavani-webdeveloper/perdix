@@ -4022,7 +4022,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","Sanction"
                      ]
                   },
                   "document":{
@@ -4031,7 +4031,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","Sanction"
                      ]
                   },
                   "remarks":{

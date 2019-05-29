@@ -526,7 +526,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         $log.info("Attempting Save");
         $log.info(reqData);
         PageHelper.clearErrors();
-        PageHelper.showLoader();
+        $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-hide').addClass('ng-show');
         if (reqData.customer.currentStage == 'Completed'){ 
             reqData['enrollmentAction'] = 'PROCEED';
         } else {
@@ -540,10 +540,10 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         var action = reqData.customer.id ? 'update' : 'save';
         Enrollment[action](reqData, function (res, headers) {
             $log.info(res);
-            PageHelper.hideLoader();
+            $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
             deferred.resolve(res);
         }, function (res) {
-            PageHelper.hideLoader();
+            $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
             PageHelper.showErrors(res);
             deferred.reject(res);
         });
@@ -563,13 +563,13 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         $log.info("Attempting Proceed");
         $log.info(res);
         PageHelper.clearErrors();
-            PageHelper.showLoader();
+            $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-hide').addClass('ng-show');
             res.enrollmentAction = "PROCEED";
             Enrollment.updateEnrollment(res, function (res, headers) {
-                PageHelper.hideLoader();
+                $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
                 deferred.resolve(res);
             }, function (res, headers) {
-                PageHelper.hideLoader();
+                $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
                 PageHelper.showErrors(res);
                 deferred.reject(res);
             });
@@ -587,13 +587,13 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         }
         else {
             PageHelper.clearErrors();
-            PageHelper.showLoader();
+            $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-hide').addClass('ng-show');
             res.enrollmentAction = "PROCEED";
             Enrollment.updateEnrollment(res, function (res, headers) {
-                PageHelper.hideLoader();
+                $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
                 deferred.resolve(res);
             }, function (res, headers) {
-                PageHelper.hideLoader();
+                $('div.spinner-wrapper.spinner-section-far-wrapper').removeClass('ng-show').addClass('ng-hide');
                 PageHelper.showErrors(res);
                 deferred.reject(res);
             });

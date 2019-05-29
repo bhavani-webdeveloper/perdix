@@ -1811,11 +1811,33 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.collateral[].collateralType",
+                                "condition": "model.loanAccount.collateral[arrayIndex].collateralCategory != 'Machinery'",
                                 "type":"select",
                                 "enumCode":"hypothication_sub_type",
                                 "title":"HYPOTHECATION_SUB_TYPE",
                                 "parentEnumCode":"hypothecation_type",
                                 "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
+                            },
+                            {
+                                "key":"loanAccount.collateral[].collateralType",
+                                "type":"lov",
+                                "condition": "model.loanAccount.collateral[arrayIndex].collateralCategory == 'Machinery'",
+                                autolov: true,
+                                lovonly:true,
+                                searchHelper: formHelper,
+                                outputMap: {
+                                     "collateralType": "loanAccount.collateral[arrayIndex].collateralType"
+                                 },
+                                search: function(inputModel, form, model, locals) {
+                                    return Queries.searchCollateralType();
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.collateralType
+                                    ];
+                                },
+                                onSelect: function(result, model, context) {
+                                }
                             },
                             {
                                 "key":"loanAccount.collateral[].electricityAvailable",

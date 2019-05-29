@@ -169,6 +169,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedAuditsQueue"), ["$log", "Quer
                         'per_page': pageOpts.itemsPerPage
                     }).$promise.then(function(res) {
                         Audit.utils.processDisplayRecords(res.body, 1, null, 'approve').then(deferred.resolve, deferred.reject);
+                    }, function(data) {
+                        deferred.reject(data[0]);
                     });
                     return deferred.promise;
                 },

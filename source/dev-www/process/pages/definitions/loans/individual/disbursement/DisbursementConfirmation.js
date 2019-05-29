@@ -179,6 +179,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         {
                             "key": "loanAccountDisbursementSchedule.udf4",
                             "title": "FINANCE_TEAM_REJECTION_REMARKS",
+                            "required": true,
                             "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'"
                         },
                         // {
