@@ -97,7 +97,19 @@
         ]
      },
      {
-        "order":9,
+      "order":9,
+      "code":"Sanction",
+      "name":"Sanction",
+      "stageType":"CAPTURE",
+      "sendSms":"No",
+      "smsCategory":"LoanBooking",
+      "isAccountOpening":false,
+      "allowedRoles":[
+         "WM"
+      ]
+     },
+     {
+        "order":10,
         "code":"Rejected",
         "name":"Rejected",
         "stageType":"CAPTURE",
@@ -109,7 +121,7 @@
         ]
      },
      {
-        "order":10,
+        "order":11,
         "code":"LoanInitiation",
         "name":"Loan Input",
         "stageType":"CAPTURE",
@@ -121,7 +133,7 @@
         ]
      },
      {
-        "order":11,
+        "order":12,
         "code":"PendingForPartner",
         "name":"Pending for Partner",
         "stageType":"CAPTURE",
@@ -133,7 +145,7 @@
         ]
      },
      {
-        "order":12,
+        "order":13,
         "code":"LoanBooking",
         "name":"Loan Booking",
         "stageType":"CAPTURE",
@@ -145,7 +157,7 @@
         ]
      },
      {
-        "order":13,
+        "order":14,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
@@ -157,7 +169,7 @@
         ]
      },
      {
-        "order":14,
+        "order":15,
         "code":"DocumentVerification",
         "name":"Document Verification",
         "stageType":"CAPTURE",
@@ -169,7 +181,7 @@
         ]
      },
      {
-          "order": 15,
+          "order": 16,
           "code":"Completed",
           "name":"Completed",
           "stageType":"CAPTURE",
@@ -258,6 +270,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "LoanInitiation"
                  ]
               },
@@ -318,6 +331,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "LoanInitiation"
                  ]
               },
@@ -866,6 +880,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "BusinessApproval2"
                  ]
               },
@@ -1018,6 +1033,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "LoanInitiation"
                  ]
               },
@@ -1270,6 +1286,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "LoanInitiation"
                  ]
               },
@@ -1296,6 +1313,7 @@
                     "CreditApproval1",
                     "CreditApproval2",
                     "CreditApproval3",
+                    "Sanction",
                     "LoanInitiation"
                  ]
               },
@@ -1393,6 +1411,7 @@
                     "CreditApproval2",
                     "BusinessApproval1",
                     "CreditApproval3",
+                    "Sanction",
                     "BusinessApproval2",
                     "Rejected",
                     "LoanInitiation",
@@ -5739,6 +5758,7 @@
                         "CreditApproval1",
                         "CreditApproval2",
                         "CreditApproval3",
+                        "Sanction",
                         "BusinessApproval2"
                     ]
                  },
@@ -5757,6 +5777,7 @@
                         "CreditApproval1",
                         "CreditApproval2",
                         "CreditApproval3",
+                        "Sanction",
                         "BusinessApproval2"
                     ]
                  },
@@ -5775,6 +5796,7 @@
                         "CreditApproval1",
                         "CreditApproval2",
                         "CreditApproval3",
+                        "Sanction",
                         "BusinessApproval2"
                     ]
                  }
@@ -5864,7 +5886,9 @@
                     "BusinessApproval2",
                     "CreditApproval1",
                     "CreditApproval2",
-                    "CreditApproval3"
+                    "CreditApproval3",
+                    "Sanction"
+                    
                  ]
               },
               "udf7":{

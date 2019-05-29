@@ -733,6 +733,44 @@ define(
                             }
                         }
                     },
+                    "Sanction": {
+                        "excludes": [
+                            "NewVehicleDetails.category1",
+                            "NewVehicleDetails.segment1",
+                            "NewVehicleDetails.category2",
+                            "NewVehicleDetails.segment2",
+                            "VehicleViability.calculateVehicleDetails"  
+                        ],
+                        "overrides": {
+                            "VehicleLoanIncomesInformation": {
+                                "readonly": true
+                            },
+                            "VehicleExpensesInformation": {
+                                "readonly": true
+                            },
+                            "VehicleViability": {
+                                "readonly": true
+                            },
+                            "VehicleViability1": {
+                                "readonly": true
+                            },
+                            "NewVehicleDetails": {
+                                "readonly": true
+                            },
+                            "VehicleAssetUse": {
+                                "readonly": true
+                            },
+                            "VehicleRouteDetails": {
+                                "readonly": true
+                            },
+                            "vehicleLoanDocuments": {
+                                "readonly": true
+                            },
+                            "VehiclePhotoCaptures": {
+                                "readonly": true
+                            }
+                        }
+                    },
                     "loanProcess.loanAccount.isReadOnly": {
                         "Yes": {
                             "excludes": [
