@@ -235,6 +235,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "KYC.IdentityProof1.addressProofSameAsIdProof": {
                             condition: "model.customer.identityProof"
                         },
+                        "KYC.IdentityProof1.identityProof": {
+                             onChange: function (value, form, model, event) {
+                                if(model.customer.identityProof == 'Aadhar card')
+                                    model.customer.identityProofNo=model.customer.aadhaarNo;
+                               else
+                                    model.customer.identityProofNo=null;
+                            }                            
+                        },
                         "KYC.addressProof1": {
                             condition: "!model.customer.addressProofSameAsIdProof",
                         },
@@ -246,6 +254,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             },
                             fileType: "image/*",
                             offline: false,
+                        },
+                        "KYC.addressProof1.addressProof": {
+                             onChange: function (value, form, model, event) {
+                                if(model.customer.addressProof == 'Aadhar card')
+                                   model.customer.addressProofNo=model.customer.aadhaarNo;
+                               else
+                                   model.customer.addressProofNo=null;
+                            }
+                            
                         },
                         "KYC.addressProof1.addressProofReverseImageId": {
                             "viewParams": function(modelValue, form, model) {
