@@ -243,7 +243,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
-                                    "readonly":true
+                                   // "readonly":true
                                 },
                             }
                         },
