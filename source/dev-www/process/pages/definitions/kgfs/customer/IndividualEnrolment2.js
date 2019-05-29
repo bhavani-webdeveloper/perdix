@@ -1551,7 +1551,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 outputMap:{},
                                                 searchHelper: formHelper,
                                                 search: function (inputModel, form, model, context) {
-                                                    debugger;
                                                     var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
                                                     var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
                                                     var out = [];
