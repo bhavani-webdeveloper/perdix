@@ -63,7 +63,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.enterprise.totalWeeklyCost = model.customer.enterprise.totalDailyCost * 4;
                         model.customer.enterprise.totalMonthlyCost = round(model.customer.enterprise.totalDailyCost * 30);
                         grossmargin = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)));
-                        model.customer.enterprise.grossMarginSales = (grossmargin*100);
+                        model.customer.enterprise.grossMarginSalesPercentage=(grossmargin*100);
+                        model.customer.enterprise.grossMarginSales = (grossmargin*100)+"%";
                         grossmarginCost = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)));
                         model.customer.enterprise.grossMarginCost = ((grossmarginCost/100));
                     }
@@ -189,7 +190,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.enterprise.totalBusinessExpenses = round(model.customer.enterprise.totalBusinessExpenses + (monthlyBusinessExpense[i].annualExpenses ? monthlyBusinessExpense[i].annualExpenses : 0));
                 }
                 model.customer.enterprise.netBusinessIncome = round(model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses);
-                model.customer.enterprise.netBusinessIncomeGrossMargin = round((model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales));
+                model.customer.enterprise.netBusinessIncomeGrossMargin = round((model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSalesPercentage))+"%";
                 model.customer.enterprise.monthlySalesCal=round(model.customer.enterprise.monthlySalesCal);
                 model.customer.enterprise.costOfGoodsSold=round(model.customer.enterprise.costOfGoodsSold);
                 model.customer.enterprise.grossProfit=round(model.customer.enterprise.grossProfit);
@@ -1512,7 +1513,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     'grossMarginSales': {
                                         key: "customer.enterprise.grossMarginSales",
                                         title: "GROSS_MARGIN",
-                                        "type": "number",
+                                        "type": "text",
                                         required: true,
                                         readonly: true
                                     },
@@ -1838,7 +1839,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'netBusinessIncomeGrossMargin': {
                                 key: "customer.enterprise.netBusinessIncomeGrossMargin",
                                 title: "NET_BUSINESS_INCOME_AS_GROSS_SALE_OR_PROFIT",
-                                "type": "number",
+                                "type": "text",
                                 readonly: true
                             },
                         }
