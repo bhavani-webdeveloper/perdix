@@ -11,7 +11,10 @@ define([],function(){
                           irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
+            var bankName = SessionStore.getBankName();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
+            var bankNameKarnataka = SessionStore.getGlobalSetting("bankNameKarnataka");
+            var bankNameKeonjar = SessionStore.getGlobalSetting("bankNameKeonjar");
             var loanAmountRequestedLoanLimit = SessionStore.getGlobalSetting("loanAmountRequestedLoanLimit");
             
             
@@ -2186,7 +2189,7 @@ define([],function(){
                                 } 
                             }
 
-                            if(branch == 'Keonjar' || branch =="Karnataka")
+                            if(bankName == bankNameKarnataka || bankName ==bankNameKeonjar)
                             {
                                 if((_.hasIn(model.customer, 'customerBankAccounts')) && _.isArray(model.customer.customerBankAccounts) && model.customer.customerBankAccounts.length == 0) {
                                     PageHelper.showErrors({data:{error:"Business Tab - Bank accounts details should be mandatory"}});
@@ -2403,7 +2406,7 @@ define([],function(){
                                 } 
                             }
 
-                            if(branch == 'Keonjar' || branch =="Karnataka")
+                            if(bankName == bankNameKeonjar || bankName ==bankNameKarnataka)
                             {
                                 if((_.hasIn(model.customer, 'customerBankAccounts')) && _.isArray(model.customer.customerBankAccounts) && model.customer.customerBankAccounts.length == 0) {
                                     PageHelper.showErrors({data:{error:"Business Tab - Bank accounts details should be mandatory"}});
