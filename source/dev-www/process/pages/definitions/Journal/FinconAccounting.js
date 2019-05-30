@@ -399,6 +399,17 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                             PageHelper.showProgress("Posting Save", "Saved succeded", 3000);
                         })
                         .subscribe(function(out) {
+                            model.finconProcess = out
+                                model.journal.journalHeader = out.journalHeader;
+
+                                for(var i=0; i<model.journal.journalHeader.journalDetails.length; i++) {
+                                    if(model.journal.journalHeader.journalDetails[i].glAcNo) {
+                                        var glDetails = _.find(model.glcodes, {productCode: model.journal.journalHeader.journalDetails[i].glAcNo});
+                                        if(glDetails) {
+                                            model.journal.journalHeader.journalDetails[i].glAcName = glDetails.glName;
+                                        }
+                                    }
+                                }
                             console.log(out)
                         }, function(err) {
                             console.log(err);
