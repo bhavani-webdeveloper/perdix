@@ -122,6 +122,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
                 // model.customer.enterprise.employeeSalary = Math.round((x/y));
+                model.customer.enterprise.coOwnerSalary = round((Math.min(model.loanAccount.emiEstimated,model.customer.enterprise.workingDaysInMonth)));
                 model.customer.enterprise.employeeSalary = 111;
             }
             var computeEstimatedEmi = function (model) {
@@ -3572,7 +3573,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:null;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
-                            model.customer.enterprise.coOwnerSalary = round((Math.min(model.loanAccount.emiEstimated,model.customer.enterprise.workingDaysInMonth)));
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {
