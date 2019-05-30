@@ -216,7 +216,6 @@ define({
                        Queries.searchPincodes(
                         model.customer.pincode  
                     ).then(function(resp){
-                        debugger;
                         model.customer.taluk=resp.body[0].taluk;
                     },function(err){
                         model.customer.taluk=null;
