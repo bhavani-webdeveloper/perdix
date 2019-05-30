@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("user.UserMaintanence"),
     ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','Utils',
-        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource",
+        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource", "Account",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
-                 SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource){
+                 SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource, Account){
             
             return {
                 "name":"USER_MAINTANENCE",
@@ -188,6 +188,12 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                         "items": [{
                             "type": "submit",
                             "title": "SAVE"
+                        },
+                        {
+                            "condition": "model.user && model.user.login",
+                            "type": "button",
+                            "title": "Reset Password",
+                            "onClick": "actions.resetPassword(model, formCtrl, form, $event)"
                         }]
                     },
                     {
@@ -244,50 +250,62 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             }
                         }
                         
-
-                        PageHelper.showLoader();
-                        PageHelper.showProgress("user-update", 'Working...');
                         Utils.confirm("Are you sure?")
-                            .then(function(){
-                                if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
-                                    /* Existing User */
-                                    User.update(model.user)
-                                        .$promise
-                                        .then(function(response){
-                                            PageHelper.showProgress("user-update", 'Done', 5000);
-                                            model.user = response;
-                                            var branches = formHelper.enum('branch_id').data;
-                                            for (var i = 0; i < branches.length; i++) {
-                                                var branch = branches[i];
-                                                if (branch.name == model.user.branchName) {
-                                                    model.user.branchId = branch.value;
-                                                }
+                        .then(function(){
+                            PageHelper.showLoader();
+                            PageHelper.showProgress("user-update", 'Working...');
+                            if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
+                                /* Existing User */
+                                User.update(model.user)
+                                    .$promise
+                                    .then(function(response){
+                                        PageHelper.showProgress("user-update", 'Done', 5000);
+                                        model.user = response;
+                                        var branches = formHelper.enum('branch_id').data;
+                                        for (var i = 0; i < branches.length; i++) {
+                                            var branch = branches[i];
+                                            if (branch.name == model.user.branchName) {
+                                                model.user.branchId = branch.value;
                                             }
-                                        }, function(httpResponse){
-                                            PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                            PageHelper.showErrors(httpResponse);
-                                        })
-                                        .finally(function(){
-                                            PageHelper.hideLoader();
-                                        })
-                                } else {
-                                    /* New User */
-                                    User.create(model.user)
-                                        .$promise
-                                        .then(function(response){
-                                            PageHelper.showProgress("user-update", 'Done', 5000);
-                                            model.user = response;
-                                            $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
-                                        }, function(httpResponse){
-                                            PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                            PageHelper.showErrors(httpResponse);
-                                        })
-                                        .finally(function(){                                    
-                                            PageHelper.hideLoader();
-                                        })
+                                        }
+                                    }, function(httpResponse){
+                                        PageHelper.showProgress("user-update", 'Failed.', 5000);
+                                        PageHelper.showErrors(httpResponse);
+                                    })
+                                    .finally(function(){
+                                        PageHelper.hideLoader();
+                                    })
+                            } else {
+                                /* New User */
+                                User.create(model.user)
+                                    .$promise
+                                    .then(function(response){
+                                        PageHelper.showProgress("user-update", 'Done', 5000);
+                                        model.user = response;
+                                        $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
+                                    }, function(httpResponse){
+                                        PageHelper.showProgress("user-update", 'Failed.', 5000);
+                                        PageHelper.showErrors(httpResponse);
+                                    })
+                                    .finally(function(){                                    
+                                        PageHelper.hideLoader();
+                                    })
 
-                                }
-                                
+                            }   
+                        })
+                    },
+                    resetPassword: function(model, form, formName) {
+                        Utils.confirm("Are you sure?")
+                        .then(function(){
+                            PageHelper.showProgress("password-reset", 'Working...');
+                            PageHelper.showLoader();
+                            Account.resetPassword({userId: model.user.login}, {userId: model.user.login})
+                            .$promise
+                            .then()
+                            .finally(function(){
+                                PageHelper.showProgress("password-reset", 'Done', 5000);
+                                PageHelper.hideLoader();
+                            })
                         })
                     }
                 }
