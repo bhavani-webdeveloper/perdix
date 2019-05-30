@@ -63,6 +63,14 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                     }
                 }
 
+                model.formatGlCode = function($model){
+                    var glDetails = _.find(model.glcodes, {productCode: $model});
+                    if(glDetails) {
+                        return glDetails.glName;
+                    }
+                    return "";
+                }
+
                 model.getLoanAccountNumber = function(loanNumb) {
                     console.log(loanNumb)
                     return Queries.getloanAccountsByLikeAccountNumber(loanNumb).then(function(res) {
@@ -278,23 +286,17 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                             <div class='col-xs-12'> \
                                             <table class='text-center'>\
                                                 <thead>\
-                                                    <th class='col-xs-3'>GL AC NO</th>\
-                                                    <th class='col-xs-3'>GL AC Name</th>\
+                                                    <th class='col-xs-2'>GL AC NO</th>\
                                                     <th class='col-xs-1'>Type</th>\
                                                     <th class='col-xs-2'>Amount</th>\
-                                                    <th class='col-xs-2'>Narration</th>\
+                                                    <th class='col-xs-4'>Narration</th>\
                                                     <th class='col-xs-1'>Delete</th>\
                                                 </thead>\
                                                 <tbody>\
                                                     <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'>\
                                                         <td class='col-xs-1'>\
                                                             <div> \
-                                                                <input type=\"text\" class=\"form-control\" ng-change='model.getGlName(d,model.journal.journalHeader.journalDetails,$index, $item)' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-on-select='model.getGlName(d,model.journal.journalHeader.journalDetails,$index, $item)' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
-                                                            </div>\
-                                                        </td>\
-                                                        <td class='col-xs-1'>\
-                                                            <div> \
-                                                                <input type=\"text\" disabled class=\"form-control\" ng-model=\"d['glAcName']\" uib-typeahead=\"glcode.glName as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \"  typeahead-editable='false' typeahead-on-select='model.glName(d,model.journal.journalHeader.journalDetails,$index)' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
+                                                                <input type=\"text\" class=\"form-control\" ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.glName for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-input-formatter=\"model.formatGlCode($model)\" typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
                                                             </div>\
                                                         </td>\
                                                         <td class='col-xs-2'> \
