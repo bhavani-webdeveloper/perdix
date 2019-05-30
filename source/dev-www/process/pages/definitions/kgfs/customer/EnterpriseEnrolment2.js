@@ -117,7 +117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 model.customer.enterprise.avgDailySaleAmount = round((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0));
                 model.customer.enterprise.avgMonthlyNetIncome = round(model.customer.enterprise.avgDailySaleAmount * (0.67));
                 model.customer.enterprise.avgDailySaleAmount=round(model.customer.enterprise.avgDailySaleAmount);
-                model.loanAccount.estimatedEmi=round(model.loanAccount.estimatedEmi);
+                // model.loanAccount.estimatedEmi=null;
                 model.customer.enterprise.workingDaysInMonth = round(Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0)));
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
@@ -2197,7 +2197,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'estimatedEmi': {
                                 key: "loanAccount.estimatedEmi",
                                 title: "Affordable EMI as stated by the Customer",
-                                "readonly":true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -2212,6 +2211,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'coOwnerSalary': {
                                 key: "customer.enterprise.coOwnerSalary",
                                 title: "Actual EMI offered to the Borrower",
+                                readonly:true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -3572,7 +3572,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:null;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
-                            model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
+                            model.customer.enterprise.coOwnerSalary = round((Math.min(model.loanAccount.emiEstimated,model.customer.enterprise.workingDaysInMonth)));
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {
