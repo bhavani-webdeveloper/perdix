@@ -72,7 +72,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                     })
                 }
                  Journal.listAccountCode({
-                     'glType': 'LEDGER'
+                     'glType': 'LEDGER',
+                     'per_page': 10000
                  }).$promise.then(function(response) {
                      model.glcodes = response.body;
                      console.log(model.glcodes)
