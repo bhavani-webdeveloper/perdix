@@ -329,11 +329,15 @@ irf.models.factory('GroupProcess',
     }
 
     resource.generateWebReceipt = function(repaymentInfo,opts,value) {
+        debugger;
         // var mywindow = window.open('', 'my div', 'height=400,width=600');
         var curTime = moment();
         var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
         var receiptData = 
         '<div class="single-receipt">'+
+        '<div style="display:grid;grid-template-columns:1fr 2fr 1fr;">'+
+        '<div style="padding-left: 10px; padding-top: 30px;"><img style="width:100%;height:60%;" src="./img/corporate_logo.kgfs.png"></img></div>'+
+        '<div>'+
         '<div style="text-align : center">' + '<h4><b>' + "DISBURSE RECEIPT" + '</b></h3>' + '</div>' + 
         '<div style="text-align : center">' + '<h5><b>' + opts.entity_name + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<h6><b>' + opts.branch + '</b></h4>' + '</div>' + 
@@ -341,6 +345,7 @@ irf.models.factory('GroupProcess',
         '<div style="text-align : center">' + '<p><b>' + opts.ReceiptName + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + repaymentInfo.productCode + '</p>' + '</div>' + 
+        '</div><div></div></div>'+
         '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Branch Code :" + '</span>'+ '<span style="border-bottom: 1px solid black; width: 100%;">' + opts.branch_code+ '</span>'+ '</p>' + '</div>' + 
         '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Customer Id :"+ '</span>' + '<span style="border-bottom: 1px solid black; width: 100%;">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + 
         '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Customer URN :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + 
