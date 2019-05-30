@@ -717,7 +717,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         type: "select",
                                         "enumCode": "businessActivity1",
                                         "parentEnumCode": "businessType",
-                                        "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf1",
+                                        "parentValueExpr": "model.customer.enterpriseDocuments[arrayIndex].udf1",
                                         "condition": "model.siteCode == 'KGFS' || model.siteCode == 'kgfs'",
                                     },
                                     "udf3": {
@@ -728,7 +728,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "type": "select",
                                         "enumCode": "businessSector1",
                                         "parentEnumCode": "businessActivity1",
-                                        "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf2",
+                                        "parentValueExpr": "model.customer.enterpriseDocuments[arrayIndex].udf2",
                                         "condition": "model.siteCode == 'KGFS' || model.siteCode == 'kgfs'",
                                     },
                                     "udf4": {
