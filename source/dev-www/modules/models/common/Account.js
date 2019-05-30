@@ -60,6 +60,10 @@ function($resource,$httpParamSerializer,BASE_URL, $q, SessionStore, formHelper, 
                     return {error: "Analytics Login Failed for the user."};
                 }
             }
+        },
+        resetPassword: {
+            method:'PUT',
+            url:endpoint + "/resetPassoword?userId=:userId"
         }
     });
 
