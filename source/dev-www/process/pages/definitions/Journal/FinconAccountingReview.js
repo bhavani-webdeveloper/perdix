@@ -45,7 +45,8 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                         model.totalAmount = creditSum - debitSum;
                     }
                     Journal.listAccountCode({
-                        'glType': 'LEDGER'
+                        'glType': 'LEDGER',
+                        'per_page': 10000
                     }).$promise.then(function(response) {
                         model.glcodes = response.body;
                         console.log(model.glcodes)
