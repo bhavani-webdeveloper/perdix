@@ -15,10 +15,23 @@ define({
 		"type": "search-list",
 		"title": "CEO_MD_Review",
 		"subTitle": "",
-		initialize: function (model, form, formCtrl) {
-			model.branch = SessionStore.getCurrentBranch().branchId;
-			$log.info("search-list sample got initialized");
-
+		initialize: function(model, form, formCtrl) {
+			model.branchId = SessionStore.getCurrentBranch().branchId;
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					model.bankId = banks[i].value;
+					model.bankName = banks[i].name;
+				}
+			}
+			var userRole = SessionStore.getUserRole();
+			if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+				model.fullAccess = true;
+			}
+			model.partner = "AXIS";
+			model.isPartnerChangeAllowed = false;
+			$log.info("Checker1 Queue got initialized");
 		},
 		definition: {
 			title: "SEARCH",
@@ -96,7 +109,7 @@ define({
 				}
 				return IndividualLoan.search({
 					'bankId': searchOptions.bankId,
-					'branchId': searchOptions.branch,
+					'branchId': searchOptions.branchId,
 					'stage': 'CEOMDReview',
 					'applicantName': searchOptions.applicantName,
 					'centreCode': searchOptions.centre,

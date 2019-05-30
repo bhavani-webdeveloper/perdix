@@ -88,7 +88,7 @@
                     var promise = IndividualLoan.search({
                         'stage': 'DSCOverride',
                         'bankId': searchOptions.bankId,
-                        'branchId': searchOptions.branch,
+                        'branchId': searchOptions.branchId,
                         'centre': searchOptions.centre,
                         'urn': searchOptions.customerUrnNo,
                         'accountNumber': searchOptions.accountNumber,

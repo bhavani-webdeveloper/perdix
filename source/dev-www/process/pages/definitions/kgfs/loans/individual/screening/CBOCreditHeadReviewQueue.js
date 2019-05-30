@@ -111,7 +111,7 @@ define({
 				}
 				return IndividualLoan.search({
 					'bankId': searchOptions.bankId,
-					'branchId': searchOptions.branch,
+					'branchId': searchOptions.branchId,
 					'stage': 'CBOCreditHeadReview',
 					'applicantName': searchOptions.applicantName,
 					'centreCode': searchOptions.centre,
