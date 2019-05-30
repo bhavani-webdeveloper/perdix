@@ -1,8 +1,8 @@
 define({
         pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
-        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager"],
-        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager) {
+        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager","Queries"],
+        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager,Queries) {
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
@@ -211,7 +211,16 @@ define({
                     //     model.UIUDF.liabilities[0].maturityDate=moment( model.UIUDF.liabilities[0].maturityDate).format('DD-MM-YYYY');
                     //     }
                     //    }
-                       
+
+                       //taluk field from pincode query
+                       Queries.searchPincodes(
+                        model.customer.pincode  
+                    ).then(function(resp){
+                        debugger;
+                        model.customer.taluk=resp.body[0].taluk;
+                    },function(err){
+                        model.customer.taluk=null;
+                    }) 
 
                
 
@@ -484,6 +493,7 @@ define({
                                             {{model.customer.landmark}} <br />\
                                             {{model.customer.villageName}} <br />\
                                             {{model.customer.locality}} <br />\
+                                            {{model.customer.taluk}} <br /> \
                                             {{model.customer.district}} <br />\
                                             {{model.customer.state}} <br /> \
                                             {{model.customer.pincode}} <br /> \

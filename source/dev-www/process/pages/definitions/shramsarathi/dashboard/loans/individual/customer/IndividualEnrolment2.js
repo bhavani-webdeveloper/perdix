@@ -4221,7 +4221,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 actions: {
                     save: function (model, formCtrl, form, $event) {
-                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(formCtrl)) {
                             return false;
@@ -4317,7 +4316,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     proceed: function (model, form, formName) {
-                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
@@ -4400,7 +4398,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
-                        model.customer.udf32=model.customer.taluk;
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
