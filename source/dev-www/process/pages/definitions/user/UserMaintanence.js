@@ -299,7 +299,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                         .then(function(){
                             PageHelper.showProgress("password-reset", 'Working...');
                             PageHelper.showLoader();
-                            Account.resetPassword({userId: model.user.login}, {userId: model.user.login})
+                            Account.resetPassword({userId: model.user.login}, null)
                             .$promise
                             .then()
                             .finally(function(){
