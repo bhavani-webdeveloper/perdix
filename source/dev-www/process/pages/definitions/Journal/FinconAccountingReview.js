@@ -245,12 +245,11 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                                             <div class='col-xs-12'> \
                                             <table >\
                                                 <thead>\
-                                                    <th class='col-xs-3'>GL AC NO</th>\
-                                                    <th class='col-xs-3'>GL AC Name</th>\
+                                                    <th class='col-xs-1'>GL AC NO</th>\
+                                                    <th class='col-xs-1'>GL AC Name</th>\
                                                     <th class='col-xs-1'>Type</th>\
                                                     <th class='col-xs-2'>Amount</th>\
-                                                    <th class='col-xs-3'>Loan Account No</th>\
-                                                    <th class='col-xs-2'>Narration</th>\
+                                                    <th class='col-xs-3'>Narration</th>\
                                                     <th class='col-xs-1'>Delete</th>\
                                                 </thead>\
                                                 <tbody>\
@@ -271,11 +270,6 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                                                         </td>\
                                                         <td class='col-xs-1'>\
                                                             <input ng-model=\"d['transactionAmount']\" disabled type='number' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
-                                                        </td>\
-                                                        <td class='col-xs-3'>\
-                                                            <div> \
-                                                                <input disabled typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
-                                                            </div>\
                                                         </td>\
                                                         <td class='col-xs-2'><textarea disabled rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
                                                         </td>\
