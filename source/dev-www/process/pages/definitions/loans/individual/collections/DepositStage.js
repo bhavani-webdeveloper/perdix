@@ -262,10 +262,9 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 title: "Bank Challan",
                 key: "bankDepositSummary.challanFileId",
                 type: "file",
-                fileType: "application/pdf",
-                category: "Loan",
-                subCategory: "DOC1",
-                using: "scanner",
+                fileType: "image/*",
+                category: "Collection",
+                subCategory: "Cheque",
                 required:true
             },
 
