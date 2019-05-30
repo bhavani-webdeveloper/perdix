@@ -22,6 +22,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             //     return deferred.promise;
             // }
 
+            var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null && listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.length;i++){
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
+                    }
+                }
+                else{
+                    model[baseKey] = {};
+                }
+            }
+
             var calculateVehiclesFree = function(modelValue, form, model) {
                 if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                     model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
@@ -1548,7 +1561,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
                     ]
                 },
+                
                 eventListeners: {
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {
+                        clearAll('customer',['firstName',"distanceFromBranch","mobilePhone","landLineNo","doorNo","street","landmark","pincode","locality","villageName","district","state","vehiclesOwned","vehiclesFinanced"],model);
+                        model.customer.enterprise={};
+                        model.customer.customerBankAccounts=[];
+                        model.customer.enterpriseDocuments=[];                        
+                        model.customer.liabilities=[];
+                        model.customer.enterpriseRegistrations=[]; 
+                        // model.customer.enterprise.enterpriseType=null;
+                        model.customer.enterpriseAssets=[];
+                        model.customer.vehiclesOwned=null;
+                        model.customer.vehiclesFinanced=null;
+                        model.customer.firstName=null;
+                        model.customer.enterpriseBureauDetails=[];
+                        model.customer.vehiclesFree=null;
+                        PageHelper.showProgress('enrollment', 'Business Details are resetted please fill it before proceed ',9000);
+                        
+                        // model['customer']['enterprise']['enterpriseType']  
+                                             
+                    },
                     "applicant-updated": function(bundleModel, model, params){
                         $log.info("inside applicant-updated of EnterpriseEnrolment2");
                         /* Load an existing customer associated with applicant, if exists. Otherwise default details*/

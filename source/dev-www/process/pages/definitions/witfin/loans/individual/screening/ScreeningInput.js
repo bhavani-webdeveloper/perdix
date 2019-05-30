@@ -432,6 +432,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if(cbCustomer.customerId){
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
+                    },
+                    "refresh-all-tabs": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("refresh-all-tabs-customer", params);
                     }
                 },
                 preSave: function(offlineData) {

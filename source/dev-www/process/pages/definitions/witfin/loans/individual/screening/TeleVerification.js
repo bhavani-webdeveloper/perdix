@@ -391,6 +391,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "financialSummary": function(pageObj, bundleModel, params) {
                             BundleManager.broadcastEvent("financial-summary", params);
+                        },
+                        "refresh-all-tabs": function(pageObj, bundleModel, params){
+                            BundleManager.broadcastEvent("refresh-all-tabs-customer", params);
                         }
                     }
 

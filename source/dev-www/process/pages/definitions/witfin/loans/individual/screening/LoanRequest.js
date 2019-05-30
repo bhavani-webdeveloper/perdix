@@ -52,7 +52,18 @@ define([], function() {
                 BundleManager.resetBundlePagesFormState(pageClassList);
                 return failed;
             }
-
+            var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null && listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.length;i++){
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
+                    }
+                }
+                else{
+                    model[baseKey] = {};
+                }
+            }
             var excelRate = function(nper, pmt, pv, fv, type, guess) {
                 // Sets default values for missing parameters
                 fv = typeof fv !== 'undefined' ? fv : 0;
@@ -1668,6 +1679,16 @@ define([], function() {
                     ]
                 },
                 eventListeners: {
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {                        
+                        clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","estimatedEmi","psychometricCompleted","interestRate","emiRequested"],model);                                     
+                        model.loanAccount.collateral=[];
+                        model.loanAccount.frequencyRequested=null;
+                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6=null;
+                        model.loanAccount.loanDocuments=[];
+                        model.loanAccount.loanMitigants=[];  
+                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5=null;
+                        model.loanAccount.securityEmiRequired=null;                 
+                    },
                         "new-applicant": function(bundleModel, model, params){
 
                             $log.info(model.loanAccount.loanCustomerRelations);
