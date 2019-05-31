@@ -275,7 +275,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 {
                                     "key": "repayment.payeeMobileNumber",
                                     "title": "PAYER_MOBILE_NUMBER",
-                                    "type": "string"
+                                    "type": "string",
+                                    "inputmode": "number",
+                                    "numberType": "number",
+                                    "schema": {
+                                        maxLength:10,
+                                        minLength:10
+                                    },
                                 },
                                 {
                                     "key": "repayment.payeeRelationToApplicant",
@@ -404,12 +410,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         type: "amount"
                                     },
                                     {
-                                        key: "repayment.totalDue",
-                                        readonly: true,
-                                        title: "TOTAL_DEMAND_DUE",
-                                        type: "amount"
-                                    },
-                                    {
                                         key: "repayment.totalFeeDue",
                                         readonly: true,
                                         title: "TOTAL_FEE_DUE",
@@ -420,14 +420,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         readonly: true,
                                         title: "NET_PAYOFF_AMOUNT",
                                         type: "amount"
-                                    },
-                                    {
-                                        key: "repayment.amount",
-                                        readonly: true,
-                                        condition:"model.siteCode == 'witfin'",
-                                        title: "Net Payoff Amount(with Due)",
-                                        type: "amount",
-
                                     },
                                     {
                                         type: "section",
@@ -682,7 +674,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 lovonly: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
+                                condition:"model.repayment.instrument=='ACH' ",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
@@ -693,7 +685,46 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model) {
-                                    return Queries.getBankAccountsByPartnerForLoanRepay();
+                                var deferred = $q.defer();
+                                Queries.getBankAccountsByPartnerForLoanRepay(SessionStore.getGlobalSetting('mainPartner'))
+                                .then(function (res) {
+                                    var records = res.body;
+                                    var out =  $filter('filter')(records, {is_ach_account : true}, true);
+                                    var result = {
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    };
+                                    deferred.resolve(result);
+                                    });
+                                    
+                                return deferred.promise;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.account_number,
+                                        item.ifsc_code + ', ' + item.bank_name,
+                                        item.branch_name
+                                    ];
+                                }
+                            },
+                            {
+                                key: "repayment.bankAccountNumber",
+                                type: "lov",
+                                lovonly: true,
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'|| model.repayment.instrument == 'INTERNAL'",
+                                title:"REPAYMENT_TO_ACCOUNT",
+                                required: true,
+                                bindMap: {
+
+                                },
+                                outputMap: {
+                                    "account_number": "repayment.bankAccountNumber"
+                                },
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model) {
+                                    return Queries.getBankAccountsByPartnerForLoanRepay(SessionStore.getGlobalSetting('mainPartner'));
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -969,10 +1000,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             return false;
                         }
 
-                        // if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
-                        //     PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
-                        //     return false;
-                        // }
+                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) > Math.round(model.repayment.amount)) {
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + model.repayment.netPayoffAmount - model.repayment.amount + " due is there", 5000);
+                            return false;
+                        }
+
+                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) < Math.round(model.repayment.amount)) {
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + model.repayment.amount - model.repayment.netPayoffAmount + " amount paying", 5000);
+                            return false;
+                        }
 
                         if (model.repayment.transactionName == 'PenalInterestPayment' && Math.round(model.repayment.amount) > Math.round(model.cbsLoanData.bookedNotDuePenalInterest)  ) {
                             PageHelper.clearErrors();
