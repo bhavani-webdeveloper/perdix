@@ -685,7 +685,29 @@
                     "Inprocess",
                     "ReadyForScreening"
                  ]
-              }
+              },
+              "segment":{  
+               "title":"segment",
+               "type":"String",
+               "minLength":1,
+               "maxLength":100,
+               "captureStages":[  
+                  "Incomplete",
+                  "Inprocess",
+                  "ReadyForScreening"
+               ]
+            },
+            "segmentType":{  
+               "title":"segmentType",
+               "type":"String",
+               "minLength":1,
+               "maxLength":100,
+               "captureStages":[  
+                  "Incomplete",
+                  "Inprocess",
+                  "ReadyForScreening"
+               ]
+            }
            }
         },
         "leadInteractions":{  
