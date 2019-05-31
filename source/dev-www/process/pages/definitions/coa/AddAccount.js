@@ -21,7 +21,6 @@ define([], function() {
 
                     model.glAccount = model.glAccount || {};
                    // model.glAccount.category = _.upperFirst(model.glAccount.category);
-                    model.glAccount.productCode = null;
                     model.glAccount.category = _.startCase(_.toLower(model.glAccount.category));
                     if (!(model && model.glAccount && model.glAccount.id)) {
                         PageHelper.showLoader();
@@ -224,6 +223,10 @@ define([], function() {
                 actions: {
                     save: function(model, formCtrl, form, $event) {
                         $log.info("Inside Submit");
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         if (model.glAccount.glType == 'LEDGER' && !model.glAccount.parentId) {
                             PageHelper.showErrors({
                                 data: {
@@ -234,8 +237,11 @@ define([], function() {
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('request', 'Saving Data', 3000);
-                        if (model.glType == 'GROUP' && !model.parentId) {
+                        if (model.glAccount.glType == 'GROUP' && !model.glAccount.parentId) {
                             model.parentId = 0;
+                        }
+                        if (model.glAccount.glType == 'GROUP') {
+                            model.glAccount.productCode = null;
                         }
                         model.glAccount.branchSetCode = 'ALL';
                         var reqData = model.glAccount;
@@ -253,6 +259,10 @@ define([], function() {
                     },
 
                     update: function(model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
                         if (model.glAccount.glType == 'LEDGER' && !model.glAccount.parentId) {
                             PageHelper.showErrors({
                                 data: {
@@ -268,6 +278,9 @@ define([], function() {
                                 }
                             });
                             return false;
+                        }
+                        if (model.glAccount.glType == 'GROUP') {
+                            model.glAccount.productCode = null;
                         }
                         $log.info("Inside Submit");
                         PageHelper.showLoader();
