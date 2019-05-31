@@ -33,8 +33,8 @@ var CDVPermissionManager = {
             cdvPermissions.CAMERA,
             cdvPermissions.FLASHLIGHT,
             cdvPermissions.WRITE_EXTERNAL_STORAGE,
-            cdvPermissions.READ_EXTERNAL_STORAG,
-            cdvPermissions.READ_PHONE_STATE,
+            cdvPermissions.READ_EXTERNAL_STORAGE,
+            cdvPermissions.READ_PHONE_STATE
         ];
         return listOfPermissions;
     },

@@ -146,8 +146,6 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 					 }
 				}*/
                 var currentStage = $stateParams.pageId;
-                console.log("currentStage - "+ currentStage);
-
 				var promise = Workflow.search({
                     "currentStage": currentStage
                 }).$promise;
@@ -222,53 +220,12 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 				},
 				getActions: function(){
 					return [
-						{
-							name: "EDIT_CUSTOMER",
-							desc: "",
-							icon: "fa fa-pencil",
-							fn: function(item, model){
-								if (item.currentStage === 'Stage01') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "ProfileInformation",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'Stage02') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "AssetsLiabilitiesAndHealth",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'EDF') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "EDF",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'Completed') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "CustomerRUD",
-										pageId: item.id,
-										pageData: {
-											intent:'EDIT'
-										}
-									});
-								}
-							},
-							isApplicable: function(item, model){
-								return model.siteCode === "KGFS";
-							}
-						},
-
                         {
                             name: "EDIT_CUSTOMER",
                             desc: "",
                             icon: "fa fa-pencil",
                             fn: function(item, model){
+								var pageName = currentStage == 'InfoUpdateInit' ? 'workflow.CustomerInfoUpdateInit': 'workflow.CustomerApprovalInit';
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     "pageName": "workflow.CustomerApprovalInit",
@@ -276,7 +233,7 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
                                 });
                             },
                             isApplicable: function(item, model){
-                                return item.currentStage=="Init";
+                                return item.currentStage=="Init" || item.currentStage =='InfoUpdateInit';
                             }
 
                         },
@@ -287,12 +244,12 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
                             fn: function(item, model){
                                 irfNavigator.go({
                                     state: "Page.Engine",
-                                    "pageName": "workflow.CustomerApprovalApprove",
+                                    "pageName": 'workflow.CustomerApprovalApprove',
                                     "pageId": item.id
                                 });
                             },
                             isApplicable: function(item, model){
-                                return item.currentStage=="Approve";
+                                return item.currentStage=="Approve" || item.currentStage =='InfoUpdateApprove';
                             }
 
                         }

@@ -3455,6 +3455,33 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
 
                         mandatoryPromises.push(p1);
+                        if (SessionStore.getGlobalSetting('siteCode') === 'kinara') {
+                            var applicanta_Id;
+                            for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                                var cust = model.loanAccount.loanCustomerRelations[i];
+
+                                if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
+                                    applicanta_Id = cust.customerId;
+                                }
+                            }
+                            if (applicanta_Id !== undefined && applicanta_Id !== '') {
+                                var ApplicantDetails = Enrollment.getCustomerById({ id: applicanta_Id })
+                                    .$promise
+                                    .then(function (ApplicantPromiseData) {
+                                        if (ApplicantPromiseData.addressProof === 'Aadhar Card' && ApplicantPromiseData.udf.userDefinedFieldValues.udf40 != undefined && ApplicantPromiseData.udf.userDefinedFieldValues.udf40 !== '') {
+                                            var DocumentDetails = {};
+                                            DocumentDetails.document = 'Aadhar Declaration';
+                                            DocumentDetails.documentId = ApplicantPromiseData.udf.userDefinedFieldValues.udf40;
+                                            DocumentDetails.loanId = model.loanAccount.id;
+                                            reqData.loanAccount.loanDocuments.push(DocumentDetails);
+                                        }
+                                    }, function (httpResponse) {
+
+                                    });
+                                mandatoryPromises.push(ApplicantDetails);
+                            }
+                        }
+
                     }
 
                     if(model.loanAccount.currentStage === 'Application' && SessionStore.getGlobalSetting('siteCode') !== 'IREPDhan'

@@ -6,7 +6,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
     var currentBranch = SessionStore.getCurrentBranch();
 
     var fullDefinition = {
-        "title": "Lead",
+        "title": "LEAD_DASHBOARD",
         "iconClass": "fa fa-users",
         "items": [
             "Page/Engine/sarvagram.dashboard.lead.LeadGeneration",
@@ -16,7 +16,6 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/sarvagram.dashboard.lead.LeadBulkUpload",
             "Page/Engine/sarvagram.dashboard.lead.LeadAssignmentPendingQueue",
             "Page/Engine/sarvagram.dashboard.lead.LeadRejectedQueue",
-
         ]
        
     };

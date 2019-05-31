@@ -183,7 +183,7 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Audit.online.findAuditInfo({
-                        'audit_id': searchOptions.auditor_id,
+                        'auditor_id': searchOptions.auditor_id,
                         'userId': searchOptions.userId,
                         'branch_id': searchOptions.branch_id,
                         'bank_id': searchOptions.bankId,

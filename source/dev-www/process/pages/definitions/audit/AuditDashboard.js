@@ -187,7 +187,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'status': 'O',
                         'audit_type': 1
                     }).$promise.then(function(data) {
-                        obraq.data = data.body.length;
+                        oraq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -209,7 +209,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'audit_type': 0,
                         'status': 'O'
                     }).$promise.then(function(data) {
-                        obsaq.data = data.body.length;
+                        osaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -259,7 +259,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                             pbavq.data = data.body.length;
                         }
                         if (paq) {
-                            paq.data = data.body.length;
+                            paq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }
@@ -299,10 +299,10 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
                         if (aaq) {
-                            aaq.data = data.body.length;
+                            aaq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
-                        if (abavq) {
-                            abavq.data = data.body.length;
+                        if (aavq) {
+                            aavq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                     });
                 }

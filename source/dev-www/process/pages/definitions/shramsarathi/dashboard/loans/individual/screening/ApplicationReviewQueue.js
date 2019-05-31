@@ -148,7 +148,7 @@ define({
                             data: 'loanId'
 						},
 						{
-							title: 'HUB_NAME',
+							title: 'BRANCH_NAME',
 							data: 'branchName'
 						},
 						{

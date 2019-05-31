@@ -129,10 +129,17 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "ContactInformation.careOf",
                                 "ContactInformation.postOffice",
                                 "ContactInformation.mailingPostoffice",
+                                "ContactInformation.mailSameAsResidence",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
                             ], "overrides": {
+                                "IndividualFinancials.expenditures":{
+                                    onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                        var index = model.customer.expenditures.length -1;
+                                        model.customer.expenditures[index].frequency="Monthly";
+                                    }
+                                },
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
                                     if (model.customer.dateOfBirth) {
@@ -140,6 +147,17 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
+                            "Liabilities.liabilities.frequencyOfInstallment":{
+                                "required": false,
+                            },
+
+                            "ContactInformation.residentialAddressFieldSet": {
+                                "title": "SOURCE_ADDRESS"
+                            },
+                            "ContactInformation.permanentAddressFieldSet": {
+                                "title": "DESTINATION_ADDRESS"
+                            },
+                            
                             "BankAccounts.customerBankAccounts.customerNameAsInBank":{
                                 "required": true
                             },
@@ -191,14 +209,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId": {
                                     "readonly": true,
-                                    "title": "ZONE_ID"
+                                    "title": "ZONE_ID",
+                                    "required":true
                                 },
                                 "IndividualInformation.customerBranchId":{
                                     "readonly":true
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME",
-                                    "readonly":true
+                                    "readonly":false,
+                                    "required": true
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
@@ -264,6 +284,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                             "overrides": {
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
@@ -356,11 +379,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "Screening": {
                             "excludes": [
                                // "IndividualFinancials",
-                                "HouseVerification.latitude",
+                                //"HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "IndividualReferences",
-                                "IndividualInformation.centreId",
+                                //"IndividualInformation.centreId",
                                 "References",
                                 "KYC.firstName",
                             ],
@@ -374,10 +397,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "EnterpriseFinancials.currentAsset.value":{
                                     "type":"amount"
                                 },
-
                                 "IndividualInformation.centreId": {
                                     "required": true,
-                                    "readonly": false,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -1977,10 +1998,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                      "enumCode": "no_of_payments" 
                     },
                     "Liabilities.liabilities.liabilityLoanPurpose":{
-                        "type": "lov",
-                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
-                        "autolov": true
+                        "title":"LOAN_PURPOSE",
+                        "key":"customer.liabilities[].liabilityLoanPurpose",
+                        "type":"select",
+                        "enumCode":"liability_loan_purpose",
                     },
+                    // "Liabilities.liabilities.liabilityLoanPurpose":{
+                    //     "type": "lov",
+                    //     "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                    //     "autolov": true
+                    // },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -2599,7 +2626,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 
@@ -3330,8 +3357,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"incomesfrequency",
-                                                            "orderNo":40
+                                                            "enumCode":"incomesfrequency", 
+                                                            "orderNo":40,
+
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",
@@ -3680,17 +3708,64 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "IndividualInformation": {
                                     "items": {
                                         "centreId1": {
-                                            key: "customer.centreId",
-                                            type: "select",
-                                            readonly: false,
-                                            title: "CENTRE_NAME",
-                                            filter: {
-                                                "parentCode": "branch_id"
-                                            },
-                                            parentEnumCode: "branch_id",
+                                            "title": "ZONE_NAME",
+                                            "key": "customer.centreName",
+                                            type: "lov",
                                             orderNo: 12,
-                                            parentValueExpr: "model.customer.customerBranchId",
-                                        }
+                                            lovonly: true,
+                                            autolov: true,
+                                            bindMap: {},
+                                            required: true,
+                                            searchHelper: formHelper,
+                                            search: function (inputModel, form, model, context) {
+                                                var centres = SessionStore.getCentres();
+                                                var centreCode = formHelper.enum('centre').data;
+                                                var out = [];
+                                                var branchId= model.customer.customerBranchId || "";
+                                                if (centres && centres.length) {
+                                                    for (var i = 0; i < centreCode.length; i++) {
+                                                        for (var j = 0; j < centres.length; j++) {
+                                                            if (centreCode[i].value == centres[j].id) {
+                                                          //  if(branchId == centreCode[i].parentCode ){
+                                                                out.push({
+                                                                    name: centreCode[i].name,
+                                                                    id: centreCode[i].value
+                                                                })
+                                                          //  }
+                                                              
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function (valueObj, model, context) {
+                                                model.customer.centreName = valueObj.name;
+                                                model.customer.centreId = valueObj.id;
+                                            },
+                                            getListDisplayItem: function (item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        },
+                                        // "centreId1": {
+                                        //     key: "customer.centreId",
+                                        //     type: "select",
+                                        //     readonly: false,
+                                        //     title: "CENTRE_NAME",
+                                        //     filter: {
+                                        //         "parentCode": "branch_id"
+                                        //     },
+                                        //     parentEnumCode: "branch_id",
+                                        //     orderNo: 12,
+                                        //     parentValueExpr: "model.customer.customerBranchId",
+                                        // }
                                         // "groupName": {
                                         //     "key": "loanAccount.groupName",
                                         //     "title": "GROUP_NAME",

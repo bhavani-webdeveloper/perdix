@@ -1,18 +1,27 @@
-irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
-		
+define({
+    pageUID: "sarvagram.dashboard.loans.individual.screening.BureauReviewQueue",
+	pageType: "Engine",
+	dependencies:["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
+	$pageFn:function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+		var branch = SessionStore.getBranch();
+		var centres = SessionStore.getCentres();
+		var centreId=[];
+	    if (centres && centres.length) {
+		    for (var i = 0; i < centres.length; i++) {
+			    centreId.push(centres[i].centreId);
+		    }
+	    }
 		return {
 			"type": "search-list",
-			"title": "REGIONAL_RISK_REVIEW_QUEUE",
+			"title": "BUREAU_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchId;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
-				$log.info("search-list sample got initialized"); 
+				// model.branch = branch;
+				$log.info("search-list sample got initialized");
+
 			},
 			definition: {
-				title: "SEARCH_LOAN",
+				title: "SEARCH",
 				searchForm: [
 					"*"
 				],
@@ -21,11 +30,20 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						'branch': {
+						"applicantName": {
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
+	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type":"userbranch",
+								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },
@@ -36,18 +54,9 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
-						"applicantName": {
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -64,7 +73,7 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                     "status": 
+	                     "status":
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -80,29 +89,21 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					var branch = SessionStore.getCurrentBranch();
-		            var centres = SessionStore.getCentres();
-		            var centreId=[];
-				    if (centres && centres.length) {
-					    for (var i = 0; i < centres.length; i++) {
-						    centreId.push(centres[i].centreId);
-					    }
-				    }
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'FieldAppraisalReview',
-	                    'centreCode':  searchOptions.centre,
-	                    'branchId':searchOptions.branch,
+	                    'branchName':searchOptions.branch,
+	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
+	                    'villageName':searchOptions.villageName,
 	                    'status':searchOptions.status,
-	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
+	                    'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -129,9 +130,11 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 							item.screeningDate,
 							item.applicantName,
 							item.customerName,
-							item.area,
+							/*item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode*/
+							item.branchName,
+							item.centreName
 						]
 					},
 					getTableConfig: function() {
@@ -143,12 +146,6 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 					},
 					getColumns: function() {
 						return [{
-							title: 'ID',
-							data: 'id'
-						}, {
-							title: 'HUB_NAME',
-							data: 'branchName'
-						}, {
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
@@ -160,7 +157,7 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 						},{
 							title: 'Loan Amount',
 							data: 'loanAmount'
-						}, {
+						}, /*{
 							title: 'AREA',
 							data: 'area'
 						}, {
@@ -169,24 +166,26 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 						}, {
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
+						}*/{
+							title: 'BRANCH_NAME',
+							data: 'branchName'
+						}, {
+							title: 'CENTRE_NAME',
+							data: 'centreName'
 						}]
 					},
 					getActions: function() {
 						return [{
-							name: "REGIONAL_RISK_REVIEW",
+							name: "REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.FieldAppraisalReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.BureauReview', {
 									_request: item
 								});
-								irfNavigator.go({
-									state: "Page.Bundle",
-									pageName: "sarvagram.dashboard.loans.individual.screening.FieldAppraisalReview",
+								$state.go("Page.Bundle", {
+									pageName: "sarvagram.dashboard.loans.individual.screening.BureauReview",
 									pageId: item.loanId
-								}, {
-									state: 'Page.Engine',
-                                    pageName: "sarvagram.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {
@@ -199,4 +198,5 @@ irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screen
 			}
 		};
 	}
-]);
+});
+

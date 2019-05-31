@@ -18,4 +18,10 @@
     <div ng-if="sectionData.type=='balance_sheet'">
         <irf-pv-balancesheet balancesheet-data="sectionData"></irf-pv-balancesheet>
     </div>
+    <div ng-if="sectionData.type=='iterator'">
+        <irf-pv-iterator iterator-data="sectionData"></irf-pv-iterator>
+    </div>
+    <div ng-if="section.type=='table'">
+        <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
+    </div>
 </div>

@@ -137,7 +137,7 @@ define({
                                 "data": "reference"
                             },
                             {
-                                "title": "HubName",
+                                "title": "ZONE_NAME",
                                 "data": "loanBranchName"
                             },
                             {

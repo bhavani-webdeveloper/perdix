@@ -191,8 +191,7 @@
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"Sanction",
-          "isAccountOpening":false,
-          "isPreAccountOpening":true,
+          "isAccountOpening":true,
           "allowedRoles":[
              "WM"
           ]
@@ -204,7 +203,7 @@
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":true,
+        "isAccountOpening":false,
         "multipleLoanNotAllowedForLoanType":true,
         "allowedRoles":[
            "WM"
@@ -3908,8 +3907,8 @@
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
-                   "isCurrentMitigation":{
-                     "title":"isCurrentMitigation",
+                   "currentMitigation":{
+                     "title":"currentMitigation",
                      "type":"boolean",
                      "minimum":1,
                      "maximum":100000000,

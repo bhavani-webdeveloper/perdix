@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 					},
 					"required": []
 				}
-			}
+			}		
 			else {
 				return {
 					"type": 'object',
@@ -125,14 +125,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"title": "PIN_CODE",
 							"type": "string"
 						}
-						// "status": {
-						// 	"type": "string",
-						// 	"title": "STATUS",
-						// 	"enumCode": "origination_status",
-						// 	"x-schema-form": {
-						// 		"type": "select"
-						// 	}
-						// }
 					},
 					"required": []
 				}

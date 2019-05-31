@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"), ["$log", "SessionStore", "$state","irfNavigator", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "formHelper", "$q", "$filter","PaymentBank",
-    function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter,PaymentBank) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"), ["$log", "SessionStore", "$state","irfNavigator", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "formHelper", "$q", "$filter","PaymentBank","PayeeValidation","Enrollment",
+    function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter,PaymentBank,PayeeValidation,Enrollment) {
 
         var docRejectReasons = [];
         Queries.getLoanProductDocumentsRejectReasons("individual_loan").then(function(resp){
@@ -34,12 +34,24 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
                     uploadedExistingDocs=_.cloneDeep(res.loanDocuments);
+
+                    model.loanAccount.disbursementTransactionType="Manual";
+
                     PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode},function(response,headersGetter){
                         model.loanAccount.isRegisterBank=response;
+                        model.loanAccount.disbursementTransactionType="Auto";
+
+                        Enrollment.getCustomerById({
+                            id: model.loanAccount.customerId
+                        },
+                        function(res) {
+                            model.customer = res;
+                        });
+                       
                     },function(resp){
+                        model.loanAccount.isRegisterBank=false;
                     });
                    
-                    //model.loanAccount.isRegisterBank = PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode});
                    
                     /* DO BASIC VALIDATION */
                     if (res.currentStage!= 'DocumentVerification'){
@@ -179,7 +191,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 "items": [{
                     "type": "fieldset",
                     "title": "DISBURSEMENT_ACCOUNT_DETAILS",
-                    "items": [{
+                    "items": [
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-warning",
+                        "condition": "model.loanAccount.payeeValidation=='Failed'",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Beneficiary Validation Failed!</h4> {{model.beneficiaryAccValidationRes.Body.Error_Desc}}"
+                    },
+                    {
+                        "type": "section",
+                        "htmlClass": "alert alert-success",
+                        "condition": "model.loanAccount.payeeValidation=='Success'",
+                        "html":"<h4><i class='icon fa fa-warning'></i>Beneficiary Validation Success </h4> Beneficiary Validation Success"
+                    },
+                    {
                         "key": "loanAccount.disbursementSchedules[0].party",
                         "type": "text",
                         "readonly":true,
@@ -206,7 +231,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         title: "BRANCH_NAME"
                     },
                     {
-                        "key": "loanAccount.modeOfDisburments",
+                        "key": "loanAccount.disbursementTransactionType",
                         "title": "PAYMENT_MODE",
                         "lovonly": true,
                         "type": "lov",
@@ -217,10 +242,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         required: true,
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
-                            var out = [{mode: "MANUAL"}];   
+                            var out = [{mode: "Manual"}];   
                             if(model.loanAccount.isRegisterBank){
                                 out.push({
-                                    mode: "AUTO"
+                                    mode: "Auto"
                                 });
                             } 
                             return $q.resolve({
@@ -231,7 +256,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                             });
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.loanAccount.modeOfDisburments = valueObj.mode;
+                            model.loanAccount.disbursementTransactionType = valueObj.mode;
                         },
                         getListDisplayItem: function(item, index) {
                             return [
@@ -241,8 +266,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         onChange: function(value, form, model) {
                         
                         }
+                    },
+                    {
+                        key: "loanAccount.payeeValidationButton",
+                        "type": "button",
+                        title: "BENEFICIARY_VALIDATION",
+                        "condition": "!model.loanAccount.payeeValidation  && model.loanAccount.disbursementTransactionType=='Auto'",
+                        "onClick": "actions.payeeValidation(model, formCtrl, form, $event)"
                     }]
-                }]
+                }] 
             },{
                 "type":"box",
                 "title":"ACH_ACCOUNT_DETAILS",
@@ -806,6 +838,35 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 }
             },
             actions: {
+                payeeValidation: function(model, formCtrl, form, $event){
+                    var reqData ={
+                        "beneficiaryAccValidationReq": {
+                            "Body": {
+                                "accountNumber": model.loanAccount.customerBankAccountNumber,
+                                "beneficiaryMobileNumber": model.customer.mobilePhone.trim(),
+                                "beneficiaryName": model.loanAccount.disbursementSchedules[0].customerNameInBank.replace(/[^a-zA-Z]/g, ''),
+                                "ifscCode": model.loanAccount.customerBankIfscCode
+                            }
+                        }
+                    };
+                    PageHelper.showLoader();
+                    PayeeValidation.validation(reqData,function(response,headersGetter){
+                        model.loanAccount.payeeValidation = response.beneficiaryAccValidationRes.Body.Status;
+                        model.beneficiaryAccValidationRes = response.beneficiaryAccValidationRes;
+                        model.beneficiaryAccValidationRes.Body.Status
+                        if(model.loanAccount.payeeValidation=="Failed"){
+                            model.loanAccount.disbursementTransactionType="Manual";
+                            model.loanAccount.isRegisterBank=false;
+                        }
+                        PageHelper.hideLoader();
+                    },function(resp){
+                        model.loanAccount.payeeValidation="Failed";
+                        model.loanAccount.disbursementTransactionType="Manual";
+                        model.loanAccount.isRegisterBank=false;
+                        PageHelper.hideLoader();
+                    });
+
+                },
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
                     Utils.confirm("Are You Sure?").then(function () {
@@ -992,6 +1053,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         return false;
                     }
              
+                    // if(model.loanAccount.disbursementTransactionType=="Auto" && model.loanAccount.payeeValidation!="Success"){
+                    //     PageHelper.showProgress('update-loan', 'Perform beneficiary Validation', 3000);
+                    //     return false;
+                    // }
+             
                     model.loanAccount.loanDocuments=[];
                     model.loanAccount.tempMasterDocuments = [];
 
@@ -1015,8 +1081,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 
                     var reqParamData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
-                        'loanProcessAction': 'PROCEED',
-                        'modeOfDisbursement': model.loanAccount.modeOfDisburments,
+                        'loanProcessAction': 'PROCEED'
                     };
                     var allowedStatues = ['APPROVED', 'REJECTED'];
                     reqParamData.loanAccount.status = null;

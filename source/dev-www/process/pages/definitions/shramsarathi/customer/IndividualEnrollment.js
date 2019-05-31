@@ -126,11 +126,27 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 "ContactInformation.mailingPostoffice",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
+                                "ContactInformation.mailSameAsResidence",
                                 "HouseVerification.date"
                             ], 
                             "overrides": {
+                                "IndividualFinancials.expenditures":{
+                                    onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                        var index = model.customer.expenditures.length -1;
+                                        model.customer.expenditures[index].frequency="Monthly";
+                                    }
+                                },
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
+                                },
+                                "ContactInformation.residentialAddressFieldSet": {
+                                    "title": "SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet": {
+                                    "title": "DESTINATION_ADDRESS"
                                 },
                                 // "BankAccounts.customerBankAccounts.customerNameAsInBank": {
                                 //     "required": true
@@ -208,14 +224,18 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         var centres = SessionStore.getCentres();
                                         var centreCode = formHelper.enum('centre').data;
                                         var out = [];
+                                        var branchId= model.customer.customerBranchId || "";
                                         if (centres && centres.length) {
                                             for (var i = 0; i < centreCode.length; i++) {
                                                 for (var j = 0; j < centres.length; j++) {
                                                     if (centreCode[i].value == centres[j].id) {
+                                                   // if(branchId == centreCode[i].parentCode ){
                                                         out.push({
                                                             name: centreCode[i].name,
                                                             id: centreCode[i].value
                                                         })
+                                                   // }
+                                                      
                                                     }
                                                 }
                                             }
@@ -302,6 +322,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                             "overrides": {
                                 "KYC.addressProofFieldSet": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "Liabilities.liabilities.frequencyOfInstallment":{
+                                    "required": false,
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
@@ -2018,11 +2041,17 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "orderNo": 23,
                         "enumCode": "no_of_payments"
                     },
-                    "Liabilities.liabilities.liabilityLoanPurpose": {
-                        "type": "lov",
-                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
-                        "autolov": true
+                    "Liabilities.liabilities.liabilityLoanPurpose":{
+                        "title":"LOAN_PURPOSE",
+                        "key":"customer.liabilities[].liabilityLoanPurpose",
+                        "type":"select",
+                        "enumCode":"liability_loan_purpose",
                     },
+                    // "Liabilities.liabilities.liabilityLoanPurpose": {
+                    //     "type": "lov",
+                    //     "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                    //     "autolov": true
+                    // },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -2641,7 +2670,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 

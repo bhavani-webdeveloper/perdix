@@ -1,8 +1,8 @@
 define({
         pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
-        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager"],
-        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager) {
+        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager","Queries"],
+        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager,Queries) {
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
@@ -74,7 +74,6 @@ define({
                         if(model.UIUDF.income!=undefined || model.UIUDF.income.length>0){
                             var incomeEarned=0;
                             var annualExpenses=0;
-
                            // model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
 
                             for(var i=0;i<model.UIUDF.income.length;i++){
@@ -90,7 +89,9 @@ define({
                                 annualExpenses+=model.UIUDF.expenditures[i].annualExpenses;
                             }
 
-                            model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
+                            setTimeout(function(){
+                                model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
+                            },1000);
                         }
                         else
                         {
@@ -106,23 +107,38 @@ define({
                             if (member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
-
-                        /*Household Assets field*/
-                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length;
-                        /* what assets i need to take*/
                         model.UIUDF.household_fields.total_Value = 0;
+                        /*Household Assets field*/
+                        var lengthOfPhysicalAssets = [];
                         _.each(model.customer.physicalAssets, function(Assets) {
-                            model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
+                            if (Assets.ownedAssetValue != null && Assets.ownedAssetValue != 0)
+                            lengthOfPhysicalAssets.push(Assets.ownedAssetValue)
+                            model.UIUDF.household_fields.total_Value +=  Assets.ownedAssetValue;
                         });
+
+                        model.UIUDF.household_fields.total_Assets = lengthOfPhysicalAssets.length;
+                        /* what assets i need to take*/
+                       
+                        // _.each(model.customer.physicalAssets, function(Assets) {
+                        //     model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
+                        // });
     
                         /*Cibil/highmark fields*/
                         
                         /* Current Assets */
-                        model.UIUDF.current_assets.assets = model.customer.currentAssets.length;
-                        model.UIUDF.current_assets.total = 0;
-                        _.each(model.customer.currentAssets,function(Asset){
-                            model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        model.UIUDF.current_assets.total = 0;  
+                        var lengthOfPhysicalAssets1 = [];
+                        _.each(model.customer.currentAssets, function(Assets) {
+                            if (Assets.assetValue != null && Assets.assetValue != 0)
+                            lengthOfPhysicalAssets1.push(Assets.assetValue)
+                            model.UIUDF.current_assets.total += Assets.assetValue;
                         });
+
+                        model.UIUDF.current_assets.assets = lengthOfPhysicalAssets1.length;
+                        
+                        // _.each(model.customer.currentAssets,function(Asset){
+                        //     model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        // });
 
                         /*Reference Check fields*/
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
@@ -195,7 +211,15 @@ define({
                     //     model.UIUDF.liabilities[0].maturityDate=moment( model.UIUDF.liabilities[0].maturityDate).format('DD-MM-YYYY');
                     //     }
                     //    }
-                       
+
+                       //taluk field from pincode query
+                       Queries.searchPincodes(
+                        model.customer.pincode  
+                    ).then(function(resp){
+                        model.customer.taluk=resp.body[0].taluk;
+                    },function(err){
+                        model.customer.taluk=null;
+                    }) 
 
                
 
@@ -468,6 +492,7 @@ define({
                                             {{model.customer.landmark}} <br />\
                                             {{model.customer.villageName}} <br />\
                                             {{model.customer.locality}} <br />\
+                                            {{model.customer.taluk}} <br /> \
                                             {{model.customer.district}} <br />\
                                             {{model.customer.state}} <br /> \
                                             {{model.customer.pincode}} <br /> \
@@ -932,8 +957,14 @@ define({
                                 getColumns: function() {
                                     return [{
                                         "title": "ASSET_TYPE",
-                                        "data": "nameOfOwnedAsset"
+                                        "data": "nameOfOwnedAsset",
+                                        render: function(data, type, full, meta) {
+                                            if (full.ownedAssetValue >0 && full.ownedAssetValue != 0)
+                                                return data
+                                            else return false
+                                        }
                                     }, 
+
                                     // {
                                     //     "title": "REGISTERED_OWNER",
                                     //     "data": "registeredOwner"
@@ -943,11 +974,13 @@ define({
                                         "title": "Asset Value",
                                         "data": "ownedAssetValue",
                                         render: function(data, type, full, meta) {
-                                            if (data)
-                                                return irfCurrencyFilter(data)
-                                            else return "NA"
+                                            if (full.ownedAssetValue >0 && full.ownedAssetValue != 0)
+                                            return irfCurrencyFilter(data)
+                                            else return false
                                         }
+                                       
                                     }, 
+                                
                                     // {
                                     //     "title": "AREA_UNITS_OF_ASSETS",
                                     //     "data": "unit"
@@ -1004,14 +1037,22 @@ define({
                                 getColumns: function() {
                                     return [{
                                         "title": "ASSET_TYPE",
-                                        "data": "assetType"
+                                        "data": "assetType",
+                                        render: function(data, type, full, meta) {
+                                            if (full.assetValue >0 && full.assetValue != 0)
+                                                return data
+                                            else return false
+                                        }
                                     },{
                                         "title": "Asset Value",
                                         "data": "assetValue",
                                         render: function(data, type, full, meta) {
-                                            if (data)
-                                                return irfCurrencyFilter(data)
-                                            else return "NA"
+                                            // if (data)
+                                            //     return irfCurrencyFilter(data)
+                                            // else return "NA"
+                                            if (full.assetValue >0 && full.assetValue != 0)
+                                            return irfCurrencyFilter(data)
+                                            else return false
                                         }
                                     }];
                                 },

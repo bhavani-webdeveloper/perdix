@@ -170,10 +170,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         .then(
                             function(res){
                                 var rows = res.body;
-                                var rowsCount = rows.length;
                                 var totalAmount = 0;
-                                for (var i=0;i<rowsCount;i++){
-                                    totalAmount= totalAmount + rows[i].repayment_amount;
+                                var rowsCount = 0;
+                                for (var i=0;i<rows.length;i++){
+                                    if(rows[i].current_stage!="RejectedProcess"){
+                                        rowsCount++;
+                                        totalAmount= totalAmount + rows[i].repayment_amount;
+                                    }   
                                 }
                                 model.additional.unapprovedAmount = totalAmount;
                                 model.additional.unapprovedTransactionsCount = rowsCount;
@@ -805,6 +808,22 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                required: true,
+                                'condition':"model.siteCode != 'witfin' && model.siteCode !='KGFS'",
+                                type: "select",
+                                titleMap: [{
+                                    "name": "Business",
+                                    "value": "Business"
+                                },
+                                    {
+                                        "name": "Personal",
+                                        "value": "Personal"
+                                    }],
+
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
                                 condition:"model.siteCode == 'witfin'",
                                 type: "select",
                                 enumCode:"reason_for_delay"
@@ -827,7 +846,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
-                                condition:"model.siteCode != 'witfin' && model.siteCode != 'shramsarathi'",
+                                condition:"model.siteCode != 'witfin' && model.siteCode != 'shramsarathi' && model.siteCode == 'KGFS'",
                                 titleMap: {
                                     "Business not running":"Business not running",
                                     "Hardship": "Hardship",
@@ -837,35 +856,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 },
 
                             },
-                            // {
-                            //     key: "repayment.overdueReasons",
-                            //     title: "REASON",
-                            //     type: "select",
-                            //     required: true,
-                            //     condition: "model.repayment.delayReasonType =='Business'",
-                            //     // enumCode: "business_overdue_reasons"
-                            //     titleMap:[
-                            //         {
-                            //             "value":"others",
-                            //             "name":"Others"
-                            //     }
-                            //     ]
+                            {
+                                key: "repayment.overdueReasons",
+                                title: "REASON",
+                                type: "select",
+                                required: true,
+                                condition: "model.repayment.delayReasonType =='Business' && model.siteCode != 'witfin' && model.siteCode != 'KGFS' ",
+                                enumCode: "business_overdue_reasons"
+                                // titleMap:[
+                                //     {
+                                //         "value":"others",
+                                //         "name":"Others"
+                                // }
+                                // ]
 
-                            // },
-                            // {
-                            //     key: "repayment.overdueReasons",
-                            //     title: "REASON",
-                            //     type: "select",
-                            //     required: true,
-                            //     condition: "model.repayment.delayReasonType=='Personal'",
-                            //     // enumCode: "personal_overdue_reasons",
-                            //     titleMap:[
-                            //         {
-                            //             "value":"others",
-                            //             "name":"Others"
-                            //     }
-                            //     ]
-                            // },
+                            },
+                            {
+                                key: "repayment.overdueReasons",
+                                title: "REASON",
+                                type: "select",
+                                required: true,
+                                condition: "model.repayment.delayReasonType=='Personal' && model.siteCode != 'witfin' && model.siteCode != 'KGFS'",
+                                enumCode: "personal_overdue_reasons",
+                                // titleMap:[
+                                //     {
+                                //         "value":"others",
+                                //         "name":"Others"
+                                // }
+                                // ]
+                            },
                             {
                                 key: "repayment.reasons",
                                 title: "OVERDUE_REASON",
@@ -1005,11 +1024,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     submit: function (model, formCtrl, formName) {
                         if (model.repayment.demandAmount > 0 && model.repayment.transactionName == "Advance Repayment"){
                             PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
-                            return false;
-                        }
-
-                        if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
                             return false;
                         }
 

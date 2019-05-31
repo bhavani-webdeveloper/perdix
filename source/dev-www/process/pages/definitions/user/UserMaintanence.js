@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("user.UserMaintanence"),
     ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','Utils',
-        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries",
+        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries", "Account",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
-            SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries){
+            SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries, Account){
             var getBranchByCode= function(code){
                 var temp = formHelper.enum('branch').data;
                 for (var i=0;i<temp.length;i++){
@@ -47,7 +47,6 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             model.bankName = banks[i].name;
                         }
                     }
-
                     if(!$stateParams.pageId) {
                         model.create = true;
                         model.user = {
@@ -74,6 +73,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
+                                model.user.userState = "ACTIVE";
                                 var branches = formHelper.enum('branch_id').data;
                                 for (var i = 0; i < branches.length; i++) {
                                     var branch = branches[i];
@@ -229,6 +229,15 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 //enumCode: "access_type"
                             },
                             {
+                                "key": "user.userState",
+                                "title":"User",
+                                "type": "radios",
+                                "titleMap": {
+                                    "ACTIVE": "Active",
+                                    "INACTIVE": "InActive",
+                                }
+                            },
+                            {
                                 key: "user.partnerCode",
                                 condition: "model.user.accessType=='PARTNER'",
                                 type: "select",
@@ -279,6 +288,12 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                         "items": [{
                             "type": "submit",
                             "title": "SAVE"
+                        },
+                        {
+                            "condition": "model.user && model.user.login",
+                            "type": "button",
+                            "title": "Reset Password",
+                            "onClick": "actions.resetPassword(model, formCtrl, form, $event)"
                         }]
                     },
                     {
@@ -402,6 +417,20 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             PageHelper.showProgress("","Error while calling query service",2000);
                         }
 
+                    },
+                    resetPassword: function(model, form, formName) {
+                        Utils.confirm("Are you sure?")
+                        .then(function(){
+                            PageHelper.showProgress("password-reset", 'Working...');
+                            PageHelper.showLoader();
+                            Account.resetPassword({userId: model.user.login}, null)
+                            .$promise
+                            .then()
+                            .finally(function(){
+                                PageHelper.showProgress("password-reset", 'Done', 5000);
+                                PageHelper.hideLoader();
+                            })
+                        })
                     }
                 }
             };

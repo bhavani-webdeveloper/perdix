@@ -98,6 +98,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     model._transAuth.securityEmiAmount = 0;
                                     model._transAuth.bookedNotDuePenalInterest = 0;
 
+                                    if(model._transAuth.excessAmount==undefined){
+                                        model._transAuth.excessAmount=0;
+                                    }
+
                                     /* Amount Allocation */
                                     if (model._transAuth.transactionName == 'Scheduled Demand') {
                                         var amountAvailable = model._transAuth.repaymentAmount;
@@ -139,7 +143,13 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                         }
                                         /* Allocating Future Principal */
                                         if (amountAvailable > 0) {
-                                            model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(model._transAuth.scheduleDemandAmount + amountAvailable);
+                                            if (model.loanAccount.totalDemandDue > 0){
+                                                model._transAuth.scheduleDemandAmount = Utils.roundToDecimal(model._transAuth.scheduleDemandAmount + amountAvailable);
+                                            } else {
+                                                model._transAuth.scheduleDemandAmount = 0;
+                                                model._transAuth.excessAmount = Utils.roundToDecimal(amountAvailable);
+                                            }
+                                            
                                         }
                                     }
 
@@ -297,6 +307,11 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                                 {
                                                     "key": "_transAuth.bookedNotDuePenalInterest",
                                                     "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "key": "_transAuth.excessAmount",
+                                                    "title": "EXCESS_AMOUNT",
                                                     "type": "number"
                                                 }
                                             ]
@@ -564,7 +579,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 PageHelper.showProgress("waiver", "Fees * Charges waiver amount is more than the Fees & Charges to be collected", 5000);
                                 return false;
                             }
-                            if (math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.securityEmiAmount), math.bignumber(model._transAuth.bookedNotDuePenalInterest)).toNumber() != model.loanCollection.repaymentAmount) {
+                            if (math.add(math.bignumber(model._transAuth.feeAmount), math.bignumber(model._transAuth.scheduleDemandAmount), math.bignumber(model._transAuth.excessAmount), math.bignumber(model._transAuth.securityEmiAmount), math.bignumber(model._transAuth.bookedNotDuePenalInterest)).toNumber() != model.loanCollection.repaymentAmount) {
                                 PageHelper.showProgress("waiver", "Amount mismatch. Please verify the amount allocation breakup and amount collected.", 5000);
                                 return false;
                             }

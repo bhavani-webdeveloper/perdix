@@ -111,7 +111,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         pageClass: 'portfolio-analytics',
                         minimum: 1,
                         maximum: 1,
-                        order: 90
+                        order: 65
                     }
                 ],
                 "bundlePages": [],
@@ -256,12 +256,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         }
                                     });
 
-                                    $this.bundlePages.push({
-                                        pageClass: 'portfolio-analytics',
-                                        model: {
-                                            loanId: bundleModel.loanId
-                                        }
-                                    });
 
                                     var temp_model = {
                                         loanAccount:res
@@ -283,7 +277,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         }
                                     });
 
-                                    deferred.resolve();
+                                    Queries.isExistingCustomer(res.customerId).then(function(resp){
+                                        if (resp.oldAccounts <= 0){
+                                            $this.bundlePages.push({
+                                                pageClass: 'portfolio-analytics',
+                                                model: {
+                                                    loanId: bundleModel.loanId
+                                                }
+                                            });
+                                        }   
+                                        deferred.resolve();
+                                    },function(err){
+                                        deferred.resolve();
+                                    })
 
                                 }, function(httpRes){
                                     deferred.reject();

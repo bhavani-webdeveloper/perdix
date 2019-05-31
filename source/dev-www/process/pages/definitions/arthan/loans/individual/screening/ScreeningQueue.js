@@ -1,5 +1,5 @@
 define({
-    pageUID: "sarvagram.dashboard.loans.individual.screening.ScreeningQueue",
+    pageUID: "arthan.loans.individual.screening.ScreeningQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -207,11 +207,11 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('arthan.loans.individual.screening.ScreeningInput', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
+                                    pageName: "arthan.loans.individual.screening.ScreeningInput",
                                     pageId: item.loanId
                                 });
                             },
