@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "arthan.dashboard.loans.individual.screening.Rcu",
+            pageUID: "arthan.loans.individual.screening.Rcu",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
-                                pageName: 'arthan.dashboard.loans.individual.screening.detail.BasicDetails',
+                                pageName: 'arthan.loans.individual.screening.detail.BasicDetails',
                                 title: 'Basic Details',
                                 pageClass: 'basicDetails',
                                 minimum: 1,

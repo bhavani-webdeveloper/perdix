@@ -1,5 +1,5 @@
-define({////arthan.dashboard.loans.individual.screening.FieldAppraisal
-	pageUID: "arthan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue", 
+define({////arthan.loans.individual.screening.FieldAppraisal
+	pageUID: "arthan.loans.individual.screening.CreditCommitteeReviewQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -185,16 +185,16 @@ define({////arthan.dashboard.loans.individual.screening.FieldAppraisal
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.CreditCommitteeReview', {
+								entityManager.setModel('arthan.loans.individual.screening.CreditCommitteeReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "arthan.dashboard.loans.individual.screening.CreditCommitteeReview",
+									pageName: "arthan.loans.individual.screening.CreditCommitteeReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "arthan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"
+                                    pageName: "arthan.loans.individual.screening.CreditCommitteeReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

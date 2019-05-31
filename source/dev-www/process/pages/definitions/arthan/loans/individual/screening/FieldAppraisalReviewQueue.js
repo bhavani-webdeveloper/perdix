@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"),
+irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.FieldAppraisalReviewQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		
@@ -177,16 +177,16 @@ irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.FieldAppraisalReview', {
+								entityManager.setModel('arthan.loans.individual.screening.FieldAppraisalReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "arthan.dashboard.loans.individual.screening.FieldAppraisalReview",
+									pageName: "arthan.loans.individual.screening.FieldAppraisalReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "arthan.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"
+                                    pageName: "arthan.loans.individual.screening.FieldAppraisalReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

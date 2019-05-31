@@ -1,5 +1,5 @@
 define({
-    pageUID: "arthan.dashboard.loans.individual.screening.RejectedQueue",
+    pageUID: "arthan.loans.individual.screening.RejectedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -15,7 +15,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                console.log("r :: arthan.dashboard.loans.individual.screening.RejectedQueue")
+                console.log("r :: arthan.loans.individual.screening.RejectedQueue")
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -181,7 +181,7 @@ define({
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "arthan.dashboard.loans.individual.screening.Rejected",
+                                    pageName: "arthan.loans.individual.screening.Rejected",
                                     pageId: item.id
                                 });
                             },

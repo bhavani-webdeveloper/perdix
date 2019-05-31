@@ -48,7 +48,7 @@ irf.pageCollection.directive("irfBaseSimpleSummaryTable", function(){
 
 }]);
 
-irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening.Summary"),
+irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager",
 function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,

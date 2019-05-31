@@ -1,5 +1,5 @@
 define({
-	pageUID: "arthan.dashboard.loans.individual.screening.FieldAppraisalQueue",
+	pageUID: "arthan.loans.individual.screening.FieldAppraisalQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -176,11 +176,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.FieldAppraisal', {
+								entityManager.setModel('arthan.loans.individual.screening.FieldAppraisal', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "arthan.dashboard.loans.individual.screening.FieldAppraisal",
+									pageName: "arthan.loans.individual.screening.FieldAppraisal",
 									pageId: item.loanId
 								});
 							},

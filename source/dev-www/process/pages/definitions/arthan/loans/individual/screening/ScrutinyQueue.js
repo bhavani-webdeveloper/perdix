@@ -1,5 +1,5 @@
 define({
-	pageUID: "arthan.dashboard.loans.individual.screening.ScrutinyQueue",
+	pageUID: "arthan.loans.individual.screening.ScrutinyQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {

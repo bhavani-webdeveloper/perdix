@@ -8,7 +8,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "arthan.dashboard.loans.individual.screening.LoanView",
+        pageUID: "arthan.loans.individual.screening.LoanView",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'arthan.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'arthan.loans.individual.customer.IndividualEnrollment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'arthan.loans.individual.customer.IndividualEnrollment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'arthan.loans.individual.customer.IndividualEnrollment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -44,7 +44,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            pageName: 'arthan.loans.individual.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
@@ -52,7 +52,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:40
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.LoanRequest',
+                            pageName: 'arthan.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
@@ -60,7 +60,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.VehicleDetails',
+                            pageName: 'arthan.loans.individual.screening.VehicleDetails',
                             title: 'VEHICLE_DETAILS',
                             pageClass: 'vehicle-details',
                             minimum: 1,
@@ -68,7 +68,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:55
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.vehiclevaluation.VehicleValuation',
+                            pageName: 'arthan.loans.individual.screening.vehiclevaluation.VehicleValuation',
                             title: 'VEHICLE_VALUATION',
                             pageClass: 'vehicle-valuation',
                             minimum: 1,
@@ -76,7 +76,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:57
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.CreditBureauView',
+                            pageName: 'arthan.loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
@@ -84,7 +84,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:70
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.Review',
+                            pageName: 'arthan.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
                             minimum: 1,
@@ -92,7 +92,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:80
                         },
                         {
-                            pageName: 'arthan.dashboard.loans.individual.screening.detail.Scoring',
+                            pageName: 'arthan.loans.individual.screening.detail.Scoring',
                             title: 'Cam',
                             pageClass: 'scoring',
                             minimum: 1,

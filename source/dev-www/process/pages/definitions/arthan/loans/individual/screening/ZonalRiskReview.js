@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('arthan.dashboard.loans.individual.screening.ZonalRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.ZonalRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager","Scoring",
     function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager,Scoring) {
         $log.info("Inside LoanBookingBundle");
@@ -10,35 +10,35 @@ irf.pageCollection.factory(irf.page('arthan.dashboard.loans.individual.screening
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": [{
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'APPLICANT',
                 pageClass: 'applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 10
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'CO_APPLICANT',
                 pageClass: 'co-applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 20
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'GUARANTOR',
                 pageClass: 'guarantor',
                 minimum: 1,
                 maximum: 1,
                 order: 30
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                pageName: 'arthan.loans.individual.screening.detail.EnterpriseEnrollmentView',
                 title: 'BUSINESS',
                 pageClass: 'business',
                 minimum: 1,
                 maximum: 1,
                 order: 40
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                pageName: 'arthan.loans.individual.screening.detail.EnterpriseFinancialView',
                 title: 'Business Financials',
                 pageClass: 'business-finance',
                 minimum: 1,
@@ -61,22 +61,22 @@ irf.pageCollection.factory(irf.page('arthan.dashboard.loans.individual.screening
                 maximum: 1,
                 order: 55
             },{
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.LoanApplicationView',
-                //arthan.dashboard.loans.individual.screening.detail.LoanApplicationView
+                pageName: 'arthan.loans.individual.screening.detail.LoanApplicationView',
+                //arthan.loans.individual.screening.detail.LoanApplicationView
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
                 minimum: 1,
                 maximum: 1,
                 order: 60
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.detail.SummaryView',
+                pageName: 'arthan.loans.individual.screening.detail.SummaryView',
                 title: 'SummaryView',
                 pageClass: 'summaryView',
                 minimum: 1,
                 maximum: 1,
                 order: 5
             }, {
-                pageName: 'arthan.dashboard.loans.individual.screening.Summary',
+                pageName: 'arthan.loans.individual.screening.Summary',
                 title: 'SUMMARY',
                 pageClass: 'summary',
                 minimum: 1,

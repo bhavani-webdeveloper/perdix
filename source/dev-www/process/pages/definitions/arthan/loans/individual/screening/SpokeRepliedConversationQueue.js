@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"), 
+irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.SpokeRepliedConversationQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","Messaging", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Messaging, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();

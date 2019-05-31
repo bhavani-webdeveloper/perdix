@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView",
+    pageUID: "arthan.loans.individual.screening.detail.EnterpriseEnrollmentView",
     pageType: "Engine",
     dependencies: ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Model_ELEM_FC", "filterFilter", "irfCurrencyFilter", "$filter"

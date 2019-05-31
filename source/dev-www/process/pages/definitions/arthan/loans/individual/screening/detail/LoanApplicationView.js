@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.detail.LoanApplicationView",
+    pageUID: "arthan.loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanAccount", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
@@ -26,62 +26,62 @@ define({
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ScreeningQueue',
+                            pageName: 'arthan.loans.individual.screening.ScreeningQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Dedupe')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.DedupeQueue',
+                            pageName: 'arthan.loans.individual.screening.DedupeQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ScreeningReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ScreeningReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.ScreeningReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Application')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ApplicationQueue',
+                            pageName: 'arthan.loans.individual.screening.ApplicationQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ApplicationReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ApplicationReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Scrutiny')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ScrutinyQueue',
+                            pageName: 'arthan.loans.individual.screening.ScrutinyQueue',
                             pageId: null,
                         });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalQueue',
+                            pageName: 'arthan.loans.individual.screening.FieldAppraisalQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'FieldAppraisalReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.FieldAppraisalReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CreditCommitteeReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.CreditCommitteeReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CentralRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.CentralRiskReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.CentralRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ZonalRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.ZonalRiskReviewQueue',
+                            pageName: 'arthan.loans.individual.screening.ZonalRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Sanction')
                         $state.go('Page.Engine', {
-                            pageName: 'base.dashboard.loans.individual.screening.LoanSanctionQueue',
+                            pageName: 'arthan.loans.individual.screening.LoanSanctionQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Rejected')

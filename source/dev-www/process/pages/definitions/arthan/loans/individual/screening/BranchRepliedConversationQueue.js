@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening.BranchRepliedConversationQueue"), 
+irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.BranchRepliedConversationQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","Messaging", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Messaging, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
@@ -16,7 +16,7 @@ irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
-				console.log("r :: arthan.dashboard.loans.individual.screening.BranchRepliedConversationQueue");
+				console.log("r :: arthan.loans.individual.screening.BranchRepliedConversationQueue");
 				model.branch = SessionStore.getCurrentBranch().branchId;
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
@@ -181,16 +181,16 @@ irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.LoanView', {
+								entityManager.setModel('arthan.loans.individual.screening.LoanView', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "arthan.dashboard.loans.individual.screening.LoanView",
+									pageName: "arthan.loans.individual.screening.LoanView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "arthan.dashboard.loans.individual.screening.BranchRepliedConversationQueue"
+                                    pageName: "arthan.loans.individual.screening.BranchRepliedConversationQueue"
 								});
 							},
 							isApplicable: function(item, index) {

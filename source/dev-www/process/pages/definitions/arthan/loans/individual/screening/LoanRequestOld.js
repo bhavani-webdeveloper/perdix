@@ -1,7 +1,7 @@
 define([], function() {
 
     return {
-        pageUID: "arthan.dashboard.loans.individual.screening.LoanRequestOld",
+        pageUID: "arthan.loans.individual.screening.LoanRequestOld",
         pageType: "Engine",
         dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
             'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",

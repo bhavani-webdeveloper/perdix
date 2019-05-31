@@ -1,5 +1,5 @@
 define({
-	pageUID: "arthan.dashboard.loans.individual.screening.LoanSanctionQueue", 
+	pageUID: "arthan.loans.individual.screening.LoanSanctionQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -174,16 +174,16 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.SanctionInput', {
+								entityManager.setModel('arthan.loans.individual.screening.SanctionInput', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "arthan.dashboard.loans.individual.screening.SanctionInput",
+									pageName: "arthan.loans.individual.screening.SanctionInput",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "arthan.dashboard.loans.individual.screening.LoanSanctionQueue"
+                                    pageName: "arthan.loans.individual.screening.LoanSanctionQueue"
 								});
 							},
 							isApplicable: function(item, index) {

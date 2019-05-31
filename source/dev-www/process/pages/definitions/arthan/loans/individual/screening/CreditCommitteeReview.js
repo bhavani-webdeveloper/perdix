@@ -6,50 +6,50 @@ arthan(["perdix/domain/model/loan/LoanProcess",
         var LoanProcessts = LoanProcess["LoanProcess"];
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
-        return {//arthan.dashboard.loans.individual.screening.FieldAppraisal
-             pageUID: "arthan.dashboard.loans.individual.screening.CreditCommitteeReview",
+        return {//arthan.loans.individual.screening.FieldAppraisal
+             pageUID: "arthan.loans.individual.screening.CreditCommitteeReview",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator"],
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
                 var getBundleDefinition = function() {
                     var definition = [{
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 10
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 20
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'arthan.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 1,
                         maximum: 1,
                         order: 30
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                        pageName: 'arthan.loans.individual.screening.detail.EnterpriseEnrollmentView',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
                         maximum: 1,
                         order: 40
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                        pageName: 'arthan.loans.individual.screening.detail.EnterpriseFinancialView',
                         title: 'Business Financials',
                         pageClass: 'business-finance',
                         minimum: 1,
                         maximum: 1,
                         order: 50
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.detail.LoanApplicationView',
+                        pageName: 'arthan.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
                         pageClass: 'loan-recommendation',
                         minimum: 1,
@@ -63,7 +63,7 @@ arthan(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 100
                     }, {
-                        pageName: 'arthan.dashboard.loans.individual.screening.Review',
+                        pageName: 'arthan.loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
@@ -79,7 +79,7 @@ arthan(["perdix/domain/model/loan/LoanProcess",
                     }];
                     if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'maitreya') {
                         definition.push({
-                            pageName: 'arthan.dashboard.loans.individual.screening.detail.SummaryView',
+                            pageName: 'arthan.loans.individual.screening.detail.SummaryView',
                             title: 'SummaryView',
                             pageClass: 'summaryView',
                             minimum: 1,

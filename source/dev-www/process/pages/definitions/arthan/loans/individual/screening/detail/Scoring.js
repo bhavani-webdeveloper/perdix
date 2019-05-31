@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.detail.Scoring",
+    pageUID: "arthan.loans.individual.screening.detail.Scoring",
     pageType: "Engine",
     dependencies: ["$log", "$q", "Enrollment", 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
         'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "Scoring", "AuthTokenHelper", "BundleManager", "filterFilter", "irfCurrencyFilter"

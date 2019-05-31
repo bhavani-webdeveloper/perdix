@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.detail.DOPartnerApplicationView",
+    pageUID: "arthan.loans.individual.screening.detail.DOPartnerApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanBookingCommons", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
         "PageHelper", "Utils","LoanProducts", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"

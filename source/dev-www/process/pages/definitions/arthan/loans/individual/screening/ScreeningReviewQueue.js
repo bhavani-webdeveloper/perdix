@@ -1,5 +1,5 @@
 
-irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening.ScreeningReviewQueue"),
+irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.ScreeningReviewQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -179,11 +179,11 @@ irf.pageCollection.factory(irf.page("arthan.dashboard.loans.individual.screening
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arthan.dashboard.loans.individual.screening.ScreeningReview', {
+								entityManager.setModel('arthan.loans.individual.screening.ScreeningReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "arthan.dashboard.loans.individual.screening.ScreeningReview",
+									pageName: "arthan.loans.individual.screening.ScreeningReview",
 									pageId: item.loanId
 								});
 							},
