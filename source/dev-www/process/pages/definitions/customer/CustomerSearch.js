@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CustomerSearch"),
-["$log", "formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
-function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
+["$log", "formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator","PageHelper",
+function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator,PageHelper){
 	var branch = SessionStore.getBranch();
 	var prepareConditionalConfig = function(config,model){
 		model.additional = model.additional || {}
@@ -34,9 +34,9 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 			}
 			PagesDefinition.getPageConfig('Page/Engine/CustomerSearch').then(function(data){
 				model.showBankFilter = data.showBankFilter ? data.showBankFilter : false;
-				if (typeof data.conditionConfig != 'undefined'){
-					prepareConditionalConfig(data.conditionConfig,model);
-				}
+				// if (typeof data.conditionConfig != 'undefined'){
+				// 	prepareConditionalConfig(data.conditionConfig,model);
+				// }
 				$log.info("search-list sample got initialized");
 			});
 		     model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
@@ -60,23 +60,33 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                }, {
 	                    key: "bankId",
 	                    readonly: true,
-	                    condition: "model.showBankFilter && !model.fullAccess && model.siteCode.toLowerCase()=='kgfs'"
+						condition: "model.showBankFilter && !model.fullAccess && model.siteCode.toLowerCase()=='kgfs'",
+						required:false
 	                }, {
 	                    key: "bankId",
-	                    condition: "model.showBankFilter && model.fullAccess"
-	                }, {
+	                    condition: "model.showBankFilter && model.fullAccess && model.siteCode != 'KGFS'"
+					},
+					{
+	                    key: "bankId",
+						condition: "model.showBankFilter && model.fullAccess && model.siteCode == 'KGFS'",
+						required:false
+	                },
+					 {
 	                    key: "branch",
 	                    "type":"userbranch",
 	                    condition: "model.siteCode =='kinara' || model.siteCode=='IREPDhan' || model.siteCode=='shramsarathi'"
 	                },{
 						key: "branch",
-	                    "type":"userbranch",
-	                    condition: "model.additional.config.access_hierarchy && model.siteCode !='kinara'"
-					},{
+						"type":"select", 
+						condition:"model.siteCode=='KGFS'",
+						required:false
+					},
+					{
 						key: "branch",
 						"type":"select", 
-	                    condition: "(model.siteCode !='kinara'&& model.siteCode !='sambandh' && model.siteCode !='IREPDhan' && model.siteCode != 'shramsarathi')"
-	                }, {
+	                    condition: "(model.siteCode !='kinara'&& model.siteCode !='sambandh' && model.siteCode !='IREPDhan' && model.siteCode != 'shramsarathi' && model.siteCode != 'KGFS')"
+	                },
+					{
 	                    key: "branch",
 	                    enumCode: "userbranches",
 	                    "type":"select",
@@ -119,7 +129,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true,
-
 						}
 					},
 					"branch": {
@@ -146,13 +155,13 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					}
 
 				},
-				"required":["branch", 'bankId']
+				"required":['bankId','branch']
 			},
 			getSearchFormHelper: function() {
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-
+				debugger;
 				/* GET BRANCH NAME */
 				var branches = formHelper.enum('branch').data;
 				var siteCode= SessionStore.getGlobalSetting("siteCode");
@@ -177,6 +186,28 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						'urnNo': searchOptions.urnNo,
 						'includeDuplicates':searchOptions.includeDuplicates
 					}).$promise;
+				}else if(siteCode =='KGFS'){
+					debugger;
+					if ((searchOptions.urnNo != null && searchOptions.urnNo != '') || (searchOptions.branch != '' && searchOptions.branch !=null)){
+						var promise = Enrollment.search({
+							'bankId': searchOptions.bankId,
+							'branchName': branchName,
+							'firstName': searchOptions.first_name,
+							'centreId': searchOptions.centre,
+							'page': pageOpts.pageNo,
+							'per_page': pageOpts.itemsPerPage,
+							'customerId': searchOptions.customerId,
+							'kycNumber': searchOptions.kyc_no,
+							'lastName': searchOptions.lastName,
+							'urnNo': searchOptions.urnNo,
+							'includeDuplicates':searchOptions.includeDuplicates
+						}).$promise;
+					}
+					else{
+						PageHelper.showErrors({data:{'error':'Enter either Urn Number or Branch.'}})
+						PageHelper.hideLoader();
+						return $q.when(false);
+					}
 				}else{
 					var promise = Enrollment.search({
 						'bankId': searchOptions.bankId,
