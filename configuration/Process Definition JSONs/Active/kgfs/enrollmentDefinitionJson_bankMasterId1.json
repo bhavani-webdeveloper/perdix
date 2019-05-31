@@ -2982,6 +2982,8 @@
                       "title": "Document Type",
                       "type": "string",
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -2990,6 +2992,8 @@
                       "title": "Document Id",
                       "type": "string",
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -2998,6 +3002,8 @@
                       "title": "File Id",
                       "type": "string",
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3008,6 +3014,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3018,6 +3026,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3028,6 +3038,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3038,6 +3050,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3048,6 +3062,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3059,6 +3075,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3070,6 +3088,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3081,6 +3101,8 @@
                       "minimum": 0,
                       "maximum": 100,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3111,6 +3133,8 @@
                       "minLength": 1,
                       "maxLength": 1000,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3121,6 +3145,8 @@
                       "minLength": 1,
                       "maxLength": 1000,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3130,6 +3156,8 @@
                       "type": "string",
                       "format": "date",
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3139,6 +3167,8 @@
                       "type": "string",
                       "format": "date",
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
@@ -3149,6 +3179,8 @@
                       "minLength": 1,
                       "maxLength": 500,
                       "captureStages": [
+                        "Stage01",
+                        "Stage02",
                         "BasicEnrolment",
                         "Completed"
                       ]
