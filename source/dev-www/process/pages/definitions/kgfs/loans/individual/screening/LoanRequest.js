@@ -910,7 +910,6 @@ define([],function(){
                             "title":"COLLATERAL",
                             "required":true,
                             "startEmpty":false,
-                            "remove": null,
                             "view": "fixed",
                         },
                         "CollateralInformation.collateral.collateralType": {
