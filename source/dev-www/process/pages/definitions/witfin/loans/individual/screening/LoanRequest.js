@@ -1680,7 +1680,7 @@ define([], function() {
                 },
                 eventListeners: {
                     "refresh-all-tabs-customer": function (bundleModel, model, params) {                        
-                        clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","estimatedEmi","psychometricCompleted","interestRate","emiRequested"],model);                                     
+                        clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","estimatedEmi","interestRate","emiRequested"],model);                                     
                         model.loanAccount.collateral=[];
                         model.loanAccount.frequencyRequested=null;
                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6=null;
