@@ -2851,28 +2851,28 @@
                         "registrationType": {
                             "title": "Registration Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "registrationNumber": {
                             "title": "Registration Number",
                             "type": "number",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "registeredDate": {
                             "title": "Registration Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "expiryDate": {
                             "title": "Expiry Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "documentId":{
                             "type": "string",
-                            "captureStages": ["BasicEnrolment", "Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment", "Completed"]
                         }
                     }
                 }
@@ -2887,22 +2887,22 @@
                         "udf1": {
                             "title": "Business Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf2": {
                             "title": "Business Activity",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf3": {
                             "title": "Business Sector",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf4": {
                             "title": "Expiry Date",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         }
                     }
                 }
