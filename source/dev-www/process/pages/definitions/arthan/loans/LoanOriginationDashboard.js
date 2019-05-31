@@ -331,7 +331,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var gng1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue"];
+        var gng1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.GoNoGoApproval1Queue"];
         if (gng1Menu) {
             IndividualLoan.search({
                 'stage': 'GoNoGoApproval1',
@@ -349,7 +349,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var gng2Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue"];
+        var gng2Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.GoNoGoApproval2Queue"];
         if (gng2Menu) {
             IndividualLoan.search({
                 'stage': 'GoNoGoApproval2',
@@ -367,7 +367,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.TeleVerificationQueue"];
+        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.TeleVerificationQueue"];
         if (tvq1Menu) {
             IndividualLoan.search({
                 'stage': 'TeleVerification',
@@ -442,7 +442,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
         }
 
        
-        var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.CreditApproval3Queue"];
+        var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.CreditApproval3Queue"];
 
         if (caq3Menu) {
             IndividualLoan.search({
@@ -500,7 +500,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var rjqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.RejectedQueue"];
+        var rjqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.RejectedQueue"];
         if (rjqMenu) {
             IndividualLoan.search({
                 'stage': 'Rejected',
@@ -518,7 +518,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-       var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.BranchNewConversationQueue"];
+       var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.BranchNewConversationQueue"];
        
         if (bncqMenu) {
             Messaging.findConversation({
@@ -532,7 +532,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-       var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.BranchRepliedConversationQueue"];
+       var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.BranchRepliedConversationQueue"];
        
         if (brcqMenu) {
             Messaging.findConversation({
@@ -546,7 +546,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-       var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.SpokeNewConversationQueue"];
+       var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.SpokeNewConversationQueue"];
        
         if (sncqMenu) {
             var centreCode = [];
@@ -567,7 +567,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"];
+        var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.SpokeRepliedConversationQueue"];
         if (srcqMenu) {
             var centreCode = [];
             _.forEach(centres, function (centre) {
