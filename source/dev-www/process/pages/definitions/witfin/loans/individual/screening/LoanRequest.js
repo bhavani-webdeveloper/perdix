@@ -12,7 +12,7 @@ define([], function() {
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
             BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
-
+            var installmentRounding = SessionStore.getGlobalSetting('installmentRounding') || 'RoundNearest';
 
             var self;
             var validateForm = function(formCtrl) {
@@ -156,10 +156,15 @@ define([], function() {
                     }
                     var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
                     var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
-                    var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    if(installmentRounding && installmentRounding == 'RoundUp') {
+                        var estimatedEmi = Math.ceil(parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    } else {
+                        var estimatedEmi = Math.round(parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    }
+
                     return {
                         nominalRate: nominalRate,
-                        estimatedEmi: Math.round(estimatedEmi)
+                        estimatedEmi: estimatedEmi
                     };
                 } else {
                     throw new Error("Invalid input for nominal rate calculation");
@@ -1582,7 +1587,6 @@ define([], function() {
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = bundleModel.currentStage;
-
                     model.review = model.review|| {};
 
                     if (!model.loanAccount.id){
