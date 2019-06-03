@@ -99,7 +99,8 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Application',
+						'stage': 'Application',
+						//'stage': 'RCU',
 	                    'centreCode':searchOptions.centreCode,
 						'branchName':branch,
 						'enterprisePincode':searchOptions.pincode,
@@ -197,11 +198,11 @@ define({
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								
-								entityManager.setModel('arthan.loans.individual.screening.RCU_Review1.js', {
+								entityManager.setModel('arthan.loans.individual.screening.RCU_Review1', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "arthan.loans.individual.screening.RCU_Review1.js",
+								$state.go("Page.Bundle", {
+									pageName: "arthan.loans.individual.screening.RCU_Review1",
 									pageId: item.loanId
 								});
 								//BundleManager.broadcastEvent('cpv-response', item);

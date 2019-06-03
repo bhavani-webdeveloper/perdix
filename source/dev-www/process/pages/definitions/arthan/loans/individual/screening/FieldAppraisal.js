@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "FIELD_APPRAISAL",
+                    "title": "PD",
                     "subTitle": "",
                     "readonly": true,
                     "bundleDefinitionPromise": function() {
@@ -149,7 +149,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "FieldAppraisal";
+                        bundleModel.currentStage = "PD";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -246,7 +246,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'FieldAppraisal');
+                        BundleManager.broadcastEvent('origination-stage', 'PD');
 
                     },
                     eventListeners: {

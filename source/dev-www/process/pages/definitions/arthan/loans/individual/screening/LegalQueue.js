@@ -99,7 +99,8 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Application',
+                        //'stage': 'Legal',
+                        'stage': 'Application',
 	                    'centreCode':searchOptions.centreCode,
 						'branchName':branch,
 						'enterprisePincode':searchOptions.pincode,
@@ -192,16 +193,16 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "CPV_REVIEW",
+							name: "LEGAL_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								
-								entityManager.setModel('arthan.loans.individual.screening.Legal', {
+								entityManager.setModel('arthan.loans.individual.screening.LegalReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
-									pageName: "arthan.loans.individual.screening.Legal",
+								$state.go("Page.Bundle", {
+									pageName: "arthan.loans.individual.screening.LegalReview",
 									pageId: item.loanId
 								});
 								//BundleManager.broadcastEvent('cpv-response', item);

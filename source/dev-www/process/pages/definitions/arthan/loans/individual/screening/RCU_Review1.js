@@ -146,7 +146,8 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.RCU_Revie
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
-                bundleModel.currentStage = "RCUReview";
+                bundleModel.currentStage = "Application";
+               // bundleModel.currentStage = "RCU";
                 var deferred = $q.defer();
 
                 var $this = this;
@@ -185,7 +186,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.RCU_Revie
                             };
 
 
-                            if (res.currentStage != 'RCUReview') {
+                            if (res.currentStage != 'Application') {
                                 PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 irfNavigator.goBack();
                                 return;

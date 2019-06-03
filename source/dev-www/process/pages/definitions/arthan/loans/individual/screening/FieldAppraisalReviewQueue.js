@@ -4,7 +4,7 @@ irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.FieldAppr
 		
 		return {
 			"type": "search-list",
-			"title": "REGIONAL_RISK_REVIEW_QUEUE",
+			"title": "LOCAL_CREDIT_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchId;
@@ -92,7 +92,7 @@ irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.FieldAppr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'FieldAppraisalReview',
+	                    'stage': 'LocalCredit',
 	                    'centreCode':  searchOptions.centre,
 	                    'branchId':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
@@ -173,7 +173,7 @@ irf.pageCollection.factory(irf.page("arthan.loans.individual.screening.FieldAppr
 					},
 					getActions: function() {
 						return [{
-							name: "REGIONAL_RISK_REVIEW",
+							name: "LOCAL_CREDIT",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

@@ -147,7 +147,8 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.Valuation
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
-                bundleModel.currentStage = "ValuationReview";
+               // bundleModel.currentStage = "Valuation";
+                bundleModel.currentStage = "Application";
                 var deferred = $q.defer();
 
                 var $this = this;
@@ -186,7 +187,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.Valuation
                             };
 
 
-                            if (res.currentStage != 'ValuationReview') {
+                            if (res.currentStage != 'Application') {
                                 PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 irfNavigator.goBack();
                                 return;
@@ -353,7 +354,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.Valuation
             },
             "post_pages_initialize": function(bundleModel) {
                 $log.info("Inside post_page_initialize");
-                BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
+                BundleManager.broadcastEvent('origination-stage', 'Application');
 
             },
             eventListeners: {

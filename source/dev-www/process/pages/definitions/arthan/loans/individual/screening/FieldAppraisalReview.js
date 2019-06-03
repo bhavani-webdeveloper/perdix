@@ -102,7 +102,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.FieldAppr
 
         return {
             "type": "page-bundle",
-            "title": "REGIONAL_RISK_REVIEW",
+            "title": "LOCAL_CREDIT",
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": getBundleDefinition(),
@@ -137,7 +137,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.FieldAppr
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
-                bundleModel.currentStage = "FieldAppraisalReview";
+                bundleModel.currentStage = "LocalCredit";
                 var deferred = $q.defer();
 
                 var $this = this;
@@ -176,7 +176,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.FieldAppr
                             };
 
 
-                            if (res.currentStage != 'FieldAppraisalReview') {
+                            if (res.currentStage != 'LocalCredit') {
                                 PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 irfNavigator.goBack();
                                 return;
@@ -335,7 +335,7 @@ irf.pageCollection.factory(irf.page('arthan.loans.individual.screening.FieldAppr
             },
             "post_pages_initialize": function(bundleModel) {
                 $log.info("Inside post_page_initialize");
-                BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
+                BundleManager.broadcastEvent('origination-stage', 'LocalCredit');
 
             },
             eventListeners: {
