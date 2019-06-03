@@ -1490,7 +1490,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE",
+                                            "title": "SAVE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)",
                                             "buttonType": "submit"
                                         }

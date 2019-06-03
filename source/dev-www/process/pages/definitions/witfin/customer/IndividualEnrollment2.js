@@ -1793,7 +1793,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "items": [
                                     {
                                         "type": "button",
-                                        "title": "UPDATE_ENROLMENT",
+                                        "title": "SAVE",
                                         "onClick": "actions.proceed(model, formCtrl, form, $event)",
                                         "buttonType": "submit"
                                     }
