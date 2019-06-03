@@ -43,14 +43,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 0,
                                 order:30
                             },
-                            // {
-                            //     pageName: 'arthan.loans.individual.customer.EnterpriseEnrolment2',
-                            //     title: 'BUSINESS',
-                            //     pageClass: 'business',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:40
-                            // },
+                            {
+                                pageName: 'arthan.loans.individual.customer.EnterpriseEnrolment2',
+                                title: 'BUSINESS',
+                                pageClass: 'business',
+                                minimum: 1,
+                                maximum: 1,
+                                order:40
+                            },
                             // {
                             //     pageName: 'arthan.loans.individual.customer.EnterpriseEnrolmentBusinessFinancial',
                             //     title: 'Business Financials',
@@ -59,14 +59,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     maximum: 1,
                             //     order:50
                             // },
-                            {
-                                pageName: 'arthan.loans.individual.customer.Enrolment',
-                                title: 'BUSINESS',
-                                pageClass: 'business',
-                                minimum: 1,
-                                maximum: 1,
-                                order:40
-                            },
+                            // {
+                            //     pageName: 'arthan.loans.individual.customer.Enrolment',
+                            //     title: 'BUSINESS',
+                            //     pageClass: 'business',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
                             // {
                             //     pageName: 'arthan.loans.individual.customer.VehicleValuation',
                             //     title: 'VEHICLE_VALUATION',

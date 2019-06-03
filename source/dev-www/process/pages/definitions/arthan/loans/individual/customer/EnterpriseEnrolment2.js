@@ -566,8 +566,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "CUSTOMER_NAME",
                                             "orderNo": 1
                                         }
-                                    }
-                                },    // "EnterpriseInformation": {
+                                    },
+                                   
+                                },  
+                                  // "EnterpriseInformation": {
                     //      "items": {
                     //           "lastFiledItr": {
                     //                "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
@@ -606,6 +608,118 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     //           },
                     //      }
                     // }
+                    "PropertyAssets": {
+                        "type": "box",
+                        "title": "PROPERTY_ASSETS",
+                        "orderNo": 150,
+                        "items": {
+                            "propertyAssets": {
+                                "key": "customer.physicalAssets",
+                                "type": "array",
+                                "startEmpty": true,
+                                "title": "PROPERTY_ASSETS",
+                                "items": {
+                                    "propertyType": {
+                                      //  "key": "customer.physicalAssets[].assetType",
+                                        "title": "PROPERTY_TYPE",
+                                        "type": "select",
+                                        "enumCode": "asset_type"
+                                    },
+                                    "natureOfProperty": {
+                                     //   "key": "customer.physicalAssets[].nameOfOwnedAsset",
+                                        "title": "NATURE_OF_PROPERTY",
+                                        "type": "select",
+                                        "enumCode": "physical_asset_name"
+                                    },
+                                    "ltv": {
+                                     //   "key": "customer.physicalAssets[].vehicleModel",
+                                        "title": "LTV",
+                                        "type": "string"
+                                    },
+                                    "noOfTenants": {
+                                       // "key": "customer.physicalAssets[].numberOfOwnedAsset",
+                                        "type":"number",
+                                        "title": "NUMBER_OF_TENANTS"
+                                    },
+                                    "propertyJuridiction": {
+                                       // "key": "customer.physicalAssets[].registeredOwner",
+                                        "title": "PROPERTY_JURIDICATION",
+                                        "type": "string"
+                                    },
+                                    "landArea": {
+                                       // "key": "customer.physicalAssets[].ownedAssetValue",
+                                        "title": "LAND_AREA",
+                                        "type": "amount"
+                                    },
+                                    "isThePropertyHyphothicated": {
+                                       // "key": "customer.physicalAssets[].unit",
+                                        "title": "IS_THE_PROPERTY_HYPOTHECATED",
+                                        "type": "number"
+                                    },
+                                    "hypothicatedTo": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "HYPOTHECATED_TO",
+                                        "type": "number"
+                                    },
+                                    "hypothicatedToUs": {
+                                       // "key": "customer.physicalAssets[].unit",
+                                        "title": "CAN_BE_HYPOTHECATED_TO_US",
+                                        "type": "number"
+                                    },
+                                    "marketValue": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "MARKET_VALUE",
+                                        "type": "number"
+                                    },
+                                    "sroValue": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "SRO_VALUE",
+                                        "type": "number"
+                                    },
+                                    "valueAsPerLocalBroker": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "VALUE_AS_PER_LOCAL_BROKER",
+                                        "type": "number"
+                                    },
+                                    "valueAsPerExternalSites": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "VALUE_AS_PER_EXTRENAL_SITES",
+                                        "type": "number"
+                                    },
+                                    "propertyUsage": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "PROPERTY_USAGE",
+                                        "type": "number"
+                                    },
+                                    "isThePropertyDocumentAvalible": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "IS_THE_PROPERTY_DOCUMENT_AVALIBLE",
+                                        "type": "number"
+                                    },
+                                    "photograph": {
+                                       // "key": "customer.physicalAssets[].unit",
+                                        "title": "PHOTOGRAPH",
+                                        "type": "number"
+                                    },
+                                    "gpsLocation": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "GPS_LOCATION",
+                                        "type": "number"
+                                    },
+                                    "address": {
+                                        //"key": "customer.physicalAssets[].unit",
+                                        "title": "ADDRESS",
+                                        "type": "number"
+                                    },
+                                    "document": {
+                                      //  "key": "customer.physicalAssets[].unit",
+                                        "title": "DOCUMENT",
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                        }
+                    },
                     "References":{
                         "type": "box",
                         "title": "REFERENCES",
@@ -1124,6 +1238,42 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Machinery.fixedAssetsMachinaries.machinePermanentlyFixedToBuilding",
                     "Machinery.fixedAssetsMachinaries.machineBillsDocId",
                     "Machinery.fixedAssetsMachinaries.machineImage",
+
+                    "PhysicalAssets",
+                    "PhysicalAssets.financialAssets",
+                    "PhysicalAssets.financialAssets.instrumentType",
+                    "PhysicalAssets.financialAssets.nameOfInstitution",
+                    "PhysicalAssets.financialAssets.instituteType",
+                    "PhysicalAssets.financialAssets.amount",
+                    "PhysicalAssets.financialAssets.frequencyOfDeposite",
+                    "PhysicalAssets.financialAssets.startDate",
+                    "PhysicalAssets.financialAssets.maturityDate",
+                    "PhysicalAssets.financialAssets.isThePropertyHyphothicated",
+                    "PhysicalAssets.financialAssets.hypothicatedTo",
+                    "PhysicalAssets.financialAssets.hypothicatedToUs",
+
+                    "PropertyAssets",
+                    "PropertyAssets.propertyAssets",
+                    "PropertyAssets.propertyAssets.propertyType",
+                    "PropertyAssets.propertyAssets.natureOfProperty",
+                    "PropertyAssets.propertyAssets.ltv",
+                    "PropertyAssets.propertyAssets.noOfTenants",
+                    "PropertyAssets.propertyAssets.propertyJuridiction",
+                    "PropertyAssets.propertyAssets.landArea",
+                    "PropertyAssets.propertyAssets.isThePropertyHyphothicated",
+                    "PropertyAssets.propertyAssets.hypothicatedTo",
+                    "PropertyAssets.propertyAssets.hypothicatedToUs",
+                    "PropertyAssets.propertyAssets.marketValue",
+                    "PropertyAssets.propertyAssets.sroValue",
+                    "PropertyAssets.propertyAssets.valueAsPerLocalBroker",
+                    "PropertyAssets.propertyAssets.valueAsPerExternalSites",
+                    "PropertyAssets.propertyAssets.propertyUsage",
+                    "PropertyAssets.propertyAssets.isThePropertyDocumentAvalible",
+                    "PropertyAssets.propertyAssets.photograph",
+                    "PropertyAssets.propertyAssets.gpsLocation",
+                    "PropertyAssets.propertyAssets.address",
+                    "PropertyAssets.propertyAssets.document",
+
                     
                     "CurrentAssets",
                     "CurrentAssets.currentAssets",
@@ -1828,7 +1978,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 ],
                                 "overrides": {
                                     "EnterpriseReferences":{
-
                                     },
                                     "EnterpriseAssets":{
                                         "title":"ENTERPRISE_ASSETS"
@@ -1888,7 +2037,135 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": false
-                                    }
+                                    },
+                                    "PhysicalAssets": {
+                                        "type": "box",
+                                        "title": "FINANCIAL_ASSETS",
+                                        "orderNo": 150,
+                                        "items": {
+                                            "physicalAssets": {
+                                                "key": "customer.physicalAssets",
+                                                "type": "array",
+                                                "startEmpty": true,
+                                                "title": "PHYSICAL_ASSETS",
+                                                "items": {
+                                                    "assetType": {
+                                                        "key": "customer.physicalAssets[].assetType",
+                                                        "title": "ASSET_TYPE",
+                                                        "type": "select",
+                                                        "enumCode": "asset_type"
+                                                    },
+                                                    "nameOfOwnedAsset": {
+                                                        "key": "customer.physicalAssets[].nameOfOwnedAsset",
+                                                        "title": "NAME_OF_OWNED_ASSET",
+                                                        "type": "select",
+                                                        "enumCode": "physical_asset_name"
+                                                    },
+                                                    "vehicleModel": {
+                                                        "key": "customer.physicalAssets[].vehicleModel",
+                                                        "title": "VEHICLE_MAKE_MODEL",
+                                                        "type": "string"
+                                                    },
+                                                    "numberOfOwnedAsset": {
+                                                        "key": "customer.physicalAssets[].numberOfOwnedAsset",
+                                                        "type":"number",
+                                                        "title": "NUMBER_OF_OWNED_ASSET"
+                                                    },
+                                                    "registeredOwner": {
+                                                        "key": "customer.physicalAssets[].registeredOwner",
+                                                        "title": "REGISTERED_OWNER",
+                                                        "type": "string"
+                                                    },
+                                                    "ownedAssetValue": {
+                                                        "key": "customer.physicalAssets[].ownedAssetValue",
+                                                        "title": "VALUE_OF_THE_ASSET",
+                                                        "type": "amount"
+                                                    },
+                                                    "unit": {
+                                                        "key": "customer.physicalAssets[].unit",
+                                                        "title": "AREA_UNITS_OF_ASSETS",
+                                                        "type": "number"
+                                                    }
+                                                }
+                                            },
+                                            "financialAssets" :{
+                                                "key": "customer.financialAssets",
+                                                "type": "array",
+                                                "startEmpty": true,
+                                                "title": "FINANCIAL_ASSETS",
+                                                "items":{
+                                                    "instrumentType" :{
+                                                        "key": "customer.financialAssets[].instrumentType",
+                                                        "title": "INSTRUMENT_TYPE",
+                                                        "type": "select",
+                                                        "enumCode": "financialAssetInstrumentType"
+                                                    },
+                                                    "nameOfInstitution": {
+                                                        "key": "customer.financialAssets[].nameOfInstitution",
+                                                        "title": "INSTITUTION_NAME",
+                                                        "type": "string"
+                                                    },
+                                                    "instituteType":{
+                                                        "key": "customer.financialAssets[].instituteType",
+                                                        "title": "INSTITUTE_TYPE",
+                                                        "type": "select",
+                                                        "enumCode": "finanical_asset"
+                                                    },
+                                                    "amount":{
+                                                        "key": "customer.financialAssets[].amountInPaisa",
+                                                        "title": "ASSET_VALUE",
+                                                        "type": "amount"
+                                
+                                                    },
+                                                    "frequencyOfDeposite":{
+                                                        "key": "customer.financialAssets[].frequencyOfDeposite",
+                                                        "title": "DEPOSIT_FREQUENCY",
+                                                        "type": "select",
+                                                        "enumCode": "frequency"
+                                                    },
+                                                    "startDate":{
+                                                        "key": "customer.financialAssets[].startDate",
+                                                        "title": "START_DATE",
+                                                        "type": "date"
+                                                    },
+                                                    "maturityDate":{
+                                                      "key": "customer.financialAssets[].maturityDate",
+                                                      "title": "MATURITY_DATE",
+                                                      "type": "date"
+                                                    },
+                                                      "isThePropertyHyphothicated":{
+                                                       // key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
+                                                        title:"IS_THE_PROPERTY_HYPHOTHICATED",
+                                                        type: "radios",
+                                                      //  enumCode: "decisionmaker",
+                                                       // "orderNo":150,
+                                                        onChange: function(modelValue, form, model, formCtrl, event) {
+                                                            if (modelValue && modelValue.toLowerCase() === 'no')
+                                                                model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedTo = null;
+                                                            else if(modelValue && modelValue.toLowerCase() === 'yes')
+                                                                model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedToUs = null;
+                                                        }
+                                                     },
+                                                     "hypothicatedTo":{
+                                                        // key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
+                                                         title:"HYPOTHECATED_TO",
+                                                         type: "string",
+                                                         //"orderNo":160,
+                                                        // condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
+                                                     },
+                                                     "hypothicatedToUs":{
+                                                        // key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
+                                                         title:"CAN_BE_HYPOTHECATED_TO_US",
+                                                         type: "radios",
+                                                        // enumCode: "decisionmaker",
+                                                        // "orderNo":170,
+                                                       //  condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
+                                                     },
+                                                }
+                                            }
+                                        }
+                                    },
+
                                     
                                 }
                             }, 
