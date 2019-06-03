@@ -259,7 +259,16 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 required:true
             },
             {
+                title: "Deposit Date",
+                condition: "model.siteCode == 'witfin'",
+                key: "bankDepositSummary.depositDate",
+                type: "date",
+                required:true
+            },
+            {
+
                 title: "Bank Challan",
+                condition: "model.siteCode == 'witfin'",
                 key: "bankDepositSummary.challanFileId",
                 type: "file",
                 fileType: "image/*",
@@ -335,7 +344,6 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                         loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
                     }
                 }
-
                 model.bankDepositSummary.loanCollections = _.cloneDeep(model.loanCollections);
                 var reqData = {
                     'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
