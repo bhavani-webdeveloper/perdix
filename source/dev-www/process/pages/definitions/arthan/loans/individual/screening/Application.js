@@ -92,7 +92,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:50
                             // },
                             {
-                                pageName: 'arthan.individual.screening.CreditBureauView',
+                                pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
                                 minimum: 1,
