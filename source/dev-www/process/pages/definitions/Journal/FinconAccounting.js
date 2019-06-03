@@ -280,6 +280,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                     <th class='col-xs-2'>GL AC Name</th>\
                                                     <th class='col-xs-1'>Type</th>\
                                                     <th class='col-xs-2'>Amount</th>\
+                                                    <th class='col-xs-3'>Loan Account No</th>\
                                                     <th class='col-xs-4'>Narration</th>\
                                                     <th class='col-xs-1'>Delete</th>\
                                                 </thead>\
@@ -296,6 +297,11 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                         </td>\
                                                         <td class='col-xs-1'>\
                                                             <input ng-model=\"d['transactionAmount']\" type='number' step='any' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
+                                                        </td>\
+                                                        <td class='col-xs-3'>\
+                                                            <div> \
+                                                                <input typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
+                                                            </div>\
                                                         </td>\
                                                         <td class='col-xs-3'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
                                                         </td>\
