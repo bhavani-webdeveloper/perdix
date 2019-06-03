@@ -53,11 +53,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementD
                                 PageHelper.showProgress('loan-fetch', 'Done.', 5000);
                             }
                             console.log(model);
-
+                            
+                            docsForProduct = [];
                             Queries.getLoanProductDocuments(model.loanAccount.productCode, "Disbursement", "DisbursementDocumentUpload")
                                 .then(
                                     function(docs) {
-                                        docsForProduct = [];
                                         for (var i = 0; i < docs.length; i++) {
                                             var doc = docs[i];
                                             docsForProduct.push({
