@@ -41,7 +41,7 @@
         "code":"ScreeningReview",
         "name":"Screening Review",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"ScreeningReview",
         "isAccountOpening":false,
         "allowedRoles":[
