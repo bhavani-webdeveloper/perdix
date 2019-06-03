@@ -271,7 +271,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 condition: "model.siteCode == 'witfin'",
                 key: "bankDepositSummary.challanFileId",
                 type: "file",
-                fileType: "image/*",
+                fileType: "gallery",
                 category: "Collection",
                 subCategory: "Cheque",
                 required:true
