@@ -38,16 +38,51 @@
     </div>
 
 </div> -->
+<div ng-if="containerData.displayName">
+    <h4>{{containerData.displayName}}</h4ßß>
+</div>
 
 <div ng-repeat="section in containerData.section">
+        <!-- <div ng-if="section.displayName">
+                <h4>{{section.displayName}}</h4ßß>
+            </div> -->
     <div ng-if="section.type=='box'">
         <irf-pv-box box-data="section"></irf-pv-box>
     </div>
     <div ng-if="section.type=='grid'">
-        <irf-pv-grid grid-data="section"></irf-pv-grid>
+        <div ng-if="section.width=='col1'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-grid grid-data="section.data"></irf-pv-grid>
+            </div>
+
+        </div>
+        <div ng-if="section.width=='col2'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-grid grid-data="section"></irf-pv-grid>
+            </div>
+        </div>
+        <div ng-if="section.width=='col3'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-grid grid-data="section.data"></irf-pv-grid>
+            </div>
+        </div>
     </div>
     <div ng-if="section.type=='balance_sheet'">
-        <irf-pv-balancesheet balancesheet-data="section"></irf-pv-balancesheet>
+        <div ng-if="section.width=='col1'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-balancesheet balancesheet-data="section"></irf-pv-balancesheet>
+            </div>
+        </div>
+        <div ng-if="section.width=='col2'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-balancesheet balancesheet-data="section"></irf-pv-balancesheet>
+            </div>
+        </div>
+        <div ng-if="section.width=='col3'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-pv-balancesheet balancesheet-data="section"></irf-pv-balancesheet>
+            </div>
+        </div>
     </div>
     <div ng-if="section.type=='chart'">
 
@@ -75,24 +110,79 @@
         <irf-scoring-display irf-scoring-data='section.data' />
     </div>
     <div ng-if="section.type=='table'">
-        <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
+        <div ng-if="section.width=='col1'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
+            </div>
+        </div>
+
+        <div ng-if="section.width=='col2'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
+            </div>
+        </div>
+
+        <div ng-if="section.width=='col3'">
+            <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                <irf-simple-summary-table irf-table-def='section.data'></irf-simple-summary-table>
+            </div>
+        </div>
     </div>
     <div ng-if="section.type=='iterator'">
         <irf-pv-iterator iterator-data="section"></irf-pv-iterator>
     </div>
-    <div ng-if="section.type=='container'" >
+    <div ng-if="section.type=='container'" class="box box-solid">
+        <div class="box-body">
+            <irf-pv-container container-data="section"></irf-pv-container>
+        </div>
+    </div>
+    <!-- Container Inside Container -->
+    <div ng-if="section.section">
+            
         <div ng-repeat="subSection in section.section">
+                <!-- <div ng-if="subSection.displayName">
+                        <h4>{{subSection.displayName}}</h4ßß>
+                    </div> -->
             <div ng-if="subSection.type=='box'">
                 <irf-pv-box box-data="subSection"></irf-pv-box>
             </div>
             <div ng-if="subSection.type=='grid'">
-                <irf-pv-grid grid-data="subSection"></irf-pv-grid>
+                <div ng-if="subSection.width=='col1'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-grid grid-data="subSection.data"></irf-pv-grid>
+                    </div>
+
+                </div>
+                <div ng-if="subSection.width=='col2'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-grid grid-data="subSection.data"></irf-pv-grid>
+                    </div>
+                </div>
+                <div ng-if="subSection.width=='col3'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-grid grid-data="subSection.data"></irf-pv-grid>
+                    </div>
+                </div>
             </div>
             <div ng-if="subSection.type=='balance_sheet'">
-                <irf-pv-balancesheet balancesheet-data="subSection"></irf-pv-balancesheet>
+                <div ng-if="subSection.width=='col1'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-balancesheet balancesheet-data="subSection"></irf-pv-balancesheet>
+                    </div>
+                </div>
+                <div ng-if="subSection.width=='col2'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-balancesheet balancesheet-data="subSection"></irf-pv-balancesheet>
+                    </div>
+                </div>
+                <div ng-if="subSection.width=='col3'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-pv-balancesheet balancesheet-data="subSection"></irf-pv-balancesheet>
+                    </div>
+                </div>
             </div>
             <div ng-if="subSection.type=='chart'">
-        
+
                 <div ng-if="subSection.width=='col1'">
                     <div class="col-md-4 col-sm-12 col-xs-12" style="float:left">
                         <irf-pv-charts chart-data="subSection"></irf-pv-charts>
@@ -108,7 +198,7 @@
                         <irf-pv-charts chart-data="subSection"></irf-pv-charts>
                     </div>
                 </div>
-        
+
             </div>
             <div ng-if="subSection.type=='pnl'">
                 <irf-pv-pnl pnl-data="subSection"></irf-pv-pnl>
@@ -117,7 +207,23 @@
                 <irf-scoring-display irf-scoring-data='subSection.data' />
             </div>
             <div ng-if="subSection.type=='table'">
-                <irf-simple-summary-table irf-table-def='subSection.data'></irf-simple-summary-table>
+                <div ng-if="subSection.width=='col1'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-simple-summary-table irf-table-def='subSection.data'></irf-simple-summary-table>
+                    </div>
+                </div>
+
+                <div ng-if="subSection.width=='col2'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-simple-summary-table irf-table-def='subSection.data'></irf-simple-summary-table>
+                    </div>
+                </div>
+
+                <div ng-if="subSection.width=='col3'">
+                    <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                        <irf-simple-summary-table irf-table-def='subSection.data'></irf-simple-summary-table>
+                    </div>
+                </div>
             </div>
             <div ng-if="subSection.type=='iterator'">
                 <irf-pv-iterator iterator-data="subSection"></irf-pv-iterator>
