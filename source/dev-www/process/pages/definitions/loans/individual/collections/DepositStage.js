@@ -122,7 +122,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "col-xs-1 col-md-1",
+                        "htmlClass": "col-xs-2 col-md-1",
                         "items": [{
                             "key":"pendingCashDeposits[].check",
                             "title":" ",
@@ -149,7 +149,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-4 col-md-4",
+                        "htmlClass": "col-xs-3 col-md-4",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
                             "readonly":true,
