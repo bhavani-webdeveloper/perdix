@@ -142,20 +142,19 @@
          ]
       },
       {
-         "order":11,
-         "code":"Completed",
-         "name":"Completed",
-         "stageType":"DISBURSEMENTCONFIRMATION",
-         "sendSms":"Yes",
-         "smsCategory":"Disbursed",
-         "documentTrackingRequired":"Yes",
-         "allowedRoles":[
-            "WM"
-         ],
-         "notRequiredForTranches":[
+        "order": 11,
+        "code": "DisbursementDocumentUpload",
+        "name": "Disbursement Document Upload",
+        "stageType": "CAPTURE",
+        "sendSms": "Yes",
+        "smsCategory": "Disbursed",
+        "isAccountOpening": false,
+        "allowedRoles": [
+          "WM"
+        ],
+        "notRequiredForTranches":[
 
          ]
-
       }
    ],
    "schema":{
