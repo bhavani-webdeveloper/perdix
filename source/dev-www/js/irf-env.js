@@ -5,12 +5,12 @@
 // irf.BI_BASE_URL = 'http://34.202.145.163:8081/bi_produat';
 // irf.PSYCHOMETRIC_BASE_URL = "";
 
-var irf = irf || {};
-irf.BASE_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_perdix-server';
-irf.MANAGEMENT_BASE_URL = 'http://uat.maitreya.perdix.co.in:8081/uat_maitreya_management';
-irf.FORM_DOWNLOAD_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_forms/formPrint.jsp';
-irf.BI_BASE_URL = "http://uat.maitreya.perdix.co.in:8081/uat_maitreya_bi";
-irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_psychometric";
+// var irf = irf || {};
+// irf.BASE_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://uat.maitreya.perdix.co.in:8081/uat_maitreya_management';
+// irf.FORM_DOWNLOAD_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://uat.maitreya.perdix.co.in:8081/uat_maitreya_bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_psychometric";
 
 // var irf = irf || {};
 // irf.BASE_URL = 'http://sit.perdix.co.in:8080/sit_kgfs_perdix-server';
@@ -161,7 +161,8 @@ irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_ps
 
 //Kinara management_sit
 // var irf = irf || {};
-// irf.BASE_URL = 'http://kinarasit.perdix.co.in:8080/perdix-server';
+// //irf.BASE_URL = 'http://kinarasit.perdix.co.in:8080/perdix-server';
+// //irf.BASE_URL = 'http://localhost:8080/perdix-server';
 // irf.MANAGEMENT_BASE_URL = 'http://kinarasit.perdix.co.in:8081/management';
 // irf.FORM_DOWNLOAD_URL = 'http://kinarasit.perdix.co.in:8080/forms/formPrint.jsp';
 // irf.BI_BASE_URL = "http://kinarasit.perdix.co.in:8081/bi";
@@ -231,6 +232,17 @@ irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_ps
 // irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';
 
 
+// var irf = irf || {};
+// irf.BASE_URL = 'https://produat.kinara.perdix.co.in:8443/perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'https://produat.kinara.perdix.co.in:8881/management';
+// irf.FORM_DOWNLOAD_URL = 'https://produat.kinara.perdix.co.in:8443/forms_produat/formPrint.jsp';
+// irf.BI_BASE_URL = "https://produat.kinara.perdix.co.in:8881/bi";
+// irf.PSYCHOMETRIC_BASE_URL = "https://produat.kinara.perdix.co.in:8443/psychometric";
+// irf.AUDIT_API_URL = 'https://produat.kinara.perdix.co.in:8087';
+// irf.ANALYTICS_WEB_URL = "http://34.202.113.237:12345";
+// irf.ANALYTICS_API_URL = "http://34.202.113.237:1337";
+
+
 // irf.BASE_URL = "{{perdix.api}}";
 // irf.MANAGEMENT_BASE_URL = "{{management.base}}";
 // irf.FORM_DOWNLOAD_URL = "{{forms.jsp}}";
@@ -282,3 +294,14 @@ irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_ps
 // irf.FORM_DOWNLOAD_URL = 'http://13.127.169.8:8080/uat_shramsarathi_forms/formPrint.jsp';
 // irf.BI_BASE_URL = "http://13.127.169.8:8081/uat_shramsarathi_bi";
 // irf.PSYCHOMETRIC_BASE_URL = "http://13.127.169.8:8080/uat_shramsarathi_psychometric";
+
+//---------------------------------Arthan Sit--------------------------------------------------
+
+var irf = irf || {};
+irf.BASE_URL = 'http://sit.arthan.perdix.co.in:8080/sit_arthan_perdix-server';
+irf.MANAGEMENT_BASE_URL = 'http://sit.arthan.perdix.co.in:8081/sit_arthan_management';
+irf.FORM_DOWNLOAD_URL = 'http://sit.arthan.perdix.co.in:8080/sit_arthan_forms/formPrint.jsp';
+irf.BI_BASE_URL = "http://sit.arthan.perdix.co.in:8081/sit_arthan_bi";
+
+irf.ANALYTICS_WEB_URL = 'http://34.202.113.237:12345';
+irf.ANALYTICS_API_URL = 'http://34.202.113.237:1337';

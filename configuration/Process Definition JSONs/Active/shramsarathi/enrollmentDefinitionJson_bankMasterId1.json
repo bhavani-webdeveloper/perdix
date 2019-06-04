@@ -2681,7 +2681,7 @@
             "type": "string",
             "enumCode": "years_in_current_address",
             "captureStages": [
-              "BasicEnrolment","Application","ApplicationReview","Screening","Televerification","ScreeningReview","Sanction","Rejected","CreditCommitteeReview",
+              "BasicEnrolment",
               "Completed"
             ]
           },

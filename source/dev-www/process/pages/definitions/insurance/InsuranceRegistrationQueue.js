@@ -125,7 +125,8 @@ define({
 						}]
 					},
 					getActions: function() {
-						return [{
+						return [
+							{
 							name: "INSURANCE_POLICY",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
@@ -149,7 +150,39 @@ define({
 
 								return true;
 							}
-						}];
+							},
+							{
+								name: "REVERSE",
+								desc: "",
+								icon: "fa fa-pencil-square-o",
+								fn: function(item, index) {
+									debugger;
+									if(item.insuranceType == 'PAI'){
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "insurance.Registration",
+										pageId: item.id,
+										pageData:{
+											'insuranceReversal':true
+										}
+									});
+								}else if(item.insuranceType == 'TLI'){
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "insurance.RegistrationTLI",
+										pageId: item.id,
+										pageData:{
+											'insuranceReversal':true
+										}
+									});
+								}
+	
+								},
+								isApplicable: function(item, index) {
+									return true;
+								}
+							}
+						];
 					}
 				}
 			}

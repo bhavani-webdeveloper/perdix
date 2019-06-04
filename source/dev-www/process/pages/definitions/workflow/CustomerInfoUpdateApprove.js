@@ -1,5 +1,5 @@
 ///<amd-dependency path="perdixConfig/CustomerApprovalConfig" name="customerApproveConfig"/>
-define(["perdixConfig/customerApprovalConfig"], function (customerApproveConfig) {
+define(["perdixConfig/CustomerApprovalConfig"], function (customerApproveConfig) {
     caConfig = customerApproveConfig;
     return {
         pageUID: "workflow.CustomerInfoUpdateApprove",

@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerification"), ["$log", "SchemaResource", "SessionStore", "$state", "$stateParams", "$filter", "PageHelper", "formHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "$q",
-    function($log, SchemaResource, SessionStore, $state, $stateParams, $filter, PageHelper, formHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, $q) {
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerification"), ["$log", "SchemaResource", "SessionStore", "$state", "$stateParams", "$filter", "PageHelper", "formHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "$q","PaymentBank",
+    function($log, SchemaResource, SessionStore, $state, $stateParams, $filter, PageHelper, formHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, $q, PaymentBank) {
 
         var docRejectReasons = [];
         Queries.getLoanProductDocumentsRejectReasons().then(function(resp){
@@ -40,6 +40,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                 }).$promise.then(function(res) {
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
+                    model.loanAccountDisbursementSchedule.disbursementTransactionType = model.loanAccount.disbursementTransactionType;
                     $log.info("Loan account fetched");
                     Queries.getLoanProductDocuments(model.loanAccount.productCode, "MultiTranche", "DocumentUpload").then(function(docs) {
                         var docsForProduct = [];
@@ -130,6 +131,39 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                             key: "loanAccountDisbursementSchedule.customerBankBranchName",
                             title: "BRANCH_NAME",
                             "readonly":true
+                        },
+                        {
+                            "key": "loanAccountDisbursementSchedule.disbursementTransactionType",
+                            "title": "PAYMENT_MODE",
+                            "lovonly": true,
+                            "type": "lov",
+                            autolov: true,
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model, context) {
+                                var out = [{mode: "Manual"}];   
+                                if(model.loanAccount.disbursementTransactionType=="Auto"){
+                                    out.push({
+                                        mode: "Auto"
+                                    });
+                                } 
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": out.length
+                                    },
+                                    body: out
+                                });
+                            },
+                            onSelect: function(valueObj, model, context) {
+                                model.loanAccount.modeOfDisburments = valueObj.mode;
+                            },
+                            getListDisplayItem: function(item, index) {
+                                return [
+                                    item.mode                                
+                                ];
+                            },
+                            onChange: function(value, form, model) {
+                            
+                            }
                         }]
                     }]
                 },
@@ -332,23 +366,38 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
 
                         if (redirectToUploadFlag == true) {
                             reqData['stage'] = 'DocumentUpload';
-                        } else
-                            reqData['stage'] = 'ReadyForDisbursement';
-
-                        IndividualLoan.updateDisbursement(reqData, function(resp, header) {
-                            PageHelper.showProgress("upd-disb", "Done.", "5000");
-                            PageHelper.hideLoader();
-                            $state.go('Page.Engine', {
-                                pageName: 'loans.individual.disbursement.MultiTrancheQueue',
-                                pageId: null
+                            IndividualLoan.updateDisbursement(reqData, function(resp, header) {
+                                PageHelper.showProgress("upd-disb", "Done.", "5000");
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {
+                                    pageName: 'loans.individual.disbursement.MultiTrancheQueue',
+                                    pageId: null
+                                });
+                            }, function(resp) {
+                                PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
+                                PageHelper.showErrors(resp);
+    
+                            }).$promise.finally(function() {
+                                PageHelper.hideLoader();
                             });
-                        }, function(resp) {
-                            PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
-                            PageHelper.showErrors(resp);
 
-                        }).$promise.finally(function() {
-                            PageHelper.hideLoader();
-                        });
+                        } else{
+                            reqData['stage'] = 'ReadyForDisbursement';
+                            IndividualLoan.updateAndBatchMultiDisbursement(reqData, function(resp, header) {
+                                PageHelper.showProgress("upd-disb", "Done.", "5000");
+                                PageHelper.hideLoader();
+                                $state.go('Page.Engine', {
+                                    pageName: 'loans.individual.disbursement.MultiTrancheQueue',
+                                    pageId: null
+                                });
+                            }, function(resp) {
+                                PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
+                                PageHelper.showErrors(resp);
+    
+                            }).$promise.finally(function() {
+                                PageHelper.hideLoader();
+                            });
+                        }       
                     }
                 }
             }

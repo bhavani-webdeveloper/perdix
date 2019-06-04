@@ -379,9 +379,16 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "readonly": true
                     },
                     "PaymentDetails.customerId": {
-                        "condition":"model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds'",
+                        "condition":" model.payment.moduleRefId == undefined  && ( model.payment.paymentPurpose == 'Loan Disbursement' || model.payment.paymentPurpose == 'Security EMI Refunds' )" ,
                         "resolver": "PaymentCustomerIDLOVConfiguration"
-                    }         
+                    },
+                    "PaymentDetails.amount": {
+                        "condition":" model.payment.moduleRefId == undefined  && ( model.payment.paymentPurpose == 'Loan Disbursement'  )" ,
+                    },
+                    "PaymentDetails.fileId":{
+                        "condition": "model.payment.modeOfPayment=='CHEQUE'",
+                        "required": false
+                    },           
                 };
             }
             var getIncludes = function(model) {
@@ -389,6 +396,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "PaymentDetails",
                     "PaymentDetails.paymentPurpose",
                     "PaymentDetails.customerId",
+                    "PaymentDetails.customerIdRO",
+                    "PaymentDetails.amountRO",
                     "PaymentDetails.accountNumber",
                     "PaymentDetails.modeOfPayment",
                     "PaymentDetails.amount",
@@ -438,7 +447,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-                        model.payment.transactionType = "MANUAL";  
+                        model.payment.transactionType = "Manual";  
                         model.payment.currentStage = "PaymentInitiation";
 
                     UIRepository.getPaymentDetails().$promise
@@ -463,6 +472,20 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                             PageHelper.hideLoader();
                             model.PaymentProcess = res;
                             model.payment = res.payment;
+                            model.payment.customerIdRO= res.payment.customerId;
+                            model.payment.amountRO= res.payment.amount;
+
+                            if(!model.payment.modeOfPayment){
+                                var bankCode = model.payment.beneficiaryIfsc.substring(0,4);
+                                if( "RATN"==bankCode){
+                                        model.payment.modeOfPayment ="FT";
+                                }else if(model.payment.amount >= 200000 && model.payment.amount){
+                                    model.payment.modeOfPayment = "RTGS";
+                                }else{
+                                    model.payment.modeOfPayment = "NEFT";
+                                }
+                            }
+
                             UIRepository.getPaymentDetails().$promise
                             .then(function(repo) {
                                 return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
@@ -482,6 +505,27 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         "excludes": [                           
                         ],
                         "options": {
+                            "repositoryAdditions": {
+                                "PaymentDetails":{
+                                    "type": "box",
+                                    "items": {
+                                        "customerIdRO": {
+                                            "key": "payment.customerIdRO",
+                                            "title": "CUSTOMER_ID",
+                                            "readonly": true,
+                                            "orderNo": 2,
+                                            "condition": "model.payment.moduleRefId",
+                                        },
+                                        "amountRO": {
+                                            "key": "payment.amountRO",
+                                            "title": "AMOUNT",
+                                            "readonly": true,
+                                            "orderNo": 5,
+                                            "condition": "model.payment.moduleRefId",
+                                        }
+                                    }
+                                }
+                            },
                             "additions": [
                             {
                                 "type": "actionbox",
@@ -492,6 +536,11 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "type": "button",
                                         "title": "PROCEED",
                                         "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                    },
+                                    {
+                                        "type": "button",
+                                        "title": "REJECT",
+                                        "onClick": "actions.reject(model, formCtrl, form, $event)"
                                     },
                                     {
                                         "type": "button",

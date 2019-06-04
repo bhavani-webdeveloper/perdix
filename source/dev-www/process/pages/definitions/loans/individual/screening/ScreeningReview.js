@@ -196,11 +196,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningReview'
                                             loanAccount: res, 
                                         }
                                     });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'balance-sheet-history',
-                                        model: {customerUrn:res.urnNo, loanId:bundleModel.loanId}
-                                    });
 /*
                                      $this.bundlePages.push({
                                         pageClass: 'cb-check',

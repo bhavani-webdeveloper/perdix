@@ -300,15 +300,19 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 }
                             });
 
-                            $this.bundlePages.push({
-                                pageClass: 'portfolio-analytics',
-                                model: {
-                                    loanId: bundleModel.loanId
-                                }
-                            });
-
-
-                            deferred.resolve();
+                            Queries.isExistingCustomer(res.customerId).then(function(resp){
+                                if (resp.oldAccounts <= 0){
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analytics',
+                                        model: {
+                                            loanId: bundleModel.loanId
+                                        }
+                                    });
+                                }   
+                                deferred.resolve();
+                            },function(err){
+                                deferred.resolve();
+                            })
 
                         },
                         function(httpRes) {

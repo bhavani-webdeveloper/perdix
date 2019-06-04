@@ -95,6 +95,14 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
         updateDisbursement:{
             method:'PUT',
             url:endpoint+'/updateDisbursement'
+        }, 
+        updateDisbursementAndBatchDisbursement:{
+            method:'PUT',
+            url:endpoint+'/updateDisbursementAndBatchDisbursement'
+        }, 
+        updateAndBatchMultiDisbursement:{
+            method:'PUT',
+            url:endpoint+'/updateAndBatchMultiDisbursement'
         },       
          loadSingleLoanWithHistory:{
             method:'GET',

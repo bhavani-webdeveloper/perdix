@@ -3,7 +3,6 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalQueue"),
 ["$log","$stateParams", "formHelper","filterFilter", "Enrollment","Workflow","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
 function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
-	var currentStage = '';
 	return {
 		"type": "search-list",
 		"title": "WORKFLOW_SEARCH",
@@ -146,11 +145,9 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 					 	branchName = branch.name;
 					 }
 				}*/
-                currentStage = $stateParams.pageId;
-                console.log("currentStage - "+ currentStage);
-
+                var currentStage = $stateParams.pageId;
 				var promise = Workflow.search({
-                    "currentStage": $stateParams.pageId == 'InfoUpdateInit' ? 'Init' : ($stateParams.pageId == 'InfoUpdateApprove' ? 'Approve' : $stateParams.pageId)
+                    "currentStage": currentStage
                 }).$promise;
 
 				return promise;
@@ -223,48 +220,6 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
 				},
 				getActions: function(){
 					return [
-						{
-							name: "EDIT_CUSTOMER",
-							desc: "",
-							icon: "fa fa-pencil",
-							fn: function(item, model){
-								if (item.currentStage === 'Stage01') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "ProfileInformation",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'Stage02') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "AssetsLiabilitiesAndHealth",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'EDF') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "EDF",
-										pageId: item.id
-									});
-								}
-								else if (item.currentStage === 'Completed') {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "CustomerRUD",
-										pageId: item.id,
-										pageData: {
-											intent:'EDIT'
-										}
-									});
-								}
-							},
-							isApplicable: function(item, model){
-								return model.siteCode === "KGFS";
-							}
-						},
-
                         {
                             name: "EDIT_CUSTOMER",
                             desc: "",
@@ -287,11 +242,9 @@ function($log,$stateParams, formHelper,filterFilter, Enrollment,Workflow,Queries
                             desc: "",
                             icon: "fa fa-pencil",
                             fn: function(item, model){
-								debugger;
-								var pageName = currentStage == 'InfoUpdateApprove' ? 'workflow.CustomerInfoUpdateApprove': 'workflow.CustomerApprovalApprove';
                                 irfNavigator.go({
                                     state: "Page.Engine",
-                                    "pageName": pageName,
+                                    "pageName": 'workflow.CustomerApprovalApprove',
                                     "pageId": item.id
                                 });
                             },

@@ -58,6 +58,7 @@
         "Page/Adhoc/arohan.dashboard.lead.LeadDashboard",
         "Page/Adhoc/arohan.dashboard.CPV.CPVDashboard",
         "Page/Adhoc/arohan.dashboard.fcu.FcuQueue",
+        "Page/Adhoc/arthan.loans.LoanOriginationDashboard",
         
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",

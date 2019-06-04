@@ -199,14 +199,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     name: "Proceed to Disbursement",
                                     desc: "",
                                     fn: function(item, index){
-                                        entityManager.setModel('loans.individual.disbursement.Disbursement', {_disbursement:item});
-                                        var siteCode = SessionStore.getGlobalSetting("siteCode");
+                                       var siteCode = SessionStore.getGlobalSetting("siteCode");
                                         if(siteCode=="kinara"){
+                                            entityManager.setModel('kinara.loans.individual.disbursement.Disbursement', {_disbursement:item});
                                             $state.go("Page.Engine",{
                                                 pageName:"kinara.loans.individual.disbursement.Disbursement",
                                                 pageId:[item.loanId,item.id].join(".")
                                             });
                                         }else{
+                                            entityManager.setModel('loans.individual.disbursement.Disbursement', {_disbursement:item});
                                             $state.go("Page.Engine",{
                                                 pageName:"loans.individual.disbursement.Disbursement",
                                                 pageId:[item.loanId,item.id].join(".")

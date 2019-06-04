@@ -68,7 +68,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 }
             }
             var getThermalReceipt = function(opts,repaymentInfo,indvTransaction){
-                var thermalReceiptArray = [
+                return thermalReceiptArray = [
                     [1,4,"DUPLICATE RECEIPT"],
                     [1,4,SessionStore.getBankName()+" KGFS"],
                     [1,4,SessionStore.getBranch()],
@@ -575,8 +575,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                                 var data = prepareData(model,indvTransaction,indvTransaction.description || indvTransaction.transactionName,flag);
                                                                 var opts = data.opts;
                                                                 var repaymentInfo = data.repaymentInfo;
-                                                                webReceipt += GroupProcess.generateWebReceipt(repaymentInfo,opts,flag);
-                                                                thermalReceipt = thermalReceipt.concat(getThermalReceipt(opts,repaymentInfo,indvTransaction));
+                                                                var tempWeb = GroupProcess.generateWebReceipt(repaymentInfo,opts,flag);
+                                                                webReceipt += tempWeb + tempWeb;
+                                                                var tempRec = getThermalReceipt(opts,repaymentInfo,indvTransaction);
+                                                                thermalReceipt = thermalReceipt.concat(tempRec);
+                                                                thermalReceipt = thermalReceipt.concat(tempRec);
                                                             }
                                                             webReceipt += '</div>';
                                                             irfPrinter.printPreview({

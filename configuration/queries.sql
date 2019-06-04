@@ -95,9 +95,14 @@ customerFamilyMembers.list = SELECT family_member_first_name as `familyMemberFir
 customerNomineeMembers.list = SELECT family_member_first_name as `familyMemberFirstName`, family_member_last_name as familyMemberLastName, `gender` as gender, date_of_birth as `dateOfBirth`, relationship as `realtionShip`, enrollment_id as `enrollmentId` from family_details where customer_id = (select if( parent_customer_id != 0, parent_customer_id, id ) as  id from customer where id =:customerId) and relationship not in (:relationShip) and relationship in ('Father','Brother','Mother','Self','Son','Daughter','Sister','Wife','Husband')
 insuranceProducts.list = select distinct im.product_code as `productCode`, im.partner_code as `partnerCode`,m.id as `moduleConfigId`, im.insurance_type as insuranceType, im.premium_rate_code as `premiumRateCode` from  insurance_product_master im  inner join module_config_master m on m.module_name = im.product_code and m.bank_id = :bankId inner join product_type_master pm on m.module_name = pm.product_name inner join product_configuration pc on pc.product_id = pm.id where pc.bank_id = :bankId and branch_id = :branchId and insurance_type = :insuranceType
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
+collateralType.list=SELECT distinct machine_type as `collateralType`,depreciation_percentage as `depreciationPercentage` from machine_master 
 getBankName = SELECT bank_name from bank_master where id =:bankId
 getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
 getInsuranceDocuments.list = SELECT product_code as `productCode`,document_code as `documentCode`,is_mandatory as `isMandatory` from insurance_documents_master where product_code = :productCode
 getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id
 productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
 isLoanDisbursed = SELECT current_stage as `currentStage` from loan_account_disbursement_schedule where loan_id = :loanId 
+isExistingCustomer = SELECT count(1) as oldAccounts from loan_accounts where loan_disbursement_date <= now() and customer_id = :customerId
+
+
+getProductCategoryByEMI = SELECT product_category,security_emi_required from loan_product_category_master where security_emi_required = :securityEmiRequired 

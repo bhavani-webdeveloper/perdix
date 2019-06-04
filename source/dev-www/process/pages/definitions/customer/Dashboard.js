@@ -1,8 +1,8 @@
 
 irf.pageCollection.factory(irf.page("customer.Dashboard"),
-    ["$log", "$state", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "VisualizationCodeResource",
+    ["$log", "$state","$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "VisualizationCodeResource",
         "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "irfNavigator",
-        function ($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, VisualizationCodeResource,
+        function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, VisualizationCodeResource,
             PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator) {
 
 
@@ -15,9 +15,13 @@ irf.pageCollection.factory(irf.page("customer.Dashboard"),
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     var self = this;
+                    console.log("pageids ---"+$stateParams.pageId);
+                    var loanid=$stateParams.pageId;
+                    loanids=loanid.split(".");
+                    console.log("2nd value---"+loanids[1]);
                     model.queryData={
-                        loanId: model.customerId.loanCentre.loanId,
-                        customerId:model.customerId.customerId
+                        loanId: loanids[0],//model.customerId.loanCentre.loanId,
+                        customerId:loanids[1]//model.customerId.customerId
                     }
                     self.form = [{
 

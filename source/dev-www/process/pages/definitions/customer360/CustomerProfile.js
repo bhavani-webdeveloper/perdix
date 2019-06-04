@@ -120,8 +120,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     items:[
                                         {
                                             key:"customer.addressProof",
-                                            readonly:true,
-                                            //type:"select"
+                                            // readonly:true,
+                                            type:"select"
                                         },
                                         {
                                             key:"customer.addressProofImageId",
@@ -129,6 +129,17 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                             required: true,
                                             fileType:"application/pdf",
                                             using: "scanner"
+                                        },
+                                        {
+                                            key:"customer.udf.userDefinedFieldValues.udf40",
+                                           condition: "model.customer.addressProof === 'Aadhar Card'",
+                                            type:"file",
+                                            required: true,
+                                            fileType:"application/pdf", 
+                                            using: "scanner",
+                                            title: "Aadhar Declaration",
+                                            "category": "CustomerEnrollment",
+                                            "subCategory": "ADDRESSPROOF"
                                         },
                                         {
                                             key:"customer.addressProofNo",

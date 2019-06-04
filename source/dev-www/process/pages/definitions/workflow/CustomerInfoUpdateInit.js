@@ -1,5 +1,5 @@
 ///<amd-dependency path="perdixConfig/CustomerApprovalConfig" name="customerApproveConfig"/>
-define(["perdixConfig/customerApprovalConfig"], function (customerApproveConfig) {
+define(["perdixConfig/CustomerApprovalConfig"], function (customerApproveConfig) {
     caConfig = customerApproveConfig;
     return {
         pageUID: "workflow.CustomerInfoUpdateInit",
@@ -25,14 +25,14 @@ define(["perdixConfig/customerApprovalConfig"], function (customerApproveConfig)
             }
             var update = function (model, workflowId) {
                 irfProgressMessage.pop("cust-load", "Loading Customer Data...");
-                Workflow.getByID({ id: workflowId }, function (resp, header) {
+                Workflow.getByID({ id: workflowId }).$promise.then((resp)=>{
                     model.workflow = _.cloneDeep(resp);
                     model.UpdatedWorkflow = JSON.parse(model.workflow.temporary);
                     model.old = model.workflow.customer;
                     model.old.biometricCaptured = "Captured";
                     model.old.biometricNotCaptured = "Not Captured";
                     irfProgressMessage.pop("cust-load", "Load Complete", 2000);
-                }, function (resp) {
+                },(err) => {
                     irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
                 }).finally(function() {
                     irfProgressMessage.pop("cust-load", "Loading Customer Data...", 10);

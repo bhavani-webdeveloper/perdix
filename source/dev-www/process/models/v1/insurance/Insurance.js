@@ -41,7 +41,11 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
        search: searchResource({
             method: 'GET',
             url: endpoint + 'findInsurancePolicyDetails'
-       })
+       }),
+       cancelInsurance:{
+           method:'GET',
+           url:endpoint+'cancelInsurancePolicy?insurancePolicyId=:id'
+       }
  });
 
     

@@ -611,6 +611,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                         if(model.customer.customerBankAccounts){
                             var isPreferredCount=0;
                             var returnFlag=false;
+                            var totalDepositFlag= false;
                             angular.forEach(model.customer.customerBankAccounts,function(customerBankAC,key){
                                 if(customerBankAC.isTransactionAccount==="YES"){
                                     isPreferredCount++;
@@ -619,7 +620,16 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                         returnFlag =true;
                                     }
                                 }
+                                angular.forEach(customerBankAC.bankStatements,function(bankStatement,key){
+                                    if(bankStatement.udf1 == null || bankStatement.udf1==undefined){
+                                        PageHelper.showProgress("EmptyAccountDetails","Have to fill Total Deposits column in Bank Statements", 9000);
+                                        totalDepositFlag=true;
+                                    }
+                                })
                             });
+                            if(totalDepositFlag){
+                                return false;
+                            }
                             if(returnFlag){
                                 return false;
                             }
