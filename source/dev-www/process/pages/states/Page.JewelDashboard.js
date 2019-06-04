@@ -45,14 +45,14 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 			var ptqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.PendingTransitQueue"];
 			if (ptqMenu) {
 				JewelLoan.search({
-							"originBranchid"	  	: branch,
+							//"originBranchid"	  	: branch,
 							'currentStage'			:"PendingTransit",
 							//"fromDate"			: '',
 							//"toDate"			  	: '',	
 							//"urnNo"				: '',
 							//"accountNo"			: '',
 							"transitStatus"		    : 'PENDING_TRANSIT',
-							//"sourceBranchId"	    : originBranchId,	
+							"sourceBranchId"	    : branch,	
 							//"destinationBranchId" : originBranch
 							// 'page': 1,
 							// 'per_page': 1,
@@ -66,14 +66,14 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 			var itqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.IncomingTransitQueue"];		
 			if (itqMenu) {
 				JewelLoan.search({
-							"originBranchid"	  	: branch,
+							//"originBranchid"	  	: branch,
 							'currentStage'			:"IncomingTransit",
 							//"fromDate"			: '',
 							//"toDate"			  	: '',	
 							//"urnNo"				: '',
 							//"accountNo"			: '',
 							 "transitStatus"		: 'IN_TRANSIT',
-							//"sourceBranchId"	    : originBranchId,	
+							"sourceBranchId"	    : branch,	
 							//"destinationBranchId" : originBranch
 							// 'page'				: 1,
 							// 'per_page'			: 1,
@@ -86,14 +86,14 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 			var rrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.ReturnRequestQueue"];		
 			if (rrqMenu) {
 				JewelLoan.search({
-							"originBranchid"	  	: branch,
+							//"originBranchid"	  	: branch,
 							'currentStage'			:"ReturnRequest",
 							//"fromDate"			: '',
 							//"toDate"			  	: '',	
 							//"urnNo"				: '',
 							//"accountNo"			: '',
 							"transitStatus"			: 'RETURN_REQUESTED',
-							//"sourceBranchId"	    : originBranchId,	
+							"sourceBranchId"	    : branch,	
 							//"destinationBranchId" : originBranch
 							// 'page'				: 1,
 							// 'per_page'			: 1,

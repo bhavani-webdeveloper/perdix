@@ -328,7 +328,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "type": "date",
                                                                 "title": "FOLLOWUP_ON",
                                                                 "condition": "model.telecalling.applicant.telecallingResponse !='Reachable'",
-                                                                "required":true
+                                                                "required":true,
+                                                                onChange: function (value, form, model, event) {
+                                                                if(model.telecalling.applicant.followupCallRequired){
+                                                                    var followupCallRequiredDate = moment(model.telecalling.applicant.followupCallRequired, SessionStore.getSystemDateFormat());
+                                                                    var customerCalledDateValid = moment(model.telecalling.applicant.customerCalledDate, SessionStore.getSystemDateFormat());
+                                                                    if (followupCallRequiredDate <= customerCalledDateValid) {
+                                                                        model.telecalling.applicant.followupCallRequired = null;
+                                                                        PageHelper.showErrors({data:{error:"Followup Call Required Date always more than customer Called Date"}});
+                                                                        return false;
+                                                                        }
+                                                                    }
+                                                                }
                                                             },
                                                             {
                                                                 "key": "telecalling.applicant.customerCalledDate",
@@ -457,7 +468,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.telecallingRemarks = model.telecalling.applicant.telecallingRemarks;
                         model.applicant.customerCalledDate = (model.telecalling.applicant.customerCalledDate == moment().format(SessionStore.getSystemDateFormat())) ? model.telecalling.applicant.customerCalledDate : moment().format(SessionStore.getSystemDateFormat());
                         model.loanAccount.telecallingDetails.push(model.applicant);
-
+                        model.telecalling.applicant.customerCalledDate=moment().format(SessionStore.getSystemDateFormat());
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
                         model.loanCustomer.partyType = "loanCustomer";
                         model.loanCustomer.customerCalledAt = new Date();

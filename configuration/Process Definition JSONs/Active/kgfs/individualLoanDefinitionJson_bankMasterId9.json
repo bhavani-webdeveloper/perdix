@@ -13,6 +13,7 @@
          "smsCategory":"LoanBooking",
          "isAccountOpening":false,
          "riskScoreName":"RiskScore1",
+	"isSchemaValidationRequired":true,
          "allowedRoles":[
             "WM"
          ]

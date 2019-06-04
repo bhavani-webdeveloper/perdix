@@ -97,6 +97,7 @@ var getIncludes = function (model) {
                    "InsurancePolicyInformation.urnNo",
                    "InsurancePolicyInformation.insuranceRecommendations",
                    "InsurancePolicyInformation.recommendationStatus",
+                   "InsurancePolicyInformation.recommendationResponseMessage",
                    "InsurancePolicyInformation.question",
                    "InsurancePolicyInformation.accountNumber",
                    "InsurancePolicyInformation.accountType",
@@ -593,6 +594,7 @@ var getIncludes = function (model) {
                                        PageHelper.hideLoader();
                                    })
                                    .subscribe(function(value) {
+                                       value.insurancePolicyDetailsDTO.recommendationResponseMessage = '<p style="color:tomato" >'+value.insurancePolicyDetailsDTO.recommendationResponseMessage+'</p>';
                                        PageHelper.clearErrors();
                                    }, function(err) {
                                        PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);

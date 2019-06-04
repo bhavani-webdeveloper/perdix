@@ -175,6 +175,11 @@
                             "title": "udf5",
                             "type": "string",
                             "captureStages": ["Completed"]
+                        },
+                        "enrolledUrnNo":{
+                            "title": "URN NO",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }
@@ -210,6 +215,11 @@
                             "minimum": 0,
                             "maximum": 100,
                             "captureStages": ["Completed"]
+                        },
+                        "billDocId":{
+                            "title": "Expenditure Type",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"] 
                         }
                     }
                 }
@@ -464,7 +474,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 50,
-                        "captureStages": ["Completed"]
+                        "captureStages": ["BasicEnrolment","Completed"]
                     },
                     "doorNo": {
                         "title": "Door Number",
@@ -749,6 +759,13 @@
                         "minLength": 0,
                         "maxLength": 100,
                         "captureStages": ["Completed"]
+                    },
+                    "photoImageId": { 
+                        "title": "photoImageId",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["BasicEnrolment","Completed"]
                     }
                 }
             },
@@ -1805,6 +1822,16 @@
                         "maxLength": 45,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
+                    "photoImageId": {
+                        "title": "photoImageId",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                          "BasicEnrolment",
+                          "Completed"
+                        ]
+                    },
                     "mobilePhone": {
                         "title": "mobilePhone",
                         "type": "string",
@@ -2824,28 +2851,28 @@
                         "registrationType": {
                             "title": "Registration Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "registrationNumber": {
                             "title": "Registration Number",
                             "type": "number",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "registeredDate": {
                             "title": "Registration Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "expiryDate": {
                             "title": "Expiry Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "documentId":{
                             "type": "string",
-                            "captureStages": ["BasicEnrolment", "Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment", "Completed"]
                         }
                     }
                 }
@@ -2860,22 +2887,22 @@
                         "udf1": {
                             "title": "Business Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf2": {
                             "title": "Business Activity",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf3": {
                             "title": "Business Sector",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         },
                         "udf4": {
                             "title": "Expiry Date",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment","Completed"]
+                            "captureStages": ["Stage01","Stage02","BasicEnrolment","Completed"]
                         }
                     }
                 }

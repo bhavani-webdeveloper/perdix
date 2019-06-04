@@ -243,7 +243,15 @@
             "key":"insurancePolicyDetailsDTO.recommendationStatus",
             "title":"RECOMMENDATION_STATUS",
             "type":"string",
-            "orderNo":134
+            "orderNo":134,
+            "readonly":true
+         },
+         "recommendationResponseMessage":{  
+            "key":"insurancePolicyDetailsDTO.recommendationResponseMessage",
+            "title":"RECOMMENDATION_RESPONSE_MESSAGE",
+            "type":"html",
+            "orderNo":133,
+            "condition":"model.insurancePolicyDetailsDTO.recommendationStatus == 'FAILURE'"
          },
          "recommendationOverride":{  
             "key":"insurancePolicyDetailsDTO.recommendationOverride",

@@ -11,6 +11,7 @@
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
+	"isSchemaValidationRequired":true,
          "isAccountOpening":false,
          "riskScoreName":"RiskScore1",
          "allowedRoles":[

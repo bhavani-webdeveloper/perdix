@@ -1605,6 +1605,32 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     };
+
+    resource.getCustomerDetails= function(loan_id) {
+        var deferred = $q.defer();
+        var loan_id = Number(loan_id)
+        var request = {
+            "loan_id":loan_id
+        };
+        resource.getResult("customerDetails.list", request).then(
+            function(response){
+            deferred.resolve(response.results);
+        },deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.getCustomerInfo= function(customer_id) {
+        var deferred = $q.defer();
+        var request = {
+            "customer_id":customer_id
+        };
+        resource.getResult("customerInfo.list", request).then(function(response){
+            deferred.resolve(response.results);
+        },deferred.reject);
+        return deferred.promise;
+    }
+    
+    
     resource.isLoanDisbursed = function(loanId){
         var deferred = $q.defer();
         resource.getResult('isLoanDisbursed',{'loanId':loanId}).then(function(resp){

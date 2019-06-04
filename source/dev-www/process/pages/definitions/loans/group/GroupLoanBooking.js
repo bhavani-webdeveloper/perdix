@@ -467,21 +467,9 @@ define({
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
                         //Call Score API for group
-                        var ScoreDetails = Scoring.getGroupScore({
-                            //auth_token: AuthTokenHelper.getAuthData().access_token,
-                            GroupId: $stateParams.pageId,
-                            ScoreName: 'PPIScore'
-                        }).$promise.then(function(response){
-                            // console.log(response);
-                            PageHelper.hideLoader();
+                        PageHelper.hideLoader();
                             irfProgressMessage.pop('proceed', 'Operation Succeeded.Done.', 5000);
                             irfNavigator.goBack();
-                        },function(err){
-                            //console.log(err);
-                            PageHelper.hideLoader();
-                            irfProgressMessage.pop('proceed', 'Oops. Some error.', 2000);
-                            PageHelper.showErrors(err);
-                        });
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('proceed', 'Oops. Some error.', 2000);

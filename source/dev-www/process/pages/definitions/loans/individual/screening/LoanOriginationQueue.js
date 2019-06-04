@@ -9,7 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
-							"enumCode": "origination_stage",
+							"enumCode": "origination_stage1",
 							"x-schema-form": {
 								"type": "select",
 								"required": "true",

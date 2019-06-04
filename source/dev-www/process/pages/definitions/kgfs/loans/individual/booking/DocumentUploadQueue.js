@@ -41,34 +41,40 @@ define({
     
                         },
                         "centre": {
-                        "title": "CENTRE",
-                        "type": ["integer", "null"],
-                        "x-schema-form": {
-                            "type": "select",
-                            "enumCode": "centre",
-                            "parentEnumCode": "branch_id",
-                            "parentValueExpr": "model.branch",
-                            "screenFilter": true
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form":{
+                                "type": "select",
+                                "enumCode": "usercentre",
                             }
                         },
                         "applicantName": {
                         "title": "CUSTOMER_NAME",
-                        "type": "string"
+                        "type": ["string", "null"]
                         },
                         "urn": {
                             "title": "URN_NO",
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanAccountNo": {
                             "title": "LOAN_ACCOUNT_NO",
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanType": {
-                            "title": "PRODUCT_TYPE",
+                            "title": "LOAN_TYPE",
                             "enumCode": "booking_loan_type",
-                            "type": "string",
+                            "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select"
+                            }
+                        },
+                        "productCategory": {
+                            "title": "PRODUCT_CATEGORY",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "loan_product_category_master",
+                                "parentEnumCode":"booking_loan_type",
                             }
                         },
                         "partner_code": {
@@ -147,6 +153,7 @@ define({
                         'loanType':searchOptions.loanType,
                         'partnerCode': searchOptions.partner_code,
                         'page': pageOpts.pageNo,
+                        'productCategory':searchOptions.productCategory,
                         'per_page': pageOpts.itemsPerPage,
                     }).$promise;
                 },

@@ -315,6 +315,8 @@ define([], function () {
                     "LoanDetails.witnessDetails.witnessRelationship",
                     "LoanDetails.numberOfGuarantorsCoApplicants",
                     "LoanDetails.collectionPaymentType",
+                    "LoanDetails.modeOfDisbursement",
+                    
 
 
                     "NomineeDetails",
@@ -374,7 +376,7 @@ define([], function () {
                     "LoanSanction.sanctionDate",
                     "LoanSanction.scheduleDisbursementDate",
                     "LoanSanction.firstRepaymentDate",
-                    "LoanSanction.customerSignatureDate",
+                    // "LoanSanction.customerSignatureDate",
                     "LoanSanction.disbursementSchedules",
                     "LoanSanction.disbursementSchedules.trancheNumber",
                     "LoanSanction.disbursementSchedules.disbursementAmount",
@@ -387,7 +389,23 @@ define([], function () {
                     "loanProcess.loanAccount.currentStage": {
                         "LoanInitiation": {
                             "excludes": [],
-                            "overrides": {}
+                            "overrides": {
+                                "LoanSanction":{
+                                    "readonly":true,
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },                                
+                                "CollateralInformation" : {
+                                    "readonly":true,
+                                }
+                            }
                         },
                         "DSCOverride": {
                             "excludes": [],
@@ -504,7 +522,8 @@ define([], function () {
                         "orderNo": 1,
                         "type": "select",
                         "readonly": true,
-                        "enumCode": "centre"
+                        "enumCode": "centre",
+                        "readonly": true
                     },
                     "LoanDetails.loanType": {
                         "orderNo": 2,
@@ -528,6 +547,7 @@ define([], function () {
                     "LoanDetails.partner": {
                         "orderNo": 3,
                         "enumCode": "loan_partner",
+                        "readonly": true,
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
@@ -536,6 +556,7 @@ define([], function () {
                     },
                     "LoanDetails.frequency": {
                         "required":true,
+                        "readonly": true,
                         "enumCode": "loan_product_frequency",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -553,6 +574,7 @@ define([], function () {
                         },
                         autolov: true,
                         required: true,
+                        "readonly": true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var deferred = $q.defer();
@@ -597,11 +619,13 @@ define([], function () {
                         },
                     },
                     "LoanDetails.loanProductName":{
-                        "orderNo":4
+                        "orderNo":4,
+                        "readonly": true,
                     },
                     "LoanDetails.interestRate":{
                         "orderNo":6,
                         required:false,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.interestPlaceHolder",
                     },
                     "LoanDetails.loanPurpose1": {
@@ -609,6 +633,7 @@ define([], function () {
                         "type": "lov",
                         "autolov": true,
                         "lovonly":true,
+                        "readonly": true,
                         "title": "LOAN_PURPOSE_1",
                         bindMap: {},
                         outputMap: {
@@ -636,6 +661,7 @@ define([], function () {
                         "title": "LOAN_PURPOSE_2",
                         "type": "lov",
                         "lovonly":true,
+                        "readonly": true,
                         bindMap: {},
                         outputMap: {
                             "purpose2": "loanAccount.loanPurpose2"
@@ -661,6 +687,7 @@ define([], function () {
                         "orderNo": 8,
                         "type": "lov",
                         "lovonly":true,
+                        "readonly": true,
                         bindMap: {},
                         outputMap: {
                             "loan_purpose": "loanAccount.loanPurpose3"
@@ -680,6 +707,7 @@ define([], function () {
                     },
                     "LoanDetails.loanAmountRequested": {
                         "orderNo": 5,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.amountPlaceHolder",
                         onChange: function (value, form, model) {
                             model.loanAccount.disbursementSchedules[0].disbursementAmount = value;
@@ -692,6 +720,7 @@ define([], function () {
                     "LoanDetails.requestedTenure": {
                         "orderNo": 6,
                         required: true,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.tenurePlaceHolder",
                     },
                     "LoanDetials.witnessDetails": {
@@ -1054,8 +1083,11 @@ define([], function () {
                             }
                         }
                     },
+                    "LoanSanction.sanctionDate":{
+                        orderNo : 4,
+                    },
                     "LoanSanction.firstRepaymentDate": {
-                        orderNo : 5,
+                        orderNo : 6,
                         required : true,
                         onChange: function (value, form, model, event) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
@@ -1068,7 +1100,7 @@ define([], function () {
 
                     },
                     "LoanSanction.scheduleDisbursementDate": {
-                        orderNo : 4,
+                        orderNo : 5,
                         required: true,
                         onChange: function (value, form, model) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
@@ -1143,6 +1175,27 @@ define([], function () {
                     }
                     /* Collateral */
 
+                    /* ornamentsAppraisals */
+                    if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                        for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                            model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                            model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                        }
+                    }
+                    
+                    // if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
+                    //     model.loanAccount.sanctionDate = moment(new Date()).format("YYYY-MM-DD");
+                    // }
+                    if (typeof model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "undefined" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == null) {
+                        var disbursementSchedules = moment(model.loanAccount.sanctionDate).add(2, "d").format("YYYY-MM-DD");
+                        model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = disbursementSchedules;
+                    }
+                    if (typeof model.loanAccount.firstRepaymentDate == "undefined" || model.loanAccount.firstRepaymentDate == "" || model.loanAccount.firstRepaymentDate == null) {
+                        model.loanAccount.firstRepaymentDate = moment(model['loanAccount']['disbursementSchedules']['0']['scheduledDisbursementDate']).add(30, "d").format("YYYY-MM-DD");
+                    }
+
+                    /* ornamentsAppraisals */
+
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
                         var formRequest = {
@@ -1184,6 +1237,7 @@ define([], function () {
                                                     "title": "BORROWERS",
                                                     "type": "radios",
                                                     "orderNo": 8,
+                                                    "readonly":true,
                                                     "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4",
                                                     "titleMap": [{
                                                             value: "Father",
@@ -1214,12 +1268,14 @@ define([], function () {
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
+                                                    "readonly":true
                                                 },
                                                 "borrowersFatherName": {
                                                     "orderNo": 8,
                                                     "title": "FATHER_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
                                                     "type": "text",
+                                                    "readonly":true,
                                                     "key": "loanAccount.husbandOrFatherFirstName"
                                                 },
                                                 "borrowersRealtionship": {
@@ -1233,6 +1289,7 @@ define([], function () {
                                                     "title":"REQUIRED",
                                                     orderNo:4,
                                                     "type":"html",
+                                                    "readonly":true,
                                                     "condition":"model.loanAccount.productCode",
                                                     "key":"additions.noOfGuarantorCoApplicantHtml"
                                                 },
@@ -1245,12 +1302,21 @@ define([], function () {
                                                     "key": "loanAccount.collectionPaymentType",
                                                     "title": "Mode Of Repayment",
                                                     "type": "select",
+                                                    "readonly":true,
                                                     titleMap:{
                                                         "ACH":"ACH",
                                                         "PDC":"PDC",
                                                         "CASH":"CASH"
                                                     },
                                                     "orderNo": 120
+                                                },
+                                                "modeOfDisbursement": {
+                                                    "key":"loanAccount.psychometricCompleted",
+                                                    "title": "MODE_OF_DISBURSEMENT",
+                                                    "type": "select",
+                                                    "enumCode":"mode_of_disbursement",
+                                                    "orderNo": 110,
+                                                    "readonly":true,
                                                 }
 
                                             }
@@ -1688,13 +1754,22 @@ define([], function () {
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
                         }
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;
+                        }
+                        /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         if(!savePolicies(model)){
-                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
-                            return false;}
-                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
                         mapNomineeAddress(model);  
@@ -1703,6 +1778,15 @@ define([], function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+
+                                /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
 
                                 /* Collateral */
                                     if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
@@ -1790,6 +1874,15 @@ define([], function () {
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
+
+                        /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
                         
                         mapNomineeAddress(model);    
                         

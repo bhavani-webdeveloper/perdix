@@ -554,6 +554,35 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     {
                                                         "title": "Transaction Date",
                                                         "data": "transactionDateStr"
+                                                    },
+                                                    {
+                                                        'title':"Receipt",
+                                                        "data":"<div><i class='fa fa-print'></i></div>",
+                                                        'format' : 'html',
+                                                        'onClick':function(col,index){
+                                                            
+                                                            console.log(model);
+                                                            var listTrans = model.cbsLoan.transactions.filter(function(o){
+                                                                return o.transactionId == col.transactionId;
+                                                            })
+                                                            var webReceipt = '<div class="receipt-container"> <style> .receipt-container {display:grid;grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap:1em;} .single-receipt {margin:0px 12px 0px;}.single-receipt p {margin-bottom:2px;} .key-container p {display:grid;grid-template-columns:minmax(1px,1fr) minmax(1px,1.3fr);}</style>';
+                                                            var thermalReceipt = [];
+                                                            for (var i=0;i<listTrans.length;i++){
+                                                                var indvTransaction = listTrans[i];
+                                                                var flag = indvTransaction.transactionName == 'Disbursement' ? 0:1;
+                                                                var data = prepareData(model,indvTransaction,indvTransaction.description || indvTransaction.transactionName,flag);
+                                                                var opts = data.opts;
+                                                                var repaymentInfo = data.repaymentInfo;
+                                                                webReceipt += GroupProcess.generateWebReceipt(repaymentInfo,opts,flag);
+                                                                thermalReceipt = thermalReceipt.concat(getThermalReceipt(opts,repaymentInfo,indvTransaction));
+                                                            }
+                                                            webReceipt += '</div>';
+                                                            irfPrinter.printPreview({
+                                                                'paperReceipt': webReceipt,
+                                                                'thermalReceipt': thermalReceipt
+                                                            });
+
+                                                        }
                                                     }
                                                 ];
                                                 if (model.siteCode =='KGFS'){

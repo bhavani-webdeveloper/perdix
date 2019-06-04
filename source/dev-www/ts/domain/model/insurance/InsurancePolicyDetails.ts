@@ -30,6 +30,7 @@ export class InsurancePolicyDetails {
     recommendationAmount: number;
     recommendationOverride: string;
     recommendationRemarks: string;
+    recommendationResponseMessage:string;
     dscId: number;
     status: string;
     parentPolicyNumber: string;

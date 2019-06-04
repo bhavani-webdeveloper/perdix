@@ -173,6 +173,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     }
                     try {
                         var loanId = ($stateParams['pageId'].split('.'))[0];
+                        model.applicant = {};
                         var disbursementId = ($stateParams['pageId'].split('.'))[1];
                         $log.info("loanId ::" + loanId);
                         PageHelper.showLoader();
@@ -236,12 +237,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                             });
                         }
-                            if(model.siteCode == 'shramsarathi'){
-                                model.additional.netDisbursementAmount = Number(resp[0].amount);
-                            }else{
-                                model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
-                            }
-                            
+
+                            model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                             var j = 1;
                             if (model.additional.tempfees) {
                                 for (var i = 0; i < model.additional.tempfees.length; i++) {
@@ -325,6 +322,43 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                                 });
                             $log.info(model.customer);
+                            Queries.getCustomerDetails(loanId).then(function(res) {
+                                if(res[0].customerType == 'Enterprise'){
+                                 Queries.getCustomerInfo(res[0].applicantCustomerId).then(function(res){
+                                    model.applicant = res[0];
+                                    model.applicant.leftHandIndexImageId= res[0].left_hand_index_image_id
+                                    model.applicant.leftHandMiddleImageId= res[0].left_hand_middle_image_id;
+                                    model.applicant.leftHandRingImageId= res[0].left_hand_ring_image_id;
+                                    model.applicant.leftHandSmallImageId= res[0].left_hand_small_image_id;
+                                    model.applicant.leftHandThumpImageId= res[0].left_hand_thump_image_id;
+                                    model.applicant.rightHandIndexImageId= res[0].right_hand_index_image_id
+                                    model.applicant.rightHandMiddleImageId= res[0].right_hand_middle_image_id;
+                                    model.applicant.rightHandRingImageId= res[0].right_hand_ring_image_id;
+                                    model.applicant.rightHandSmallImageId= res[0].right_hand_small_image_id;
+                                    model.applicant.rightHandThumpImageId= res[0].right_hand_thump_image_id;
+                                 },function(error){
+                                    PageHelper.showErrors(error);
+                                 });
+                                }
+                                else if(res[0].customerType == 'Individual'){
+                                    model.applicant.leftHandIndexImageId= model.customer.leftHandIndexImageId;
+                                    model.applicant.leftHandMiddleImageId= model.customer.leftHandMiddleImageId;
+                                    model.applicant.leftHandRingImageId= model.customer.leftHandRingImageId;
+                                    model.applicant.leftHandSmallImageId= model.customer.leftHandSmallImageId;
+                                    model.applicant.leftHandThumpImageId= model.customer.leftHandThumpImageId;
+                                    model.applicant.rightHandIndexImageId= model.customer.rightHandIndexImageId;
+                                    model.applicant.rightHandMiddleImageId= model.customer.rightHandMiddleImageId;
+                                    model.applicant.rightHandRingImageId= model.customer.rightHandRingImageId;
+                                    model.applicant.rightHandSmallImageId= model.customer.rightHandSmallImageId;
+                                    model.applicant.rightHandThumpImageId= model.customer.rightHandThumpImageId;
+                                }
+                             }, function(httpRes) {
+                                 PageHelper.showErrors(httpRes);
+                             }).finally(function() {
+                                 PageHelper.hideLoader();
+                             });
+                            
+                           
                         },
                         function (resp) {
                             PageHelper.showProgress('loan-fetch', 'Oops. An Error Occurred', 5000);
@@ -466,7 +500,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         {
                             "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
                             "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays != '0' && model.CanChangeRepaymentDateIndisbursement",
-                            "title":"IREP_FIRST_REPAYMENT_DATE",
+                            "title":"FIRST_REPAYMENT_DATE",
                             "type":"date",
                             "readonly":true,
                             "onChange": function(value ,form ,model, event){
@@ -477,7 +511,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         {
                             "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
                             "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays == '0' && model.CanChangeRepaymentDateIndisbursement",
-                            "title":"IREP_FIRST_REPAYMENT_DATE",
+                            "title":"FIRST_REPAYMENT_DATE",
                             "type":"date",
                             "onChange": function(value ,form ,model, event){
                                 model.validateFirstRepaymentDate(model);
@@ -573,16 +607,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 subCategory: 'FINGERPRINT',
                                 helper: formHelper,
                                 biometricMap: {
-                                    leftThumb: "model.customer.leftHandThumpImageId",
-                                    leftIndex: "model.customer.leftHandIndexImageId",
-                                    leftMiddle: "model.customer.leftHandMiddleImageId",
-                                    leftRing: "model.customer.leftHandRingImageId",
-                                    leftLittle: "model.customer.leftHandSmallImageId",
-                                    rightThumb: "model.customer.rightHandThumpImageId",
-                                    rightIndex: "model.customer.rightHandIndexImageId",
-                                    rightMiddle: "model.customer.rightHandMiddleImageId",
-                                    rightRing: "model.customer.rightHandRingImageId",
-                                    rightLittle: "model.customer.rightHandSmallImageId"
+                                    leftThumb: "model.applicant.leftHandThumpImageId",
+                                    leftIndex: "model.applicant.leftHandIndexImageId",
+                                    leftMiddle: "model.applicant.leftHandMiddleImageId",
+                                    leftRing: "model.applicant.leftHandRingImageId",
+                                    leftLittle: "model.applicant.leftHandSmallImageId",
+                                    rightThumb: "model.applicant.rightHandThumpImageId",
+                                    rightIndex: "model.applicant.rightHandIndexImageId",
+                                    rightMiddle: "model.applicant.rightHandMiddleImageId",
+                                    rightRing: "model.applicant.rightHandRingImageId",
+                                    rightLittle: "model.applicant.rightHandSmallImageId"
                                 },
                                 viewParams: function (modelValue, form, model) {
                                     return {
@@ -599,16 +633,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             fieldHtmlClass: "btn-block",
                             onClick: function (model, form, formName) {
                                 var fingerprintObj = {
-                                    'LeftThumb': model.customer.leftHandThumpImageId,
-                                    'LeftIndex': model.customer.leftHandIndexImageId,
-                                    'LeftMiddle': model.customer.leftHandMiddleImageId,
-                                    'LeftRing': model.customer.leftHandRingImageId,
-                                    'LeftLittle': model.customer.leftHandSmallImageId,
-                                    'RightThumb': model.customer.rightHandThumpImageId,
-                                    'RightIndex': model.customer.rightHandIndexImageId,
-                                    'RightMiddle': model.customer.rightHandMiddleImageId,
-                                    'RightRing': model.customer.rightHandRingImageId,
-                                    'RightLittle': model.customer.rightHandSmallImageId
+                                    'LeftThumb': model.applicant.leftHandThumpImageId,
+                                    'LeftIndex': model.applicant.leftHandIndexImageId,
+                                    'LeftMiddle': model.applicant.leftHandMiddleImageId,
+                                    'LeftRing': model.applicant.leftHandRingImageId,
+                                    'LeftLittle': model.applicant.leftHandSmallImageId,
+                                    'RightThumb': model.applicant.rightHandThumpImageId,
+                                    'RightIndex': model.applicant.rightHandIndexImageId,
+                                    'RightMiddle': model.applicant.rightHandMiddleImageId,
+                                    'RightRing': model.applicant.rightHandRingImageId,
+                                    'RightLittle': model.applicant.rightHandSmallImageId
                                 };
                                 if (model.fingerPrintDeviceType == "MANTRA") {
                                     BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {

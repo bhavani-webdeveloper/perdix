@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource","Lead","irfStorageService"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource","Lead","irfStorageService", "irfNavigator"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource,Lead,irfStorageService) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource,Lead,irfStorageService, irfNavigator) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -250,6 +250,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "KYC.IdentityProof1.addressProofSameAsIdProof": {
                             condition: "model.customer.identityProof"
                         },
+                        "KYC.IdentityProof1.identityProof": {
+                             onChange: function (value, form, model, event) {
+                                if(model.customer.identityProof == 'Aadhar card')
+                                    model.customer.identityProofNo=model.customer.aadhaarNo;
+                               else
+                                    model.customer.identityProofNo=null;
+                            }                            
+                        },
                         "KYC.addressProof1": {
                             condition: "!model.customer.addressProofSameAsIdProof",
                         },
@@ -261,6 +269,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             },
                             fileType: "image/*",
                             offline: false,
+                        },
+                        "KYC.addressProof1.addressProof": {
+                             onChange: function (value, form, model, event) {
+                                if(model.customer.addressProof == 'Aadhar card')
+                                   model.customer.addressProofNo=model.customer.aadhaarNo;
+                               else
+                                   model.customer.addressProofNo=null;
+                            }
+                            
                         },
                         "KYC.addressProof1.addressProofReverseImageId": {
                             "viewParams": function(modelValue, form, model) {
@@ -276,9 +293,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 if(model.customer.idProofIssueDate){
                                     model.customer.idProofValidUptoDate = "";
                                 }
-                            }
+                            },
+                            required:true
                         },
                         "KYC.IdentityProof1.idProofValidUptoDate":{
+                            required:true,
                             onChange: function (value, form, model, event) {
                                 if(model.customer.idProofValidUptoDate){
                                     var idProof1IssueDate = moment(model.customer.idProofIssueDate, SessionStore.getSystemDateFormat());
@@ -397,7 +416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             type: "qrcode",
                         },
                         "AdditionalKYC.additionalKYCs": {
-                            startEmpty: true,
+                           // startEmpty: true,
                             "schema": {
                                 "maxItems": 1
                             },
@@ -416,7 +435,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "familyDetails.familyMembers": {
                             "startEmpty":true,
-                            titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                            titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Member')",
                             onArrayAdd: function(value, form, model, formCtrl, event) {
                                 if ((model.customer.familyMembers.length - 1) === 0) {
                                     model.customer.familyMembers[0].relationShip = 'Self';
@@ -1033,10 +1052,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "BusinessOccupationDetails.agricultureDetails.nonIrrigated",
                     "BusinessOccupationDetails.agricultureDetails.irrigated",
                     "BusinessOccupationDetails.agricultureDetails.harvestMonth",
-                    "BusinessOccupationDetails.agricultureDetails.landArea",
-                    "Biometric",
-                    "Biometric.CaptureFingerPrint",
-                    "Biometric.FingerPrintSection",
+                    "BusinessOccupationDetails.agricultureDetails.landArea", 
+                    "Biometric",		
+                    "Biometric.CaptureFingerPrint",		
+                    "Biometric.FingerPrintSection",                   
                     "HouseVerification",
                     "HouseVerification.fullName",
                     "HouseVerification.nameInLocalLanguage",
@@ -1099,8 +1118,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 model.customer.street = res.addressLine2;
                                 model.customer.doorNo = res.addressLine1;
                                 model.customer.locality = res.area;
+                                model.customer.district = res.district;
+                                model.customer.mailingDistrict = res.district;
+                                model.customer.mailingState=res.state;
+                                model.customer.mailingPincode=res.pincode;
+                                model.customer.mailingStreet = res.addressLine2;
+                                model.customer.mailingDoorNo = res.addressLine1;
+                                model.customer.mailingLocality = res.area;
                                 model.customer.villageName = res.cityTownVillage;
                                 model.customer.landLineNo = res.alternateMobileNo;
+                                model.customer.kgfsBankName = SessionStore.getBankName();
                                 model.customer.age = moment().diff(moment(res.dob, SessionStore.getSystemDateFormat()), 'years');
                             },
                             function(err) {
@@ -1404,26 +1431,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             $q.all(fpPromisesArr).then(function(){
                                 /** Valid check whether the user have enrolled or fingerprints or not **/
-                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                                 )) {
-                                     PageHelper.showErrors({
-                                        "data": {
-                                            "error": "Fingerprints are not enrolled. Please check"
-                                        }
-                                    });
-                                     PageHelper.hideLoader();
-            
-                                     return;
-                                 }
+                                
+                                if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&		                                
+                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&		
+                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&		
+                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&		
+                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&		
+                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&		
+                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&		
+                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&		
+                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&		
+                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])		
+                                 )) {		
+                                     PageHelper.showErrors({		
+                                        "data": {		
+                                            "error": "Fingerprints are not enrolled. Please check"		
+                                        }		
+                                    });		
+                                     PageHelper.hideLoader();		
+            		
+                                     return;		
+                                 }		
                             
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
@@ -1565,26 +1593,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             $q.all(fpPromisesArr).then(function(){
                                 /** Valid check whether the user have enrolled or fingerprints or not **/
-                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                                 )) {
-                                     console.log(reqData);
-                                     PageHelper.showErrors({
-                                        "data": {
-                                            "error": "Fingerprints are not enrolled. Please check"
-                                        }
-                                    });
-                                     PageHelper.hideLoader();
-                                     return;
-                                 }
+                                if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&		                               
+                                _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&		
+                               _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&		
+                                _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&		
+                                 _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&		
+                                 _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&		
+                                _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&		
+                                 _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&		
+                                _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&		
+                                 _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])		
+                             )) {		
+                                 console.log(reqData);		
+                                 PageHelper.showErrors({		
+                                    "data": {		
+                                        "error": "Fingerprints are not enrolled. Please check"		
+                                    }		
+                                });		
+                                 PageHelper.hideLoader();		
+                                 return;		
+                             }
                             
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
@@ -1677,7 +1705,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                         model.customer = _.clone(res.customer);
                                         model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                                         model = EnrollmentHelper.fixData(model);
-                                        //$state.go('Page.Landing', null);
+                                        irfNavigator.goBack();
                                     }, function(err) {
                                         Utils.removeNulls(res.customer, true);
                                         model.customer = res.customer;

@@ -33,20 +33,38 @@ define({
                                 "screenFilter": true
                             }
                         },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form":{
+                                "type": "select",
+                                "enumCode": "usercentre",
+                            }
+                        },
                         "applicantName": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string"
+                            "title": "CUSTOMER_NAME",
+                            "type": "string",
+                            "type": ["string", "null"],
                         },
                         "urn": {
                             "title": "URN_NO",
-                            "type": "string"
+                            "type": ["string", "null"]
                         },
                         "loanType": {
-                            "title": "PRODUCT_TYPE",
+                            "title": "LOAN_TYPE",
                             "enumCode": "booking_loan_type",
-                            "type": "string",
+                            "type": ["string", "null"],
                             "x-schema-form": {
                                 "type": "select"
+                            }
+                        },
+                        "productCategory": {
+                            "title": "PRODUCT_CATEGORY",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "loan_product_category_master",
+                                "parentEnumCode":"booking_loan_type",
                             }
                         },
                         "partner_code": {
@@ -69,10 +87,12 @@ define({
                     var promise = IndividualLoan.search({
                         'stage': 'LoanInitiation',
                         'branchId': searchOptions.branch,
+                        'centreCode': searchOptions.centre,
                         'applicantName': searchOptions.applicantName,
                         'urn': searchOptions.urn,
                         'loanType':searchOptions.loanType,
                         'partnerCode': searchOptions.partner_code,
+                        'productCategory':searchOptions.productCategory,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;

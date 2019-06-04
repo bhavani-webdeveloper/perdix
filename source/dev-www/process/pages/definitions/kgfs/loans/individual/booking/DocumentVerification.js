@@ -51,11 +51,13 @@ define({
                             var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
                             if (documentObj != null) {
                                 loanDocuments[i].$title = documentObj.document_name;
+                                loanDocuments[i].$formsKey = documentObj.forms_key;
+                                loanDocuments[i].$downloadRequired = documentObj.download_required;
                             } else {
                                 if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                     loanDocuments[i].$title = loanDocuments[i].document;
                                 } else {
-                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
+                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                 }
                             }
                         }
@@ -72,7 +74,7 @@ define({
             },
             eventListeners: {
                 "teleVerification-capture": function(bundleModel, model, params){
-                    model.loanAccount.telecallingDetails = params.customer.telecallingDetails;            
+                    model.loanAccount.telecallingDetails = params.loanAccount.telecallingDetails;            
                 }
             },
             form: [
@@ -117,8 +119,24 @@ define({
                                         "key": "loanAccount.loanDocuments[].$title",
                                         "notitle": true,
                                         "title": " ",
-                                        "readonly": true
-                                    }]
+                                        "readonly": true,
+                                        "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].$title",
+                                            "type": "anchor",
+                                            "fieldHtmlClass": "text-bold",
+                                            "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
+                                            "onClick": function (model, form, schemaForm, event) {
+                                                var doc = model.loanAccount.loanDocuments[event.arrayIndex];
+                                                console.log(doc);
+                                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                // Utils.downloadFile(Misc.allFormsDownload());
+                                            }
+                                    }, {
+                                            "key": "loanAccount.loanDocuments[].$title",
+                                            "notitle": true,
+                                            "title": " ",
+                                            "condition": "!model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
+                                            "readonly": true
+                                        }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
@@ -195,7 +213,7 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentId",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
@@ -205,7 +223,7 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-5",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED'",
+                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentId",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,

@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 */
 		return {
 			"type": "search-list",
-			"title": siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'KGFS' ? "READY_FOR_ENROLMENT" :"READY_FOR_SCREENING",
+			"title": siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'KGFS' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -267,10 +267,10 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 									});
 								} else if (siteCode == 'KGFS') {
 									$state.go("Page.Engine", {
-										pageName: "kgfs.customer.Enrollment",
+										pageName: "ProfileInformation",
 										pageId: item.accountId,
 										pageData: {
-											pageData: item
+											lead_id: item.id
 										}
 										
 									});

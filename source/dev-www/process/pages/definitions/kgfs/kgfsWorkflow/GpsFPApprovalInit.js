@@ -474,47 +474,47 @@ define({
                         },
                     ]
                 },
-                {
-                    type: "fieldset",
-                    title: "VALIDATE_BIOMETRIC",
-                    condition: "model.customer.isFingerPrintChanged == 'YES'",
-                    items: [{
-                        key: "customer.isBiometricValidated",
-                        //required:true,
-                        "title": "CHOOSE_A_FINGER_TO_VALIDATE",
-                        type: "validatebiometric",
-                        category: 'CustomerEnrollment',
-                        subCategory: 'FINGERPRINT',
-                        helper: formHelper,
-                        biometricMap: {
-                            leftThumb: "model.customer.newLeftHandThumpImageId",
-                            leftIndex: "model.customer.newLeftHandIndexImageId",
-                            leftMiddle: "model.customer.newLeftHandMiddleImageId",
-                            leftRing: "model.customer.newLeftHandRingImageId",
-                            leftLittle: "model.customer.newLeftHandSmallImageId",
-                            rightThumb: "model.customer.newRightHandThumpImageId",
-                            rightIndex: "model.customer.newRightHandIndexImageId",
-                            rightMiddle: "model.customer.newRightHandMiddleImageId",
-                            rightRing: "model.customer.newRightHandRingImageId",
-                            rightLittle: "model.customer.newRightHandSmallImageId"
-                        },
-                        viewParams: function (modelValue, form, model) {
-                            return {
-                                customerId: model.customer.id
-                            };
-                        },
-                    }, {
-                        "key": "customer.biometricEnrollment",
-                        title: "BIOMETRIC_AUTHENTICATION",
-                        type: "select",
-                        titleMap: {
-                            "NOT-ENABLE": "NOT-ENABLE",
-                            "PENDING": "PENDING",
-                            "AUTHENTICATED": "AUTHENTICATED"
-                        }
-                    },
-                    ]
-                },
+                // {
+                //     type: "fieldset",
+                //     title: "VALIDATE_BIOMETRIC",
+                //     condition: "model.customer.isFingerPrintChanged == 'YES'",
+                //     items: [{
+                //         key: "customer.isBiometricValidated",
+                //         //required:true,
+                //         "title": "CHOOSE_A_FINGER_TO_VALIDATE",
+                //         type: "validatebiometric",
+                //         category: 'CustomerEnrollment',
+                //         subCategory: 'FINGERPRINT',
+                //         helper: formHelper,
+                //         biometricMap: {
+                //             leftThumb: "model.customer.newLeftHandThumpImageId",
+                //             leftIndex: "model.customer.newLeftHandIndexImageId",
+                //             leftMiddle: "model.customer.newLeftHandMiddleImageId",
+                //             leftRing: "model.customer.newLeftHandRingImageId",
+                //             leftLittle: "model.customer.newLeftHandSmallImageId",
+                //             rightThumb: "model.customer.newRightHandThumpImageId",
+                //             rightIndex: "model.customer.newRightHandIndexImageId",
+                //             rightMiddle: "model.customer.newRightHandMiddleImageId",
+                //             rightRing: "model.customer.newRightHandRingImageId",
+                //             rightLittle: "model.customer.newRightHandSmallImageId"
+                //         },
+                //         viewParams: function (modelValue, form, model) {
+                //             return {
+                //                 customerId: model.customer.id
+                //             };
+                //         },
+                //     }, {
+                //         "key": "customer.biometricEnrollment",
+                //         title: "BIOMETRIC_AUTHENTICATION",
+                //         type: "select",
+                //         titleMap: {
+                //             "NOT-ENABLE": "NOT-ENABLE",
+                //             "PENDING": "PENDING",
+                //             "AUTHENTICATED": "AUTHENTICATED"
+                //         }
+                //     },
+                //     ]
+                // },
                 {
                     "type": "actionbox",
                     "items": [

@@ -182,6 +182,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess,
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -193,6 +194,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess,
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
@@ -396,6 +398,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "business-updated": function(pageObj, bundlePageObj, obj) {
                         /* Update other pages */
                         BundleManager.broadcastEvent("business-updated", obj);
+                    },
+                    "business-customer-bank-account": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("business-customer-bank-accounts", params);
                     },
                     "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
                         if (enrolmentDetails.customerId){
