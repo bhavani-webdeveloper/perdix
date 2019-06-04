@@ -117,6 +117,7 @@
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/Adhoc/management.VillageCreationDashboard",
+                "Page/Engine/management.Patch",
                 "Page/Adhoc/management.branchadmin.BranchAdminDashboard",
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
