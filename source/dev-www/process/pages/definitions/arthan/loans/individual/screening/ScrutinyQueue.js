@@ -13,7 +13,7 @@ define({
 	    }
 		return {
 			"type": "search-list",
-			"title": "SCRUTINY_QUEUE",
+			"title": "PRE_PD_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;
@@ -93,7 +93,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-                        'stage': 'Scrutiny',
+                        'stage': 'PrePD',
 	                    'branchName':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -179,7 +179,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "SCRUTINY_QUEUE",
+							name: "PRE_PD_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

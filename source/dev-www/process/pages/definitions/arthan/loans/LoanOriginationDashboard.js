@@ -19,15 +19,12 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/arthan.loans.individual.screening.FieldAppraisalQueue",
             //"Page/Engine/arthan.loans.individual.screening.RcuQueue",  
             "Page/Engine/arthan.loans.individual.screening.FieldAppraisalReviewQueue",
-            "Page/Engine/arthan.loans.individual.screening.RCUQueue1",
-           // "Page/Engine/arthan.loans.individual.screening.RCU_Review1",
             "Page/Engine/arthan.loans.individual.screening.ValuationQueue",
-            //"Page/Engine/arthan.loans.individual.screening.ValuationReview",
             "Page/Engine/arthan.loans.individual.screening.LegalQueue",
-           // "Page/Engine/arthan.loans.individual.screening.LegalReview",
+            "Page/Engine/arthan.loans.individual.screening.RCUQueue1",
             "Page/Engine/arthan.loans.individual.screening.ZonalRiskReviewQueue",
             "Page/Engine/arthan.loans.individual.screening.CentralRiskReviewQueue",
-            // "Page/Engine/arthan.loans.individual.screening.FieldAppraisalReview",
+           // "Page/Engine/arthan.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/arthan.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/arthan.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arthan.loans.individual.screening.RejectedQueue",
@@ -231,7 +228,7 @@ if (aqMenu) {
 var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.FieldAppraisalQueue"];
 if (faqMenu) {
     IndividualLoan.search({
-        'stage': 'FieldAppraisal',
+        'stage': 'PD',
         'enterprisePincode': '',
         'applicantName': '',
         'area': '',
@@ -268,7 +265,7 @@ if (faqMenu) {
 var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.FieldAppraisalReviewQueue"];
             if (farqMenu) {
                 IndividualLoan.search({
-                    'stage': 'FieldAppraisalReview',
+                    'stage':'LocalCredit',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -304,7 +301,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
         var scqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.ScrutinyQueue"];
         if (scqMenu) {
             IndividualLoan.search({
-                'stage': 'Scrutiny',
+                'stage': 'PrePD',
                 'enterprisePincode': '',
                 'applicantName': '',
                 'area': '',
@@ -319,7 +316,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
             });
         }
 
-        var rcuMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.RcuQueue"];
+        var rcuMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.RCUQueue1"];
         if (rcuMenu) {
             IndividualLoan.search({
                 'stage': 'RCU',
@@ -334,6 +331,42 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.ind
                 rcuMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 rcuMenu.data = '-';
+            });
+        }
+
+        var valuationMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.ValuationQueue"];
+        if (valuationMenu) {
+            IndividualLoan.search({
+                'stage': 'Valuation',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                valuationMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                valuationMenu.data = '-';
+            });
+        }
+
+        var legalMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arthan.loans.individual.screening.LegalQueue"];
+        if (legalMenu) {
+            IndividualLoan.search({
+                'stage': 'Legal',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                legalMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                legalMenu.data = '-';
             });
         }
 

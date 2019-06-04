@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "Scrutiny",
+                    "title": "Pre PD",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
@@ -160,7 +160,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "Scrutiny";
+                        bundleModel.currentStage = "PrePD";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -327,7 +327,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'Scrutiny');
+                        BundleManager.broadcastEvent('origination-stage', 'PrePD');
                     },
                     eventListeners: {
                         "on-customer-load": function(pageObj, bundleModel, params){

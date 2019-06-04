@@ -5,7 +5,7 @@ define({
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
     	return {
 			"type": "search-list",
-			"title": "FIELD_APPRAISAL_QUEUE",
+			"title": "PD_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 
@@ -94,7 +94,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'FieldAppraisal',
+	                    'stage': 'PD',
 	                    'centreCode':centreId[0],
 	                    'branchName':branch.branchName,
 	                    'enterprisePincode':searchOptions.pincode,
@@ -172,7 +172,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "FIELD_APPRAISAL",
+							name: "PD",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

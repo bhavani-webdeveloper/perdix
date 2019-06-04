@@ -99,7 +99,8 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Application',
+						//'stage': 'Valuation',
+						'stage': 'Application',
 	                    'centreCode':searchOptions.centreCode,
 						'branchName':branch,
 						'enterprisePincode':searchOptions.pincode,
@@ -200,7 +201,7 @@ define({
 								entityManager.setModel('arthan.loans.individual.screening.ValuationReview', {
 									_request: item
 								});
-								$state.go("Page.Engine", {
+								$state.go("Page.Bundle", {
 									pageName: "arthan.loans.individual.screening.ValuationReview",
 									pageId: item.loanId
 								});
