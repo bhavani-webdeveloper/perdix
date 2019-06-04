@@ -12,6 +12,17 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
             var configFile = function () {
                 return {
+                    'isReversalFlag':{
+                        "true":{
+                            "excludes":[
+                                'actionboxBeforeSave',
+                                'actionboxAfterSave'
+                            ],
+                            "overrides":{
+
+                            },
+                        }
+                    },
                     "idPresent": {
                         "true": {
                             "excludes": [],
@@ -27,7 +38,8 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                 },
                             }
                         }
-                    }
+                    },
+                    
                 }
             }
 
@@ -105,9 +117,11 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
                     "actionboxBeforeSave",
                     "actionboxBeforeSave.save",
-                       "actionboxAfterSave",
-                       "actionboxAfterSave.OnlinePrint",
-                       "actionboxAfterSave.Back"
+                    "actionboxAfterSave",
+                    "actionboxAfterSave.OnlinePrint",
+                    "actionboxAfterSave.Back",
+                    "Reversal",
+                    "Reversal.Reverse"
                 ];
 
             }
@@ -289,7 +303,6 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                     "orderNo": 4,
                                     "title": "VALIDATE_BIOMETRIC",
                                     "items": {
-
                                         "fpOverrideRequested": {
                                             key: "insurancePolicyDetailsDTO.fpOverrideRequested",
                                             type: "checkbox",
@@ -306,7 +319,6 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                             "title": "OVERRIDE_REMARKS",
                                             condition: "model.insurancePolicyDetailsDTO.fpOverrideRequested"
                                         },
-
                                         "fpOverrideStatus": {
                                             key: "insurancePolicyDetailsDTO.fpOverrideStatus",
                                             type: "select",
@@ -351,10 +363,18 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                         }
                                     }
                                 },
+                                "Reversal":{  
+                                    "type":"actionbox",
+                                    "condition": "model.insurancePolicyDetailsDTO.id && model.isReversalFlag =='true'" , 
+                                    "items":{
+                                       "Reverse":{
+                                          "type":"button",
+                                          "title":"Reverse",
+                                          "onClick":"actions.reverse(model, formCtrl, form, $event)"
+                                       },
+                                    }
+                                 }
                             }
-
-
-
                         },
                         "overrides": {
                             "InsurancePolicyInformation": {
@@ -417,6 +437,9 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
                     if (_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
+                        if($stateParams.pageData){
+                            model.isReversalFlag = $stateParams.pageData.insuranceReversal == true ? 'true' : 'false';
+                        }
                         InsuranceProcess.fromInsurancePolicyID($stateParams.pageId)
                             .subscribe(function (insuranceProcess) {
                                 model.insuranceProcess = insuranceProcess;
@@ -629,6 +652,27 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                 PageHelper.hideLoader();
                             });
 
+                    },
+                    reverse: function(model,formCtrl,form,$event){
+                        Utils.confirm('Are you sure want to Reverse Insurance').then(function(resp){
+                            if (model.insurancePolicyDetailsDTO.purchaseDate == moment().format('YYYY-MM-DD')){
+                                PageHelper.showLoader();
+                                Insurance.cancelInsurance({id:model.insurancePolicyDetailsDTO.id}).$promise.then(function(resp){
+                                    PageHelper.hideLoader();
+                                    PageHelper.showProgress('Insurance','Insurance Reversal is done.',3000);
+                                    irfNavigator.goBack();
+                                },function(err){
+                                    PageHelper.hideLoader();
+                                    PageHelper.showErrors(err);
+                                })
+                            }
+                            else{
+                                PageHelper.showErrors({data:{error:'OOPS! Only Insurance which are creadted today can be Reversal'}})
+                                PageHelper.hideLoader();
+                            }
+                        },function(err){
+                            PageHelper.hideLoader();
+                        })
                     }
                 }
             };
