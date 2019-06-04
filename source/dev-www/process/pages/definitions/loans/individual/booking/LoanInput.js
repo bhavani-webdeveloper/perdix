@@ -1056,8 +1056,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
                                 required: true,
+                                readonly:true,
                                 enumCode: "decisionmaker",
-                                "condition" : "model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired && model.siteCode != 'shramsarathi'"
+                                "condition" : "model.siteCode=='kinara' && model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired && model.siteCode != 'shramsarathi'"
+                            },
+                            {
+                                key:"loanAccount.securityEmiRejectReason",
+                                type:"select",
+                                required: true,
+                                readonly:true,
+                                "title":"REASON",
+                                "condition" : "model.siteCode=='kinara' && model.loanAccount.securityEmiRequired=='No'"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",

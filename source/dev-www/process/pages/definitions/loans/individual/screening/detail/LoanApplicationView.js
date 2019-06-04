@@ -336,7 +336,10 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-                
+                if(model.loanAccount.securityEmiRequired == null){
+                    model.loanAccount.securityEmiRequired='Yes';
+                }
+               
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
@@ -758,6 +761,13 @@ define({
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
+                        },
+                        {
+                            key: "loanAccount.securityEmiRequired",
+                            type: "select",
+                            title: "SECURITY_EMI",
+                            "enumCode": "decisionmaker",
+                            "required":true
                         }]
                     }, {
                         "type": "grid",
@@ -776,6 +786,16 @@ define({
                             "key": "loanAccount.commercialCibilCharge",
                             "title": "CIBIL Charges",
                             "type": "amount"
+                        },
+                        { 
+                            condition:"model.loanAccount.securityEmiRequired == 'No'",
+                            key: "loanAccount.securityEmiRejectReason",
+                            type: "select",
+                            title: "REASON",
+                            "required":true,
+                            titleMap:{
+                                "No Reason":"No Reason"
+                            }
                         }]
                     }]
                 }]

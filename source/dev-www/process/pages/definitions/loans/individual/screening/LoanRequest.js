@@ -501,6 +501,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     }
                 }
+              
+                if( model.loanAccount.securityEmiRequired == null){
+                    model.loanAccount.securityEmiRequired="Yes";
+                }
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -510,6 +514,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";
                 model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
+                model.loanAccount.securityEmiRequired="Yes";
                 /* END OF TEMP CODE */
             }
             if (bundlePageObj){
@@ -613,6 +618,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
 
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
+
+            // Newly added for security EMI new Requirements
+            Queries.getProductCategoryByEMI("Yes")
+            .then(function(resp){
+             console.log("getProductCategoryByEMI query response",resp);
+            model.totalProductCategoryByEMI=[];
+            _.forEach(resp.body,function(productcategory){
+                model.totalProductCategoryByEMI.push(productcategory.product_category);
+            });
+            },function(err){
+             console.log("getProductCategoryByEMI query error ",err);
+             model.totalProductCategoryByEMI=[];
+            });
+
+
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -1025,6 +1045,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         required:true,
                         type:"select",
                         enumCode:"loan_product_category",
+                        onChange:function(value,form,model){
+                            var b= model.loanAccount.productCategory.replace('–','');
+                            for(var i=0;i<model.totalProductCategoryByEMI.length;i++){
+                                var temp=model.totalProductCategoryByEMI[i].replace('–','');
+                                if(temp ==b){
+                                    model.loanAccount.securityEmiRequired='Yes';
+                                    break;
+                                }  
+                            }
+                        }
                      },
                     {
                         key: "loanAccount.loanAmountRequested",
@@ -1067,6 +1097,23 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "amount",
                         title: "ESTIMATED_KINARA_EMI",
                         readonly:true
+                    },
+                    {
+                        key: "loanAccount.securityEmiRequired",
+                        type: "select",
+                        title: "SECURITY_EMI",
+                        "enumCode": "decisionmaker",
+                        "required":true
+                    },
+                    { 
+                        condition:"model.loanAccount.securityEmiRequired == 'No'",
+                        key: "loanAccount.securityEmiRejectReason",
+                        type: "select",
+                        title: "REASON",
+                        "required":true,
+                        titleMap:{
+                            "No Reason":"No Reason"
+                        }
                     },
                     {
                         key: "loanAccount.emiRequested",
@@ -1336,6 +1383,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "number",
                         readonly:true,
                         title: "EXPECTED_INTEREST_RATE"
+                    },
+                    {
+                        key: "loanAccount.securityEmiRequired",
+                        type: "select",
+                        title: "SECURITY_EMI",
+                        "enumCode": "decisionmaker",
+                        "required":true,
+                        "readonly":false
+                    },
+                    { 
+                        condition:"model.loanAccount.securityEmiRequired == 'No'",
+                        key: "loanAccount.securityEmiRejectReason",
+                        type: "select",
+                        title: "REASON",
+                        "required":true,
+                        titleMap:{
+                            "No Reason":"No Reason"
+                        },
+                        "readonly":false
                     },
                     {
                         key: "loanAccount.estimatedEmi",
@@ -2305,6 +2371,23 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 },
                 {
+                    key: "loanAccount.securityEmiRequired",
+                    type: "select",
+                    title: "SECURITY_EMI",
+                    "enumCode": "decisionmaker",
+                    "readonly":false
+                },
+                { 
+                    condition:"model.loanAccount.securityEmiRequired == 'No'",
+                    key: "loanAccount.securityEmiRejectReason",
+                    type: "select",
+                    title: "REASON",
+                    titleMap:{
+                        "No Reason":"No Reason"
+                    },
+                    "readonly":false
+                },
+                {
                     key: "loanAccount.estimatedEmi",
                     type: "amount",
                     title: "ESTIMATED_KINARA_EMI",
@@ -2341,13 +2424,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
                 "condition": "model.currentStage=='Sanction'",
-                "readonly": true,
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",
                     "type": "amount",
                     required:true,
                     "title": "LOAN_AMOUNT",
+                    "readonly": true,
                     onChange:function(value,form,model){
                         computeEMI(model);
                     }
@@ -2356,6 +2439,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.tenure",
                     "title":"DURATION_IN_MONTHS",
                     required:true,
+                    "readonly": true,
                     onChange:function(value,form,model){
                         computeEMI(model);
                     }
@@ -2364,6 +2448,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.interestRate",
                     "type": "number",
                     required:true,
+                    "readonly": true,
                     "title": "INTEREST_RATE",
                     onChange:function(value,form,model){
                         computeEMI(model);
@@ -2379,7 +2464,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.processingFeePercentage",
                     "type": "number",
                     required:true,
-                    "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    "readonly": true
                 },
                 {
                    key: "loanAccount.estimatedEmi",
@@ -2392,13 +2478,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     'enumCode': "decisionmaker",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
-                    // readonly:true,
+                    readonly:false
                     // required: true
+                },
+                { 
+                    condition:"model.loanAccount.securityEmiRequired == 'No'",
+                    key: "loanAccount.securityEmiRejectReason",
+                    type: "select",
+                    title: "REASON",
+                    "required":true,
+                    titleMap:{
+                        "No Reason":"No Reason"
+                    },
+                    readonly:false
                 },
                 {
                     "key": "loanAccount.commercialCibilCharge",
                     "type": "amount",
-                    "title": "COMMERCIAL_CIBIL_CHARGE"
+                    "title": "COMMERCIAL_CIBIL_CHARGE",
+                    "readonly": true
                 }]
             },
             {

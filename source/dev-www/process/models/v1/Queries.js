@@ -423,6 +423,26 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         }
+
+        resource.getProductCategoryByEMI = function(securityEmiRequired) {
+            var deferred = $q.defer();
+            var request = {};
+            request.securityEmiRequired=securityEmiRequired;
+           
+            resource.getResult("getProductCategoryByEMI", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+
         resource.getLoanProductDetails = function(loanType,partnerCode,frequency){
             var deferred  = $q.defer();
             var request = {};
