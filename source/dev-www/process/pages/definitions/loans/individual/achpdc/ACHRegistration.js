@@ -446,34 +446,34 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 					ACH.create(model.ach, function(response) {
 						PageHelper.hideLoader();
 						PageHelper.showProgress("page-init", "ACH Registration Successful", 5000);
-						if (model.isRejected) {
-							model.achUpdateStatus = [];
-							model.ach.mandateId = response.mandateId;
-							model.ach.verificationStatus = 'Verified';
-							model.ach.mandateStatus = 'ACCEPTED'
-							model.achUpdateStatus.push(model.ach);
-							ACH.updateMandateStatus(model.achUpdateStatus).$promise.then(
-								function(response) {
-									PageHelper.hideLoader();
-									PageHelper.showProgress("page-init", "Done.", 2000);
-									$state.go("Page.Engine", {
-										pageName: 'loans.individual.achpdc.ACHPDCQueue',
-										pageId: null
-									});
-								},
-								function(errorResponse) {
-									PageHelper.hideLoader();
-									PageHelper.showErrors(errorResponse);
-								}
-							).finally(function() {
-								PageHelper.hideLoader();
-							});
-						} else {
-							$state.go("Page.Engine", {
-								pageName: 'loans.individual.achpdc.ACHPDCQueue',
-								pageId: null
-							});
-						}
+						// if (model.isRejected) {
+						// 	model.achUpdateStatus = [];
+						// 	model.ach.mandateId = response.mandateId;
+						// 	model.ach.verificationStatus = 'Verified';
+						// 	model.ach.mandateStatus = 'ACCEPTED'
+						// 	model.achUpdateStatus.push(model.ach);
+						// 	ACH.updateMandateStatus(model.achUpdateStatus).$promise.then(
+						// 		function(response) {
+						// 			PageHelper.hideLoader();
+						// 			PageHelper.showProgress("page-init", "Done.", 2000);
+						// 			$state.go("Page.Engine", {
+						// 				pageName: 'loans.individual.achpdc.ACHPDCQueue',
+						// 				pageId: null
+						// 			});
+						// 		},
+						// 		function(errorResponse) {
+						// 			PageHelper.hideLoader();
+						// 			PageHelper.showErrors(errorResponse);
+						// 		}
+						// 	).finally(function() {
+						// 		PageHelper.hideLoader();
+						// 	});
+						// } else {
+						// 	$state.go("Page.Engine", {
+						// 		pageName: 'loans.individual.achpdc.ACHPDCQueue',
+						// 		pageId: null
+						// 	});
+						// }
 
 						//model.ach=response;
 					}, function(errorResponse) {
