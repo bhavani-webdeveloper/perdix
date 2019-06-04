@@ -103,3 +103,6 @@ getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id
 productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
 isLoanDisbursed = SELECT current_stage as `currentStage` from loan_account_disbursement_schedule where loan_id = :loanId 
 isExistingCustomer = SELECT count(1) as oldAccounts from loan_accounts where loan_disbursement_date <= now() and customer_id = :customerId
+
+
+getProductCategoryByEMI = SELECT product_category,security_emi_required from loan_product_category_master where security_emi_required = :securityEmiRequired 
