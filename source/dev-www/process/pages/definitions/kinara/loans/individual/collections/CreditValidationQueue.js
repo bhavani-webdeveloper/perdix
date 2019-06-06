@@ -18,37 +18,8 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                     "title": "TRANSACTION_TYPE",
                     "key":"instrumentType",
                     "type":"select",
-                        "titleMap": [{
-                            "name": "Cash",
-                            "value": "CASH"
-                        }, {
-                            "name": "Cheque",
-                            "value": "CHQ"
-                        }, {
-                            "name": "NEFT",
-                            "value": "NEFT"
-                        }, {
-                            "name": "RTGS",
-                            "value": "RTGS"
-                        }, {
-                            "name": "ACH",
-                            "value": "ACH"
-                        },{
-                            "name": "Suspense",
-                            "value": "Suspense"
-                        },
-                        {
-                            "name": "Internal",
-                            "value": "INTERNAL"
-                        },
-                        {
-                            "name": "Security Deposit",
-                            "value": "SECURITY_DEPOSIT"
-                        }
-                        ]},
-                    
-                    //cash, cheque, NEFT, RTGS, ACH, security deposit, suspense and internal 
-            
+                    "enumCode":"collection_instrument_type"
+                },  //cash, cheque, NEFT, RTGS, ACH, security deposit, suspense and internal 
                 {
                     "key": "branch",
                     "type":"userbranch"
