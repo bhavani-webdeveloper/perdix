@@ -209,7 +209,7 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                             LoanCollection.batchUpdate(cashCollectionData).$promise
                             .then(function (res, head) {
                                 PageHelper.showProgress('BranchDeposit', 'successfully moved to preDeposit', 5000);
-                                irfNavigator.goBack();
+                                //irfNavigator.goBack();
                             }, function (httpres) {
                                 PageHelper.showProgress("BranchDeposit", "Error in proceeding to preDeposit", 5000);
 
