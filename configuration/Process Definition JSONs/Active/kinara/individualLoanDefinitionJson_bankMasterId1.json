@@ -1223,10 +1223,31 @@
                       "Sanction",
                       "LoanInitiation",
                       "PendingForPartner",
+                      "LoanBooking"
+                  ]
+               },
+               "securityEmiRejectReason":{
+                  "title": "status",
+                  "type": "string",
+                  "captureStages": [
+                      "Screening",
+                      "ScreeningReview",
+                      "Application",
+                      "ApplicationReview",
+                      "FieldAppraisal",
+                      "FieldAppraisalReview",
+                      "ZonalRiskReview",
+                      "CentralRiskReview",
+                      "CreditCommitteeReview",
+                      "Rejected",
+                      "Sanction",
+                      "LoanInitiation",
+                      "PendingForPartner",
                       "LoanBooking",
                       "DocumentUpload",
                       "DocumentVerification"
                   ]
+
                }
             }
          },

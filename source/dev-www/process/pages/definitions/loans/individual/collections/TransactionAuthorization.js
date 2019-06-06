@@ -604,7 +604,10 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                 var loanCollection = _.cloneDeep(model._transAuth);
                                 var reqParams = {};
                                 reqParams.loanCollection = loanCollection;
-                                reqParams.repaymentProcessAction = "PROCEED";
+                                reqParams.repaymentProcessAction = "PROCEED";//move to transaction .js
+                                if (reqParams.loanCollection.instrumentType == 'SUSPENSE') {
+                                    reqParams.loanCollection.instrumentType = 'NEFT';
+                                }
                                 reqParams.stage = "Completed";
                                 LoanCollection.update(reqParams, function (resp, header) {
                                     PageHelper.hideLoader();
