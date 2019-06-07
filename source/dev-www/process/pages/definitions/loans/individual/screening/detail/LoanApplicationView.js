@@ -767,7 +767,12 @@ define({
                             type: "select",
                             title: "SECURITY_EMI",
                             "enumCode": "decisionmaker",
-                            "required":true
+                            "required":true,
+                            onChange:function(value,form,model){
+                                if(value === 'Yes'){
+                                   model.loanAccount.securityEmiRejectReason=null; 
+                                }
+                                }
                         }]
                     }, {
                         "type": "grid",

@@ -228,7 +228,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         // Psychometric Required for applicants & co-applicants
         if (_.isArray(loanAccount.loanCustomerRelations)) {
             var psychometricIncomplete = false;
-            var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+            var enterpriseCustomerRelations='';
+            if( typeof model.enterprise.enterpriseCustomerRelations != 'undefined'){
+               enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+            }
+           
             for (i in loanAccount.loanCustomerRelations) {
                 if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
                     loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
@@ -1104,10 +1108,15 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "SECURITY_EMI",
                         "enumCode": "decisionmaker",
                         "required":true,
-                        condition:"model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe'"
+                        condition:"model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe'",
+                        onChange:function(value,form,model){
+                            if(value === 'Yes'){
+                               model.loanAccount.securityEmiRejectReason=null; 
+                            }
+                            }
                     },
                     { 
-                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage! = 'Dedupe')",
+                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe')",
                         key: "loanAccount.securityEmiRejectReason",
                         type: "select",
                         title: "REASON",
@@ -1385,25 +1394,31 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly:true,
                         title: "EXPECTED_INTEREST_RATE"
                     },
-                    // {
-                    //     key: "loanAccount.securityEmiRequired",
-                    //     type: "select",
-                    //     title: "SECURITY_EMI",
-                    //     "enumCode": "decisionmaker",
-                    //     "required":true,
-                    //     "readonly":false
-                    // },
-                    // { 
-                    //     condition:"model.loanAccount.securityEmiRequired == 'No'",
-                    //     key: "loanAccount.securityEmiRejectReason",
-                    //     type: "select",
-                    //     title: "REASON",
-                    //     "required":true,
-                    //     titleMap:{
-                    //         "No Reason":"No Reason"
-                    //     },
-                    //     "readonly":false
-                    // },
+                    {
+                        key: "loanAccount.securityEmiRequired",
+                        type: "select",
+                        title: "SECURITY_EMI",
+                        "enumCode": "decisionmaker",
+                        "required":true,
+                        "readonly":false,
+                        condition:"model.currentStage == 'Rejected' || model.currentStage == 'loanView'",
+                        onChange:function(value,form,model){
+                            if(value === 'Yes'){
+                               model.loanAccount.securityEmiRejectReason=null; 
+                            }
+                            }
+                    },
+                    { 
+                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage == 'Rejected' || model.currentStage == 'loanView')",
+                        key: "loanAccount.securityEmiRejectReason",
+                        type: "select",
+                        title: "REASON",
+                        "required":true,
+                        titleMap:{
+                            "No Reason":"No Reason"
+                        },
+                        "readonly":false
+                    },
                     {
                         key: "loanAccount.estimatedEmi",
                         type: "amount",
@@ -2376,7 +2391,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     type: "select",
                     title: "SECURITY_EMI",
                     "enumCode": "decisionmaker",
-                    "readonly":false
+                    "readonly":false,
+                    required:true,
+                    onChange:function(value,form,model){
+                    if(value === 'Yes'){
+                       model.loanAccount.securityEmiRejectReason=null; 
+                    }
+                    }
                 },
                 { 
                     condition:"model.loanAccount.securityEmiRequired == 'No'",
@@ -2386,7 +2407,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     titleMap:{
                         "No Reason":"No Reason"
                     },
-                    "readonly":false
+                    "readonly":false,
+                    required:true
                 },
                 {
                     key: "loanAccount.estimatedEmi",
@@ -2485,8 +2507,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     'enumCode': "decisionmaker",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
-                    readonly:false
-                    // required: true
+                    readonly:false,
+                    required: true,
+                    onChange:function(value,form,model){
+                        if(value === 'Yes'){
+                           model.loanAccount.securityEmiRejectReason=null; 
+                        }
+                        }
                 },
                 { 
                     condition:"model.loanAccount.securityEmiRequired == 'No'",
