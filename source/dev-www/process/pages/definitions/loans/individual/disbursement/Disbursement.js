@@ -302,15 +302,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     }
                                     if (model.siteCode == "KGFS"){
                                     if (typeof res.customerBankAccounts == 'undefined' || res.customerBankAccounts.length == 0){
-                                        model.additional.isNeftCheckFlag == true;
+                                        model.additional.isNeftCheckFlag = true;
                                     }
                                     else{
                                         // TODO was told to so that hardcode zero
+                                        model.additional.isNeftCheckFlag = false;
                                         model.loanAccountDisbursementSchedule.customerNameInBank = res.firstName;
-                                        model.loanAccountDisbursementSchedule.customerAccountNumber = res.customerBankAccounts[0].customerAccountNumber;
+                                        model.loanAccountDisbursementSchedule.customerAccountNumber = res.customerBankAccounts[0].accountNumber;
                                         model.loanAccountDisbursementSchedule.ifscCode = res.customerBankAccounts[0].ifscCode;
                                         model.loanAccountDisbursementSchedule.customerBankBranchName = res.customerBankAccounts[0].customerBankBranchName;
-                                        model.additional.isNeftCheckFlag == false;
+                
                                         if (!model.loanAccountDisbursementSchedule.modeOfDisbursement) {
                                             if (model.additional.netDisbursementAmount >= 200000) {
                                                 model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
