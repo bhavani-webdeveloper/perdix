@@ -1121,6 +1121,11 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
+                                //   security EMI & Reject Reason validation
+                    if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                        PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
+                        return false;
+                    }
                 
                     model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
                    // loanMitigants= [];
@@ -1360,6 +1365,13 @@ define({
                     return;
                 }
 */
+
+                //   security EMI & Reject Reason validation
+                if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                    PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
+                    return false;
+                }
+
                     /* validating that loan AmountRequested should be greater than current loan amount*/
                     if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
                         if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){

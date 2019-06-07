@@ -1066,6 +1066,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 required: true,
                                 readonly:true,
                                 "title":"REASON",
+                                titleMap:{
+                                    "No Reason":"No Reason"
+                                },
                                 "condition" : "model.siteCode=='kinara' && model.loanAccount.securityEmiRequired=='No'"
                             },
                             {

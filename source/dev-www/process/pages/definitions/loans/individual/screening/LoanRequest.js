@@ -1103,10 +1103,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "select",
                         title: "SECURITY_EMI",
                         "enumCode": "decisionmaker",
-                        "required":true
+                        "required":true,
+                        condition:"model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe'"
                     },
                     { 
-                        condition:"model.loanAccount.securityEmiRequired == 'No'",
+                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage! = 'Dedupe')",
                         key: "loanAccount.securityEmiRejectReason",
                         type: "select",
                         title: "REASON",
@@ -1384,25 +1385,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly:true,
                         title: "EXPECTED_INTEREST_RATE"
                     },
-                    {
-                        key: "loanAccount.securityEmiRequired",
-                        type: "select",
-                        title: "SECURITY_EMI",
-                        "enumCode": "decisionmaker",
-                        "required":true,
-                        "readonly":false
-                    },
-                    { 
-                        condition:"model.loanAccount.securityEmiRequired == 'No'",
-                        key: "loanAccount.securityEmiRejectReason",
-                        type: "select",
-                        title: "REASON",
-                        "required":true,
-                        titleMap:{
-                            "No Reason":"No Reason"
-                        },
-                        "readonly":false
-                    },
+                    // {
+                    //     key: "loanAccount.securityEmiRequired",
+                    //     type: "select",
+                    //     title: "SECURITY_EMI",
+                    //     "enumCode": "decisionmaker",
+                    //     "required":true,
+                    //     "readonly":false
+                    // },
+                    // { 
+                    //     condition:"model.loanAccount.securityEmiRequired == 'No'",
+                    //     key: "loanAccount.securityEmiRejectReason",
+                    //     type: "select",
+                    //     title: "REASON",
+                    //     "required":true,
+                    //     titleMap:{
+                    //         "No Reason":"No Reason"
+                    //     },
+                    //     "readonly":false
+                    // },
                     {
                         key: "loanAccount.estimatedEmi",
                         type: "amount",
@@ -2474,6 +2475,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     readonly:true
                 },
                 {
+                    "key": "loanAccount.commercialCibilCharge",
+                    "type": "amount",
+                    "title": "COMMERCIAL_CIBIL_CHARGE",
+                    "readonly": true
+                },
+                {
                     "key": "loanAccount.securityEmiRequired",
                     'enumCode': "decisionmaker",
                     'type': "select",
@@ -2491,12 +2498,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         "No Reason":"No Reason"
                     },
                     readonly:false
-                },
-                {
-                    "key": "loanAccount.commercialCibilCharge",
-                    "type": "amount",
-                    "title": "COMMERCIAL_CIBIL_CHARGE",
-                    "readonly": true
                 }]
             },
             {
@@ -2919,7 +2920,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
                 /* TODO Call proceed servcie for the loan account */
-
+                if (!validateForm(formCtrl)){
+                    PageHelper.hideLoader();
+                    return;
+                }
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -2961,6 +2965,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 //     return;
                 // }
                 if (!preLoanSaveOrProceed(model)){
+                    return;
+                }
+                if (!validateForm(formCtrl)){
+                    PageHelper.hideLoader();
                     return;
                 }
                 Utils.confirm("Are You Sure?")
