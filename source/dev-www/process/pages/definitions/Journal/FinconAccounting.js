@@ -279,31 +279,31 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                 <thead>\
                                                     <th class='col-xs-2'>GL AC Name</th>\
                                                     <th class='col-xs-1'>Type</th>\
-                                                    <th class='col-xs-2'>Amount</th>\
-                                                    <th class='col-xs-3'>Loan Account No</th>\
-                                                    <th class='col-xs-4'>Narration</th>\
+                                                    <th class='col-xs-1'>Amount</th>\
+                                                    <th class='col-xs-2'>Loan Account No</th>\
+                                                    <th class='col-xs-5'>Narration</th>\
                                                     <th class='col-xs-1'>Delete</th>\
                                                 </thead>\
                                                 <tbody>\
                                                     <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'>\
-                                                        <td class='col-xs-1'>\
+                                                        <td class='col-xs-2'>\
                                                             <div> \
                                                                 <input type=\"text\" class=\"form-control\" ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-input-formatter=\"model.formatGlCode($model)\" typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
                                                             </div>\
                                                         </td>\
-                                                        <td class='col-xs-2'> \
+                                                        <td class='col-xs-1'> \
                                                             <select class='form-control' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' ng-model=\"d['drCrIndicator']\" schema-validate='form' ng-options='item.value as item.name for item in model.entryType'> <option value=''>{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option> </select>\
                                                         \
                                                         </td>\
                                                         <td class='col-xs-1'>\
                                                             <input ng-model=\"d['transactionAmount']\" type='number' step='any' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
                                                         </td>\
-                                                        <td class='col-xs-3'>\
+                                                        <td class='col-xs-2'>\
                                                             <div> \
-                                                                <input typeahead-append-to-body=\"true\" class=\"form-control\" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
+                                                            <input  typeahead-append-to-body=\"true\" class=\"form-control\" ng-required=\"model.journal.journalHeader.entryType.toLowerCase() == 'payment - account' || model.journal.journalHeader.entryType.toLowerCase() == 'journal - account' || model.journal.journalHeader.entryType.toLowerCase() == 'receipt - account' || model.journal.journalHeader.entryType.toLowerCase() == 'contra - journal' \" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb.account_number  as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
                                                             </div>\
                                                         </td>\
-                                                        <td class='col-xs-3'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
+                                                        <td class='col-xs-5'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
                                                         </td>\
                                                         <td class='col-xs-1'><a href='' ng-click='model.delete($index)'>Delete</a>\
                                                         </td>\
