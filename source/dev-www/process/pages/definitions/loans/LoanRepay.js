@@ -752,7 +752,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.instrumentDate",
                                 title:"DATE",
                                 type:"date",
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                                condition:"model.siteCode != 'witfin' && (modemodel.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS')"
                             },
                             {
                                 key:"repayment.instrumentDate",
