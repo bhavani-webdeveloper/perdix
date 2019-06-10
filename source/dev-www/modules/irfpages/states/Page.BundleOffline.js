@@ -25,7 +25,7 @@ function(
 	Utils,
 	translateFilter,
 	PageManager,
-	PageHelper,
+	PageHelper
 ) {
 	var self = this;
 	$log.info("Page.BundleOffline.html loaded");
