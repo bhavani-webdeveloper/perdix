@@ -6002,7 +6002,8 @@
                        "FieldInvestigation3",
                        "TeleVerification",
                        "LoanInitiation",
-                       "DocumentUpload"
+                       "DocumentUpload",
+                       "Completed"
                     ]
                  },
                  "document":{
