@@ -1,55 +1,22 @@
-irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", "Patch", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "$filter", "$q", "$http", "irfProgressMessage",
-    function ($log, RolesPages, Patch, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper, $filter, $q, $http, irfProgressMessage) {
+irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", "Patches", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper", "$filter", "$q", "$http", "irfProgressMessage",
+    function ($log, RolesPages, Patches, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper, $filter, $q, $http, irfProgressMessage) {
         var allReportParametersCache = [];
         debugger;
-        var getReportsConfiguration = function (reportName) {
+        var getReportsConfiguration = function (patchName) {
             var defered = $q.defer();
             var result = [];
             if (allReportParametersCache.length != 0) {
                 debugger;
-                if (reportName) {
+                if (patchName) {
                     result = $filter('filter')(allReportParametersCache, {
-                        report_name: reportName
+                        patch_name: patchName
                     }, true);
                 } else {
                     result = allReportParametersCache
                 }
                 defered.resolve(result);
             } else {
-                // Patch.allPatchParameters().$promise.then(function (result)
-                $q.when([
-                    {
-                      "report_name": "customer_image_perdix8",
-                      "parameter": "customer_id",
-                      "name": "Customer Id",
-                      "type": "list",
-                      "operators": [
-                        "IN"
-                      ],
-                      "titleMap": [],
-                      "required": "1"
-                    },
-                    {
-                      "report_name": "customer_image_perdix8",
-                      "parameter": "customer_type",
-                      "name": "Customer Type",
-                      "type": "select",
-                      "operators": [
-                        "IN"
-                      ],
-                      "titleMap":[
-                        {
-                            "name":'Individual',
-                            'value':'Individual'
-                        },
-                        {
-                            'name':'Enterprise',
-                            'value':'Enterprise'
-                        }
-                      ],
-                      "required": null
-                    }
-                  ]).then(function (result) {
+                Patches.allPatchParameters().$promise.then(function (result) {
                     var item;
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].parameter == 'from_date' || result[i].parameter == 'to_date') {
@@ -59,9 +26,9 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
                         item = result[i];
                         allReportParametersCache.push(result[i]);
                     }
-                    if (reportName) {
+                    if (patchName) {
                         result = $filter('filter')(allReportParametersCache, {
-                            report_name: reportName
+                            patch_name: patchName
                         }, true);
                     } else {
                         result = allReportParametersCache
@@ -89,83 +56,18 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
                 }
                 var self = this;
                 self.form = [];
-                // Patch.patchList().$promise.then(function (resp)
-                var p2 = $q.when([
-                    {  
-                      "group":"Customer",
-                      "name":"Customer Image Perdix 8",
-                      "value":"customer_image_perdix8",
-                      "parameters":[  
-                         "customer_id",
-                         "customer_type"
-                      ],
-                      "parameterized":true
-                   },
-                   {  
-                      "group":"Customer",
-                      "name":"Customer Family",
-                      "value":"customer_family",
-                      "parameters":[  
-                         "customer_urn",
-                         "customer_id"
-                      ],
-                      "parameterized":true
-                   },
-                   {  
-                      "group":"Loan",
-                      "name":"Loan Stage Change",
-                      "value":"loan_stage_Change",
-                      "parameters":[  
-                         "to_stage",
-                         "from_stage"
-                      ],
-                      "parameterized":true
-                   },
-                   {  
-                      "group":"Loan",
-                      "name":"Loan Close",
-                      "value":"loan_close",
-                      "parameters":[  
-                         "loan_id"
-                      ],
-                      "parameterized":true
-                   },
-                ]).then(function (resp) {
-                    // RolesPages.getReportsByRole({
-                        // roleId: model.report.role.id
-                    // }).$promise.then(function (response) {
-                    $q.when({"body":[
-                        {  
-                          "id":128,
-                          "report_name":"customer_image_perdix8",
-                          "role_id":1,
-                          "config":null
-                       },
-                       {  
-                          "id":129,
-                          "report_name":"customer_family",
-                          "role_id":1,
-                          "config":null
-                       },
-                       {  
-                          "id":130,
-                          "report_name":"loan_stage_change",
-                          "role_id":1,
-                          "config":null
-                       },
-                       {  
-                          "id":131,
-                          "report_name":"loan_close",
-                          "role_id":1,
-                          "config":null
-                       }
-                    ]}
-                    ).then(function (response) {
+                
+                var p2 = Patches.patchList().$promise
+                .then(function (resp) {
+                    RolesPages.getPatchesByRole({
+                        roleId: model.report.role.id
+                    }).$promise
+                    .then(function (response) {
                         var object = [];
                         for (i in resp) {
                             if (response && response.body && response.body.length) {
                                 for (j in response.body) {
-                                    if (resp[i].value == response.body[j].report_name) {
+                                    if (resp[i].value == response.body[j].patch_name) {
                                         object.push(resp[i]);
 
                                     }
@@ -308,15 +210,15 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
             },
             actions: {
                 submit: function (model, form, formName) {
-                    PageHelper.clearErrors();
-                    PageHelper.showProgress('reports','Api is not configured',4000)
-                    return;
+                    // PageHelper.clearErrors();
+                    // PageHelper.showProgress('reports','Api is not configured',4000)
+                    // return;
                     if (model.selectedReport.parameterized) {
                         var reqData = {}
                         reqData.auth_data = {
                             'auth_token': AuthTokenHelper.getAuthData().access_token,
                         }
-                        reqData.report_name = model.bi.report_name;
+                        reqData.patch_name = model.bi.report_name;
                         //reqData.query_mode = 1;
 
                         reqData.filters = [];
@@ -330,50 +232,10 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
                         PageHelper.showLoader();
                         irfProgressMessage.pop("Reports", "Downloading Report. Please wait...");
                         $http.post(
-                            irf.MANAGEMENT_BASE_URL + '/applyPatch.php',
-                            reqData, {
-                                responseType: 'arraybuffer'
-                            }
+                            irf.MANAGEMENT_BASE_URL + '/server-ext/patchmaster/patch-execute.php',
+                            reqData
                         ).then(function (response) {
                             irfProgressMessage.pop("Reports", "Patch applied Succesfully.", 5000);
-                            // var headers = response.headers();
-                            // if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
-                            //     var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
-                            //     console.log(decodedString);
-                            //     PageHelper.showErrors({
-                            //         data: {
-                            //             error: decodedString
-                            //         }
-                            //     });
-                            //     irfProgressMessage.pop("Reports", "Report download failed.", 5000);
-                            //     return;
-                            // }
-                            // var blob = new Blob([response.data], {
-                            //     type: headers['content-type']
-                            // });
-                            // if (!$("#reportdownloader").length) {
-                            //     var l = document.createElement('a');
-                            //     l.id = "reportdownloader";
-                            //     document.body.appendChild(l);
-                            // }
-                            // $("#reportdownloader").css({
-                            //     "position": "absolute",
-                            //     "height": "-1px",
-                            //     "top": "-100px",
-                            //     "left": "-100px",
-                            //     "width": "-100px",
-                            // });
-                            // var link = document.getElementById("reportdownloader");
-                            // link.href = window.URL.createObjectURL(blob);
-
-                            // if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
-                            //     var filename = headers["content-disposition"].split('filename=')[1];
-                            //     link.download = filename.replace(/"/g, "");
-                            // } else {
-                            //     link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
-                            // }
-                            // link.click();
-                            // irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
                         }, function (err) {
                             var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
                             PageHelper.showErrors({
@@ -385,12 +247,12 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
                         }).finally(function () {
                             PageHelper.hideLoader();
                         });
-
-                    } else {
-                        var biDownloadUrl = irf.BI_BASE_URL + '/download.php?auth_token=' + AuthTokenHelper.getAuthData().access_token + '&' + $httpParamSerializer(model.bi);
-                        $log.info(biDownloadUrl);
-                        window.open(biDownloadUrl);
                     }
+                    // } else {
+                    //     var biDownloadUrl = irf.BI_BASE_URL + '/download.php?auth_token=' + AuthTokenHelper.getAuthData().access_token + '&' + $httpParamSerializer(model.bi);
+                    //     $log.info(biDownloadUrl);
+                    //     window.open(biDownloadUrl);
+                    // }
                 }
             }
         };

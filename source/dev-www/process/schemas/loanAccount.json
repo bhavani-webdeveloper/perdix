@@ -1324,6 +1324,10 @@
                     "title": "SECURITY_EMI",
                     "enumCode": "decisionmaker"
                 },
+                "securityEmiRejectReason":{
+                    "type":["string","null"],
+                    "title":"REASON"
+                },
                 "startTime": {
                     "type": ["string", "null"]
                 },

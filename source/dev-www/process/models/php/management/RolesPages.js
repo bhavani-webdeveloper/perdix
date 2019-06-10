@@ -30,6 +30,10 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
             method: 'GET',
             url: endpoint + '/getReportsByRole.php'
         }),
+        getPatchesByRole: searchResource({
+            method: 'GET',
+            url: endpoint + '/getPatchesByRole.php'
+        }),
         searchUsers: searchResource({
             method: 'GET',
             url: endpoint + '/findUsers.php'

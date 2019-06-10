@@ -1,10 +1,10 @@
-irf.models.factory('Patch', function($resource, $httpParamSerializer, searchResource, formHelper, SessionStore, Enrollment, IndividualLoan) {
+irf.models.factory('Patches', function($resource, $httpParamSerializer, searchResource, formHelper, SessionStore, Enrollment, IndividualLoan) {
 	var endpoint = irf.MANAGEMENT_BASE_URL;
 
     var res = $resource(endpoint, null, {
         patchList: {
             method: 'GET',
-            url: endpoint + '/patch_list.php',
+            url: endpoint + '/server-ext/patchmaster/patch_list.php',
             isArray: true
         },
         /*reportMenuList: {
@@ -99,9 +99,9 @@ irf.models.factory('Patch', function($resource, $httpParamSerializer, searchReso
         //     method: 'POST',
         //     url: endpoint2 + '/scoring/Api/UpdateParameterValues.php'
         // },
-        allpatchParameters: {
+        allPatchParameters: {
             method: 'GET',
-            url: endpoint + '/patch_parameters.php',
+            url: endpoint + '/server-ext/patchmaster/patch_parameter.php',
             isArray: true
         },
         // downLoadReport: {

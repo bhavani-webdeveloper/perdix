@@ -108,3 +108,5 @@ isExistingCustomer = SELECT count(1) as oldAccounts from loan_accounts where loa
 getProductCategoryByEMI = SELECT product_category,security_emi_required from loan_product_category_master where security_emi_required = :securityEmiRequired 
 customerDetails.list = SELECT l.customer_id as `customerId`,lcr.customer_id as `applicantCustomerId`,c.customer_type as `customerType` FROM `loan_accounts` l left join loan_customer_relation lcr on l.id=lcr.loan_id AND lcr.relation='Applicant' left join customer c on l.customer_id=c.id WHERE l.id = :loan_id
 customerInfo.list = SELECT * from customer where id = :customer_id
+
+partnerCode.list = SELECT DISTINCT partner_code as `partnerCode` from bank_account_master where partner_code is not null and partner_code<>''

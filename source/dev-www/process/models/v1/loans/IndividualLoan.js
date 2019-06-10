@@ -131,9 +131,9 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
                         }
                     }
 
-                    if (_.hasIn(data, 'securityEmiRequired') && !_.isNull(data.securityEmiRequired) && _.isString(data.securityEmiRequired)){
-                        data.securityEmiRequired = data.securityEmiRequired.toUpperCase();
-                    }
+                    // if (_.hasIn(data, 'securityEmiRequired') && !_.isNull(data.securityEmiRequired) && _.isString(data.securityEmiRequired)){
+                    //     data.securityEmiRequired = data.securityEmiRequired.toUpperCase();
+                    // }
 
                     if (_.isArray(data.collateral)){
                         _.forEach(data.collateral, function(collateral){
