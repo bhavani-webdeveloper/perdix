@@ -9238,25 +9238,7 @@
          }
       },
       "IndividualLoanProcessCompositeDTO":{  
-         "properties":{  
-            "applicant":{  
-               "$ref":"#/definitions/CustomerDTO"
-            },
-            "coApplicants":{  
-               "type":"array",
-               "items":{  
-                  "$ref":"#/definitions/CustomerDTO"
-               }
-            },
-            "enterprise":{  
-               "$ref":"#/definitions/CustomerDTO"
-            },
-            "gaurantors":{  
-               "type":"array",
-               "items":{  
-                  "$ref":"#/definitions/CustomerDTO"
-               }
-            },
+         "properties":{              
             "loanAccount":{  
                "$ref":"#/definitions/LoanAccountDTO"
             },
