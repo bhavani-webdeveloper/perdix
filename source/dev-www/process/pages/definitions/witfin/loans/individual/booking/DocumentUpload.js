@@ -981,7 +981,8 @@ define({
                     }
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
-                        'loanProcessAction': 'PROCEED'
+                        'loanProcessAction': 'PROCEED',
+                        'remarks': model.review.remarks
                     };
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
