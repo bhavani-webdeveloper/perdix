@@ -3966,12 +3966,7 @@
                   "DSC_OVERRIDE_REQUEST_REJECTED"
                ]
             },
-            "groupMemeberDetails":{  
-               "type":"array",
-               "items":{  
-                  "$ref":"#/definitions/CustomerDTO"
-               }
-            },
+            
             "remarks":{  
                "type":"string"
             },
