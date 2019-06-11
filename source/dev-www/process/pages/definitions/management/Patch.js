@@ -232,7 +232,7 @@ irf.pageCollection.factory(irf.page("management.Patch"), ["$log", "RolesPages", 
                         PageHelper.showLoader();
                         irfProgressMessage.pop("Reports", "Downloading Report. Please wait...");
                         $http.post(
-                            irf.MANAGEMENT_BASE_URL + '/server-ext/patchmaster/patch-execute.php',
+                            irf.MANAGEMENT_BASE_URL + '/server-ext/patchmaster/patch_execute.php',
                             reqData
                         ).then(function (response) {
                             irfProgressMessage.pop("Reports", "Patch applied Succesfully.", 5000);
