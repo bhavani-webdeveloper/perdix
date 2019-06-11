@@ -116,19 +116,19 @@ define({
 							title: 'ID',
 							data: 'id'
 						}, {
-							title: 'Lead Name',
+							title: 'LEAD_NAME',
 							data: 'leadName'
 						}, {
-							title: 'Address Line1',
+							title: 'ADDRESS_LINE1',
 							data: 'addressLine1'
 						}, {
-							title: 'City/Town Village',
+							title: 'CITY_TOWN_VILLAGE',
 							data: 'cityTownVillage'
 						}, {
-							title: 'Area',
+							title: 'AREA',
 							data: 'area'
 						}, {
-							title: 'Pincode',
+							title: 'PIN_CODE',
 							data: 'pincode'
 						}]
 					},

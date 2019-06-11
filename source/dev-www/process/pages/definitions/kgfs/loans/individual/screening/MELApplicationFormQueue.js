@@ -42,12 +42,9 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-						"x-schema-form": {
+						"x-schema-form":{
 							"type": "select",
-							"enumCode": "centre",
-							"parentEnumCode": "branch_id",
-							"parentValueExpr": "model.branch",
-							"screenFilter": true
+							"enumCode": "usercentre",
 						}
 					},
 					"applicantName": {

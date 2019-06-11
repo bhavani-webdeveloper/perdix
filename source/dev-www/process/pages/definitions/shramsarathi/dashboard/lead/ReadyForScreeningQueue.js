@@ -67,7 +67,7 @@ define({
 							"type": "string"
 						},
 						"cityTownVillage": {
-							"title": "CITY/_TOWN_VILLAGE",
+							"title": "CITY_TOWN_VILLAGE",
 							"type": "string"
 						},
 						"screeningDate": {
@@ -202,16 +202,16 @@ define({
 							title: 'ID',
 							data: 'id'
 						}, {
-							title: 'Lead Name',
+							title: 'LEAD_NAME',
 							data: 'leadName'
 						}, {
 							title: 'Screening Date',
 							data: 'screeningDate'
 						}, {
-							title: 'Address Line1',
+							title: 'ADDRESS_LINE1',
 							data: 'addressLine1'
 						}, {
-							title: 'CityTownVillage',
+							title: 'CITY_TOWN_VILLAGE',
 							data: 'cityTownVillage'
 						}]
 					},

@@ -315,21 +315,25 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     {
                         key: "customer.postOffice",
                         required: true
-                    }, {
+                    }, 
+                    {
                         key: "customer.district",
                         type: "select",
                         "enumCode": "district_master",
                         screenFilter: true,
                         parentEnumCode: "bankname",
                         parentValueExpr: "model.customer.kgfsBankName"
-                    }, "customer.pincode", {
+                    }, 
+                    "customer.pincode",
+                    {
                         key: "customer.state",
                         type: "select",
                         "enumCode": "state_master",
                         screenFilter: true,
                         parentEnumCode: "bankname",
                         parentValueExpr: "model.customer.kgfsBankName"
-                    }, "customer.stdCode", "customer.landLineNo", {
+                    },
+                     "customer.stdCode", "customer.landLineNo", {
                         key: "customer.mobilePhone",
                         required: true,
                     }, "customer.mailSameAsResidence"]
@@ -387,7 +391,13 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     title: "IDENTITY_PROOF",
                     items: [{
                         key: "customer.identityProof",
-                        type: "select"
+                        type: "select",
+                         onChange: function (value, form, model, event) {
+                                if(model.customer.identityProof == 'Aadhar card')
+                                    model.customer.identityProofNo=model.customer.aadhaarNo;
+                               else
+                                    model.customer.identityProofNo=null;
+                        } 
                     }, {
                         key: "customer.identityProofImageId",
                         type: "file",
@@ -429,10 +439,12 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         }
                     }, {
                         key: "customer.idProofIssueDate",
-                        type: "date"
+                        type: "date",
+                        required:true
                     }, {
                         key: "customer.idProofValidUptoDate",
-                        type: "date"
+                        type: "date",
+                        required:true
                     }, {
                         key: "customer.addressProofSameAsIdProof"
                     }]
@@ -442,7 +454,13 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     condition: "!model.customer.addressProofSameAsIdProof",
                     items: [{
                         key: "customer.addressProof",
-                        type: "select"
+                        type: "select",
+                        onChange: function (value, form, model, event) {
+                                if(model.customer.addressProof == 'Aadhar card')
+                                   model.customer.addressProofNo=model.customer.aadhaarNo;
+                               else
+                                   model.customer.addressProofNo=null;
+                        }
                     }, {
                         key: "customer.addressProofImageId",
                         type: "file",
@@ -553,7 +571,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                 "items": [{
                     "key": "customer.additionalKYCs",
                     "type": "array",
-                    "startEmpty": true,
+                  //  "startEmpty": true,
                     "schema": {
                         "maxItems": 1
                     },

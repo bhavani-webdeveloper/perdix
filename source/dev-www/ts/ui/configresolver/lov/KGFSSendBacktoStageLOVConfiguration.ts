@@ -12,16 +12,15 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
         let productCategory = model.loanProcess.loanAccount.productCategory;
         if(model.loanAccount.currentStage=='Rejected')
         let stage1= model.review.preStage;
-        if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage!='Rejected')
-        let targetstage = formHelper.enum('targetstagemelpersonal').data;
-        else if(productCategory == 'JEWEL' && model.loanAccount.currentStage !='Rejected')
-        let targetstage = formHelper.enum('targetstagemeljewel').data;
-        else if(productCategory == 'JEWEL' && model.loanAccount.currentStage=='Rejected')
-        let targetstage = formHelper.enum('targetstagemeljewelreject').data;
-        else if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage=='Rejected' )
-        let targetstage = formHelper.enum('targetstagemelpersonalreject').data;
-        else
-        let targetstage = formHelper.enum('targetstagemel').data;
+            if(model.loanAccount.currentStage =='Rejected')
+            let targetstage = formHelper.enum('targetstagemelreject').data;
+            else if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage!='Rejected')
+            let targetstage = formHelper.enum('targetstagemelpersonal').data;
+            else if(productCategory == 'JEWEL' && model.loanAccount.currentStage !='Rejected')
+            let targetstage = formHelper.enum('targetstagemeljewel').data;
+            else
+            let targetstage = formHelper.enum('targetstagemel').data;
+
         let out = [];
         for (let i = 0; i < targetstage.length; i++) {
             let t = targetstage[i];

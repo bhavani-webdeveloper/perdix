@@ -1,4 +1,4 @@
-define({
+    define({
     pageUID: "kgfs.loans.individual.screening.DscOverrideQueue",
     pageType: "Engine",
     dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
@@ -9,48 +9,76 @@ define({
             "title": "DSC_OVERRIDE_SEARCH",
             "subTitle": "",
 
-            initialize: function (model, form, formCtrl) {
-                // model.branch = branch;
-                model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getCurrentBranch().branchId;
-            },
-
+            initialize: function(model, form, formCtrl) {
+				model.branchId = SessionStore.getCurrentBranch().branchId;
+				var bankName = SessionStore.getBankName();
+				var banks = formHelper.enum('bank').data;
+				for (var i = 0; i < banks.length; i++){
+					if(banks[i].name == bankName){
+						model.bankId = banks[i].value;
+						model.bankName = banks[i].name;
+					}
+				}
+				var userRole = SessionStore.getUserRole();
+				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+					model.fullAccess = true;
+				}
+				model.partner = "AXIS";
+				model.isPartnerChangeAllowed = false;
+				$log.info("Checker1 Queue got initialized");
+			},
+               
             definition: {
                 title: "SEARCH_LOANS",
                 autoSearch: true,
-                searchForm: [
-                    "*"
-                ],
-                searchSchema: {
-                    "type": 'object',
-                    "title": 'SearchOptions',
-                    "properties": {
-                        'branch': {
-                            'title': "BRANCH",
-                            "type": ["string", "null"],
-                            "x-schema-form": {
-                                "type": "userbranch",
-                                "screenFilter": true
-                            }
+                searchForm: [{
+					"type": "section",
+					"items": [ 
+					{
+						"key": "bankId",
+						"type": "select",
+					}, {
+						"key": "branchId",
+						"type": "select",
+						"parentEnumCode": "bank",
+						"parentValueExpr": "model.bankId",
+                    },
+                    {
+						"key": "centre",
+                        "type": "select",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.branchId",
+					},
+                    {
+						"key": "customerUrnNo",
+						"type": "number"
+                    }, 
+                ]
+				}],
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"bankId": {
+							"title": "BANK_NAME",
+							"type": ["integer", "null"],
+							enumCode: "bank"
+						},
+						"branchId": {
+							"title": "BRANCH_NAME",
+							"type": ["integer", "null"],
+							"enumCode": "branch_id"
                         },
-                        "centre": {
+                        "centre":{
                             "title": "CENTRE",
                             "type": ["integer", "null"],
-                            "x-schema-form": {
-                                "type": "select",
-                                "enumCode": "centre",
-                                "parentEnumCode": "branch",
-                                "parentValueExpr": "model.branch",
-                                "screenFilter": true
-                            }
+                            "enumCode": "centre",
                         },
                         "customerUrnNo": {
                             "title": "CUSTOMER_URN_NO",
                             "type": "number"
                         }
-                    },
-                    "required": ["stage"]
-                },
+					}},
 
                 getSearchFormHelper: function () {
                     return formHelper;
@@ -59,8 +87,9 @@ define({
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
                         'stage': 'DSCOverride',
-                        'branchId': searchOptions.branch,
-                        'centreCode': searchOptions.centre,
+                        'bankId': searchOptions.bankId,
+                        'branchId': searchOptions.branchId,
+                        'centre': searchOptions.centre,
                         'urn': searchOptions.customerUrnNo,
                         'accountNumber': searchOptions.accountNumber,
                         'page': pageOpts.pageNo

@@ -78,10 +78,11 @@ define({
 			<tr class="table-sub-header" style="font-size: 30px;">
 				<th class="text-center" colspan="2">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(2)}}%</th>
 				<th><div ng-style="model.portfolioAnalytics.emiBankBalancePercentage<=50.00? (model.portfolioAnalytics.emiBankBalancePercentage <= 0.00 ? {\'background-color\':\'#ff0000\'}:{\'background-color\':\'#18c118\'}):(model.portfolioAnalytics.emiProfitPercentage > 80.00 ? {\'background-color\':\'#ff0000\'}:{\'background-color\':\'#FFBF00\'})">&nbsp;</div></th>
+				<th><div ng-style="model.portfolioAnalytics.emiBankBalancePercentage<=50.00? (model.portfolioAnalytics.emiBankBalancePercentage <= 0.00 ? {\'background-color\':\'#ff0000\'}:{\'background-color\':\'#18c118\'}):(model.portfolioAnalytics.emiBankBalancePercentage > 80.00 ? {\'background-color\':\'#ff0000\'}:{\'background-color\':\'#FFBF00\'})">&nbsp;</div></th>
 			</tr>
 			<tr class="table-sub-header">
 				<th class="text-center">{{"% Time & Above" | translate}}</th>
-				<th class="text-center">{{"Income" | translate}}</th>
+				<th class="text-center">{{"ABB" | translate}}</th>
 				<th >{{"Ability to Pay" | translate}}</th>
 			</tr>
 			<tr>

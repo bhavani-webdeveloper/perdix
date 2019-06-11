@@ -672,7 +672,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                     "title": "T_FAMILY_DETAILS",
                     "items": [{
                         key: "customer.familyMembers",
-                        titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                        titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Member')",
                         type: "array",
                         items: [{
                             key: "customer.familyMembers[].customerId",
@@ -716,7 +716,26 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                                     model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
                                     model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
                                     model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                    model.customer.familyMembers[rowIndex].enrolledUrnNo = resp.urnNo;
                                     model.customer.familyMembers[rowIndex].relationShip = "";
+                                    _.forEach(resp.familyMembers,function(familyMembers){
+                                            if (resp.urnNo == familyMembers.enrolledUrnNo){
+                                                model.customer.familyMembers[rowIndex].id =  familyMembers.id
+                                            }
+                                    });    
+
+                                    _.forEach(model.customer.familyMembers,function(familyMember){
+                                        _.forEach(resp.familyMembers,function(secondaryFamilyMember){
+                                            if(secondaryFamilyMember.enrolledUrnNo == familyMember.enrolledUrnNo) {
+                                            PageHelper.showErrors({
+                                                'data': {
+                                                    'error': "Same Family Member is already captured in Family Details."
+                                                }
+                                            });
+                                            }
+                                        })
+                                    });
+    
                                     var selfIndex = _.findIndex(resp.familyMembers, function(o) {
                                         return o.relationShip.toUpperCase() == 'SELF'
                                     });
@@ -903,6 +922,14 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                             condition: "model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
                             title: "Enroll as customer",
                             onClick: function(model, formCtrl, context) {
+                            if(model.customer.familyMembers[context.arrayIndex].enrolledUrnNo){
+                                PageHelper.showErrors({
+                                    'data': {
+                                        'error': "Existing customer cannot be enrolled again"
+                                    }
+                                });
+                            }
+                            else{
                                 model.family = {};
                                 model.family = model.customer;
                                 model.family.familydata = model.customer.familyMembers[context.arrayIndex];
@@ -912,6 +939,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                                     pageData: model.family
                                     //pageData:model.customer.familyMembers[context.arrayIndex]
                                 });
+                            }
                             }
                         }, {
                             key: "customer.familyMembers[].incomes",

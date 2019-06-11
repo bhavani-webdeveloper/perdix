@@ -31,6 +31,7 @@
                 "Page/Engine/CustomerFormDownloads",
                 "Page/Engine/customer360.RecaptureQueue",
                 "Page/Adhoc/workflow.CustomerApprovalDashboard",
+                "Page/Adhoc/workflow.CustomerInfoUpdateDashboard",
                 "Page/Adhoc/kgfs.kgfsWorkflow.GpsFPApprovalDashboard",
                 "Page/Adhoc/kgfs.customer.CustomerEnrollmentDashboard"
             ]
@@ -57,6 +58,7 @@
         "Page/Adhoc/arohan.dashboard.lead.LeadDashboard",
         "Page/Adhoc/arohan.dashboard.CPV.CPVDashboard",
         "Page/Adhoc/arohan.dashboard.fcu.FcuQueue",
+        "Page/Adhoc/arthan.loans.LoanOriginationDashboard",
         
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
@@ -115,6 +117,7 @@
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/Adhoc/management.VillageCreationDashboard",
+                "Page/Engine/management.Patch",
                 "Page/Adhoc/management.branchadmin.BranchAdminDashboard",
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",

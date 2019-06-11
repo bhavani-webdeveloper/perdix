@@ -228,7 +228,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         // Psychometric Required for applicants & co-applicants
         if (_.isArray(loanAccount.loanCustomerRelations)) {
             var psychometricIncomplete = false;
-            var enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+            var enterpriseCustomerRelations='';
+            if( typeof model.enterprise.enterpriseCustomerRelations != 'undefined'){
+               enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
+            }
+           
             for (i in loanAccount.loanCustomerRelations) {
                 if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
                     loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
@@ -501,6 +505,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     }
                 }
+              
+                if( model.loanAccount.securityEmiRequired == null){
+                    model.loanAccount.securityEmiRequired="Yes";
+                }
             } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
@@ -510,6 +518,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";
                 model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
+                model.loanAccount.securityEmiRequired="Yes";
                 /* END OF TEMP CODE */
             }
             if (bundlePageObj){
@@ -613,6 +622,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             }
 
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
+
+            // Newly added for security EMI new Requirements
+            Queries.getProductCategoryByEMI("Yes")
+            .then(function(resp){
+             console.log("getProductCategoryByEMI query response",resp);
+            model.totalProductCategoryByEMI=[];
+            _.forEach(resp.body,function(productcategory){
+                model.totalProductCategoryByEMI.push(productcategory.product_category);
+            });
+            },function(err){
+             console.log("getProductCategoryByEMI query error ",err);
+             model.totalProductCategoryByEMI=[];
+            });
+
+
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -1025,6 +1049,16 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         required:true,
                         type:"select",
                         enumCode:"loan_product_category",
+                        onChange:function(value,form,model){
+                            var b= model.loanAccount.productCategory.replace('–','');
+                            for(var i=0;i<model.totalProductCategoryByEMI.length;i++){
+                                var temp=model.totalProductCategoryByEMI[i].replace('–','');
+                                if(temp ==b){
+                                    model.loanAccount.securityEmiRequired='Yes';
+                                    break;
+                                }  
+                            }
+                        }
                      },
                     {
                         key: "loanAccount.loanAmountRequested",
@@ -1067,6 +1101,29 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "amount",
                         title: "ESTIMATED_KINARA_EMI",
                         readonly:true
+                    },
+                    {
+                        key: "loanAccount.securityEmiRequired",
+                        type: "select",
+                        title: "SECURITY_EMI",
+                        "enumCode": "decisionmaker",
+                        "required":true,
+                        condition:"model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe'",
+                        onChange:function(value,form,model){
+                            if(value === 'Yes'){
+                               model.loanAccount.securityEmiRejectReason=null; 
+                            }
+                            }
+                    },
+                    { 
+                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe')",
+                        key: "loanAccount.securityEmiRejectReason",
+                        type: "select",
+                        title: "REASON",
+                        "required":true,
+                        titleMap:{
+                            "No Reason":"No Reason"
+                        }
                     },
                     {
                         key: "loanAccount.emiRequested",
@@ -1336,6 +1393,31 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "number",
                         readonly:true,
                         title: "EXPECTED_INTEREST_RATE"
+                    },
+                    {
+                        key: "loanAccount.securityEmiRequired",
+                        type: "select",
+                        title: "SECURITY_EMI",
+                        "enumCode": "decisionmaker",
+                        "required":true,
+                        "readonly":false,
+                        condition:"model.currentStage == 'Rejected' || model.currentStage == 'loanView'",
+                        onChange:function(value,form,model){
+                            if(value === 'Yes'){
+                               model.loanAccount.securityEmiRejectReason=null; 
+                            }
+                            }
+                    },
+                    { 
+                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage == 'Rejected' || model.currentStage == 'loanView')",
+                        key: "loanAccount.securityEmiRejectReason",
+                        type: "select",
+                        title: "REASON",
+                        "required":true,
+                        titleMap:{
+                            "No Reason":"No Reason"
+                        },
+                        "readonly":false
                     },
                     {
                         key: "loanAccount.estimatedEmi",
@@ -2305,6 +2387,30 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     }
                 },
                 {
+                    key: "loanAccount.securityEmiRequired",
+                    type: "select",
+                    title: "SECURITY_EMI",
+                    "enumCode": "decisionmaker",
+                    "readonly":false,
+                    required:true,
+                    onChange:function(value,form,model){
+                    if(value === 'Yes'){
+                       model.loanAccount.securityEmiRejectReason=null; 
+                    }
+                    }
+                },
+                { 
+                    condition:"model.loanAccount.securityEmiRequired == 'No'",
+                    key: "loanAccount.securityEmiRejectReason",
+                    type: "select",
+                    title: "REASON",
+                    titleMap:{
+                        "No Reason":"No Reason"
+                    },
+                    "readonly":false,
+                    required:true
+                },
+                {
                     key: "loanAccount.estimatedEmi",
                     type: "amount",
                     title: "ESTIMATED_KINARA_EMI",
@@ -2341,13 +2447,13 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "type": "box",
                 "title": "LOAN_RECOMMENDATION",
                 "condition": "model.currentStage=='Sanction'",
-                "readonly": true,
                 "items": [
                 {
                     "key": "loanAccount.loanAmount",
                     "type": "amount",
                     required:true,
                     "title": "LOAN_AMOUNT",
+                    "readonly": true,
                     onChange:function(value,form,model){
                         computeEMI(model);
                     }
@@ -2356,6 +2462,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.tenure",
                     "title":"DURATION_IN_MONTHS",
                     required:true,
+                    "readonly": true,
                     onChange:function(value,form,model){
                         computeEMI(model);
                     }
@@ -2364,6 +2471,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.interestRate",
                     "type": "number",
                     required:true,
+                    "readonly": true,
                     "title": "INTEREST_RATE",
                     onChange:function(value,form,model){
                         computeEMI(model);
@@ -2379,7 +2487,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     "key": "loanAccount.processingFeePercentage",
                     "type": "number",
                     required:true,
-                    "title": "PROCESSING_FEES_IN_PERCENTAGE"
+                    "title": "PROCESSING_FEES_IN_PERCENTAGE",
+                    "readonly": true
                 },
                 {
                    key: "loanAccount.estimatedEmi",
@@ -2388,17 +2497,34 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     readonly:true
                 },
                 {
+                    "key": "loanAccount.commercialCibilCharge",
+                    "type": "amount",
+                    "title": "COMMERCIAL_CIBIL_CHARGE",
+                    "readonly": true
+                },
+                {
                     "key": "loanAccount.securityEmiRequired",
                     'enumCode': "decisionmaker",
                     'type': "select",
                     "title": "SECURITY_EMI_REQUIRED",
-                    // readonly:true,
-                    // required: true
+                    readonly:false,
+                    required: true,
+                    onChange:function(value,form,model){
+                        if(value === 'Yes'){
+                           model.loanAccount.securityEmiRejectReason=null; 
+                        }
+                        }
                 },
-                {
-                    "key": "loanAccount.commercialCibilCharge",
-                    "type": "amount",
-                    "title": "COMMERCIAL_CIBIL_CHARGE"
+                { 
+                    condition:"model.loanAccount.securityEmiRequired == 'No'",
+                    key: "loanAccount.securityEmiRejectReason",
+                    type: "select",
+                    title: "REASON",
+                    "required":true,
+                    titleMap:{
+                        "No Reason":"No Reason"
+                    },
+                    readonly:false
                 }]
             },
             {
@@ -2821,7 +2947,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info("Inside submit()");
                 PageHelper.clearErrors();
                 /* TODO Call proceed servcie for the loan account */
-
+                if (!validateForm(formCtrl)){
+                    PageHelper.hideLoader();
+                    return;
+                }
                 Utils.confirm("Are You Sure?").then(function(){
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -2863,6 +2992,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 //     return;
                 // }
                 if (!preLoanSaveOrProceed(model)){
+                    return;
+                }
+                if (!validateForm(formCtrl)){
+                    PageHelper.hideLoader();
                     return;
                 }
                 Utils.confirm("Are You Sure?")
@@ -3455,6 +3588,33 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
 
                         mandatoryPromises.push(p1);
+                        if (SessionStore.getGlobalSetting('siteCode') === 'kinara') {
+                            var applicanta_Id;
+                            for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                                var cust = model.loanAccount.loanCustomerRelations[i];
+
+                                if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
+                                    applicanta_Id = cust.customerId;
+                                }
+                            }
+                            if (applicanta_Id !== undefined && applicanta_Id !== '') {
+                                var ApplicantDetails = Enrollment.getCustomerById({ id: applicanta_Id })
+                                    .$promise
+                                    .then(function (ApplicantPromiseData) {
+                                        if (ApplicantPromiseData.addressProof === 'Aadhar Card' && ApplicantPromiseData.udf.userDefinedFieldValues.udf40 != undefined && ApplicantPromiseData.udf.userDefinedFieldValues.udf40 !== '') {
+                                            var DocumentDetails = {};
+                                            DocumentDetails.document = 'Aadhar Declaration';
+                                            DocumentDetails.documentId = ApplicantPromiseData.udf.userDefinedFieldValues.udf40;
+                                            DocumentDetails.loanId = model.loanAccount.id;
+                                            reqData.loanAccount.loanDocuments.push(DocumentDetails);
+                                        }
+                                    }, function (httpResponse) {
+
+                                    });
+                                mandatoryPromises.push(ApplicantDetails);
+                            }
+                        }
+
                     }
 
                     if(model.loanAccount.currentStage === 'Application' && SessionStore.getGlobalSetting('siteCode') !== 'IREPDhan'

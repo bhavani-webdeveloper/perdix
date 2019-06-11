@@ -25,7 +25,7 @@
     "type": "object",
     "title": "Comment",
     "customerMinAge": 18,
-    "customerMaxAge": 70,
+    "customerMaxAge": 75,
     "isMinimumFingerPrintRequired": 1,
     "required": [
       "personalProfile",
@@ -2563,6 +2563,14 @@
           "udf36": {
             "type": "string",
             "title": "SPOUSE_IDENTITY_PROOF_NO",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf40": {
+            "type": "string",
+            "title": "Aadhar Declaration",
             "captureStages": [
               "BasicEnrolment",
               "Completed"

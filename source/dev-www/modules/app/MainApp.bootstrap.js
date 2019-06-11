@@ -37,7 +37,7 @@ var fileSystem = {
 	}
 };
 
-if ( irf.appConfig.FILESYSTEM_ENABLED ) {
+if (irf.appConfig.FILESYSTEM_ENABLED) {
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {

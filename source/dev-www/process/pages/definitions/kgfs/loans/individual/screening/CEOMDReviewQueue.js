@@ -15,60 +15,91 @@ define({
 		"type": "search-list",
 		"title": "CEO_MD_Review",
 		"subTitle": "",
-		initialize: function (model, form, formCtrl) {
-			model.branch = SessionStore.getCurrentBranch().branchId;
-			$log.info("search-list sample got initialized");
-
+		initialize: function(model, form, formCtrl) {
+			model.branchId = SessionStore.getCurrentBranch().branchId;
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					model.bankId = banks[i].value;
+					model.bankName = banks[i].name;
+				}
+			}
+			var userRole = SessionStore.getUserRole();
+			if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
+				model.fullAccess = true;
+			}
+			model.partner = "AXIS";
+			model.isPartnerChangeAllowed = false;
+			$log.info("Checker1 Queue got initialized");
 		},
 		definition: {
 			title: "SEARCH",
-			searchForm: [
-				"*"
-			],
-			//autoSearch: true,
+			searchForm: [{
+				"type": "section",
+				"items": [ 
+				{
+					"key": "bankId",
+					"type": "select",
+				}, {
+					"key": "branchId",
+					"type": "select",
+					"parentEnumCode": "bank",
+					"parentValueExpr": "model.bankId",
+				},
+				{
+					"key": "centre",
+					"type": "select",
+					"parentEnumCode": "branch_id",
+					"parentValueExpr": "model.branchId",
+				},
+				{
+					"key": "applicantName",
+					"type": "string"
+				}, 
+				{
+					"key": "customerUrnNo",
+					"type": "number"
+				}, 
+				{
+					"key":"loanType",
+					"type": "select"
+				}
+			]
+			}],
 			searchSchema: {
 				"type": 'object',
-				"title": 'SEARCH_OPTIONS',
+				"title": 'SearchOptions',
 				"properties": {
-					"branch": {
-						'title': "BRANCH",
-						"type": ["string", "null"],
-						"required":true,
-						"x-schema-form": {
-							"type": "userbranch",
-							"screenFilter": true
-						}
+					"bankId": {
+						"title": "BANK_NAME",
+						"type": ["integer", "null"],
+						enumCode: "bank"
 					},
-					"centre": {
+					"branchId": {
+						"title": "BRANCH_NAME",
+						"type": ["integer", "null"],
+						"enumCode": "branch_id"
+					},
+					"centre":{
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-						"x-schema-form": {
-							"type": "select",
-							"enumCode": "centre",
-							"parentEnumCode": "branch_id",
-							"parentValueExpr": "model.branch",
-							"screenFilter": true
-						}
+						"enumCode": "centre",
 					},
 					"applicantName": {
 						"title": "CUSTOMER_NAME",
 						"type": "string"
 					},
-					"urn": {
-						"title": "URN_NO",
-						"type": "string"
+					"customerUrnNo": {
+						"title": "CUSTOMER_URN_NO",
+						"type": "number"
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
+						"type": ["string", "null"],
 						"enumCode": "booking_loan_type",
-						"type": "string",
-						"x-schema-form": {
-							"type": "select"
-						}
 					},
-				},
-				"required": []
-			},
+				}},
 			getSearchFormHelper: function () {
 				return formHelper;
 			},
@@ -77,7 +108,8 @@ define({
 					searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 				}
 				return IndividualLoan.search({
-					'branchId': searchOptions.branch,
+					'bankId': searchOptions.bankId,
+					'branchId': searchOptions.branchId,
 					'stage': 'CEOMDReview',
 					'applicantName': searchOptions.applicantName,
 					'centreCode': searchOptions.centre,

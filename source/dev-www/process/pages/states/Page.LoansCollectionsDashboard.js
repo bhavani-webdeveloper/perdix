@@ -3,8 +3,34 @@ irf.pages.controller("LoansCollectionsDashboardCtrl",
 function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,RepaymentReminder, LoanCollection) {
     $log.info("Page.LoansCollectionsDashboard.html loaded");
 
-
-
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
+if(siteCode=="kinara"){
+    var fullDefinition = {
+        "title": "Collections Dashboard",
+        "iconClass": "fa fa-reply",
+        "items": [
+            "Page/Engine/loans.individual.collections.RepaymentReminderQueue",
+            "Page/Engine/loans.individual.collections.ReminderFollowUpQueue",
+            "Page/Engine/loans.individual.collections.LoanAssignment",
+            "Page/Engine/loans.individual.collections.BounceQueue",
+            "Page/Engine/loans.individual.collections.BouncePromiseQueue",
+            "Page/Engine/loans.individual.collections.BounceRecoveryQueue",
+            "Page/Engine/loans.individual.collections.DepositStage",
+            "Page/Engine/loans.individual.collections.BranchDepositQueue",
+            "Page/Engine/loans.individual.collections.PreDepositQueue",
+            "Page/Engine/loans.individual.collections.CollectionDepositQueue",
+            "Page/Engine/loans.individual.collections.BRSMultiApproval",
+            "Page/Engine/kinara.loans.individual.collections.CreditValidationQueue",
+            "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
+            "Page/Engine/loans.individual.collections.MonthlyDemandList",
+            "Page/Engine/loans.individual.collections.offlineCollectionUpload",
+            "Page/Engine/loans.individual.collections.CollectionRemainder",
+            "Page/Engine/loans.individual.collections.SecurityEMIRefundQueue",
+            "Page/Engine/loans.individual.collections.RejectedQueue"
+        ]
+    };
+}
+else{
     var fullDefinition = {
         "title": "Collections Dashboard",
         "iconClass": "fa fa-reply",
@@ -29,6 +55,7 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             "Page/Engine/loans.individual.collections.RejectedQueue"
         ]
     };
+}
     var assignedTo ;
     PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
     .then(function(data){
@@ -110,15 +137,35 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
                 brqMenu.data = '-';
             });
         }
-
-        var cvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CreditValidationQueue"];
-        if (cvqMenu) {
-            LoanCollection.query({
-                    'currentStage':"CreditValidation"
-                }).$promise.then(function(response, headerGetter){
-                    cvqMenu.data = response.headers['x-total-count'];
-                })
+        
+        if(siteCode=="kinara"){
+            var cvqMenu  = $scope.dashboardDefinition.$menuMap["Page/Engine/kinara.loans.individual.collections.CreditValidationQueue"];
+            if (cvqMenu) {
+                LoanCollection.query({
+                        'currentStage':"CreditValidation"
+                    }).$promise.then(function(response, headerGetter){
+                        cvqMenu.data = response.headers['x-total-count'];
+                    })
+            }
         }
+        else{
+            var cvqMenu  = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CreditValidationQueue"];
+            if (cvqMenu) {
+                LoanCollection.query({
+                        'currentStage':"CreditValidation"
+                    }).$promise.then(function(response, headerGetter){
+                        cvqMenu.data = response.headers['x-total-count'];
+                    })
+            }
+        }
+        // var cvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CreditValidationQueue"];
+        // if (cvqMenu) {
+        //     LoanCollection.query({
+        //             'currentStage':"CreditValidation"
+        //         }).$promise.then(function(response, headerGetter){
+        //             cvqMenu.data = response.headers['x-total-count'];
+        //         })
+        // }
 
         var brdep=$scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BranchDepositQueue"];
         if(brdep) {

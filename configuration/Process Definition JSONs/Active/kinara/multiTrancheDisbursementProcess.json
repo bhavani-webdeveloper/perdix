@@ -132,7 +132,7 @@
          "code":"DisbursementConfirmation",
          "name":"Disbursement Confirmation",
          "stageType":"DISBURSEMENTCONFIRMATION",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"Disbursed",
          "documentTrackingRequired":"Yes",
          "allowedRoles":[

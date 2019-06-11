@@ -22,7 +22,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
             sortByColumns:{
                 "customer name":"Customer Name",
                 "centre id":"Centre",
-                "sanction_date":"Sanction Date"
+                "sanctionDate":"Sanction Date",
+                "status":"Status"
             },
             searchForm: [
                 "*"
@@ -87,13 +88,17 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             },
                         }
                     },
-                    // "sanction_date": {
-                    //     "title": "SANCTION_DATE",
-                    //     "type": "string",
-                    //     "x-schema-form": {
-                    //         "type": "date"
-                    //     }
-                    // }
+                    "status": {
+                        "title": "STATUS",
+                        "type": ["string","null"],
+                        "x-schema-form": {
+                            "type": "select",
+                            "titleMap": [{
+                                "name": "Hold",
+                                "value": "HOLD"
+                            }]
+                        }
+                    }
                 }
             },
             getSearchFormHelper: function() {
@@ -106,8 +111,10 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                     'branchId':searchOptions.branch,
                     'centreCode': searchOptions.centre,
                     'customerId': searchOptions.customerId,
+                    'status': searchOptions.status,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
+                    'sortBy': searchOptions.sortBy,
                 }).$promise;
             },
             paginationOptions: {
@@ -131,7 +138,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 },
                 getListItem: function(item){
                     return [
-                        item.customerName ,
+                        item.customerName + ( item.status ?  " <em>["+item.status+"]</en>" : "") ,
                         "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
                     ]
                 },

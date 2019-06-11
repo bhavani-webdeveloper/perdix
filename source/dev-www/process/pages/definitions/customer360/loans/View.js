@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "$stateParams","PageHelper","$q",
-        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, $stateParams, PageHelper,$q){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "$stateParams","PageHelper","$q","IndividualLoan",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, $stateParams, PageHelper,$q,IndividualLoan){
             var pageConfig = {};
             var isPageConfigResolve = false;
             var isApplicableValue = function(param){
@@ -100,6 +100,22 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                             return [];
                         },
                         getListItem: function(item){
+                            if (item && item.accountId) {
+                                IndividualLoan.get({
+                                    id: item.accountId
+                                }).$promise.then(function (currentResp) {
+                                    if(currentResp.currentStage == 'LoanInitiation' || currentResp.currentStage == 'DocumentUpload')
+                                    item.applicationStatus='Pending upload queue';
+                                    else if(currentResp.currentStage == 'Checker1')
+                                    item.applicationStatus='Checker 1';
+                                    else if(currentResp.currentStage == 'Checker2')
+                                    item.applicationStatus='Checker 2';
+                                    else if(currentResp.currentStage == 'Completed' || currentResp.currentStage == 'ReadyForDisbursement')
+                                    item.applicationStatus='Open';                                   
+                                });
+
+                            }
+                            
                             return [
                                 item.accountNumber,
                                 'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode
@@ -274,6 +290,21 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     },
                                     isApplicable: function(item, index){
                                         return isApplicableValue('isFreezeAccountAccess');
+                                    }
+                                },{ 
+                                    name: "ACTIVATE_ACCOUNT",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.individual.ActivateLoan',
+                                            pageId: [item.accountNumber]
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'KGFS') { 
+                                            return true
+                                        }
+                                        
                                     }
                                 },
                                 {

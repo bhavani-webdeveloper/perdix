@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.P2PUpdate"),
 ["$log","$q", 'Pages_ManagementHelper','LoanProcess','PageHelper','formHelper','irfProgressMessage',
-'SessionStore',"$state","$stateParams","Masters","authService","Utils", "LoanAccount",
+'SessionStore',"$state","$stateParams","Masters","authService","Utils", "LoanAccount", "PagesDefinition",
 function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgressMessage,
-	SessionStore,$state,$stateParams,Masters,authService, Utils, LoanAccount){
+	SessionStore,$state,$stateParams,Masters,authService, Utils, LoanAccount, PagesDefinition){
 
 	return {
 		"type": "schema-form",
@@ -22,16 +22,17 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 }
             }
 
+            model.pageConfig = {};
+            PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.P2PUpdate").then(function(data){
+                model.pageConfig = data;
+            });
+
             //PageHelper
             var loanAccountNo = $stateParams.pageId;
             var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
             model.additional = {};
             promise.then(function (data) { /* SUCCESS */
                 model.P2PUpdate = data;
-                console.log(data);
-
-
-
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
                 model.promise = model.promise || {};
@@ -39,9 +40,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.promise.applicant = data.customer2FirstName;
                 model.promise.productCode=data.productCode;
                 model.promise.customer1Phone1=data.customer1Phone1;
-                //model.promise.customerCategoryLoanOfficer=data.customerCategoryLoanOfficer;
-                //model.promise.urnNo=data.customerId1;
-                //model.promise.instrument='CASH_IN';
                 model.promise.authorizationUsing="";
                 model.promise.remarks='';
                 model.promise.accountNumber = data.accountId;
@@ -81,23 +79,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                 model.additional.fromBouncePromiseQueue = false;
                 model.additional.fromBounceQueue = false;
             }
-
-
-
-           /* if (!model._bounce) {
-                $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
-            } else {
-                 model.promise = model._bounce;
-                 model.promise.assignTo='Null-testing';
-                 model.promise.bankName=model._bounce.;
-                model.promise.amountdue = model._bounce.amount1;
-                model.promise.custname = model._bounce.customerName;
-                model.promise.accountNumber = model._bounce.accountId;
-                model.promise.transactionDate = Utils.getCurrentDate();
-                model.promise.scheduledDate = Utils.getCurrentDate();
-
-            }
-            */
         },
 		form: [
 			{
@@ -264,7 +245,19 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         "titleMap": {
                             "YES": "YES",
                             "NO": "NO"
-                        }
+                        },
+                        required: true,
+                        condition: "model.pageConfig && model.pageConfig.mandatoryFields && model.pageConfig.mandatoryFields['promise.udf1'] && model.pageConfig.mandatoryFields['promise.udf1'] == true"
+                    },
+                    {
+                        key: "promise.udf1",
+                        type: "radios",
+                        title: "BUSINESS_RUNNING",
+                        "titleMap": {
+                            "YES": "YES",
+                            "NO": "NO"
+                        },
+                        condition: "(model.pageConfig && model.pageConfig.mandatoryFields && model.pageConfig.mandatoryFields['promise.udf1'] && model.pageConfig.mandatoryFields['promise.udf1'] == false) || !model.pageConfig || !model.pageConfig.mandatoryFields || !model.pageConfig.mandatoryFields['promise.udf1']"
                     },
                     {
                         key: "promise.udf2",
@@ -273,7 +266,19 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         "titleMap": {
                             "YES": "YES",
                             "NO": "NO"
-                        }
+                        },
+                        required: true,
+                        condition: "model.pageConfig && model.pageConfig.mandatoryFields && model.pageConfig.mandatoryFields['promise.udf2'] && model.pageConfig.mandatoryFields['promise.udf2'] == true"
+                    },
+                    {
+                        key: "promise.udf2",
+                        type: "radios",
+                        title: "COLLATERAL_AVAILABLE",
+                        "titleMap": {
+                            "YES": "YES",
+                            "NO": "NO"
+                        },
+                        condition: "(model.pageConfig && model.pageConfig.mandatoryFields && model.pageConfig.mandatoryFields['promise.udf2'] && model.pageConfig.mandatoryFields['promise.udf2'] == false) || !model.pageConfig || !model.pageConfig.mandatoryFields || !model.pageConfig.mandatoryFields['promise.udf1']"
                     },
                     {
                                 "type": "fieldset",
@@ -342,14 +347,30 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         type: "select",
                                         "condition" : "model.siteCode != 'shramsarathi'",
                                         required: true,
-                                        titleMap: {
-                                            "Business not running":"Business not running",
-                                            "Hardship": "Hardship",
-                                            "Wilful default":"Wilful default",
-                                            "Can pay":"Can pay",
-                                            "Others":"Others"
-                                        },
-
+                                        titleMap: [{
+                                            "name": "Business",
+                                            "value": "Business"
+                                            },
+                                            {
+                                                "name": "Personal",
+                                                "value": "Personal"
+                                            }]
+                                    },
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        required: true,
+                                        condition: "model.additional.reasonType=='Business'",
+                                        enumCode: "business_overdue_reasons"
+                                    },
+                                    {
+                                        key: "additional.reason",
+                                        title: "REASON",
+                                        type: "select",
+                                        required: true,
+                                        condition: "model.additional.reasonType=='Personal'",
+                                        enumCode: "personal_overdue_reasons"
                                     },
 
                                     {

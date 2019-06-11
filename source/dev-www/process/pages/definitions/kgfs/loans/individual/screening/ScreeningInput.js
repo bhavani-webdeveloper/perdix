@@ -50,7 +50,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.LoanRequest',
-                            title: 'LOAN_APPROVAL',
+                            title: 'LOAN_DETAILS',
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
@@ -60,8 +60,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.loans.individual.screening.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1,
                             order:60
                         }
                     ]);
@@ -127,6 +125,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;
+                                var loanType=loanProcess.loanAccount.loanType;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
@@ -184,14 +183,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
+                                if(loanType != 'JEWEL') {
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-
+                                }
                             
                                 deferred.resolve();
 
@@ -246,13 +245,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
+                                if(localStorage.getItem("productCategory")!='JEWEL') {
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                }
 
                                 deferred.resolve();
                             });
@@ -292,7 +292,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "load-bank-details": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-bank-details-business", params);
-                    },
+                    },                    
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)
                         model.productCategory = params
@@ -344,11 +344,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
+                    "new-loanAccount-id": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("new-loanAccounts-id", params);
+                    },                    
                     "business-capture": function(pageObj, bundleModel, params){
                         $log.info("Inside business-capture of Screening");
                         BundleManager.broadcastEvent("business-captures", params);
                     },
-                    
+                    "business-customer-bank-account": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("business-customer-bank-accounts", params);
+                    },                    
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */
                         BundleManager.broadcastEvent("applicant-updated", obj);
@@ -378,6 +383,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "dsc-status":function(pageObj,bundlePageObj, obj){
                         BundleManager.broadcastEvent('dsc-response',pageObj);
+                    },
+                    "refresh-all-tabs": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("refresh-all-tabs-customer", params);
                     }
                 },
                 preSave: function(offlineData) {

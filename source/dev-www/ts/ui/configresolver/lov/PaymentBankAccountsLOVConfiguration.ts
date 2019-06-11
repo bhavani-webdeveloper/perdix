@@ -23,7 +23,7 @@ export class PaymentBankAccountsLOVConfiguration extends LOVElementConfiguration
     };
 
     onSelect: Function = function(valueObj, model, context) {
-
+        model._lastSelectedBankAccount= valueObj;
     };
 
     inputMap: Object = {

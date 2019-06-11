@@ -36,7 +36,17 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                             }
                                         }
                                        }
-                                   }                   
+                                   },
+                                   'isReversalFlag':{
+                                    "true":{
+                                        "excludes":[
+                                            'actionboxBeforeSave',
+                                            'actionboxAfterSave',
+                                            'Telecalling'
+                                        ],
+                                        "overrides":{},
+                                    }
+                                },                   
                                }
                            }
 var idPresent = false;
@@ -87,6 +97,7 @@ var getIncludes = function (model) {
                    "InsurancePolicyInformation.urnNo",
                    "InsurancePolicyInformation.insuranceRecommendations",
                    "InsurancePolicyInformation.recommendationStatus",
+                   "InsurancePolicyInformation.recommendationResponseMessage",
                    "InsurancePolicyInformation.question",
                    "InsurancePolicyInformation.accountNumber",
                    "InsurancePolicyInformation.accountType",
@@ -442,6 +453,17 @@ var getIncludes = function (model) {
                                        }
                                    }
                                },
+                               "Reversal":{  
+                                "type":"actionbox",
+                                "condition": "model.insurancePolicyDetailsDTO.id && model.isReversalFlag =='true'" , 
+                                "items":{
+                                   "Reverse":{
+                                      "type":"button",
+                                      "title":"Reverse",
+                                      "onClick":"actions.reverse(model, formCtrl, form, $event)"
+                                   },
+                                }
+                             }
                            }
                            
                           
@@ -572,6 +594,7 @@ var getIncludes = function (model) {
                                        PageHelper.hideLoader();
                                    })
                                    .subscribe(function(value) {
+                                       value.insurancePolicyDetailsDTO.recommendationResponseMessage = '<p style="color:tomato" >'+value.insurancePolicyDetailsDTO.recommendationResponseMessage+'</p>';
                                        PageHelper.clearErrors();
                                    }, function(err) {
                                        PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
@@ -742,7 +765,22 @@ var getIncludes = function (model) {
                                    PageHelper.hideLoader();
                                });
                            }
-                   }
+                   },
+                   reverse: function(model,formCtrl,form,$event){
+                    Utils.confirm('Are you sure want to Reverse Insurance').then(function(resp){
+                        PageHelper.showLoader();
+                        Insurance.cancelInsurance({id:model.insurancePolicyDetailsDTO.id}).$promise.then(function(resp){
+                            PageHelper.hideLoader();
+                            PageHelper.showProgress('Insurance','Insurance Reversal is done.',3000);
+                            irfNavigator.goBack();
+                        },function(err){
+                            PageHelper.hideLoader();
+                            PageHelper.showErrors(err);
+                        })
+                    },function(err){
+                        // hide the loader
+                    })
+                }
                }
            };
        }

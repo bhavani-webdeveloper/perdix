@@ -144,7 +144,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							data: 'id'
 						},
 						{
-							title: 'HUB_NAME',
+							title: 'BRANCH_NAME',
 							data: 'branchName'
 						},
 						{
@@ -168,7 +168,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							data: 'loanAmount'
 						}, 
 						{
-							title: 'PANCHAYAT',
+							title: 'AREA',
 							data: 'area'
 						}, 
 						{

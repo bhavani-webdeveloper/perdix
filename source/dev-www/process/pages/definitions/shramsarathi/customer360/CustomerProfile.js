@@ -3708,17 +3708,64 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "IndividualInformation": {
                                     "items": {
                                         "centreId1": {
-                                            key: "customer.centreId",
-                                            type: "select",
-                                            readonly: false,
-                                            title: "CENTRE_NAME",
-                                            filter: {
-                                                "parentCode": "branch_id"
-                                            },
-                                            parentEnumCode: "branch_id",
+                                            "title": "ZONE_NAME",
+                                            "key": "customer.centreName",
+                                            type: "lov",
                                             orderNo: 12,
-                                            parentValueExpr: "model.customer.customerBranchId",
-                                        }
+                                            lovonly: true,
+                                            autolov: true,
+                                            bindMap: {},
+                                            required: true,
+                                            searchHelper: formHelper,
+                                            search: function (inputModel, form, model, context) {
+                                                var centres = SessionStore.getCentres();
+                                                var centreCode = formHelper.enum('centre').data;
+                                                var out = [];
+                                                var branchId= model.customer.customerBranchId || "";
+                                                if (centres && centres.length) {
+                                                    for (var i = 0; i < centreCode.length; i++) {
+                                                        for (var j = 0; j < centres.length; j++) {
+                                                            if (centreCode[i].value == centres[j].id) {
+                                                          //  if(branchId == centreCode[i].parentCode ){
+                                                                out.push({
+                                                                    name: centreCode[i].name,
+                                                                    id: centreCode[i].value
+                                                                })
+                                                          //  }
+                                                              
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                return $q.resolve({
+                                                    headers: {
+                                                        "x-total-count": out.length
+                                                    },
+                                                    body: out
+                                                });
+                                            },
+                                            onSelect: function (valueObj, model, context) {
+                                                model.customer.centreName = valueObj.name;
+                                                model.customer.centreId = valueObj.id;
+                                            },
+                                            getListDisplayItem: function (item, index) {
+                                                return [
+                                                    item.name
+                                                ];
+                                            }
+                                        },
+                                        // "centreId1": {
+                                        //     key: "customer.centreId",
+                                        //     type: "select",
+                                        //     readonly: false,
+                                        //     title: "CENTRE_NAME",
+                                        //     filter: {
+                                        //         "parentCode": "branch_id"
+                                        //     },
+                                        //     parentEnumCode: "branch_id",
+                                        //     orderNo: 12,
+                                        //     parentValueExpr: "model.customer.customerBranchId",
+                                        // }
                                         // "groupName": {
                                         //     "key": "loanAccount.groupName",
                                         //     "title": "GROUP_NAME",

@@ -138,7 +138,7 @@
         },
         "udf3": {
           "title":"REJECTION_REASON",
-          "type": "string"
+          "type": ["string", "null"]
         },
         "udf4": {
           "title": "FINANCE_TEAM_REJECTION_REMARKS",

@@ -56,8 +56,15 @@ define({
                 {
                     "key": "product.productCategory",
                     "type": "select",
-                    "enumCode": "loan_product_category_master",
+                    "enumCode": "product_category_loan_type",
                     "required": true,
+                    "condition":"!model.productId"
+                },{
+                    "key": "product.productCategory",
+                    "type": "select",
+                    "enumCode": "product_category_loan_type",
+                    "readonly":true,
+                    "condition":"model.productId"
                 }, {
                     "key": "product.productCode",
                     "type": "string",
@@ -235,23 +242,21 @@ define({
                         "value": "HI",
                     }]
                 },
-                // {
-                //     "title": "APPLICANT_MIN_AGE",
-                //     "key": "product.applicantMinAge",
-                //     "type": "number",
-                //     required:true
-                // },
-                // {
-                //     "title": "APLLICANT_MAX_AGE",
-                //     "key":"product.applicantMaxAge",
-                //     "type":"number",
-                //     required:true
-                // },
-                // {
-                //     "title": "MATURITY_AGE",
-                //     "key":"product.maturityAge",
-                //     "type":"number"
-                // },
+                {
+                    "title": "APPLICANT_MIN_AGE",
+                    "key": "product.applicantMinAge",
+                    "type": "number"
+                },
+                {
+                    "title": "APLLICANT_MAX_AGE",
+                    "key":"product.applicantMaxAge",
+                    "type":"number"
+                },
+                {
+                    "title": "MATURITY_AGE",
+                    "key":"product.maturityAge",
+                    "type":"number"
+                },
                 {
                     "key": "product.repaymentReminderEnabled",
                     "title": "REPAYMENT_REMINDER_ENABLED"

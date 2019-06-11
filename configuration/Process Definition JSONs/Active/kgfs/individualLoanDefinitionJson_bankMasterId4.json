@@ -11,6 +11,7 @@
          "stageType":"CAPTURE",
          "sendSms":"No",
          "smsCategory":"LoanBooking",
+	"isSchemaValidationRequired":true,
          "isAccountOpening":false,
          "riskScoreName":"RiskScore1",
          "allowedRoles":[
@@ -160,8 +161,7 @@
          "stageType":"CAPTURE",
          "sendSms":"Yes",
          "smsCategory":"Sanction",
-         "isAccountOpening":false,
-         "isPreAccountOpening":true,
+         "isAccountOpening":true,
          "allowedRoles":[
             "WM"
          ]
@@ -174,7 +174,7 @@
        "sendSms":"Yes",
        "smsCategory":"Sanction",
        "isAccountOpening":false,
-       "isPreAccountOpening":true,
+      
        "allowedRoles":[
           "WM"
        ]
@@ -186,7 +186,7 @@
        "stageType":"CAPTURE",
        "sendSms":"Yes",
        "smsCategory":"LoanBooking",
-       "isAccountOpening":true,
+       "isAccountOpening":false,
        "allowedRoles":[
           "WM"
        ]

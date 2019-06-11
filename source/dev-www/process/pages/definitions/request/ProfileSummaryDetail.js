@@ -63,14 +63,15 @@ define([], function(){
                             }, {
                                 "key":"userInfo.pincode",
                                 "title": "PINCODE"
-                            },{
-                                "key":"userInfo.addressProofFileID",
-                                "title":"ADDRESS_PROOF"
-                                // type: "file",
-                                // "fileType": "application/pdf",
-                                // "category": "CustomerEnrollment"
-                                //"using": "scanner",
-                            }]
+                            },
+                            {
+                                "key": "userInfo.addressProofFileID",
+                                "type": "file",
+                                "title": "Address Proof File",
+                                "fileType": "application/pdf",
+                                "category": "Loan",
+                                "subCategory": "PHOTO",
+                            } ]
                         }]
                     }]
                   },

@@ -131,6 +131,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "References",   
                             ],
                             "overrides": {
+                                "IndividualFinancials.expenditures":{
+                                    onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                        var index = model.customer.expenditures.length -1;
+                                        model.customer.expenditures[index].frequency="Monthly";
+                                    }
+                                },
                                 "IndividualInformation.centreId1":{
                                     "required":true
                                 },
@@ -237,7 +243,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
-                                    "readonly":true
+                                   // "readonly":true
                                 },
                             }
                         },
@@ -285,7 +291,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 //"IndividualReferences",
-                                "IndividualInformation.centreId",
+                               "IndividualInformation.centreId",
                                 //"References",
                                 "KYC.firstName"
                             ],
@@ -338,17 +344,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer.expenditures[index].frequency="Monthly";
                                     }
                                 },
-
-                          
                                 // "IndividualInformation.centreId": {
                                 //     "required": true,
-                                //     "readonly": true,
+                                //     "readonly": false,
                                 //     "title": "ZONE_ID"
                                 // },
-                                "IndividualInformation.centreId1":{
-                                    "title": "ZONE_NAME",
-                                    "readonly":false
-                                },
+                                // "IndividualInformation.centreId1":{
+                                //     "title": "ZONE_NAME",
+                                //     "readonly":false
+                                // },
+                                // "IndividualInformation.centreId":{
+                                //     "title": "ZONE_NAME",
+                                //     "readonly":true
+                                // },
                                 "IndividualInformation.caste":{
                                     "enumcode": "caste",
                                     "required": true
@@ -3669,18 +3677,65 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "IndividualInformation": {
                             "items": {
                                 "centreId1": {
-                                    key: "customer.centreId",
-                                    type: "select",
-                                    readonly: true,
-                                    title: "CENTRE_NAME",
-                                    required: true,
-                                    filter: {
-                                        "parentCode": "branch_id"
-                                    },
-                                    parentEnumCode: "branch_id",
+                                    "title": "ZONE_NAME",
+                                    "key": "customer.centreName",
+                                    type: "lov",
                                     orderNo: 12,
-                                    parentValueExpr: "model.customer.customerBranchId",
+                                    lovonly: true,
+                                    autolov: true,
+                                    bindMap: {},
+                                    required: true,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var centres = SessionStore.getCentres();
+                                        var centreCode = formHelper.enum('centre').data;
+                                        var out = [];
+                                        var branchId= model.customer.customerBranchId || "";
+                                        if (centres && centres.length) {
+                                            for (var i = 0; i < centreCode.length; i++) {
+                                                for (var j = 0; j < centres.length; j++) {
+                                                    if (centreCode[i].value == centres[j].id) {
+                                                  //  if(branchId == centreCode[i].parentCode ){
+                                                        out.push({
+                                                            name: centreCode[i].name,
+                                                            id: centreCode[i].value
+                                                        })
+                                                  //  }
+                                                      
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        model.customer.centreName = valueObj.name;
+                                        model.customer.centreId = valueObj.id;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
                                 },
+                                // "centreId1": {
+                                //     key: "customer.centreId",
+                                //     type: "select",
+                                //     readonly: true,
+                                //     title: "CENTRE_NAME",
+                                //     required: true,
+                                //     filter: {
+                                //         "parentCode": "branch_id"
+                                //     },
+                                //     parentEnumCode: "branch_id",
+                                //     orderNo: 12,
+                                //     parentValueExpr: "model.customer.customerBranchId",
+                                // },
                                 // "groupName": {
                                 //     "key": "loanAccount.groupName",
                                 //     "title": "GROUP_NAME",

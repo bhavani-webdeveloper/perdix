@@ -30,7 +30,7 @@ irf.pageCollection.directive("irfPvCharts", function () {
     $scope.data.push($scope.chartData.data.dataset[i].data)
     $scope.colors.push(getColor($scope.chartData.data.dataset[i]));
   }
-
+  Chart.defaults.global.elements.rectangle.borderWidth = 0;
   $scope.onClick = function (points, evt) {
   };
 

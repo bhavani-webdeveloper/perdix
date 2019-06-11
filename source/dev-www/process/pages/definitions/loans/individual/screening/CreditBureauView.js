@@ -540,7 +540,7 @@ var INDIVIDUAL_HTML =
                     bureauPromise.then(function(httpres) {
                         // Data processing for UI - starts
                         // CIBIL
-                        if (httpres && httpres.cibil && typeof httpres.cibil.fileId){
+                        if (httpres && httpres.cibil && httpres.cibil.fileId){
                             var fileId = httpres.cibil.fileId;
                             httpres.cibil = {};
                             httpres.cibil.pdfRender = true;

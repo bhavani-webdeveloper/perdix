@@ -540,7 +540,7 @@ var INDIVIDUAL_HTML =
                     bureauPromise.then(function(httpres) {
                         // Data processing for UI - starts
                         // CIBIL
-                        if (httpres && httpres.cibil && typeof httpres.cibil.fileId){
+                        if (httpres && httpres.cibil && httpres.cibil.fileId){
                             var fileId = httpres.cibil.fileId;
                             httpres.cibil = {};
                             httpres.cibil.pdfRender = true;
@@ -803,7 +803,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' +'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.coapplicants">' +'<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+CIBIL_HTML+'</div>'+'<div ng-show="model.EUQIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div></div>'
                     }
                 ]
             },
@@ -816,7 +816,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' +'<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+CIBIL_HTML+'</div>'+'<div ng-show="model.EUQIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div></div>'
                     }
                 ]
             }

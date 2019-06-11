@@ -964,7 +964,7 @@
                   "title":"SecurityEmiRequired",
                   "type":"string",
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
+                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected","FieldAppraisal","Application"
                   ]
                },
                "fee3":{
@@ -1223,10 +1223,31 @@
                       "Sanction",
                       "LoanInitiation",
                       "PendingForPartner",
+                      "LoanBooking"
+                  ]
+               },
+               "securityEmiRejectReason":{
+                  "title": "status",
+                  "type": "string",
+                  "captureStages": [
+                      "Screening",
+                      "ScreeningReview",
+                      "Application",
+                      "ApplicationReview",
+                      "FieldAppraisal",
+                      "FieldAppraisalReview",
+                      "ZonalRiskReview",
+                      "CentralRiskReview",
+                      "CreditCommitteeReview",
+                      "Rejected",
+                      "Sanction",
+                      "LoanInitiation",
+                      "PendingForPartner",
                       "LoanBooking",
                       "DocumentUpload",
                       "DocumentVerification"
                   ]
+
                }
             }
          },
@@ -4022,7 +4043,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","Sanction"
                      ]
                   },
                   "document":{
@@ -4031,7 +4052,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","Sanction"
                      ]
                   },
                   "remarks":{

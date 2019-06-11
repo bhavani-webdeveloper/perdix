@@ -192,7 +192,6 @@
 <script src="process/models/v1/Queries.js"></script>
 <script src="process/models/v1/Schema.js"></script>
 <script src="process/models/v1/customer/Enrollment.js"></script>
-<script src="process/models/v1/customer/Workflow.js"></script>
 <script src="process/models/v1/customer/IrfFormRequestProcessor.js"></script>
 <script src="process/models/v1/customer/CreditBureau.js"></script>
 <script src="process/models/v1/customer/MantraFingrePrintService.js"></script>
@@ -207,6 +206,7 @@
 <script src="process/models/v1/loans/LoanCollection.js"></script>
 <script src="process/models/v1/loans/RepaymentReminder.js"></script>
 <script src="process/models/v1/loans/PaymentBank.js"></script>
+<script src="process/models/v1/loans/PayeeValidation.js"></script>
 <script src="process/models/v1/loans/Groups.js"></script>
 <script src="process/models/v1/loans/GroupProcess.js"></script>
 <script src="process/models/v1/loans/ACH.js"></script>
@@ -229,6 +229,7 @@
 <script src="process/models/v1/management/VillageCreationResource.js"></script>
 <script src="process/models/v1/management/DeathMarking.js"></script>
 <script src="process/models/v1/management/BranchKeyResource.js"></script>
+<script src="./process/models/v1/management/Patch.js"></script>
 
 <script src="process/models/v1/management/Commons.js"></script>
 
@@ -268,6 +269,7 @@
 <script src="process/pages/pages.config.js"></script>
 <script src="process/pages/states/Page.Landing.js"></script>
 <script src="process/pages/definitions/workflow/CustomerApprovalDashboard.js"></script>
+<script src="process/pages/definitions/workflow/CustomerInfoUpdateDashboard.js"></script>
 <script src="process/pages/states/Page.Customer360.js"></script>
 <script src="process/pages/states/Page.CustomerHistory.js"></script>
 <script src="process/pages/states/Page.BIDashboard.js"></script>
@@ -392,6 +394,7 @@
 <script src="process/pages/definitions/management/product/LoanProductDashboard.js"></script>
 <script src="process/pages/definitions/management/BranchCreationDashboard.js"></script>
 <script src="process/pages/definitions/management/VillageCreationDashboard.js"></script>
+<script src="process/pages/definitions/management/Patch.js"></script>
 
 <script src="process/pages/definitions/coa/ChartOfAccountDashboard.js"></script>
 
@@ -407,9 +410,8 @@
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
 <script src="process/pages/definitions/customer/CustomerSearch.js"></script>
-<script src="process/pages/definitions/workflow/CustomerApprovalApprove.js"></script>
 <script src="process/pages/definitions/workflow/CustomerApprovalQueue.js"></script>
-<script src="process/pages/definitions/workflow/CustomerApprovalInit.js"></script>
+<script src="process/pages/definitions/workflow/CustomerInfoUpdateApprovalQueue.js"></script>
 <script src="process/pages/definitions/customer/FSOCustomerSearch.js"></script>
 <script src="process/pages/definitions/customer/EnrollmentStage1.js"></script>
 <script src="process/pages/definitions/customer/AssetsLiabilitiesAndHealth.js"></script>
@@ -548,12 +550,13 @@
 <script src="modules/directives/Box.js"></script>
 <script src="modules/directives/PnL.js"></script>
 <script src="modules/directives/Charts.js"></script>
+<script src="modules/directives/Iterator.js"></script>
 <script src="modules/directives/Container.js"></script>
 <script src="modules/directives/Dashboard.js"></script>
 <script src="modules/directives/Section.js"></script>
 <script src="modules/directives/Grid.js"></script>
 
-
+<script src="modules/models/common/Workflow.js"></script>
 <script src="modules/models/common/Visulaization.js"></script>
 
 
@@ -578,6 +581,7 @@
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementDocumentUpload.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/kinara/loans/individual/disbursement/Disbursement.js"></script>
+<script src="process/pages/definitions/kinara/loans/individual/collections/CreditValidationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmation.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursementQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursement.js"></script>
@@ -705,15 +709,6 @@
 <script src="process/pages/definitions/audit/OpenSnapAuditsQueue.js"></script>
 <script src="process/pages/definitions/audit/AuditScoreDetails.js"></script>
 <script src="process/pages/definitions/audit/ScheduledAuditDetails.js"></script>
-<script src="process/pages/definitions/audit/AssignedBranchIssuesViewQueue.js"></script>
-<script src="process/pages/definitions/audit/ExpiredBranchAuditsQueue.js"></script>
-<script src="process/pages/definitions/audit/AuditBranchScoresQueue.js"></script>
-<script src="process/pages/definitions/audit/CreateBranchAudit.js"></script>
-<script src="process/pages/definitions/audit/OpenBranchRegularAuditsQueue.js"></script>
-<script src="process/pages/definitions/audit/OpenBranchSnapAuditsQueue.js"></script>
-<script src="process/pages/definitions/audit/PublishedBranchAuditsViewQueue.js"></script>
-<script src="process/pages/definitions/audit/OutstandingBranchIssuesQueue.js"></script>
-<script src="process/pages/definitions/audit/AuditsBranchViewQueue.js"></script>
 
 <script src="process/pages/definitions/audit/ScheduleAudit.js"></script>
 <script src="process/pages/definitions/audit/CreateAudit.js"></script>
@@ -832,6 +827,18 @@
 <!-- Sarvagram Mapping-->
 <script src="process/pages/definitions/sarvagram/dashboard/lead/LeadDashboard.js"></script>
 <script src="process/pages/definitions/sarvagram/dashboard/loans/LoanOriginationDashboard.js"></script>
+
+<!-- Arthan Mapping-->
+<script src="process/pages/definitions/arthan/loans/LoanOriginationDashboard.js"></script>
+<script src="process/pages/definitions/arthan/loans/individual/screening/FieldAppraisalReviewQueue.js"></script>
+<script src="process/pages/definitions/arthan/loans/individual/screening/LegalReview.js"></script>
+<script src="process/pages/definitions/arthan/loans/individual/screening/ValuationReview.js"></script>
+<script src="process/pages/definitions/arthan/loans/individual/screening/RCU_Review1.js"></script>
+
+
+
+
+
 
 <!-- endbuild -->
 <!--Cordova-->

@@ -9,7 +9,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"stage": {
 							"title": "STAGE",
 							"type": ["string", "null"],
-							"enumCode": "origination_stage",
+							"enumCode": "origination_stage1",
 							"x-schema-form": {
 								"type": "select",
 								"required": "true",
@@ -66,7 +66,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 					},
 					"required": []
 				}
-			}
+			}		
 			else {
 				return {
 					"type": 'object',
@@ -125,14 +125,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"title": "PIN_CODE",
 							"type": "string"
 						}
-						// "status": {
-						// 	"type": "string",
-						// 	"title": "STATUS",
-						// 	"enumCode": "origination_status",
-						// 	"x-schema-form": {
-						// 		"type": "select"
-						// 	}
-						// }
 					},
 					"required": []
 				}

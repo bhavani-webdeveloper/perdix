@@ -336,7 +336,10 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-                
+                if(model.loanAccount.securityEmiRequired == null){
+                    model.loanAccount.securityEmiRequired='Yes';
+                }
+               
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
@@ -758,6 +761,18 @@ define({
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
+                        },
+                        {
+                            key: "loanAccount.securityEmiRequired",
+                            type: "select",
+                            title: "SECURITY_EMI",
+                            "enumCode": "decisionmaker",
+                            "required":true,
+                            onChange:function(value,form,model){
+                                if(value === 'Yes'){
+                                   model.loanAccount.securityEmiRejectReason=null; 
+                                }
+                                }
                         }]
                     }, {
                         "type": "grid",
@@ -776,6 +791,16 @@ define({
                             "key": "loanAccount.commercialCibilCharge",
                             "title": "CIBIL Charges",
                             "type": "amount"
+                        },
+                        { 
+                            condition:"model.loanAccount.securityEmiRequired == 'No'",
+                            key: "loanAccount.securityEmiRejectReason",
+                            type: "select",
+                            title: "REASON",
+                            "required":true,
+                            titleMap:{
+                                "No Reason":"No Reason"
+                            }
                         }]
                     }]
                 }]
@@ -1101,6 +1126,11 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
+                                //   security EMI & Reject Reason validation
+                    if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                        PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
+                        return false;
+                    }
                 
                     model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
                    // loanMitigants= [];
@@ -1340,6 +1370,13 @@ define({
                     return;
                 }
 */
+
+                //   security EMI & Reject Reason validation
+                if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                    PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
+                    return false;
+                }
+
                     /* validating that loan AmountRequested should be greater than current loan amount*/
                     if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
                         if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
