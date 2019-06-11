@@ -6019,7 +6019,8 @@
                        "FieldInvestigation3",
                        "TeleVerification",
                        "LoanInitiation",
-                       "DocumentUpload"
+                       "DocumentUpload",
+                       "Completed"
                     ]
                  },
                  "remarks":{
@@ -6036,6 +6037,7 @@
                        "TeleVerification",
                        "LoanInitiation",
                        "DocumentUpload"
+                       
                     ]
                  }
               }
