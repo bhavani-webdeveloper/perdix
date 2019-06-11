@@ -1,3 +1,4 @@
+
 irf.pageCollection.factory(irf.page("lead.LeadGeneration"), ["$log", "LoanAccount","Enrollment", "$state", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "Queries","IndividualLoan",
 function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, SessionStore, formHelper,$q, irfProgressMessage,
@@ -9,9 +10,15 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
             initialize: function (model, form, formCtrl) {
-
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                if(model.siteCode == 'KGFS'){
+                    model.loanAmountRequestedLeadLimit = SessionStore.getGlobalSetting('loanAmountRequestedLeadLimit');
+                    model.leadMinorMinimumAge = SessionStore.getGlobalSetting('leadMinorMinimumAge');
+                    model.leadMinorMaximumAge = SessionStore.getGlobalSetting('leadMinorMaximumAge');
+                    model.currentDate = SessionStore.getCBSDate();                    
+                }
+
 
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
@@ -121,7 +128,8 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                     if (centreCode[i].value == centres[j].id) {
                                         out.push({
                                             name: centreCode[i].name,
-                                            id: centreCode[i].value
+                                            id: centreCode[i].value,
+                                            centreAddress:centres[j].centreAddress
                                         })
                                     }
                                 }
@@ -137,6 +145,19 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     onSelect: function (valueObj, model, context) {
                         model.lead.centreName = valueObj.name;
                         model.lead.centreId = valueObj.id;
+                        if(model.siteCode == "KGFS"){
+                        var addressArr = valueObj.centreAddress.split("~#");
+                            if(addressArr && addressArr.length > 0) {
+                                model.lead.addressLine2 = addressArr[0];
+                                if(addressArr.length >= 6) {
+                                    model.lead.area = addressArr[1];
+                                    model.lead.cityTownVillage = addressArr[2];
+                                    model.lead.district = addressArr[3];
+                                    model.lead.state = addressArr[4];
+                                    model.lead.pincode = Number(addressArr[5]);
+                                }
+                            }                            
+                        }
                     },
                     getListDisplayItem: function (item, index) {
                         return [
@@ -737,6 +758,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                 }, {
                                     key: "lead.dob",
                                     type: "date",
+                                    required:true,
                                     "onChange": function (modelValue, form, model) {
                                         if (model.lead.dob) {
                                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
@@ -902,7 +924,16 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     items: [{
                             key: "lead.transactionType",
                             title: "TRANSACTION_TYPE",
-                            type: "text",
+                            type: "select",
+                            "titleMap":{
+                                "New Loan":"New Loan",
+                                "Renewal":"Renewal",
+                                "Loan Restructure":"Loan Restructure",
+                                "Internal Foreclosure":"Internal Foreclosure"
+                            },
+                            "schema":{
+                                "enumCode":undefined
+                            },
                             condition: "model.lead.transactionType.toLowerCase()=='renewal'",
                             readonly: true,
                             required:true
@@ -913,6 +944,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             type: "select",
                             "titleMap":{
                                 "New Loan":"New Loan",
+                                "Renewal":"Renewal",
                                 "Loan Restructure":"Loan Restructure",
                                 "Internal Foreclosure":"Internal Foreclosure"
                             },
@@ -1234,7 +1266,23 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             type: "amount",
                             required: true,
                             condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
-                        }, {
+                        },
+                        {
+                            key: "lead.productCategory",
+                            type: "select",
+                            required: true,
+                            title:"Interested in Product Category",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct =='Yes')",
+                            titleMap: {
+                                "Consumer": "Consumer",
+                                "JEWEL": "JEWEL",
+                                "MEL": "MEL",
+                                "Personal": "Personal",
+                                "Group":"Group",
+                                "Others":"Others"
+                            },
+                        },
+                         {
                             key: "lead.loanPurpose1",
                             condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
@@ -1260,26 +1308,11 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
 
                             },
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.screeningDate",
-                            condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes' ) && model.lead.productRequiredBy ==='In this week')",
-                            type: "date",
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
+                        },  {
                             key: "lead.followUpDate",
                             condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes') && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                             type: "date",
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            type: "fieldset",
-                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')",
-                            title: "PRODUCT_ELIGIBILITY",
-                            items: [{
-                                key: "lead.eligibleForProduct",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                onChange: "actions.changeStatus(modelValue, form, model)",
-                            }]
                         }, {
                             type: "fieldset",
                             title: "PRODUCT_REJECTION_REASON",
@@ -1324,7 +1357,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                 },
                 {
                     type: "box",
-                    title: "PREVIOUS_INTERACTIONS",
+                    title: "PREVIOUS_INTERACTIONS1",
                     condition: "model.lead.id && model.lead.currentStage == 'Inprocess'",
                     items: [{
                         key: "lead.leadInteractions1",
@@ -1342,7 +1375,6 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         }, {
                             key: "lead.leadInteractions1[].typeOfInteraction",
                             type: "select",
-                            readonly: true,
                             titleMap: {
                                 "Call": "Call",
                                 "Visit": "Visit",
@@ -1363,6 +1395,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         }, {
                             "key": "lead.leadInteractions1[].picture",
                             readonly: true,
+                            required:true,
                             "type": "file",
                             "fileType": "image/*",
                             "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction === 'Visit'",
@@ -1410,6 +1443,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             "key": "lead.leadInteractions[].picture",
                             "type": "file",
                             "fileType": "image/*",
+                            required:true,
                             "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction === 'Visit'",
                         },]
                     }]
@@ -1464,8 +1498,11 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
 
                 submit: function (model, form, formName) {
                     $log.info("Inside submit()");
-                    model.lead.productCategory = "Asset";
-                    model.lead.productSubCategory = "Loan";
+                    if(!(model.siteCode == 'KGFS' || model.siteCode == 'kgfs'))
+                    {
+                        model.lead.productCategory = "Asset";
+                        model.lead.productSubCategory = "Loan";
+                    }
                     $log.warn(model);
                     var sortFn = function (unordered) {
                         var out = {};
@@ -1477,6 +1514,32 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'|| model.siteCode == 'KGFS') {
                         model.lead.customerType = model.lead.customerTypeString;
                     }
+
+                    if (model.siteCode == 'KGFS') {
+                        if(model.lead.loanAmountRequested > model.loanAmountRequestedLeadLimit)
+                        {
+                            PageHelper.showErrors({data:{error:"Loan Amount Requested should be Maximum at 25 lakhs"}});
+                            return false;
+                        }
+
+                        if(model.lead.age < model.leadMinorMinimumAge || model.lead.age > model.leadMinorMaximumAge)
+                        {
+                            PageHelper.showErrors({data:{error:"Age should be Minimum Age 18 and Maximum Age 65"}});
+                            return false;
+                        }
+
+                        if(model.lead.followUpDate && model.lead.followUpDate < model.currentDate){
+                            PageHelper.showErrors({data:{error:"Follow up date cannot be less than current date"}});
+                            return false;
+                        }
+                        var maxLeadFollowUpDate = moment(model.currentDate).add(30, "d").format("YYYY-MM-DD");
+                        if(model.lead.followUpDate && model.lead.followUpDateLeadGeneration > maxLeadFollowUpDate){
+                            PageHelper.showErrors({data:{error:"Follow up date cannot be more than 30 days from current date"}});
+                            return false;
+                        }
+                    }
+
+
                     var reqData = _.cloneDeep(model);
                     var centres = formHelper.enum('centre').data;
                     for (var i = 0; i < centres.length; i++) {
