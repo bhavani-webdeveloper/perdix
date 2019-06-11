@@ -269,11 +269,22 @@ define({
                 RuleMaintenance.getRuleParams().$promise.then(function(res){
                     console.log(res);
                     for(i in res){
-                        res[i].id= res[i].displayName;
-                        res[i].name=res[i].displayName;
-                        res[i].value='${'+res[i].displayName+'}';
+                        let input = res[i].displayName;
+                        if(input && input.length){
+                            let output = input.split('')
+                                            .map(function (char) {
+                                                return char.charCodeAt(0);
+                                            })
+                                            .reduce(function (current, previous) {
+                                                return previous + current;
+                                            });
+
+                                res[i].id= output;
+                                res[i].name=res[i].displayName;
+                                res[i].value='${'+res[i].displayName+'}';
+                        }
                     }
-                    res.push({ id: "one", name: 1, value:'1', type: 'number' });
+                    res.push({ id: res.length +1, name: 1, value:'1', type: 'number' });
                     model.options.fields= res;
                 },function(err){
                     console.log(err);
