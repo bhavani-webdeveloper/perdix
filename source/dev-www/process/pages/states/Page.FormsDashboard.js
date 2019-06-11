@@ -11,6 +11,7 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
         "items": [
             "Page/Engine/forms.FormsSearch",
             "Page/Engine/forms.FormsMaintanence",
+            "Page/Engine/forms.DownloadForm"
             //"Page/Engine/user.LogoutUser",
             //"Page/Engine/user.MultipleUserLogout",
             //"Page/Engine/user.UserAttendance"
