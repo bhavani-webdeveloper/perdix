@@ -122,6 +122,7 @@
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
+                "Page/FormsDashboard",
                 "Page/Adhoc/bank.Survey.SurveyDashboard", {
                     "title": "AUDIT_MANAGEMENT",
                     "iconClass": "fa fa-cubes",

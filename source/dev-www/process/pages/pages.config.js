@@ -91,7 +91,14 @@ irf.pages.config([
 		url: "/UserDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "UserDashboardCtrl"
-	},{
+	},
+	{
+		name: "Page.FormsDashboard",
+		url: "/FormsDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "FormsDashboardCtrl"
+	},
+	{
 		name: "Page.JewelDashboard",
 		url: "/JewelDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
