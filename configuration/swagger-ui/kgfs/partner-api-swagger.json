@@ -9753,9 +9753,7 @@
             "baseLoanAccount":{  
                "type":"string"
             },
-            "bcAccount":{  
-               "$ref":"#/definitions/BcAccountDTO"
-            },
+           
             "borrowerIlliterate":{  
                "type":"boolean"
             },
@@ -10242,9 +10240,7 @@
             "proposedHires":{  
                "type":"string"
             },
-            "psychometricCompleted":{  
-               "type":"string"
-            },
+            
             "rejectReason":{  
                "type":"string"
             },
@@ -10287,12 +10283,7 @@
             "status":{  
                "type":"string"
             },
-            "telecallingDetails":{  
-               "type":"array",
-               "items":{  
-                  "$ref":"#/definitions/TeleCallingDetailsDTO"
-               }
-            },
+            
             "tenure":{  
                "type":"string"
             },
