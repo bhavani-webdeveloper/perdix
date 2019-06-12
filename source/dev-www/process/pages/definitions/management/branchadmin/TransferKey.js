@@ -1,19 +1,21 @@
 define({
     pageUID: "management.branchadmin.TransferKey",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "PageHelper", "User", "BranchKeyResource", "$state", "SessionStore", "$stateParams", "PagesDefinition"],
+    dependencies: ["$log", "formHelper", "PageHelper", "User", "BranchKeyResource", "Utils", "SessionStore", "$stateParams", "PagesDefinition"],
     $pageFn:
-        function ($log, formHelper, PageHelper, User, BranchKeyResource, $state, SessionStore, $stateParams, PagesDefinition) {
+        function ($log, formHelper, PageHelper, User, BranchKeyResource, Utils, SessionStore, $stateParams, PagesDefinition) {
             var branchName = SessionStore.getCurrentBranch().branchName;
             var fromUser = SessionStore.getLoginname();
-            var keyBranchId = SessionStore.getBranchId()
-
+            var keyBranchId = SessionStore.getBranchId();
             return {
                 "type": "schema-form",
                 "title": "TRANSFER_KEY",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     model.key = model.key || {};
+                    var currentDate = moment(Utils.getCurrentDate(), "YYYY-MM-DD");
+                    console.log("Current date", currentDate._i);
+                    
                     PagesDefinition.getPageConfig("Page/Engine/management.TransferKey")
                         .then(function (data) {
                             model.pageConfig = data;
@@ -29,6 +31,7 @@ define({
                         model.key.keyBranchId = keyBranchId;
                         model.key.key1Custodian = model.key.body.key1KepperUserId.userName;
                         model.key.key2Custodian = model.key.body.key2KepperUserId.userName;
+                        model.key.date = currentDate._i;
                         PageHelper.hideLoader();
                     }, function (resp) {
                         PageHelper.hideLoader();
@@ -106,10 +109,11 @@ define({
                             key: "key.date",
                             title: "TRANSFERING_DATE",
                             type: "date",
-                            required: true
+                            required: true,
+                            readonly: true
                         },
                         {
-                            key: "key.amount",
+                            key: "key.amountInPaisa",
                             title: "CASH_BALANCE",
                             type: "amount"
                         },
@@ -163,7 +167,7 @@ define({
                                     "title": "TRANSFERING_DATE",
                                     "format": "date",
                                 },
-                                "amount": {
+                                "amountInPaisa": {
                                     "type": ["integer", "null"],
                                     "title": "CASH_BALANCE",
                                 },
