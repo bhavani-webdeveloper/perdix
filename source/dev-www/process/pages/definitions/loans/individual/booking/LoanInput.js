@@ -346,12 +346,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model.loanAccount.nominees=model.loanAccount.nominees || [{nomineeFirstName:"",nomineeDoorNo:""}];
                     if (model.loanAccount.nominees.length == 0)
                         model.loanAccount.nominees = [{nomineeFirstName:"",nomineeDoorNo:""}];
-                    if(model.siteCode != 'shramsarathi'){
-                    model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
+                    if(model.siteCode == 'shramsarathi'){
+                    model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate;
+                    }else if(model.siteCode == 'maitreya'){
+                            model.loanAccount.loanApplicationDate =  model.loanAccount.loanApplicationDate || model.loanAccount.screeningDate || Utils.getCurrentDate();    
                     }else{
-                        model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate;
+                        model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
                     }
-
+                    
                     // model.loanAccount.commercialCibilCharge = 750; //Hard coded. This value to be changed to pickup from global_settings table
                     model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
                     model.loanAccount.isRestructure = false;
