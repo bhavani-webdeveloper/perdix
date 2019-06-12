@@ -21,6 +21,7 @@ define({
                                 if (model.branchProductMapping.length != 0 && j < model.branchProductMapping.length) {
                                     if (model.branchProductMapping[j].productCode == model.productTypeMasterData[i].productName) {
                                         model.branchProductMappings.push({
+                                            "productType": model.productTypeMasterData[i].productType,
                                             "productCode": model.productTypeMasterData[i].productName,
                                             "agentAccess": model.branchProductMapping[j].agentAccess,
                                             "wmAccess": model.branchProductMapping[j].wmAccess,
@@ -50,6 +51,7 @@ define({
 
         var branchMapping = function(model,i){
             model.branchProductMappings.push({
+                "productType": model.productTypeMasterData[i].productType,
                 "productCode": model.productTypeMasterData[i].productName,
                 "agentAccess": false,
                 "wmAccess": false,
@@ -117,6 +119,7 @@ define({
                         '<table class="table table-bordered">' + '<thead class="thead-default">' +
                         '<tr>' +
                         '<th style="text-align: center">Select</th>' +
+                        '<th style="text-align: center">Product Type</th>' +
                         '<th style="text-align: center">Product Name</th>' +
                         '<th style="text-align: center">wmAccess </th>' +
                         '<th style="text-align: center">agentAccess</th>' +
@@ -125,6 +128,7 @@ define({
                         '<tbody>' +
                         '<tr ng-repeat="data1 in model.branchProductMappings">' +
                         '<td class="col-sm-3" style="text-align: center"><input type="checkbox"  ng-checked="data1.checked" ng-model="data1.checked" ng-change="model.selectAl(data1.checked)" /> </td>' +
+                        '<td class="col-sm-3" style="text-align: center">{{data1.productType}}</td>' +
                         '<td class="col-sm-3" style="text-align: center">{{data1.productCode}}</td>' +
                         '<td class="col-sm-3" style="text-align: center"><input type="checkbox" ng-checked="data1.wmAccess" ng-model="data1.wmAccess" ng-change="data1.wmAccess" class="center" /> </td>' +
                         '<td class="col-sm-3" style="text-align: center"><input type="checkbox" ng-checked="data1.agentAccess" ng-model="data1.agentAccess" ng-change="data1.agentAccess" class="center" /></td>' + '</tr>' +

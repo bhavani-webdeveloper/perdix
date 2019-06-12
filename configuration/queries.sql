@@ -110,3 +110,5 @@ customerDetails.list = SELECT l.customer_id as `customerId`,lcr.customer_id as `
 customerInfo.list = SELECT * from customer where id = :customer_id
 
 partnerCode.list = SELECT DISTINCT partner_code as `partnerCode` from bank_account_master where partner_code is not null and partner_code<>''
+
+productTypeAndProductName.list = SELECT product_type as `productType`, product_name as `productName` from product_type_master

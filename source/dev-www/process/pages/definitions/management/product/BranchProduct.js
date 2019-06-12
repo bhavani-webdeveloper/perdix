@@ -114,33 +114,18 @@ define({
                     required: true,
                     searchHelper: formHelper,
                     search: function(inputModel, form, model, context) {
-                        var productCode = formHelper.enum('loan_product').data;
-                        var out = [];
-                        for (i in productCode) {
-                            console.log(productCode)
-                            var nam = productCode[i].parentCode + " " + productCode[i].name + " " + "(" + productCode[i].field1 + ")";
-                            out.push({
-                                name: nam,
-                                id: productCode[i].field1
-                            })
-                        }
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": out.length
-                            },
-                            body: out
-                        });
+                        return Queries.getProductMappings(inputModel.productType,inputModel.productName);                        
                     },
                     onSelect: function(valueObj, model, context) {
                         model.productCode = valueObj.name;
-                        model.id = valueObj.id;
-                        productCode = model.id;
+                        productCode = valueObj.productName;
                         getProductMappingData(model, productCode);
                     },
                     getListDisplayItem: function(item, index) {
                         return [
-                            item.name
-                        ];
+                            item.productType,
+                            item.productName,   
+                           ];
                     }
                 }]
             }, {

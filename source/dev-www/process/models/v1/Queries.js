@@ -1649,6 +1649,22 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     };
+    resource.getProductMappings = function(productType,productName) {
+        var deferred = $q.defer();
+        var request = {
+            "productType":productType,
+            "productName":productName,
+        };
+        resource.getResult("productTypeAndProductName.list", request).then(function(response) {
+            if (response && response.results) {
+                var result = {
+                    body: response.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
     return resource;
     
     }
