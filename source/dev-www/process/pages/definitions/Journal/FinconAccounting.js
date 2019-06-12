@@ -18,7 +18,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.glAcNo = "";
                 model.entries = [];
-                model.glcodes = [];
+                // model.glcodes = [];
                 model.entries.push(model.entries.length + 1)
                 var result = [];
                 model.entryType = [{
@@ -273,7 +273,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                             </ul>\
                                           </div>\
                                         </script>\
-                                        <div class='row'> \
+                                        <div class='row' ng-if='model.glcodes'> \
                                             <div class='col-xs-12'> \
                                             <table class='text-center'>\
                                                 <thead>\

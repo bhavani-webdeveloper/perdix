@@ -248,7 +248,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                                             </ul>\
                                           </div>\
                                         </script>\
-                                        <div class='row'> \
+                                        <div class='row' ng-if='model.glcodes'> \
                                             <div class='col-xs-12'> \
                                             <table >\
                                                 <thead>\
