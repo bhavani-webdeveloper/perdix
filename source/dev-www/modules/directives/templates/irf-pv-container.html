@@ -46,7 +46,7 @@
         <!-- <div ng-if="section.displayName">
                 <h4>{{section.displayName}}</h4ßß>
             </div> -->
-    <div ng-if="section.type=='box'">
+   <div ng-if="!section.section"> <div ng-if="section.type=='box'">
         <irf-pv-box box-data="section"></irf-pv-box>
     </div>
     <div ng-if="section.type=='grid'">
@@ -137,6 +137,7 @@
             <irf-pv-container container-data="section"></irf-pv-container>
         </div>
     </div>
+</div>
     <!-- Container Inside Container -->
     <div ng-if="section.section">
             
