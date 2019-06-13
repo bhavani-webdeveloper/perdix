@@ -497,7 +497,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "Completed"
                  ]
               },
               "payeeMobileNumber":{
@@ -511,7 +512,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "Completed"
                  ]
               },
               "payeeRelationToApplicant":{
@@ -525,7 +527,8 @@
                     "FieldInvestigation2",
                     "FieldInvestigation3",
                     "TeleVerification",
-                    "LoanInitiation"
+                    "LoanInitiation",
+                    "Completed"
                  ]
               },
               "fixedIntrestRate":{

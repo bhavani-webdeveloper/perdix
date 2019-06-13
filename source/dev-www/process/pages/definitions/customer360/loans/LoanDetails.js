@@ -2213,6 +2213,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 {
                     "type":"box",
                     "title": "PAYER_DETAILS",
+                    "readonly": true,
                     "condition": "model.siteCode != 'IREPDhan'",
                         "items": [
                         {

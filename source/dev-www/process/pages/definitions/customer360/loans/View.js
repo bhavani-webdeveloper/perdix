@@ -154,6 +154,23 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         }
                                         return false;
                                     }
+                                },
+                                {
+                                    name: "Payer Details",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'customer360.loans.PayerDetails',
+                                            pageId: [item.accountId,item.urnNo].join(".")
+                                        })
+                                    },
+                                    //pagePermission:'Page/Engine/loans.PayerDetails',
+                                    isApplicable: function(item, index){
+                                        if (item.accountNumber){
+                                        	return true;
+                                        }
+                                        return false;
+                                    }
                                 }, 
                                 {
                                     name: "Repay",
