@@ -48,6 +48,7 @@ define({
 				model.familyInfo.noOfSchoolGoing = resp.no_of_school_going;
 				model.familyInfo.noOfCollegeGoing = resp.no_of_college_going;
 				model.proposedAmount = 0;
+				BundleManager.broadcastEvent('financial-income', model);
 				})
 
 				//financial summary event

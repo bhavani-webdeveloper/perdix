@@ -14,7 +14,8 @@ define({
                     console.log("------Form");
                     console.log(formCtrl);
                     console.log("------FormCtrl");
-
+                    model.total={'incomeExpense':{'incomeGrandTotal':0,'expensesGrandTotal':0}};
+    
                     var self = this;
                     model.bundlePageObj = bundlePageObj;
                     model.bundleModel = bundleModel;
@@ -1409,6 +1410,11 @@ define({
                         model.avarage_withdrawal=params.avarage_withdrawal;
                         model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
                         model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
+                    },
+                    "financial-income" : function(bundleModel,model,params){
+                       model.total.incomeExpense.incomeGrandTotal=params.incomeExpense.incomeGrandTotal;
+                       model.total.incomeExpense.expensesGrandTotal=params.incomeExpense.expensesGrandTotal;
+                       model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
                     }
                 },
                 actions: {}
