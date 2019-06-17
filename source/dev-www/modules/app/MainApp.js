@@ -31,6 +31,14 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 								});
 							});
 						}
+					}, function(err){
+						Queries.getGlobalSettings('cordova.latest_apk_url').then(function (url) {
+							$log.debug('latest_apk_url:' + url);
+							$scope.latest_apk_url = url;
+							Queries.getGlobalSettings('cordova.latest_apk_force_upgrade').then(function (val) {
+								$scope.latest_apk_force_upgrade = val === 'Y';
+							});
+						});
 					});
 				}
 			});
