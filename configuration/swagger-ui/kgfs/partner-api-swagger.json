@@ -3966,7 +3966,6 @@
                   "DSC_OVERRIDE_REQUEST_REJECTED"
                ]
             },
-            
             "remarks":{  
                "type":"string"
             },
@@ -4206,12 +4205,7 @@
                "type":"integer",
                "format":"int64"
             },
-            "psychometricCompleted":{  
-               "type":"string"
-            },
-            "psychometricRequired":{  
-               "type":"string"
-            },
+           
             "relation":{  
                "type":"string"
             },
@@ -9233,7 +9227,7 @@
          }
       },
       "IndividualLoanProcessCompositeDTO":{  
-         "properties":{              
+         "properties":{  
             "loanAccount":{  
                "$ref":"#/definitions/LoanAccountDTO"
             },
@@ -9713,110 +9707,31 @@
             "accountUserDefinedFields":{  
                "$ref":"#/definitions/AccountUserDefinedFieldDTO"
             },
-            "actualAmountRequired":{  
-               "type":"number",
-               "format":"double"
-            },
-            "annualizedPercentage":{  
-               "type":"number",
-               "format":"double"
-            },
             "applicant":{  
                "type":"string"
             },
-            "applicationFileId":{  
-               "type":"string"
-            },
-            "applicationFileName":{  
-               "type":"string"
-            },
             "applicationStatus":{  
-               "type":"string"
-            },
-            "applicationStatusUpdatedBy":{  
-               "type":"string"
-            },
-            "applicationStatusUpdatedOn":{  
-               "type":"string",
-               "format":"date-time"
-            },
-            "assetAvailableForHypothecation":{  
-               "type":"string"
-            },
-            "assignedTo":{  
                "type":"string"
             },
             "bankId":{  
                "type":"integer",
                "format":"int64"
             },
-            "baseLoanAccount":{  
-               "type":"string"
-            },
-           
             "borrowerIlliterate":{  
                "type":"boolean"
-            },
-            "branchCode":{  
-               "type":"string"
             },
             "branchId":{  
                "type":"integer",
                "format":"int32"
             },
-            "chk1FileUploadId":{  
-               "type":"string"
-            },
-            "chk1UploadFilePath":{  
-               "type":"string"
-            },
             "closed":{  
                "type":"boolean"
-            },
-            "coApplicant":{  
-               "type":"string"
-            },
-            "coBorrowerUrnNo":{  
-               "type":"string"
-            },
-            "collectionAccountNumber":{  
-               "type":"string"
-            },
-            "collectionAccountType":{  
-               "type":"string"
-            },
-            "collectionBankBranchName":{  
-               "type":"string"
-            },
-            "collectionBankName":{  
-               "type":"string"
-            },
-            "collectionCustomerNameAsInBank":{  
-               "type":"string"
-            },
-            "collectionIfscCode":{  
-               "type":"string"
-            },
-            "collectionPaymentType":{  
-               "type":"string"
             },
             "commercialCibilCharge":{  
                "type":"integer",
                "format":"int32"
             },
             "currentStage":{  
-               "type":"string"
-            },
-            "customerBank":{  
-               "type":"string"
-            },
-            "customerBankAccountNumber":{  
-               "type":"string"
-            },
-            "customerBankIfscCode":{  
-               "type":"string"
-            },
-            "customerBranch":{  
                "type":"string"
             },
             "customerId":{  
@@ -9827,43 +9742,14 @@
                "type":"number",
                "format":"double"
             },
-            "customerSignDateExpected":{  
-               "type":"string"
-            },
-            "dealIrr":{  
-               "type":"number",
-               "format":"double"
-            },
-            "disbursedAmountInPaisa":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "disbursementFromBankAccountNumber":{  
-               "type":"string"
-            },
             "disbursementSchedules":{  
                "type":"array",
                "items":{  
                   "$ref":"#/definitions/LoanAccountDisbursementScheduleDTO"
                }
             },
-            "doCustomerLoanAmount":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "doCustomerProcessingFee":{  
-               "type":"number",
-               "format":"double"
-            },
-            "dob":{  
-               "type":"string"
-            },
             "documentTracking":{  
                "type":"string"
-            },
-            "dsaPayout":{  
-               "type":"number",
-               "format":"double"
             },
             "dscIntegrationId":{  
                "type":"integer",
@@ -9879,9 +9765,6 @@
             "dscOverrideRemarks":{  
                "type":"string"
             },
-            "emiPaymentDateRequested":{  
-               "type":"string"
-            },
             "emiRequested":{  
                "type":"number",
                "format":"double"
@@ -9890,40 +9773,13 @@
                "type":"string",
                "format":"date-time"
             },
-            "equatedInstallmentAmount":{  
-               "type":"number",
-               "format":"double"
-            },
-            "estimatedDateOfCompletion":{  
-               "type":"string"
-            },
             "estimatedEmi":{  
                "type":"number",
                "format":"double"
             },
-            "estimatedValueOfAssets":{  
-               "type":"number",
-               "format":"double"
-            },
-            "expectedCommercialCibilCharge":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "expectedIncrementalIncome":{  
-               "type":"integer",
-               "format":"int32"
-            },
             "expectedInterestRate":{  
                "type":"number",
                "format":"double"
-            },
-            "expectedInterestSaving":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "expectedJobCreation":{  
-               "type":"integer",
-               "format":"int32"
             },
             "expectedPortfolioInsurancePremium":{  
                "type":"number",
@@ -9967,35 +9823,15 @@
             "frequencyRequested":{  
                "type":"string"
             },
-            "fundsFromDifferentSources":{  
-               "type":"number",
-               "format":"double"
-            },
             "groupCode":{  
                "type":"string"
             },
             "groupName":{  
                "type":"string"
             },
-            "gstNumber":{  
-               "type":"string"
-            },
-            "husbandOrFatherFirstName":{  
-               "type":"string"
-            },
-            "husbandOrFatherLastName":{  
-               "type":"string"
-            },
-            "husbandOrFatherMiddleName":{  
-               "type":"string"
-            },
             "id":{  
                "type":"integer",
                "format":"int64"
-            },
-            "insuranceFee":{  
-               "type":"number",
-               "format":"double"
             },
             "insuranceRateCode":{  
                "type":"string"
@@ -10006,15 +9842,6 @@
             "interestRate":{  
                "type":"number",
                "format":"float"
-            },
-            "isNpa":{  
-               "type":"boolean"
-            },
-            "isRestructure":{  
-               "type":"boolean"
-            },
-            "isSendBack":{  
-               "type":"string"
             },
             "jlgGroupId":{  
                "type":"integer",
@@ -10028,22 +9855,7 @@
                "type":"string",
                "format":"date-time"
             },
-            "leadId":{  
-               "type":"integer",
-               "format":"int64"
-            },
-            "linkedAccountNumber":{  
-               "type":"string"
-            },
-            "literateWitnessFirstName":{  
-               "type":"string"
-            },
-            "literateWitnessLastName":{  
-               "type":"string"
-            },
-            "literateWitnessMiddleName":{  
-               "type":"string"
-            },
+           
             "loanAmount":{  
                "type":"integer",
                "format":"int32"
@@ -10057,9 +9869,6 @@
             },
             "loanCentre":{  
                "$ref":"#/definitions/LoanCentreDTO"
-            },
-            "loanChannels":{  
-               "type":"string"
             },
             "loanClosedAt":{  
                "type":"string",
@@ -10096,21 +9905,10 @@
             "loanPurpose3":{  
                "type":"string"
             },
-            "loanToValue":{  
-               "type":"number",
-               "format":"double"
-            },
             "loanType":{  
                "type":"string"
             },
-            "maxEmi":{  
-               "type":"number",
-               "format":"double"
-            },
-            "maximumStageOrder":{  
-               "type":"integer",
-               "format":"int64"
-            },
+           
             "noOfGuarantersRequired":{  
                "type":"integer",
                "format":"int32"
@@ -10130,58 +9928,15 @@
             "oldAccountNO":{  
                "type":"string"
             },
-            "originalAccountNumber":{  
-               "type":"string"
-            },
             "otherFee":{  
                "type":"number",
                "format":"double"
             },
-            "parentLoanAccount":{  
-               "type":"string"
-            },
-            "partnerAccountNumber":{  
-               "type":"string"
-            },
-            "partnerApprovalStatus":{  
-               "type":"string"
-            },
             "partnerCode":{  
-               "type":"string"
-            },
-            "partnerLoanAmount":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "partnerProcessingFee":{  
-               "type":"number",
-               "format":"double"
-            },
-            "partnerRemarks":{  
-               "type":"string"
-            },
-            "payeeAddress":{  
-               "type":"string"
-            },
-            "payeeMobileNumber":{  
-               "type":"string"
-            },
-            "payeeName":{  
-               "type":"string"
-            },
-            "payeeRelationToApplicant":{  
                "type":"string"
             },
             "pendingApproval":{  
                "type":"string"
-            },
-            "percentageIncreasedIncome":{  
-               "type":"number",
-               "format":"double"
-            },
-            "percentageInterestSaved":{  
-               "type":"number",
-               "format":"double"
             },
             "portfolioInsurancePremium":{  
                "type":"number",
@@ -10209,10 +9964,7 @@
                "type":"number",
                "format":"double"
             },
-            "priority":{  
-               "type":"integer",
-               "format":"int32"
-            },
+          
             "processType":{  
                "type":"string"
             },
@@ -10237,10 +9989,6 @@
             "productType":{  
                "type":"string"
             },
-            "proposedHires":{  
-               "type":"string"
-            },
-            
             "rejectReason":{  
                "type":"string"
             },
@@ -10250,13 +9998,7 @@
             "sanctionDate":{  
                "type":"string"
             },
-            "sbAccountNo":{  
-               "type":"string"
-            },
             "scheduleStartDate":{  
-               "type":"string"
-            },
-            "schemeCode":{  
                "type":"string"
             },
             "screeningDate":{  
@@ -10283,7 +10025,6 @@
             "status":{  
                "type":"string"
             },
-            
             "tenure":{  
                "type":"string"
             },
@@ -10299,15 +10040,6 @@
                "type":"string"
             },
             "urnNo":{  
-               "type":"string"
-            },
-            "valuator":{  
-               "type":"string"
-            },
-            "verificationReason":{  
-               "type":"string"
-            },
-            "verificationStatus":{  
                "type":"string"
             },
             "version":{  
@@ -11915,40 +11647,14 @@
             "ifscCode":{  
                "type":"string"
             },
-            "latitude":{  
-               "type":"string"
-            },
-            "linkedAccountNormalInterestDue":{  
-               "type":"number",
-               "format":"double"
-            },
-            "linkedAccountPenalInterestDue":{  
-               "type":"number",
-               "format":"double"
-            },
-            "linkedAccountPreclosureFee":{  
-               "type":"number",
-               "format":"double"
-            },
-            "linkedAccountTotalFeeDue":{  
-               "type":"number",
-               "format":"double"
-            },
-            "linkedAccountTotalPrincipalDue":{  
-               "type":"number",
-               "format":"double"
-            },
+           
+           
             "loanId":{  
                "type":"integer",
                "format":"int64"
             },
-            "longitude":{  
-               "type":"string"
-            },
-            "maximumStageOrder":{  
-               "type":"integer",
-               "format":"int64"
-            },
+           
+           
             "modeOfDisbursement":{  
                "type":"string"
             },
@@ -12013,36 +11719,7 @@
             "transactionId":{  
                "type":"string"
             },
-            "udf1":{  
-               "type":"string"
-            },
-            "udf2":{  
-               "type":"string"
-            },
-            "udf3":{  
-               "type":"string"
-            },
-            "udf4":{  
-               "type":"string"
-            },
-            "udf5":{  
-               "type":"string"
-            },
-            "udfDate1":{  
-               "type":"string"
-            },
-            "udfDate2":{  
-               "type":"string"
-            },
-            "udfDate3":{  
-               "type":"string"
-            },
-            "udfDate4":{  
-               "type":"string"
-            },
-            "udfDate5":{  
-               "type":"string"
-            },
+            
             "version":{  
                "type":"integer",
                "format":"int32"
