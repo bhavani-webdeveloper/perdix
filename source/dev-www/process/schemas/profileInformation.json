@@ -375,7 +375,8 @@
                             "title": "Division"
                         },
                         "region": {
-                            "type":["string","null"]
+                            "type":["string","null"],
+                            "title": "Region"
                         },
                         "registeredAt": {
                             "type": ["string","null"]
