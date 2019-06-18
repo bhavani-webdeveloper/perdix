@@ -21,7 +21,7 @@ irf.models.factory('Queries', [
             }).$promise;
         };
 
-        resource.searchPincodes = function(pincode, district, state, division, region, taluk) {
+        resource.searchPincodes = function(pincode, district, state, region, division, taluk) {
             var deferred = $q.defer();
             var request = {
                 "pincode": pincode || '',
