@@ -624,7 +624,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
 
             // Newly added for security EMI new Requirements
-            Queries.getProductCategoryByEMI("Yes")
+            Queries.getProductCategoryByEMI(1)
             .then(function(resp){
              console.log("getProductCategoryByEMI query response",resp);
             model.totalProductCategoryByEMI=[];
