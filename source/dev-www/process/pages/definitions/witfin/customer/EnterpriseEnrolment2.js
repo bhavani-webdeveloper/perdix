@@ -1052,6 +1052,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "EnterpriseInformation.enterpriseType": {
                                 "title": "ENTERPRISE_TYPE",
                                 "resolver": "SoleProprietorshipBusinessConfiguration",
+                                "condition" : "model.customer.id",
+                                "readonly": true,
                                 "titleMap": [
                                     {
                                         "name": "Individual",
@@ -1399,12 +1401,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         //         });
                                         //     }
                                         // },
+                                        "enterpriseType1": {
+                                            "key": "customer.enterprise.enterpriseType",
+                                            "title": "ENTERPRISE_TYPE",
+                                            "type": "select",
+                                            "resolver": "SoleProprietorshipBusinessConfiguration",
+                                            "condition" : "!model.customer.id",
+                                            "titleMap": [
+                                                {
+                                                    "name": "Individual",
+                                                    "value": "Sole Proprietorship"
+                                                },
+                                                {
+                                                    "name": "Company",
+                                                    "value": "Enterprise"
+                                                }
+                                            ]
+                                        },
                                         "netBusinessIncome": {
                                             "type": "number",
                                             "title": "CASH_PROFIT",
                                             "key": "customer.enterprise.netBusinessIncome"
                                             // "condition": "model.customer.customerCategory.toLowerCase() == 'captive - retail'"
-                                        }
+                                        },
+
                                     }
 
                                 },
@@ -1508,7 +1528,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
                                             "orderNo": 10
                                         },
-                                        "EnterpriseInformation.enterpriseType"
+                                        "EnterpriseInformation.enterpriseType",
+                                        "EnterpriseInformation.enterpriseType1"
                                     ]
                                 }
                             ]
