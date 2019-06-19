@@ -2449,4 +2449,3 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
         };
     }
 ]);
-X
