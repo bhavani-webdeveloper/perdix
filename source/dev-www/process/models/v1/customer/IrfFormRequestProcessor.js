@@ -2631,6 +2631,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 type: "lov",
                                 fieldType: "number",
                                 orderNo: 80,
+                                // resolver: "PincodeLOVConfiguration",
                                 inputMap: {
                                     "pincode": "lead.pincode",
                                     "district": {
@@ -2638,6 +2639,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     },
                                     "state": {
                                         key: "lead.state"
+                                    },
+                                    "division": {
+                                        key: "lead.division"
+                                    },
+                                    "region": {
+                                        key: "lead.region"
                                     }
                                 },
                                 outputMap: {
@@ -2650,7 +2657,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                                 searchHelper: formHelper,
                                 search: function (inputModel, form, model) {
-                                    return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                                    return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state,inputModel.region,inputModel.division);
                                 },
                                 getListDisplayItem: function (item, index) {
                                     return [

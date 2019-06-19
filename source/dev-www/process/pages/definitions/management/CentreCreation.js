@@ -139,10 +139,10 @@ define({
                                             "state": "centre.state",
                                         },
                                         searchHelper: formHelper,
-                                        initialize: function(inputModel) {
-                                            $log.warn('in pincode initialize');
-                                            $log.info(inputModel);
-                                        },
+                                        // initialize: function(inputModel) {
+                                        //     $log.warn('in pincode initialize');
+                                        //     $log.info(inputModel);
+                                        // },
                                         search: function(inputModel, form, model) {
                                             if (!inputModel.pincode) {
                                                 return $q.reject();
@@ -151,8 +151,8 @@ define({
                                                     inputModel.pincode,
                                                     inputModel.district,
                                                     inputModel.state,
-                                                    inputModel.division,
                                                     inputModel.region,
+                                                    inputModel.division,
                                                     inputModel.taluk
                                             );
                                         },
