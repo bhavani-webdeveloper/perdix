@@ -1513,7 +1513,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             "title": "SAVE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)",
                                             "buttonType": "submit"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "title": "Clear Customer",
+                                            "condition": "model.customer.id && model.customer.currentStage && model.currentStage!='loanView' && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
+                                            "onClick": "actions.clearCustomer(model, formCtrl, form, $event)",
+                                            "buttonType": "submit"
                                         }
+
                                     ]
                                 },
                                 {
@@ -1585,7 +1593,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                 
                 eventListeners: {
                     "refresh-all-tabs-customer": function (bundleModel, model, params) {
-                        clearAll('customer',['firstName',"distanceFromBranch","mobilePhone","landLineNo","doorNo","street","landmark","pincode","locality","villageName","district","state","vehiclesOwned","vehiclesFinanced"],model);
+                        clearAll('customer',['id','firstName',"distanceFromBranch","mobilePhone","landLineNo","doorNo","street","landmark","pincode","locality","villageName","district","state","vehiclesOwned","vehiclesFinanced"],model);
                         model.customer.enterprise={};
                         model.customer.customerBankAccounts=[];
                         model.customer.enterpriseDocuments=[];                        
@@ -1643,6 +1651,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         return deferred.promise;
                     },
                     save: function(model, formCtrl, formName){
+
+                    },
+                    clearCustomer: function(model, formCtrl, formName){
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType)
+                        customerType = 'Enterprise'
+                        EnrolmentProcess.createNewProcess(customerType)
+                                    .subscribe(function(enrolmentProcess) {
+                                        PageHelper.hideLoader();
+                                        model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+                                        model.enrolmentProcess = enrolmentProcess;
+                                        model.customer = enrolmentProcess.customer;
+                                        /* Setting enterprise customer relation on the enterprise customer */
+                                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+
+                                    });
+                                    BundleManager.pushEvent('refresh-all-tabs', model._bundlePageObj, {customer: model.customer});
 
                     },
                     submit: function(model, form, formName){
