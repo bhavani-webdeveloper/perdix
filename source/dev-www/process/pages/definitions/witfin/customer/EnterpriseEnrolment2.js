@@ -394,6 +394,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 ]
                             },
                             "FieldInvestigation1": {
+                                "overrides":{
+                                    "EnterpriseInformation.customerId":{
+                                        "readonly": true
+                                    }
+
+                                },
                                 "excludes": [
                                     "Liabilities"
                                 ]
@@ -765,6 +771,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "TeleVerification": {
                                 "overrides": {
+                                    "EnterpriseInformation.customerId":{
+                                        "readonly": true
+                                    }
                                     // "IndividualReferences":{
                                     //     "readonly": true
                                     // }
@@ -1513,17 +1522,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             "title": "SAVE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)",
                                             "buttonType": "submit"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "title": "Clear Customer",
-                                            "condition": "model.customer.id && model.customer.currentStage && model.currentStage!='loanView' && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='Application')",
-                                            "onClick": "actions.clearCustomer(model, formCtrl, form, $event)",
-                                            "buttonType": "submit"
                                         }
-
                                     ]
                                 },
+                                {
+                                    "type": "actionbox",
+                                    "orderNo": 1200,
+                                    "condition": "model.customer.id && model.customer.currentStage && model.currentStage!='loanView' && (model.loanProcess.loanAccount.currentStage=='Screening')",
+                                    "items":[
+                                    {
+                                        "type": "button",
+                                        "title": "Clear Customer",
+                                        "onClick": "actions.clearCustomer(model, formCtrl, form, $event)",
+                                        "buttonType": "submit"
+                                    
+                                    
+                                }]
+                            },
+
                                 {
                                     "orderNo": 1,   
                                     "type": "box",
