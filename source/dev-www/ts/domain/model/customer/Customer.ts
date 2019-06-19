@@ -35,6 +35,10 @@ export enum CustomerTypes {
     LENDER = "Lender"
 }
 
+export enum EnterpriseTypes {
+    SOLE_PROPRIETORSHIP = 'Sole Proprietorship',
+    ENTERPRISE = 'Enterprise'
+}
 
 export class Customer {
     aadhaarNo: string;
