@@ -99,6 +99,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
                     "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
                     "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
+                    "EnterpriseInformation1",
+                    "EnterpriseInformation1.firstName",
+                    "EnterpriseInformation1.customerId",
+                    "EnterpriseInformation1.customerBranchId",
+                    "EnterpriseInformation1.entityId",
+                    "EnterpriseInformation1.urnNo",
+                    "EnterpriseInformation1.centreId",
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
                     "ContactInformation.landLineNo",
@@ -1052,9 +1059,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "type": "select",
                                 "enumCode": "vehicle_end_use"
                             },
+                            "EnterpriseInformation1": {
+                                "condition": "model.customer.enterprise.enterpriseType=='Sole Proprietorship'"
+                            },
                             "EnterpriseInformation": {
                                 "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                             },
+
                             "ContactInformation": {
                                 "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
                             },
@@ -1091,7 +1102,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "BankAccounts": {
                                 "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
-                            },
+                            },  
                             "BankAccounts.customerBankAccounts": {
                                 startEmpty: true
                             },
@@ -1497,7 +1508,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                             }
                                         }
                                     }
+                                },
+                                "EnterpriseInformation1":{
+                                    "type": "box",
+                                    "title": "Business Details",
+                                    "orderNo": 25,
+                                    "items": {
+                                    "entityId": {
+                                        "key": "customer.id",
+                                        "type": "number",
+                                        "readonly": true,
+                                        "title": "ENTITY_ID",
+                                        "orderNo": 10
+                                    },
+                                    "customerBranchId": {
+                                        "key": "customer.customerBranchId",
+                                        "title": "BRANCH_NAME",
+                                        "readonly": true,
+                                        "type": "select",
+                                        "orderNo": 20
+                                    },
+                                    "urnNo": {
+                                        "key": "customer.urnNo",
+                                        "readonly": true,
+                                        "condition": "model.customer.urnNo",
+                                        "title": "URN_NO",
+                                        "orderNo": 40
+                                    },
+                                    "centreId": {
+                                        "key": "customer.centreId",
+                                        "type": "select",
+                                        "readonly":true,
+                                        "title": "CENTRE_NAME",
+                                        "filter": {
+                                            "parentCode": "branch_id"
+                                        },
+                                        "parentEnumCode": "branch_id",
+                                        "parentValueExpr": "model.customer.customerBranchId",
+                                        "orderNo": 30
+                                    },
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "readonly":true,
+                                        "title": "ENTITY_NAME",
+                                        "orderNo": 70
+                                    },
+
                                 }
+                            }
                             },
                             "additions": [
                                 {
