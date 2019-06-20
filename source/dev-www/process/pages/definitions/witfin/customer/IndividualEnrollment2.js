@@ -243,6 +243,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
                                 // "PhysicalAssets": {
                                 //     "readonly": true
                                 // },

@@ -140,8 +140,6 @@ export class EnrolmentProcess {
 
         }
         
-
-        if (this.customer.enterprise.enterpriseType == 'Enterprise'){
             for (let guarantor:EnrolmentProcess of loanProcess.guarantorsEnrolmentProcesses){
 
                 /* Need details on guarantor */
@@ -174,7 +172,6 @@ export class EnrolmentProcess {
                     }
                 }
             }
-        }
     }
 
     public removeEnterpriseCustomerRelations(loanProcess: LoanProcess, enrolmentDetails:EnterpriseCustomerRelation): void{

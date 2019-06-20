@@ -1377,7 +1377,7 @@ define([], function() {
                             "type": "box",
                             "orderNo": 999,
                             "title": "POST_REVIEW",
-                            "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.currentStage != 'Rejected'",
+                            "condition": "model.loanAccount.customerId && model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.currentStage != 'Rejected'",
                             "items": [{
                                 key: "review.action",
                                 type: "radios",
