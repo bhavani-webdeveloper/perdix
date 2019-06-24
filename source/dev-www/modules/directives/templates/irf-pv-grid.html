@@ -1,13 +1,17 @@
 <div class="row ">
+        {{irf.BASE_URL}}
    <div ng-if="gridData.displayName" style="padding-right:15px;padding-left:15px"><h4 > {{gridData.displayName}}</h4></div>
     <div ng-repeat="x in gridData.data">
         <div ng-if="$odd">
             <div class="col-md-6 col-sm-6 col-6 col-xs-12" >
                 <div style="float: left;">
                     {{x.title}}
+                   
                 </div>
                 <div style="float: right;">
-                    {{x.data}}
+                   <span ng-if="x.type=='url'"><a ng-href="{{x.data}}" target="_blank"> {{x.data}}</a></span> 
+                   <span ng-if="x.format=='currency'"> {{x.data | irfCurrency}}</span> 
+                   <span ng-if="!x.format && !x.type"> {{x.data}}</span> 
                 </div>
             </div>
         </div>
@@ -17,7 +21,9 @@
                     {{x.title}}
                 </div>
                 <div style="float: right;">
-                    {{x.data}}</div>
+                    <span ng-if="x.type=='url'"><a ng-href="{{x.data}}" target="_blank"> {{x.data}}</a></span> 
+                    <span ng-if="x.format=='currency'"> {{x.data | irfCurrency}}</span> 
+                    <span ng-if="!x.format && !x.type"> {{x.data}}</span> 
             </div>
         </div>
     </div>

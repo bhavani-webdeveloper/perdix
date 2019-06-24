@@ -26,14 +26,14 @@
                                                             {{data.title}}
                                                         </div>
                                                         <div style="float:right">
-                                                            {{data.data}}
+                                                            {{data.data | irfCurrency}}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div ng-if="getBType(innerdata.data)!='object'" style="float:right">
-                                                {{innerdata.data}}
+                                                {{innerdata.data | irfCurrency}}
                                             </div>
 
                                         </div>
@@ -43,7 +43,7 @@
                                             <b> {{value.total.title}}</b>
                                         </div>
                                         <div style="float:right ;border-top: 2px solid black">
-                                            <b>{{value.total.data}}</b>
+                                            <b>{{value.total.data | irfCurrency}}</b>
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                 <b>{{values.total.title}}</b>
                             </div>
                             <div style="float:right ;border-bottom: 2px solid black;border-top: 2px solid black">
-                                <b> {{values.total.data}}</b>
+                                <b> {{values.total.data | irfCurrency}}</b>
                             </div>
                         </div>
                     </div>
@@ -89,14 +89,14 @@
                                                             {{data.title}}
                                                         </div>
                                                         <div style="float:right">
-                                                            {{data.data}}
+                                                            {{data.data | irfCurrency}}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div ng-if="getBType(innerdata.data)!='object'" style="float:right">
-                                                {{innerdata.data}}
+                                                {{innerdata.data | irfCurrency}}
                                             </div>
 
                                         </div>
@@ -106,7 +106,7 @@
                                             <b> {{value.total.title}}</b>
                                         </div>
                                         <div style="float:right ;border-top: 2px solid black">
-                                            <b>{{value.total.data}}</b>
+                                            <b>{{value.total.data | irfCurrency}}</b>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                                 <b>{{values.total.title}}</b>
                             </div>
                             <div style="float:right ;border-bottom: 2px solid black;border-top: 2px solid black">
-                                <b> {{values.total.data}}</b>
+                                <b> {{values.total.data | irfCurrency}}</b>
                             </div>
                         </div>
                     </div>

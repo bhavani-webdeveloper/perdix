@@ -54,7 +54,7 @@
             <div class="col-md-6  ">
                 <div ng-repeat="data in pnlData.data.XLabels">
                     <div class="col-md-4 ">
-                        <h5><b>{{data}}</b></h5>
+                        <h5><b style="float:right">{{data}}</b></h5>
                     </div>
                 </div>
             </div>
@@ -70,8 +70,8 @@
                 <div class="col-md-6 minWidth400" style="float:right">
                     <div ng-repeat="value in fullpnlData.data | filter:q as results track by $index">
                         <div class="col-md-4 minWidth150">
-                            <span ng-if="fullpnlData.style.FONTSTYLE == 'bold'"><b>{{value}}</b></span>
-                            <span ng-if="fullpnlData.style.FONTSTYLE != 'bold'">{{value}}</span>
+                            <span ng-if="fullpnlData.style.FONTSTYLE == 'bold'" style="float:right"><b>{{value | irfCurrency}}</b></span>
+                            <span ng-if="fullpnlData.style.FONTSTYLE != 'bold'" style="float:right">{{value | irfCurrency}}</span>
                         </div>
                     </div>
                 </div>
@@ -95,17 +95,17 @@
                         <div class="col-md-6 minWidth400" style="float:right">
                             <div ng-repeat="value in frststageData.data | filter:q as results track by $index">
                                 <div class="col-md-4 minWidth150">
-                                    <span ng-if="frststageData.style.FONTSTYLE == 'bold'"> <b> {{value}}</b></span>
-                                    <span ng-if="frststageData.style.FONTSTYLE != 'bold'"> {{value}}</span>
+                                    <span ng-if="frststageData.style.FONTSTYLE == 'bold'" style="float:right"> <b> {{value | irfCurrency}}</b></span>
+                                    <span ng-if="frststageData.style.FONTSTYLE != 'bold'" style="float:right">  {{value | irfCurrency}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div ng-if="frststageData.data[0].title!=undefined">
                         <div class="col-md-12 col-sm-12 ">
-                            <span ng-if="frststageData.style.FONTSTYLE == 'bold'"> <b> <span>{{$index+1}}</span>.
+                            <span ng-if="frststageData.style.FONTSTYLE == 'bold'" > <b> <span>{{$index+1}}</span>.
                                     {{frststageData.title}}</b></span>
-                            <span ng-if="frststageData.style.FONTSTYLE != 'bold'"> <span>{{$index+1}}</span>.
+                            <span ng-if="frststageData.style.FONTSTYLE != 'bold'" > <span>{{$index+1}}</span>.
                                 {{frststageData.title}}</span>
                         </div>
                         <div ng-repeat="scndstageData in frststageData.data">
@@ -116,8 +116,8 @@
                                 <div class="col-md-6  minWidth400" style="float:right">
                                     <div ng-repeat="value in scndstageData.data | filter:q as results track by $index">
                                         <div class="col-md-4 minWidth150">
-                                            <span ng-if="scndstageData.style.FONTSTYLE == 'bold'"> <b> {{value}}</b></span>
-                                            <span ng-if="scndstageData.style.FONTSTYLE != 'bold'"> {{value}}</span>
+                                            <span ng-if="scndstageData.style.FONTSTYLE == 'bold'" style="float:right"> <b> {{value | irfCurrency}}</b></span>
+                                            <span ng-if="scndstageData.style.FONTSTYLE != 'bold'" style="float:right"> {{value | irfCurrency}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -135,9 +135,9 @@
                                         <div class="col-md-6  minWidth400" style="float:right">
                                             <div ng-repeat="value in thrdstageData.data | filter:q as results track by $index">
                                                 <div class="col-md-4 minWidth150">
-                                                    <span ng-if="thrdstageData.style.FONTSTYLE == 'bold'"> <b>
+                                                    <span ng-if="thrdstageData.style.FONTSTYLE == 'bold'" style="float:right"> <b>
                                                             {{value}}</b></span>
-                                                    <span ng-if="thrdstageData.style.FONTSTYLE != 'bold'"> {{value}}</span>
+                                                    <span ng-if="thrdstageData.style.FONTSTYLE != 'bold'" style="float:right"> {{value | irfCurrency}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,9 +156,9 @@
                                                     style="float:right">
                                                     <div ng-repeat="value in frthstageData.data | filter:q as results track by $index">
                                                         <div class="col-md-4 minWidth150">
-                                                            <span ng-if="frthstageData.style.FONTSTYLE == 'bold'"> <b>{{value}}</b></span>
-                                                            <span ng-if="frthstageData.style.FONTSTYLE != 'bold'">
-                                                                {{value}}</span>
+                                                            <span ng-if="frthstageData.style.FONTSTYLE == 'bold'" style="float:right"> <b>{{value | irfCurrency}}</b></span>
+                                                            <span ng-if="frthstageData.style.FONTSTYLE != 'bold'" style="float:right">
+                                                                {{value | irfCurrency}}</span>
                                                         </div>
                                                     </div>
                                                 </div>

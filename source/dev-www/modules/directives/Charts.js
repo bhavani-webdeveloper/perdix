@@ -14,9 +14,6 @@ irf.pageCollection.directive("irfPvCharts", function () {
   $scope.filterdata = $scope.chartData.data;
   $scope.series = [];
   $scope.data = [];
-  for (i = 0; i < $scope.chartData.data.dataset.length; i++) {
-    $scope.series.push($scope.chartData.data.dataset[i].label);
-  }
   getColor = function (colorValue) {
     return {
       backgroundColor: colorValue.backgroundColor,
@@ -25,10 +22,16 @@ irf.pageCollection.directive("irfPvCharts", function () {
       pointHoverBackgroundColor: colorValue.backgroundColor
     };
   }
-
-  for (i = 0; i < $scope.chartData.data.dataset.length; i++) {
-    $scope.data.push($scope.chartData.data.dataset[i].data)
-    $scope.colors.push(getColor($scope.chartData.data.dataset[i]));
+  if ($scope.type == "pie" || $scope.type == "doughnut") {
+    $scope.series.push($scope.chartData.data.dataset.label);
+    $scope.data.push($scope.chartData.data.dataset.data)
+    $scope.colors.push(getColor($scope.chartData.data.dataset));
+  } else {
+    for (i = 0; i < $scope.chartData.data.dataset.length; i++) {
+      $scope.series.push($scope.chartData.data.dataset[i].label);
+      $scope.data.push($scope.chartData.data.dataset[i].data)
+      $scope.colors.push(getColor($scope.chartData.data.dataset[i]));
+    }
   }
   Chart.defaults.global.elements.rectangle.borderWidth = 0;
   $scope.onClick = function (points, evt) {

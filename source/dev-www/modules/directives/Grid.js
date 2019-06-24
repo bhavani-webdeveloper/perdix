@@ -7,5 +7,5 @@ irf.pageCollection.directive("irfPvGrid", function () {
         templateUrl: 'modules/directives/templates/irf-pv-grid.html',
         controller: 'irfPvGridController'
     }
-}).controller('irfPvGridController', ["$scope", function ($scope) {
+}).controller('irfPvGridController', ["$scope", "irfCurrencyFilter",function ($scope, irfCurrencyFilter) {
 }]);
