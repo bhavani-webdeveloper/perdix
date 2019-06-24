@@ -57,15 +57,55 @@ define({
                                 .then(
                                     function(docs) {
                                         var docsForProduct = [];
-                                        for (var i = 0; i < docs.length; i++) {
-                                            var doc = docs[i];
-                                            docsForProduct.push({
-                                                docTitle: doc.document_name,
-                                                docCode: doc.document_code,
-                                                formsKey: doc.forms_key,
-                                                downloadRequired: doc.download_required,
-                                                mandatory: doc.mandatory
-                                            })
+                                        masterDocumentsArray=docs;
+                                        for (var i = 0; i < masterDocumentsArray.length; i++) {
+                                            var pushFlag = true;
+                                            var hiddenFlag=false;
+                                            if (uploadedExistingDocs && uploadedExistingDocs.length) {
+                                                for (var j = 0; j < uploadedExistingDocs.length; j++) {
+                                                    if (!uploadedExistingDocs[j]) continue;
+                                                    if (masterDocumentsArray[i].document_code == uploadedExistingDocs[j].document) {
+                                                        
+                                                        if (uploadedExistingDocs[j].documentStatus == 'APPROVED'){
+                                                            hiddenFlag = true; 
+                                                        }
+                                                        allExistingDocs.push({
+                                                            "$formsKey": masterDocumentsArray[i].forms_key,
+                                                            "$key": masterDocumentsArray[i].forms_key,
+                                                            "documentId": uploadedExistingDocs[j].documentId,
+                                                            "id": uploadedExistingDocs[j].id,
+                                                            "loanId": uploadedExistingDocs[j].loanId,
+                                                            "$title": masterDocumentsArray[i].document_description ||
+                                                            masterDocumentsArray[i].document_name ||
+                                                            masterDocumentsArray[i].document_code,
+                                                            "$downloadRequired": masterDocumentsArray[i].download_required,
+                                                            "$mandatory": masterDocumentsArray[i].mandatory,
+                                                            "isHidden": hiddenFlag,
+                                                            "documentStatus":uploadedExistingDocs[j].documentStatus,
+                                                            "document":uploadedExistingDocs[j].document,
+                                                            "rejectReason":(uploadedExistingDocs[j].rejectReason)?uploadedExistingDocs[j].rejectReason:null,
+                                                            "remarks":(uploadedExistingDocs[j].remarks)?uploadedExistingDocs[j].remarks:null
+                                                        });
+                                                        uploadedExistingDocs[j] = null;
+                                                        pushFlag = false;
+                                                    }
+                                                }
+                                            }
+                                            if (pushFlag) {
+                                                allExistingDocs.push({
+                                                    "$formsKey": masterDocumentsArray[i].forms_key,
+                                                    "$key": masterDocumentsArray[i].forms_key,
+                                                    "documentId": null,
+                                                    "id": null,
+                                                    "loanId": $stateParams.pageId,
+                                                    "$title":masterDocumentsArray[i].document_description || masterDocumentsArray[i].document_name || masterDocumentsArray[i].document_code || 'No Title Defined',
+                                                    "$downloadRequired": masterDocumentsArray[i].download_required,
+                                                    "$mandatory": masterDocumentsArray[i].mandatory,
+                                                    "isHidden": false,
+                                                    "documentStatus":null,
+                                                    "document":masterDocumentsArray[i].document_code
+                                                });
+                                            }
                                         }
                                         var loanDocuments = model.loanAccount.loanDocuments;
                                         var availableDocCodes = [];
@@ -409,20 +449,174 @@ define({
                                 "items": [
                                 {
                                     "type": "section",
-                                    "htmlClass": "col-sm-2",
-                                    "items": [{
-                                        "key": "loanAccount.loanDocuments[].$title",
-                                        "notitle": true,
-                                        "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].$title",
-                                        "type": "anchor",
-                                        "fieldHtmlClass": "text-bold",
-                                        "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
-                                        "onClick": function(model, form, schemaForm, event) {
-                                            var doc = model.loanAccount.loanDocuments[event.arrayIndex];
-                                            console.log(doc);
-                                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                    "htmlClass": "row",
+                                    "condition": "model.allExistingDocs[arrayIndex].isHidden === false",
+                                    "items": [
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "items": [{
+                                                "key": "allExistingDocs[arrayIndex].$title",
+                                                "notitle": true,
+                                                "titleExpr": "model.allExistingDocs[arrayIndex].$title",
+                                                "type": "anchor",
+                                                "fieldHtmlClass": "text-bold",
+                                                "condition": "model.allExistingDocs[arrayIndex].$downloadRequired",
+                                                "onClick": function (model, form, schemaForm, event) {
+                                                    var doc = model.allExistingDocs[schemaForm.key[-1]];
+                                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                }
+                                            },
+
+                                            {
+                                                "key": "allExistingDocs[].$title",
+                                                "notitle": true,
+                                                "title": " ",
+                                                "condition": "!model.allExistingDocs[arrayIndex].$downloadRequired",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].documentStatus",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-5",
+                                            "key": "allExistingDocs[].remarks",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED' || !model.allExistingDocs[arrayIndex].documentStatus",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].remarks",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "key": "allExistingDocs[].rejectReason",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && !model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].rejectReason",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "key": "allExistingDocs[].rejectReason",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].rejectReason",
+                                                "readonly": true
+                                            }]
+                                        }, {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "key": "allExistingDocs[].remarks",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].remarks",
+                                                "readonly": true
+                                            }]},
+                                        // }, {
+                                        //     "type": "section",
+                                        //     "htmlClass": "col-sm-4",
+                                        //     "key": "allExistingDocs[].documentStatus",
+                                        //     "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED' && model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' "
+                                        // },
+                                        {
+                                            "type": "section",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' && model.allExistingDocs[arrayIndex].documentStatus != null && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "allExistingDocs[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner",
+                                                required: false
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "allExistingDocs[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner",
+                                                required:true
+                                            }]
+                                        },
+                                ]
+                            }] // END of array items
+                        }]
+                    },// all existing docs ends
+                    //remaining docs 
+                    {
+                        "type": "fieldset",
+                        "title": "Additional Documents",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        "readonly": true,
+                        "items": [{
+                            "type": "array",
+                            "notitle": true,
+                            "view": "fixed",
+                            "key": "remainingDocsArray",
+                            "remove": null,
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "row",
+                                    "condition": "model.remainingDocsArray[arrayIndex].isHidden === false",
+                                    "items": [
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-9",
+                                            "items": [{
+                                                "key": "remainingDocsArray[].$title",
+                                                "notitle": true,
+                                                "titleExpr": "model.remainingDocsArray[arrayIndex].$title",
+                                                "type": "html",
+                                                "fieldHtmlClass": "text-bold",
+                                                "condition": "!model.remainingDocsArray[arrayIndex].$downloadRequired",
+                                                "onClick": function (model, form, schemaForm, event) {
+                                                   
+                                                }
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "remainingDocsArray[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner"
+                                            }]
                                         }
-                                    },{
+                                    ,{
                                         "key": "loanAccount.loanDocuments[].$title",
 
                                         "notitle": true,
