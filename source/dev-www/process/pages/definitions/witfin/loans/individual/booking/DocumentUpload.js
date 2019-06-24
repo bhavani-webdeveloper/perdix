@@ -225,7 +225,9 @@ define({
                                                             "$mandatory": masterDocumentsArray[i].mandatory,
                                                             "isHidden": hiddenFlag,
                                                             "documentStatus":uploadedExistingDocs[j].documentStatus,
-                                                            "document":uploadedExistingDocs[j].document
+                                                            "document":uploadedExistingDocs[j].document,
+                                                            "rejectReason":(uploadedExistingDocs[j].rejectReason)?uploadedExistingDocs[j].rejectReason:null,
+                                                            "remarks":(uploadedExistingDocs[j].remarks)?uploadedExistingDocs[j].remarks:null
                                                         });
                                                         uploadedExistingDocs[j] = null;
                                                         pushFlag = false;
@@ -593,7 +595,7 @@ define({
                                     "items": [
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-3",
+                                            "htmlClass": "col-sm-2",
                                             "items": [{
                                                 "key": "allExistingDocs[arrayIndex].$title",
                                                 "notitle": true,
@@ -627,9 +629,9 @@ define({
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-4",
+                                            "htmlClass": "col-sm-5",
                                             "key": "allExistingDocs[].remarks",
-                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED'",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED' || !model.allExistingDocs[arrayIndex].documentStatus",
                                             "items": [{
                                                 "notitle": true,
                                                 "key": "allExistingDocs[].remarks",
@@ -638,8 +640,8 @@ define({
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-4",
-                                            "key": "allExistingDocs[].documentStatus",
+                                            "htmlClass": "col-sm-3",
+                                            "key": "allExistingDocs[].rejectReason",
                                             "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && !model.allExistingDocs[arrayIndex].remarks",
                                             "items": [{
                                                 "notitle": true,
@@ -649,30 +651,30 @@ define({
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-2",
-                                            "key": "allExistingDocs[].documentStatus",
+                                            "htmlClass": "col-sm-3",
+                                            "key": "allExistingDocs[].rejectReason",
                                             "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
                                             "items": [{
                                                 "notitle": true,
-                                                "key": "model.allExistingDocs[].rejectReason",
+                                                "key": "allExistingDocs[].rejectReason",
                                                 "readonly": true
                                             }]
                                         }, {
                                             "type": "section",
                                             "htmlClass": "col-sm-2",
-                                            "key": "allExistingDocs[].documentStatus",
+                                            "key": "allExistingDocs[].remarks",
                                             "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
                                             "items": [{
                                                 "notitle": true,
-                                                "key": "model.allExistingDocs[].remarks",
+                                                "key": "allExistingDocs[].remarks",
                                                 "readonly": true
-                                            }]
-                                        }, {
-                                            "type": "section",
-                                            "htmlClass": "col-sm-4",
-                                            "key": "allExistingDocs[].documentStatus",
-                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED' && model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' "
-                                        },
+                                            }]},
+                                        // }, {
+                                        //     "type": "section",
+                                        //     "htmlClass": "col-sm-4",
+                                        //     "key": "allExistingDocs[].documentStatus",
+                                        //     "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED' && model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' "
+                                        // },
                                         {
                                             "type": "section",
                                             "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' && model.allExistingDocs[arrayIndex].documentStatus != null && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
