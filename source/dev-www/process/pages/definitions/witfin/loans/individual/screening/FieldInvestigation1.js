@@ -17,7 +17,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "type": "page-bundle",
                     "title": "FIELD_INVESTIGATION",
                     "subTitle": "FIELD_INVESTIGATION_SUB_TITLE",
-                 //   "readonly": true,
+                    "readonly": true,
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
