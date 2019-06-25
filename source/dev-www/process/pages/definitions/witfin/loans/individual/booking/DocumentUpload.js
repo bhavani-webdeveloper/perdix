@@ -488,7 +488,7 @@ define({
                                         },
                                         {
                                             "type": "section",
-                                            "htmlClass": "col-sm-5",
+                                            "htmlClass": "col-sm-3",
                                             "key": "allExistingDocs[].remarks",
                                             "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED' || !model.allExistingDocs[arrayIndex].documentStatus",
                                             "items": [{
@@ -522,7 +522,7 @@ define({
                                             "type": "section",
                                             "htmlClass": "col-sm-2",
                                             "key": "allExistingDocs[].remarks",
-                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
+                                           // "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
                                             "items": [{
                                                 "notitle": true,
                                                 "key": "allExistingDocs[].remarks",
