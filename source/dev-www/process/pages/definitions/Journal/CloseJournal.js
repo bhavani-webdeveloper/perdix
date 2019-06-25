@@ -16,7 +16,6 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.journal = model.journal || {};
-                model.siteCode=SessionStore.getGlobalSetting('siteCode');
                 $log.info("Inside submit()");
                 if (!(model && model.journal && model.journal.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
