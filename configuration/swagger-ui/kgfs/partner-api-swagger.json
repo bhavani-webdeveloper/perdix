@@ -7360,6 +7360,7 @@
             }
          }
       },
+	  "AccountStatementEntryWSDto":{"properties":{"accountEntryType":{"type":"string"},"accountId":{"type":"string"},"amount":{"type":"string"},"balance":{"type":"string"},"description":{"type":"string"},"entryNum":{"type":"integer","format":"int32"},"referencedTransactionId":{"type":"string"},"subAccountId":{"type":"string"},"transactionDate":{"type":"string","format":"date-time"},"transactionId":{"type":"string"},"valueDate":{"type":"string","format":"date-time"}}},
       "UrnLinkResponseDTO":{  
          "properties":{  
             "familyMemberName":{  
