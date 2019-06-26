@@ -101,7 +101,8 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							item.cityTownVillage,
 							item.pincode,
 							item.transactionType,
-							item.mobileNo
+							item.mobileNo,
+							item.leadSource
 						]
 					},
 					getTableConfig: function() {
@@ -139,6 +140,9 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 						}, {
 							title: 'Mobile No',
 							data: 'mobileNo'
+						},{
+							title:'Lead Source',
+							data:'leadSource'
 						}]
 					},
 					getActions: function() {
