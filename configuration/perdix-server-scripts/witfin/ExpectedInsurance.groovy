@@ -1,8 +1,7 @@
 import java.time.*;
 
-        loanAccount = loanAccountRepository.findById(loanId);
-        loanProduct = loanProductRepository.findByProductCode(loanAccount.getProductCode());
-        customer = customerRepository.findById(loanAccount.getCustomerId());
+        
+        customer = customerRepository.findById(loanAccountFromWeb.getCustomerId());
         customerPortFolioInsurancePremium = new BigDecimal(0);
         customerPortfolioInsuranceServiceCharge = null;
         customerPortfolioInsuranceServiceTax = null;
@@ -11,7 +10,7 @@ import java.time.*;
         spousePortfolioInsuranceServiceTax = null;
         portfolioInsurancePremium = new BigDecimal(0);
 		expectedPortfolioInsurancePremium = null;
-        portfolioInsuranceUrn = (loanAccount.getPortfolioInsuranceUrn() == null || loanAccount.getPortfolioInsuranceUrn() == "") ? customer.getUrnNo() : loanAccount.getPortfolioInsuranceUrn();
+        portfolioInsuranceUrn = (loanAccountFromWeb.getPortfolioInsuranceUrn() == null || loanAccountFromWeb.getPortfolioInsuranceUrn() == "") ? customer.getUrnNo() : loanAccountFromWeb.getPortfolioInsuranceUrn();
         customerData = customerRepository.findByUrnNoAndCustomerStatusAndKgfsBankName(portfolioInsuranceUrn,user.getBankName());
         
        loanAmount = loanAccountFromWeb.getLoanAmount() == null ? loanAccountFromWeb.getLoanAmountRequested() : loanAccountFromWeb.getLoanAmount();	
@@ -98,11 +97,11 @@ import java.time.*;
             if(customerData != null){
                 spouseGender = null;
                 ageOfSpouseCustomer = null
-                if (loanAccount.getWitnessFirstName() != null) {
+                if (loanAccountFromWeb.getWitnessFirstName() != null) {
                     familyMembers = familyRepository.findByCustomerId (customer.getParentCustomerId().equals(0L) ? customer.getId(): customer.getParentCustomerId());
                     if(familyMembers != null) {
                         for (int i = 0; i < familyMembers.size(); i++) {
-                            if (loanAccount.getWitnessFirstName() != null &&  loanAccount.getWitnessFirstName().equals(familyMembers[i].getFamilyMemberFirstName())) {
+                            if (loanAccountFromWeb.getWitnessFirstName() != null &&  loanAccountFromWeb.getWitnessFirstName().equals(familyMembers[i].getFamilyMemberFirstName())) {
             
                                 spouseGender = familyMembers[i].getGender();
                                 dateOfBirth = familyMembers[i].getDateOfBirth();
