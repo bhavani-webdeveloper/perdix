@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-4" ng-repeat="x in multimediaData.data">
+        <span ng-if="x.type=='perdix-image'" ng-init="fullurl(x.data)">
+            <img ng-src="{{fullUrl}}" alt="Image" style="height:200px;width:200px;">
+        </span>
+        <span ng-if="x.type=='document'">
+            <img src="/source/dev-www/img/irf-elements/pdf.png" ng-click="openInNewWindow(x.data)" style="height:200px;width:200px;cursor: pointer;">
+        </span>
+        <span ng-if="x.type=='video'">
+            <video width="200" height="200" controls>
+                <source ng-src="{{x.data}}" type="video/mp4">
+                <source ng-src="{{x.data}}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+        </span>
+        <span ng-if="x.type=='audio'">
+            <audio controls>
+                <source ng-src="{{x.data}}" type="audio/ogg">
+                <source ng-src="{{x.data}}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </span>
+
+
+    </div>
+</div>
