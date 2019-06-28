@@ -57,322 +57,8 @@
          "description":"Enrollments API"
       }
    ],
-   "paths":{  
-      "/api/partner/loanaccounts/show/accountId":{  
-         "get":{  
-            "tags":[  
-               "loanprocess"
-            ],
-            "summary":"Get loan account",
-            "description":"Get loan account details for the given accountId",
-            "operationId":"getAccountSummaryUsingGET",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"accountId",
-                  "in":"query",
-                  "description":"accountId",
-                  "required":true,
-                  "type":"string"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"Loaded loan account successfully.",
-                  "schema":{  
-                     "$ref":"#/definitions/LoanOdSummaryWSDto"
-                  }
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "500":{  
-                  "description":"Internal server error"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         }
-      },
-      "/api/partner/centre":{  
-         "get":{  
-            "tags":[  
-               "centre"
-            ],
-            "summary":"findCentres",
-            "operationId":"findCentresUsingGET",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"centreName",
-                  "in":"query",
-                  "description":"centreName",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"centreCode",
-                  "in":"query",
-                  "description":"centreCode",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"centreAddress",
-                  "in":"query",
-                  "description":"centreAddress",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"branchId",
-                  "in":"query",
-                  "description":"branchId",
-                  "required":false,
-                  "type":"integer",
-                  "format":"int64"
-               },
-               {  
-                  "name":"status",
-                  "in":"query",
-                  "description":"status",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"employee",
-                  "in":"query",
-                  "description":"employee",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"sortBy",
-                  "in":"query",
-                  "description":"sortBy",
-                  "required":false,
-                  "type":"string"
-               },
-               {  
-                  "name":"page",
-                  "in":"query",
-                  "description":"offset",
-                  "required":false,
-                  "type":"integer",
-                  "format":"int32"
-               },
-               {  
-                  "name":"per_page",
-                  "in":"query",
-                  "description":"limit",
-                  "required":false,
-                  "type":"integer",
-                  "format":"int32"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK",
-                  "schema":{  
-                     "type":"array",
-                     "items":{  
-                        "$ref":"#/definitions/CentreMasterDTO"
-                     }
-                  }
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         },
-         "post":{  
-            "tags":[  
-               "centre"
-            ],
-            "summary":"createCentre",
-            "operationId":"createCentreUsingPOST",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "in":"body",
-                  "name":"centreMasterDTO",
-                  "description":"centreMasterDTO",
-                  "required":true,
-                  "schema":{  
-                     "$ref":"#/definitions/CentreMasterDTO"
-                  }
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK",
-                  "schema":{  
-                     "$ref":"#/definitions/CentreMasterDTO"
-                  }
-               },
-               "201":{  
-                  "description":"Created"
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         },
-         "put":{  
-            "tags":[  
-               "centre"
-            ],
-            "summary":"update",
-            "operationId":"updateUsingPUT_6",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "in":"body",
-                  "name":"centreMasterDTO",
-                  "description":"centreMasterDTO",
-                  "required":true,
-                  "schema":{  
-                     "$ref":"#/definitions/CentreMasterDTO"
-                  }
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK",
-                  "schema":{  
-                     "$ref":"#/definitions/CentreMasterDTO"
-                  }
-               },
-               "201":{  
-                  "description":"Created"
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         }
-      },
-      "/api/centre/{id}":{  
-         "get":{  
-            "tags":[  
-               "centre"
-            ],
-            "summary":"getUser",
-            "operationId":"getUserUsingGET",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"id",
-                  "in":"path",
-                  "description":"id",
-                  "required":true,
-                  "type":"integer",
-                  "format":"int64"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK",
-                  "schema":{  
-                     "$ref":"#/definitions/CentreMasterDTO"
-                  }
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         },
-         "delete":{  
-            "tags":[  
-               "centre"
-            ],
-            "summary":"delete",
-            "operationId":"deleteUsingDELETE_4",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"id",
-                  "in":"path",
-                  "description":"id",
-                  "required":true,
-                  "type":"integer",
-                  "format":"int64"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK"
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "204":{  
-                  "description":"No Content"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               }
-            }
-         }
-      },
+   "paths":{ 
+   "/api/partner/loanaccounts/collectiondemand/update":{"put":{"tags":["loanprocess"],"summary":"Update an existing collectiondemand","description":"Update an existing collectiondemand and return the updated collectiondemand on success.","operationId":"updateCollectionDemandUsingPUT","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"collectionDemandSummary","description":"collectionDemandSummary","required":true,"schema":{"$ref":"#/definitions/CollectionDemandSummaryCompositeDTO"}}],"responses":{"200":{"description":"Successfully updated collectiondemand","schema":{"$ref":"#/definitions/CollectionDemandSummaryCompositeDTO"}},"201":{"description":"Created"},"401":{"description":"Unauthorized"},"500":{"description":"Internal Server Error"},"403":{"description":"Forbidden"},"404":{"description":"Not Found"}}}}, 
       "/api/partner/enrollments":{  
          "get":{  
             "tags":[  
@@ -870,6 +556,8 @@
             }
          }
       },
+    
+   
       "/api/partner/loanaccounts/repay":{  
          "post":{  
             "tags":[  
@@ -1456,6 +1144,7 @@
             }
          }
       },
+     
       "/api/partner/individualLoan":{  
          "post":{  
             "tags":[  
@@ -1652,291 +1341,6 @@
                },
                "500":{  
                   "description":"Internal Server Error"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         }
-      },
-      "/api/partner/files/upload":{  
-         "post":{  
-            "tags":[  
-               "files"
-            ],
-            "summary":"File upload",
-            "description":"File upload.",
-            "operationId":"uploadUsingPOST_1",
-            "consumes":[  
-               "multipart/form-data"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"file",
-                  "in":"formData",
-                  "description":"file",
-                  "required":true,
-                  "type":"file"
-               },
-               {  
-                  "name":"category",
-                  "in":"query",
-                  "description":"category",
-                  "required":true,
-                  "type":"string",
-                  "enum":[  
-                     "CustomerEnrollment",
-                     "Group",
-                     "Loan",
-                     "Collection",
-                     "PLDC",
-                     "Repayment",
-                     "ACH",
-                     "PDC",
-                     "Customer",
-                     "LoanMonitoringDetails",
-                     "CreditMonitoringDetails",
-                     "DeathMarking",
-                     "Audit"
-                  ]
-               },
-               {  
-                  "name":"subCategory",
-                  "in":"query",
-                  "description":"subCategory",
-                  "required":true,
-                  "type":"string",
-                  "enum":[  
-                     "ADDRESSPROOF",
-                     "ADDRESSPROOFREVERSE",
-                     "IDENTITYPROOF",
-                     "IDENTITYPROOFREVERSE",
-                     "AGEPROOF",
-                     "PAN",
-                     "KYC1",
-                     "KYC1REVERSE",
-                     "KYC2",
-                     "KYC2REVERSE",
-                     "PHOTO",
-                     "FINGERPRINT",
-                     "HOUSEVERIFICATTIONPHOTO",
-                     "CGT1PHOTO",
-                     "CGT2PHOTO",
-                     "CGT3PHOTO",
-                     "GRTPHOTO",
-                     "DOC1",
-                     "DOC2",
-                     "DOC3",
-                     "COLLATERAL1",
-                     "COLLATERAL2",
-                     "COLLATERAL3",
-                     "COLLATERALPHOTO",
-                     "PHOTOOFCENTRE",
-                     "APPLICATION",
-                     "AGREEMENT",
-                     "PLDCPHOTO",
-                     "CATTLE_PHOTO",
-                     "SHOP_PHOTO",
-                     "Cheque",
-                     "ReverseFeed",
-                     "REGISTRATIONDOCUMENT",
-                     "IndividualLoanDocuments",
-                     "ExcelFileUpload",
-                     "GROUPPHOTO",
-                     "DSCREQUESTDOCUMENT",
-                     "AUDITISSUEDOC",
-                     "AUDITISSUEDRAFTDOC",
-                     "DEATHCERTIFICATE",
-                     "LIABILITIES"
-                  ]
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"File is  uploaded successfully",
-                  "schema":{  
-                     "$ref":"#/definitions/FileInfo"
-                  }
-               },
-               "201":{  
-                  "description":"Created"
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "500":{  
-                  "description":"Internal Server Error"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         }
-      },
-      "/api/partner/files/upload/base64":{  
-         "post":{  
-            "tags":[  
-               "files"
-            ],
-            "summary":"Base64 file upload",
-            "description":"Base64 file upload",
-            "operationId":"uploadUsingPOST",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "application/json"
-            ],
-            "parameters":[  
-               {  
-                  "name":"file",
-                  "in":"query",
-                  "description":"fileStream",
-                  "required":true,
-                  "type":"string"
-               },
-               {  
-                  "name":"type",
-                  "in":"query",
-                  "description":"category",
-                  "required":true,
-                  "type":"string",
-                  "enum":[  
-                     "CustomerEnrollment",
-                     "Group",
-                     "Loan",
-                     "Collection",
-                     "PLDC",
-                     "Repayment",
-                     "ACH",
-                     "PDC",
-                     "Customer",
-                     "LoanMonitoringDetails",
-                     "CreditMonitoringDetails",
-                     "DeathMarking",
-                     "Audit"
-                  ]
-               },
-               {  
-                  "name":"subType",
-                  "in":"query",
-                  "description":"subCategory",
-                  "required":true,
-                  "type":"string",
-                  "enum":[  
-                     "ADDRESSPROOF",
-                     "ADDRESSPROOFREVERSE",
-                     "IDENTITYPROOF",
-                     "IDENTITYPROOFREVERSE",
-                     "AGEPROOF",
-                     "PAN",
-                     "KYC1",
-                     "KYC1REVERSE",
-                     "KYC2",
-                     "KYC2REVERSE",
-                     "PHOTO",
-                     "FINGERPRINT",
-                     "HOUSEVERIFICATTIONPHOTO",
-                     "CGT1PHOTO",
-                     "CGT2PHOTO",
-                     "CGT3PHOTO",
-                     "GRTPHOTO",
-                     "DOC1",
-                     "DOC2",
-                     "DOC3",
-                     "COLLATERAL1",
-                     "COLLATERAL2",
-                     "COLLATERAL3",
-                     "COLLATERALPHOTO",
-                     "PHOTOOFCENTRE",
-                     "APPLICATION",
-                     "AGREEMENT",
-                     "PLDCPHOTO",
-                     "CATTLE_PHOTO",
-                     "SHOP_PHOTO",
-                     "Cheque",
-                     "ReverseFeed",
-                     "REGISTRATIONDOCUMENT",
-                     "IndividualLoanDocuments",
-                     "ExcelFileUpload",
-                     "GROUPPHOTO",
-                     "DSCREQUESTDOCUMENT",
-                     "AUDITISSUEDOC",
-                     "AUDITISSUEDRAFTDOC",
-                     "DEATHCERTIFICATE",
-                     "LIABILITIES"
-                  ]
-               },
-               {  
-                  "name":"extn",
-                  "in":"query",
-                  "description":"fileExtension",
-                  "required":true,
-                  "type":"string"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"File is  uploaded successfully",
-                  "schema":{  
-                     "$ref":"#/definitions/FileInfo"
-                  }
-               },
-               "201":{  
-                  "description":"Created"
-               },
-               "401":{  
-                  "description":"Unauthorized"
-               },
-               "500":{  
-                  "description":"Internal Server Error"
-               },
-               "403":{  
-                  "description":"Forbidden"
-               },
-               "404":{  
-                  "description":"Not Found"
-               }
-            }
-         }
-      },
-      "/api/partner/stream/{fileId}":{  
-         "get":{  
-            "tags":[  
-               "files"
-            ],
-            "summary":"streamFile",
-            "operationId":"streamFileUsingGET",
-            "consumes":[  
-               "application/json"
-            ],
-            "produces":[  
-               "*/*"
-            ],
-            "parameters":[  
-               {  
-                  "name":"fileId",
-                  "in":"path",
-                  "description":"fileId",
-                  "required":true,
-                  "type":"string"
-               }
-            ],
-            "responses":{  
-               "200":{  
-                  "description":"OK"
-               },
-               "401":{  
-                  "description":"Unauthorized"
                },
                "403":{  
                   "description":"Forbidden"
@@ -3183,6 +2587,58 @@
             }
          }
       },
+      "LoanInsuranceDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "applicationDate":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "insuranceCompany":{  
+               "type":"string"
+            },
+            "insuranceExpiryDate":{  
+               "type":"string"
+            },
+            "insuranceFrom":{  
+               "type":"string"
+            },
+            "insuranceHypothecation":{  
+               "type":"boolean"
+            },
+            "insuranceId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "insuranceType":{  
+               "type":"string"
+            },
+            "insurerId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "rfidTag":{  
+               "type":"string"
+            },
+            "sumInsured":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
       "RemittanceInputDTO":{  
          "properties":{  
             "amountInPaisa":{  
@@ -3431,6 +2887,141 @@
             "totalTurnover":{  
                "type":"number",
                "format":"double"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "VehiclePhotoCaptureDTO":{  
+         "properties":{  
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "photoFileId":{  
+               "type":"string"
+            },
+            "photoRemarks":{  
+               "type":"string"
+            },
+            "photoType":{  
+               "type":"string"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "NomineeDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "familyMemberName":{  
+               "type":"string"
+            },
+            "guardianAddressSameAsCustomer":{  
+               "type":"boolean"
+            },
+            "guardianDOB":{  
+               "type":"string"
+            },
+            "guardianDistrict":{  
+               "type":"string"
+            },
+            "guardianDoorNo":{  
+               "type":"string"
+            },
+            "guardianFirstName":{  
+               "type":"string"
+            },
+            "guardianGender":{  
+               "type":"string"
+            },
+            "guardianLastName":{  
+               "type":"string"
+            },
+            "guardianLocality":{  
+               "type":"string"
+            },
+            "guardianMiddleName":{  
+               "type":"string"
+            },
+            "guardianPincode":{  
+               "type":"string"
+            },
+            "guardianRelationWithMinor":{  
+               "type":"string"
+            },
+            "guardianState":{  
+               "type":"string"
+            },
+            "guardianStreet":{  
+               "type":"string"
+            },
+            "guardianTitle":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "nomineeAddressSameAsCustomer":{  
+               "type":"boolean"
+            },
+            "nomineeDOB":{  
+               "type":"string"
+            },
+            "nomineeDistrict":{  
+               "type":"string"
+            },
+            "nomineeDoorNo":{  
+               "type":"string"
+            },
+            "nomineeFirstName":{  
+               "type":"string"
+            },
+            "nomineeGender":{  
+               "type":"string"
+            },
+            "nomineeLastName":{  
+               "type":"string"
+            },
+            "nomineeLocality":{  
+               "type":"string"
+            },
+            "nomineeMiddleName":{  
+               "type":"string"
+            },
+            "nomineeMinor":{  
+               "type":"boolean"
+            },
+            "nomineePincode":{  
+               "type":"string"
+            },
+            "nomineeRelationship":{  
+               "type":"string"
+            },
+            "nomineeState":{  
+               "type":"string"
+            },
+            "nomineeStreet":{  
+               "type":"string"
             },
             "version":{  
                "type":"integer",
@@ -4011,6 +3602,12 @@
                   "DSC_OVERRIDE_REQUEST_REJECTED"
                ]
             },
+            "groupMemeberDetails":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/CustomerDTO"
+               }
+            },
             "remarks":{  
                "type":"string"
             },
@@ -4250,6 +3847,12 @@
                "type":"integer",
                "format":"int64"
             },
+            "psychometricCompleted":{  
+               "type":"string"
+            },
+            "psychometricRequired":{  
+               "type":"string"
+            },
             "relation":{  
                "type":"string"
             },
@@ -4450,6 +4053,113 @@
                "additionalProperties":{  
                   "type":"string"
                }
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "JewelLoanDetailsDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "authenticationRegisterId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "encoreClosed":{  
+               "type":"boolean"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "jewelLoanEligibleMarketRate":{  
+               "type":"number",
+               "format":"float"
+            },
+            "jewelPouchLocationId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "jewelPouchLocationType":{  
+               "type":"string"
+            },
+            "jewelPouchMovementId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "jewelPouchNo":{  
+               "type":"string"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "ratePerGram22CaratInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "transitRequest":{  
+               "type":"boolean"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "JewelLoanOrnamentsAppraisalDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "grossWeightInGrams":{  
+               "type":"number",
+               "format":"double"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "jewelDefects":{  
+               "type":"string"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "marketValueInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "netWeightInGrams":{  
+               "type":"number",
+               "format":"double"
+            },
+            "noOfArticles":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "ornamentsDescription":{  
+               "type":"string"
+            },
+            "qualityInCarats":{  
+               "type":"number",
+               "format":"double"
+            },
+            "ratePerGram22CaratInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "ratePerGramInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "stoneDescription":{  
+               "type":"string"
             },
             "version":{  
                "type":"integer",
@@ -5062,6 +4772,241 @@
             "version":{  
                "type":"integer",
                "format":"int32"
+            }
+         }
+      },
+      "VehicleLoanExpensesDTO":{  
+         "properties":{  
+            "expenseAmount":{  
+               "type":"number",
+               "format":"double"
+            },
+            "expenseType":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "VehiclePastValuationDTO":{  
+         "properties":{  
+            "financier":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "valuation":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "valuationDate":{  
+               "type":"string"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "CollateralDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "collateral1FilePath":{  
+               "type":"string"
+            },
+            "collateral2FilePath":{  
+               "type":"string"
+            },
+            "collateral3FilePath":{  
+               "type":"string"
+            },
+            "collateral4FilePath":{  
+               "type":"string"
+            },
+            "collateral5FilePath":{  
+               "type":"string"
+            },
+            "collateralCategory":{  
+               "type":"string"
+            },
+            "collateralDescription":{  
+               "type":"string"
+            },
+            "collateralType":{  
+               "type":"string"
+            },
+            "collateralValue":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "dateOfRegistration":{  
+               "type":"string"
+            },
+            "district":{  
+               "type":"string"
+            },
+            "documentNumber":{  
+               "type":"string"
+            },
+            "documentType":{  
+               "type":"string"
+            },
+            "doorNo":{  
+               "type":"string"
+            },
+            "electricityAvailable":{  
+               "type":"string"
+            },
+            "expectedIncome":{  
+               "type":"number",
+               "format":"double"
+            },
+            "expectedPurchaseDate":{  
+               "type":"string"
+            },
+            "extentOfProperty":{  
+               "type":"string"
+            },
+            "extentOfPropertyUnit":{  
+               "type":"string"
+            },
+            "hypothecatedToBank":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "landmark":{  
+               "type":"string"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanToValue":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "machineAttachedToBuilding":{  
+               "type":"string"
+            },
+            "machineOld":{  
+               "type":"boolean"
+            },
+            "mandal":{  
+               "type":"string"
+            },
+            "manufacturer":{  
+               "type":"string"
+            },
+            "marginValue":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "modelNo":{  
+               "type":"string"
+            },
+            "photoFilePath":{  
+               "type":"string"
+            },
+            "propertyOwner":{  
+               "type":"string"
+            },
+            "propertyOwnerName":{  
+               "type":"string"
+            },
+            "propertyType":{  
+               "type":"string"
+            },
+            "quantity":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "relationWithApplicant":{  
+               "type":"string"
+            },
+            "serialNo":{  
+               "type":"string"
+            },
+            "spaceAvailable":{  
+               "type":"string"
+            },
+            "state":{  
+               "type":"string"
+            },
+            "subRegistrar":{  
+               "type":"string"
+            },
+            "subRegistrarArea":{  
+               "type":"string"
+            },
+            "subRegistrarDistrict":{  
+               "type":"string"
+            },
+            "subRegistrarPincode":{  
+               "type":"string"
+            },
+            "subRegistrarState":{  
+               "type":"string"
+            },
+            "subRegistrarVillage":{  
+               "type":"string"
+            },
+            "surveyNo":{  
+               "type":"string"
+            },
+            "totalValue":{  
+               "type":"number",
+               "format":"double"
+            },
+            "udf1":{  
+               "type":"string"
+            },
+            "udf2":{  
+               "type":"string"
+            },
+            "udf3":{  
+               "type":"string"
+            },
+            "udf4":{  
+               "type":"string"
+            },
+            "udf5":{  
+               "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "village":{  
+               "type":"string"
             }
          }
       },
@@ -7360,7 +7305,6 @@
             }
          }
       },
-	  "AccountStatementEntryWSDto":{"properties":{"accountEntryType":{"type":"string"},"accountId":{"type":"string"},"amount":{"type":"string"},"balance":{"type":"string"},"description":{"type":"string"},"entryNum":{"type":"integer","format":"int32"},"referencedTransactionId":{"type":"string"},"subAccountId":{"type":"string"},"transactionDate":{"type":"string","format":"date-time"},"transactionId":{"type":"string"},"valueDate":{"type":"string","format":"date-time"}}},
       "UrnLinkResponseDTO":{  
          "properties":{  
             "familyMemberName":{  
@@ -9273,6 +9217,24 @@
       },
       "IndividualLoanProcessCompositeDTO":{  
          "properties":{  
+            "applicant":{  
+               "$ref":"#/definitions/CustomerDTO"
+            },
+            "coApplicants":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/CustomerDTO"
+               }
+            },
+            "enterprise":{  
+               "$ref":"#/definitions/CustomerDTO"
+            },
+            "gaurantors":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/CustomerDTO"
+               }
+            },
             "loanAccount":{  
                "$ref":"#/definitions/LoanAccountDTO"
             },
@@ -9478,6 +9440,62 @@
                "format":"int32"
             },
             "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "VehicleLoanDocumentsDTO":{  
+         "properties":{  
+            "docType":{  
+               "type":"string"
+            },
+            "expiryDate":{  
+               "type":"string"
+            },
+            "fileId":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "issueDate":{  
+               "type":"string"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "udf1":{  
+               "type":"string"
+            },
+            "udf2":{  
+               "type":"string"
+            },
+            "udf3":{  
+               "type":"string"
+            },
+            "udf4":{  
+               "type":"string"
+            },
+            "udf5":{  
+               "type":"string"
+            },
+            "udfDate1":{  
+               "type":"string"
+            },
+            "udfDate2":{  
+               "type":"string"
+            },
+            "udfDate3":{  
+               "type":"string"
+            },
+            "vehicleLoanDetailsId":{  
                "type":"integer",
                "format":"int64"
             },
@@ -9744,6 +9762,33 @@
             }
          }
       },
+      "VehicleLoanIncomesDTO":{  
+         "properties":{  
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "incomeAmount":{  
+               "type":"number",
+               "format":"double"
+            },
+            "incomeType":{  
+               "type":"string"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
       "LoanAccountDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -9752,31 +9797,118 @@
             "accountUserDefinedFields":{  
                "$ref":"#/definitions/AccountUserDefinedFieldDTO"
             },
+            "actualAmountRequired":{  
+               "type":"number",
+               "format":"double"
+            },
+            "annualizedPercentage":{  
+               "type":"number",
+               "format":"double"
+            },
             "applicant":{  
                "type":"string"
             },
+            "applicationFileId":{  
+               "type":"string"
+            },
+            "applicationFileName":{  
+               "type":"string"
+            },
             "applicationStatus":{  
+               "type":"string"
+            },
+            "applicationStatusUpdatedBy":{  
+               "type":"string"
+            },
+            "applicationStatusUpdatedOn":{  
+               "type":"string",
+               "format":"date-time"
+            },
+            "assetAvailableForHypothecation":{  
+               "type":"string"
+            },
+            "assignedTo":{  
                "type":"string"
             },
             "bankId":{  
                "type":"integer",
                "format":"int64"
             },
+            "baseLoanAccount":{  
+               "type":"string"
+            },
+            "bcAccount":{  
+               "$ref":"#/definitions/BcAccountDTO"
+            },
             "borrowerIlliterate":{  
                "type":"boolean"
+            },
+            "branchCode":{  
+               "type":"string"
             },
             "branchId":{  
                "type":"integer",
                "format":"int32"
             },
+            "chk1FileUploadId":{  
+               "type":"string"
+            },
+            "chk1UploadFilePath":{  
+               "type":"string"
+            },
             "closed":{  
                "type":"boolean"
+            },
+            "coApplicant":{  
+               "type":"string"
+            },
+            "coBorrowerUrnNo":{  
+               "type":"string"
+            },
+            "collateral":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/CollateralDTO"
+               }
+            },
+            "collectionAccountNumber":{  
+               "type":"string"
+            },
+            "collectionAccountType":{  
+               "type":"string"
+            },
+            "collectionBankBranchName":{  
+               "type":"string"
+            },
+            "collectionBankName":{  
+               "type":"string"
+            },
+            "collectionCustomerNameAsInBank":{  
+               "type":"string"
+            },
+            "collectionIfscCode":{  
+               "type":"string"
+            },
+            "collectionPaymentType":{  
+               "type":"string"
             },
             "commercialCibilCharge":{  
                "type":"integer",
                "format":"int32"
             },
             "currentStage":{  
+               "type":"string"
+            },
+            "customerBank":{  
+               "type":"string"
+            },
+            "customerBankAccountNumber":{  
+               "type":"string"
+            },
+            "customerBankIfscCode":{  
+               "type":"string"
+            },
+            "customerBranch":{  
                "type":"string"
             },
             "customerId":{  
@@ -9787,14 +9919,43 @@
                "type":"number",
                "format":"double"
             },
+            "customerSignDateExpected":{  
+               "type":"string"
+            },
+            "dealIrr":{  
+               "type":"number",
+               "format":"double"
+            },
+            "disbursedAmountInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "disbursementFromBankAccountNumber":{  
+               "type":"string"
+            },
             "disbursementSchedules":{  
                "type":"array",
                "items":{  
                   "$ref":"#/definitions/LoanAccountDisbursementScheduleDTO"
                }
             },
+            "doCustomerLoanAmount":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "doCustomerProcessingFee":{  
+               "type":"number",
+               "format":"double"
+            },
+            "dob":{  
+               "type":"string"
+            },
             "documentTracking":{  
                "type":"string"
+            },
+            "dsaPayout":{  
+               "type":"number",
+               "format":"double"
             },
             "dscIntegrationId":{  
                "type":"integer",
@@ -9810,6 +9971,9 @@
             "dscOverrideRemarks":{  
                "type":"string"
             },
+            "emiPaymentDateRequested":{  
+               "type":"string"
+            },
             "emiRequested":{  
                "type":"number",
                "format":"double"
@@ -9818,13 +9982,40 @@
                "type":"string",
                "format":"date-time"
             },
+            "equatedInstallmentAmount":{  
+               "type":"number",
+               "format":"double"
+            },
+            "estimatedDateOfCompletion":{  
+               "type":"string"
+            },
             "estimatedEmi":{  
                "type":"number",
                "format":"double"
             },
+            "estimatedValueOfAssets":{  
+               "type":"number",
+               "format":"double"
+            },
+            "expectedCommercialCibilCharge":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "expectedIncrementalIncome":{  
+               "type":"integer",
+               "format":"int32"
+            },
             "expectedInterestRate":{  
                "type":"number",
                "format":"double"
+            },
+            "expectedInterestSaving":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "expectedJobCreation":{  
+               "type":"integer",
+               "format":"int32"
             },
             "expectedPortfolioInsurancePremium":{  
                "type":"number",
@@ -9868,15 +10059,41 @@
             "frequencyRequested":{  
                "type":"string"
             },
+            "fundsFromDifferentSources":{  
+               "type":"number",
+               "format":"double"
+            },
             "groupCode":{  
                "type":"string"
             },
             "groupName":{  
                "type":"string"
             },
+            "gstNumber":{  
+               "type":"string"
+            },
+            "guarantors":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/GuarantorDTO"
+               }
+            },
+            "husbandOrFatherFirstName":{  
+               "type":"string"
+            },
+            "husbandOrFatherLastName":{  
+               "type":"string"
+            },
+            "husbandOrFatherMiddleName":{  
+               "type":"string"
+            },
             "id":{  
                "type":"integer",
                "format":"int64"
+            },
+            "insuranceFee":{  
+               "type":"number",
+               "format":"double"
             },
             "insuranceRateCode":{  
                "type":"string"
@@ -9887,6 +10104,18 @@
             "interestRate":{  
                "type":"number",
                "format":"float"
+            },
+            "isNpa":{  
+               "type":"boolean"
+            },
+            "isRestructure":{  
+               "type":"boolean"
+            },
+            "isSendBack":{  
+               "type":"string"
+            },
+            "jewelLoanDetails":{  
+               "$ref":"#/definitions/JewelLoanDetailsDTO"
             },
             "jlgGroupId":{  
                "type":"integer",
@@ -9899,6 +10128,22 @@
             "lastStageChangedAt":{  
                "type":"string",
                "format":"date-time"
+            },
+            "leadId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "linkedAccountNumber":{  
+               "type":"string"
+            },
+            "literateWitnessFirstName":{  
+               "type":"string"
+            },
+            "literateWitnessLastName":{  
+               "type":"string"
+            },
+            "literateWitnessMiddleName":{  
+               "type":"string"
             },
             "loanAmount":{  
                "type":"integer",
@@ -9913,6 +10158,9 @@
             },
             "loanCentre":{  
                "$ref":"#/definitions/LoanCentreDTO"
+            },
+            "loanChannels":{  
+               "type":"string"
             },
             "loanClosedAt":{  
                "type":"string",
@@ -9940,6 +10188,15 @@
                   "$ref":"#/definitions/IndividualLoanDocumentDTO"
                }
             },
+            "loanInsurance":{  
+               "$ref":"#/definitions/LoanInsuranceDTO"
+            },
+            "loanMitigants":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/LoanMitigantsDTO"
+               }
+            },
             "loanPurpose1":{  
                "type":"string"
             },
@@ -9949,12 +10206,42 @@
             "loanPurpose3":{  
                "type":"string"
             },
+            "loanToValue":{  
+               "type":"number",
+               "format":"double"
+            },
             "loanType":{  
                "type":"string"
+            },
+            "loanUtilisationDetail":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/LoanUtilisationDetailsDTO"
+               }
+            },
+            "maxEmi":{  
+               "type":"number",
+               "format":"double"
+            },
+            "maximumStageOrder":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "newLoanDemandSchedules":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/NewLoanDemandScheduleDTO"
+               }
             },
             "noOfGuarantersRequired":{  
                "type":"integer",
                "format":"int32"
+            },
+            "nominees":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/NomineeDTO"
+               }
             },
             "numberOfDisbursed":{  
                "type":"integer",
@@ -9971,15 +10258,64 @@
             "oldAccountNO":{  
                "type":"string"
             },
+            "originalAccountNumber":{  
+               "type":"string"
+            },
+            "ornamentsAppraisals":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/JewelLoanOrnamentsAppraisalDTO"
+               }
+            },
             "otherFee":{  
                "type":"number",
                "format":"double"
             },
+            "parentLoanAccount":{  
+               "type":"string"
+            },
+            "partnerAccountNumber":{  
+               "type":"string"
+            },
+            "partnerApprovalStatus":{  
+               "type":"string"
+            },
             "partnerCode":{  
+               "type":"string"
+            },
+            "partnerLoanAmount":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "partnerProcessingFee":{  
+               "type":"number",
+               "format":"double"
+            },
+            "partnerRemarks":{  
+               "type":"string"
+            },
+            "payeeAddress":{  
+               "type":"string"
+            },
+            "payeeMobileNumber":{  
+               "type":"string"
+            },
+            "payeeName":{  
+               "type":"string"
+            },
+            "payeeRelationToApplicant":{  
                "type":"string"
             },
             "pendingApproval":{  
                "type":"string"
+            },
+            "percentageIncreasedIncome":{  
+               "type":"number",
+               "format":"double"
+            },
+            "percentageInterestSaved":{  
+               "type":"number",
+               "format":"double"
             },
             "portfolioInsurancePremium":{  
                "type":"number",
@@ -10007,6 +10343,10 @@
                "type":"number",
                "format":"double"
             },
+            "priority":{  
+               "type":"integer",
+               "format":"int32"
+            },
             "processType":{  
                "type":"string"
             },
@@ -10031,6 +10371,12 @@
             "productType":{  
                "type":"string"
             },
+            "proposedHires":{  
+               "type":"string"
+            },
+            "psychometricCompleted":{  
+               "type":"string"
+            },
             "rejectReason":{  
                "type":"string"
             },
@@ -10040,7 +10386,13 @@
             "sanctionDate":{  
                "type":"string"
             },
+            "sbAccountNo":{  
+               "type":"string"
+            },
             "scheduleStartDate":{  
+               "type":"string"
+            },
+            "schemeCode":{  
                "type":"string"
             },
             "screeningDate":{  
@@ -10067,6 +10419,12 @@
             "status":{  
                "type":"string"
             },
+            "telecallingDetails":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/TeleCallingDetailsDTO"
+               }
+            },
             "tenure":{  
                "type":"string"
             },
@@ -10082,6 +10440,18 @@
                "type":"string"
             },
             "urnNo":{  
+               "type":"string"
+            },
+            "valuator":{  
+               "type":"string"
+            },
+            "vehicleLoanDetails":{  
+               "$ref":"#/definitions/VehicleLoanDetailsDTO"
+            },
+            "verificationReason":{  
+               "type":"string"
+            },
+            "verificationStatus":{  
                "type":"string"
             },
             "version":{  
@@ -11169,86 +11539,6 @@
             }
          }
       },
-      "CentreMasterDTO":{  
-         "properties":{  
-            "branchId":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "centreAddress":{  
-               "type":"string"
-            },
-            "centreAltitude":{  
-               "type":"string"
-            },
-            "centreCode":{  
-               "type":"string"
-            },
-            "centreGpsCaptureDate":{  
-               "type":"string"
-            },
-            "centreLatitude":{  
-               "type":"string"
-            },
-            "centreLeaderUrn":{  
-               "type":"string"
-            },
-            "centreLongitude":{  
-               "type":"string"
-            },
-            "centreName":{  
-               "type":"string"
-            },
-            "employee":{  
-               "type":"string"
-            },
-            "fortnightlyMeetingDay":{  
-               "type":"string"
-            },
-            "fortnightlyMeetingTime":{  
-               "type":"string"
-            },
-            "id":{  
-               "type":"integer",
-               "format":"int64"
-            },
-            "meetingPreference":{  
-               "type":"string"
-            },
-            "monthlyMeetingDate":{  
-               "type":"string"
-            },
-            "monthlyMeetingDateNumber":{  
-               "type":"string"
-            },
-            "monthlyMeetingDay":{  
-               "type":"string"
-            },
-            "monthlyMeetingStatus":{  
-               "type":"string"
-            },
-            "monthlyMeetingTime":{  
-               "type":"string"
-            },
-            "status":{  
-               "type":"string"
-            },
-            "surveyId":{  
-               "type":"integer",
-               "format":"int64"
-            },
-            "version":{  
-               "type":"integer",
-               "format":"int32"
-            },
-            "weeklyMeetingDay":{  
-               "type":"string"
-            },
-            "weeklyMeetingTime":{  
-               "type":"string"
-            }
-         }
-      },
       "RepaymentDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -11689,7 +11979,37 @@
             "ifscCode":{  
                "type":"string"
             },
+            "latitude":{  
+               "type":"string"
+            },
+            "linkedAccountNormalInterestDue":{  
+               "type":"number",
+               "format":"double"
+            },
+            "linkedAccountPenalInterestDue":{  
+               "type":"number",
+               "format":"double"
+            },
+            "linkedAccountPreclosureFee":{  
+               "type":"number",
+               "format":"double"
+            },
+            "linkedAccountTotalFeeDue":{  
+               "type":"number",
+               "format":"double"
+            },
+            "linkedAccountTotalPrincipalDue":{  
+               "type":"number",
+               "format":"double"
+            },
             "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "longitude":{  
+               "type":"string"
+            },
+            "maximumStageOrder":{  
                "type":"integer",
                "format":"int64"
             },
@@ -11755,6 +12075,36 @@
                "type":"string"
             },
             "transactionId":{  
+               "type":"string"
+            },
+            "udf1":{  
+               "type":"string"
+            },
+            "udf2":{  
+               "type":"string"
+            },
+            "udf3":{  
+               "type":"string"
+            },
+            "udf4":{  
+               "type":"string"
+            },
+            "udf5":{  
+               "type":"string"
+            },
+            "udfDate1":{  
+               "type":"string"
+            },
+            "udfDate2":{  
+               "type":"string"
+            },
+            "udfDate3":{  
+               "type":"string"
+            },
+            "udfDate4":{  
+               "type":"string"
+            },
+            "udfDate5":{  
                "type":"string"
             },
             "version":{  
@@ -12211,6 +12561,142 @@
             "version":{  
                "type":"integer",
                "format":"int32"
+            }
+         }
+      },
+      "NewLoanDemandScheduleDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "amount":{  
+               "type":"string"
+            },
+            "authorizationRemark":{  
+               "type":"string"
+            },
+            "authorizationUsing":{  
+               "type":"string"
+            },
+            "bankId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "bcCustId":{  
+               "type":"string"
+            },
+            "branchId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "closed":{  
+               "type":"boolean"
+            },
+            "description":{  
+               "type":"string"
+            },
+            "disbursementDate":{  
+               "type":"string"
+            },
+            "encoreAccountNo":{  
+               "type":"string"
+            },
+            "enrollmentId":{  
+               "type":"string"
+            },
+            "firstName":{  
+               "type":"string"
+            },
+            "fldgFlag":{  
+               "type":"boolean"
+            },
+            "fldgUpdatedAt":{  
+               "type":"string"
+            },
+            "fldgUpdatedBy":{  
+               "type":"string"
+            },
+            "frequency":{  
+               "type":"string"
+            },
+            "groupCode":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "installmentAmountInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "installmentNumber":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "isAdvanceDemand":{  
+               "type":"boolean"
+            },
+            "lastName":{  
+               "type":"string"
+            },
+            "lastRepaymentFlag":{  
+               "type":"boolean"
+            },
+            "loanAmount":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "loanClosedAt":{  
+               "type":"string"
+            },
+            "loanClosedBy":{  
+               "type":"string"
+            },
+            "middleName":{  
+               "type":"string"
+            },
+            "noOfInstallments":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "partPaymentStatus":{  
+               "type":"string"
+            },
+            "pendingAmountInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "product":{  
+               "type":"string"
+            },
+            "productName":{  
+               "type":"string"
+            },
+            "repaid":{  
+               "type":"boolean"
+            },
+            "repaymentAmountInPaisa":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "repaymentDate":{  
+               "type":"string"
+            },
+            "repaymentType":{  
+               "type":"string"
+            },
+            "scheduleDate":{  
+               "type":"string"
+            },
+            "tenure":{  
+               "type":"string"
+            },
+            "transactionId":{  
+               "type":"string"
+            },
+            "urnNo":{  
+               "type":"string"
             }
          }
       },
@@ -13111,6 +13597,44 @@
             }
          }
       },
+      "LoanUtilisationDetailsDTO":{  
+         "properties":{  
+            "consumptionDetails":{  
+               "type":"string"
+            },
+            "fundAllocationPercentage":{  
+               "type":"number",
+               "format":"double"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "udf1":{  
+               "type":"string"
+            },
+            "udf2":{  
+               "type":"string"
+            },
+            "udf3":{  
+               "type":"string"
+            },
+            "udfDate1":{  
+               "type":"string"
+            },
+            "utilisationType":{  
+               "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
       "DscOverrideCompositeDTO":{  
          "properties":{  
             "dscIntegration":{  
@@ -13889,6 +14413,76 @@
             }
          }
       },
+      "GuarantorDTO":{  
+         "properties":{  
+            "accountNumber":{  
+               "type":"string"
+            },
+            "address":{  
+               "type":"string"
+            },
+            "assetDetails":{  
+               "type":"string"
+            },
+            "dscIntegrationId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "guaCustomerId":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "guaDob":{  
+               "type":"string"
+            },
+            "guaDscOverride":{  
+               "type":"boolean"
+            },
+            "guaDscRemarks":{  
+               "type":"string"
+            },
+            "guaFirstName":{  
+               "type":"string"
+            },
+            "guaLastName":{  
+               "type":"string"
+            },
+            "guaMiddleName":{  
+               "type":"string"
+            },
+            "guaUrnNo":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "relationFirstName":{  
+               "type":"string"
+            },
+            "relationLastName":{  
+               "type":"string"
+            },
+            "relationMiddleName":{  
+               "type":"string"
+            },
+            "relationship":{  
+               "type":"string"
+            },
+            "totalLiabilities":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
       "PartnerLoanDemandScheduleDTO":{  
          "properties":{  
             "accountNumber":{  
@@ -14116,6 +14710,34 @@
             },
             "visitedDate":{  
                "type":"string"
+            }
+         }
+      },
+      "LoanMitigantsDTO":{  
+         "properties":{  
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "mitigant":{  
+               "type":"string"
+            },
+            "mitigatedStatus":{  
+               "type":"boolean"
+            },
+            "parameter":{  
+               "type":"string"
+            },
+            "riskScore":{  
+               "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
             }
          }
       },
@@ -15944,6 +16566,428 @@
             }
          }
       },
+      "VehicleLoanDetailsDTO":{  
+         "properties":{  
+            "accident":{  
+               "type":"boolean"
+            },
+            "accidentRemarks":{  
+               "type":"string"
+            },
+            "airbag":{  
+               "type":"boolean"
+            },
+            "assetDetails":{  
+               "type":"string"
+            },
+            "assetSubDetails":{  
+               "type":"string"
+            },
+            "attachedAddress":{  
+               "type":"string"
+            },
+            "attachedContactNumber":{  
+               "type":"string"
+            },
+            "attachedWith":{  
+               "type":"string"
+            },
+            "bankReferenceNumber":{  
+               "type":"string"
+            },
+            "bodyType":{  
+               "type":"string"
+            },
+            "category":{  
+               "type":"string"
+            },
+            "chasisNo":{  
+               "type":"string"
+            },
+            "colour":{  
+               "type":"string"
+            },
+            "costOfTyre":{  
+               "type":"number",
+               "format":"double"
+            },
+            "cubicCapacity":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "currentInvoiceValue":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "currentMarketValue":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "dailyWorkingHours":{  
+               "type":"number",
+               "format":"double"
+            },
+            "distressValue":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "endUse":{  
+               "type":"string"
+            },
+            "engineNo":{  
+               "type":"string"
+            },
+            "engineStarted":{  
+               "type":"boolean"
+            },
+            "entityType":{  
+               "type":"string"
+            },
+            "estimatedReading":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "fitnesscertifiedUpto":{  
+               "type":"string"
+            },
+            "fuelConsumptionPerHour":{  
+               "type":"number",
+               "format":"double"
+            },
+            "fuelUsed":{  
+               "type":"string"
+            },
+            "futureLife":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "grossVehicleWeight":{  
+               "type":"number",
+               "format":"double"
+            },
+            "hourlyRate":{  
+               "type":"number",
+               "format":"double"
+            },
+            "hypothecatedTo":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "inspectedBy":{  
+               "type":"string"
+            },
+            "inspectionAltitude":{  
+               "type":"string"
+            },
+            "inspectionDate":{  
+               "type":"string"
+            },
+            "inspectionLatitude":{  
+               "type":"string"
+            },
+            "inspectionLongitude":{  
+               "type":"string"
+            },
+            "insuranceCompany":{  
+               "type":"string"
+            },
+            "insuranceIdv":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "insurancePolicyNumber":{  
+               "type":"string"
+            },
+            "insurancePolicyType":{  
+               "type":"string"
+            },
+            "insuranceValidFrom":{  
+               "type":"string"
+            },
+            "insuranceValidTo":{  
+               "type":"string"
+            },
+            "insuredDeclaredValue":{  
+               "type":"number",
+               "format":"double"
+            },
+            "lifeOfTyre":{  
+               "type":"number",
+               "format":"double"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "locationAddress":{  
+               "type":"string"
+            },
+            "locationContactName":{  
+               "type":"string"
+            },
+            "locationContactNumber":{  
+               "type":"string"
+            },
+            "majorRepair":{  
+               "type":"boolean"
+            },
+            "make":{  
+               "type":"string"
+            },
+            "makersClassification":{  
+               "type":"string"
+            },
+            "manufacturer":{  
+               "type":"string"
+            },
+            "mileage":{  
+               "type":"number",
+               "format":"double"
+            },
+            "modelUnderProduction":{  
+               "type":"boolean"
+            },
+            "monthlyWorkingDays":{  
+               "type":"number",
+               "format":"double"
+            },
+            "noOfAxles":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "noOfCylinders":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "noOfTyres":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "numberPlateCOlour":{  
+               "type":"string"
+            },
+            "odometer":{  
+               "type":"string"
+            },
+            "odometerReading":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "operationroute":{  
+               "type":"string"
+            },
+            "originalInvoiceValue":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "ownerSerialNo":{  
+               "type":"string"
+            },
+            "payLoad":{  
+               "type":"string"
+            },
+            "permitStatus":{  
+               "type":"string"
+            },
+            "permitType":{  
+               "type":"string"
+            },
+            "permitValidUpto":{  
+               "type":"string"
+            },
+            "powerSteering":{  
+               "type":"boolean"
+            },
+            "powerWindowFont":{  
+               "type":"boolean"
+            },
+            "powerWindowRear":{  
+               "type":"boolean"
+            },
+            "previousRegistrationNumber":{  
+               "type":"string"
+            },
+            "price":{  
+               "type":"number",
+               "format":"double"
+            },
+            "proposedOwnerName":{  
+               "type":"string"
+            },
+            "ratePerTrip":{  
+               "type":"number",
+               "format":"double"
+            },
+            "rcbookStatus":{  
+               "type":"boolean"
+            },
+            "reRegistered":{  
+               "type":"boolean"
+            },
+            "recommendationDate":{  
+               "type":"string"
+            },
+            "recommendationRemarks":{  
+               "type":"string"
+            },
+            "recommendationStatus":{  
+               "type":"string"
+            },
+            "registeredAddress":{  
+               "type":"string"
+            },
+            "registeredOwnerName":{  
+               "type":"string"
+            },
+            "registrationAsPerActual":{  
+               "type":"string"
+            },
+            "registrationAsPerRcbook":{  
+               "type":"string"
+            },
+            "registrationDate":{  
+               "type":"string"
+            },
+            "registrationNumber":{  
+               "type":"string"
+            },
+            "seatingCapacity":{  
+               "type":"string"
+            },
+            "segment":{  
+               "type":"string"
+            },
+            "subSegment":{  
+               "type":"string"
+            },
+            "taxPaid":{  
+               "type":"string"
+            },
+            "taxValidUpto":{  
+               "type":"string"
+            },
+            "trailer":{  
+               "type":"string"
+            },
+            "trailerAttached":{  
+               "type":"string"
+            },
+            "transmission":{  
+               "type":"string"
+            },
+            "typeofLoad":{  
+               "type":"string"
+            },
+            "unladenWeight":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "usedFor":{  
+               "type":"string"
+            },
+            "valuationDate":{  
+               "type":"string"
+            },
+            "valuationPlace":{  
+               "type":"string"
+            },
+            "valuationPurpose":{  
+               "type":"string"
+            },
+            "valuationRating":{  
+               "type":"string"
+            },
+            "variant":{  
+               "type":"string"
+            },
+            "vehicleAccessories":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleAccessoriesDTO"
+               }
+            },
+            "vehicleAssetConditions":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleAssetConditionDTO"
+               }
+            },
+            "vehicleClass":{  
+               "type":"string"
+            },
+            "vehicleLoanDocuments":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleLoanDocumentsDTO"
+               }
+            },
+            "vehicleLoanExpenses":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleLoanExpensesDTO"
+               }
+            },
+            "vehicleLoanIncomes":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleLoanIncomesDTO"
+               }
+            },
+            "vehicleModel":{  
+               "type":"string"
+            },
+            "vehicleMoved":{  
+               "type":"boolean"
+            },
+            "vehiclePastValuations":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehiclePastValuationDTO"
+               }
+            },
+            "vehiclePhotoCaptures":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehiclePhotoCaptureDTO"
+               }
+            },
+            "vehicleRouteDetails":{  
+               "type":"array",
+               "items":{  
+                  "$ref":"#/definitions/VehicleRouteDetailsDTO"
+               }
+            },
+            "vehicleType":{  
+               "type":"string"
+            },
+            "vehicleUseSegment":{  
+               "type":"string"
+            },
+            "vehicleUseSubSegment":{  
+               "type":"string"
+            },
+            "vehicleValuationDoneAt":{  
+               "type":"string",
+               "format":"date-time"
+            },
+            "vehicleValuationReportId":{  
+               "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "viabilityCategory":{  
+               "type":"string"
+            },
+            "yearOfManufacture":{  
+               "type":"string"
+            }
+         }
+      },
       "LoggerDTO":{  
          "properties":{  
             "level":{  
@@ -16059,6 +17103,47 @@
             },
             "vendorCode":{  
                "type":"string"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
+         }
+      },
+      "VehicleRouteDetailsDTO":{  
+         "properties":{  
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "ratePerTrip":{  
+               "type":"number",
+               "format":"double"
+            },
+            "routeFrom":{  
+               "type":"string"
+            },
+            "routeTo":{  
+               "type":"string"
+            },
+            "routeVia":{  
+               "type":"string"
+            },
+            "routesKms":{  
+               "type":"number",
+               "format":"double"
+            },
+            "trips":{  
+               "type":"integer",
+               "format":"int32"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
             },
             "version":{  
                "type":"integer",
@@ -16436,6 +17521,38 @@
             },
             "type":{  
                "type":"string"
+            }
+         }
+      },
+      "VehicleAssetConditionDTO":{  
+         "properties":{  
+            "componentCondition":{  
+               "type":"string"
+            },
+            "componentRemarks":{  
+               "type":"string"
+            },
+            "componentType":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "make":{  
+               "type":"string"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
             }
          }
       },
@@ -16852,6 +17969,35 @@
          "type":"object",
          "additionalProperties":{  
             "type":"object"
+         }
+      },
+      "VehicleAccessoriesDTO":{  
+         "properties":{  
+            "accessoryAvailable":{  
+               "type":"boolean"
+            },
+            "accessoryStatus":{  
+               "type":"string"
+            },
+            "accessoryType":{  
+               "type":"string"
+            },
+            "id":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "loanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "vehicleLoanId":{  
+               "type":"integer",
+               "format":"int64"
+            },
+            "version":{  
+               "type":"integer",
+               "format":"int32"
+            }
          }
       },
       "BankDepositCompositDTO":{  
