@@ -12,8 +12,8 @@ if (customerStateCode == null || customerStateCode.isEmpty()) {
 	customer = customerRepository.findCustomer(customerId);
 	customerStateCode = (customer == null || customer.getContact() == null)? "" : customer.getContact().getStateCode();
 }
-if (description == null || !description.toLowerCase().contains("NO GST".toLowerCase())) {
-	if (productCode.equalsIgnoreCase("TESTLOCALPRODUCT")) {
+if (description == null || !description.contains("NO_GST")) {
+	if (!productCode.equalsIgnoreCase("CENTRALPRODUCT")) {
 		// Localized processing
 		if (customerStateCode.equals(branchStateCode)) {
 			tax2 = tax/2;
