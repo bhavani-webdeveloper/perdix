@@ -393,7 +393,7 @@
                   "title":"Loan Application Date",
                   "type":"string",
                   "captureStages":[
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "Screening","ScreeningReview","Application", "LoanInitiation", "PendingForPartner"
                   ]
                },
                 "screeningDate":{

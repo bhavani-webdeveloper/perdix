@@ -2613,6 +2613,9 @@ define([],function(){
                             PageHelper.hideLoader();
                             return false;
                         } 
+                        if(model.loanAccount.currentStage == 'ScreeningReview'){
+                            model.loanAccount.loanApplicationDate=Utils.getCurrentDate();
+                        }
                         model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         if (!validateForm(formCtrl)){
                             PageHelper.hideLoader();
