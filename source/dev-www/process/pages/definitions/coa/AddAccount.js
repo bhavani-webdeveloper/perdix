@@ -63,7 +63,7 @@ define([], function() {
                             }, {
                                 "title": "GL_PRODUCT_CODE",
                                 "key": "glAccount.productCode",
-                                "type": "text",
+                                "type": ["string","null"],
                                 "condition": "model.glAccount.glType == 'LEDGER'",
                                 "required": true
                             }, {

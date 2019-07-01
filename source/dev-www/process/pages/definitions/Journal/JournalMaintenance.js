@@ -169,14 +169,23 @@ define({
                         getListDisplayItem: function(data, index) {
                             return [
                                 data.category,
+                                ata.glName,
                                 data.productCode,
                                 data.glType
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
                             model.journal.debitGLNo=valueObj.productCode;
+                            model.journal.debitGLName=valueObj.glName;
                         }
-                    }, {
+                    },
+                    {
+                        key: "journal.debitGLName",
+                        type: "String",
+                        readonly: true,
+                        "title": "Debit GL Name"
+                    },  
+                    {
                         key: "journal.creditGLNo",
                         "type": "lov",
                         lovonly: true,
