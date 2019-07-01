@@ -9,20 +9,20 @@ import java.time.*;
         spousePortfolioInsuranceServiceCharge = null;
         spousePortfolioInsuranceServiceTax = null;
         portfolioInsurancePremium = new BigDecimal(0);
-		expectedPortfolioInsurancePremium = null;
+        expectedPortfolioInsurancePremium = null;
         portfolioInsuranceUrn = (loanAccountFromWeb.getPortfolioInsuranceUrn() == null || loanAccountFromWeb.getPortfolioInsuranceUrn() == "") ? ((loanAccountFromWeb.getApplicant() == null || loanAccountFromWeb.getApplicant() == "")  ? loanAccountFromWeb.getUrnNo : loanAccountFromWeb.getApplicant()) : loanAccountFromWeb.getPortfolioInsuranceUrn();
         customerData = customerRepository.findByUrnNoAndCustomerStatusAndKgfsBankName(portfolioInsuranceUrn,user.getBankName());
         
-       loanAmount = loanAccountFromWeb.getLoanAmount() == null ? loanAccountFromWeb.getLoanAmountRequested() : loanAccountFromWeb.getLoanAmount();	
-		if(loanAccountFromWeb.getTenure() == null)
-			noOfInstallments =  loanAccountFromWeb.getTenureRequested();
-		else
-			noOfInstallments = Integer.parseInt(loanAccountFromWeb.getTenure());
-		if(loanAccountFromWeb.getFrequency() == null)
-			frequency =  loanAccountFromWeb.getFrequencyRequested();
-		else
-			frequency = loanAccountFromWeb.getFrequency().getDisplayName();
-		insuranceRateCode = "DEFAULT";
+       loanAmount = loanAccountFromWeb.getLoanAmount() == null ? loanAccountFromWeb.getLoanAmountRequested() : loanAccountFromWeb.getLoanAmount();  
+        if(loanAccountFromWeb.getTenure() == null)
+            noOfInstallments =  loanAccountFromWeb.getTenureRequested();
+        else
+            noOfInstallments = Integer.parseInt(loanAccountFromWeb.getTenure());
+        if(loanAccountFromWeb.getFrequency() == null)
+            frequency =  loanAccountFromWeb.getFrequencyRequested();
+        else
+            frequency = loanAccountFromWeb.getFrequency().getDisplayName();
+        insuranceRateCode = "DEFAULT";
         
         factor=0;
         if(frequency.equals("daily")){
@@ -94,4 +94,7 @@ import java.time.*;
             }
         }        
 expectedPortfolioInsurancePremium = customerPortFolioInsurancePremium.add(spousePortFolioInsurancePremium);
+if(expectedPortfolioInsurancePremium != null){
+expectedPortfolioInsurancePremium = expectedPortfolioInsurancePremium.setScale(2, BigDecimal.ROUND_HALF_UP);
+}
 portfolioInsurancePremium = expectedPortfolioInsurancePremium;
