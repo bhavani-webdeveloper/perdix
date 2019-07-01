@@ -1318,7 +1318,7 @@ define([],function(){
             };
             var populateDisbursementSchedule=function (value,form,model){
                 PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
-                // model.loanAccount.disbursementSchedules=[];
+                 model.loanAccount.disbursementSchedules=[{"trancheNumber":"","disbursementAmount":""}];
                 for(var i=0;i<value;i++){
                     if(i==0){
                         model.loanAccount.disbursementSchedules[0].trancheNumber="1";
