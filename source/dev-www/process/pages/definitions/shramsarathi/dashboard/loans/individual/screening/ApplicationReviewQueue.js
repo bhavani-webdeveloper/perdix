@@ -148,15 +148,16 @@ define({
                             data: 'loanId'
 						},
 						{
-							title: 'BRANCH_NAME',
+							title: 'APPLICANT_NAME',
+							data: 'applicantName'
+						},
+						{
+							title: 'HUB_NAME',
 							data: 'branchName'
 						},
 						{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},{
-							title: 'APPLICANT_NAME',
-							data: 'applicantName'
 						},
 						// {
 						// 	title: 'BUSINESS_NAME',

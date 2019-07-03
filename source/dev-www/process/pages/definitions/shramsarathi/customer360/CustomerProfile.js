@@ -130,6 +130,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "ContactInformation.postOffice",
                                 "ContactInformation.mailingPostoffice",
                                 "ContactInformation.mailSameAsResidence",
+                                
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
