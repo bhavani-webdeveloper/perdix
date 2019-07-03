@@ -1036,7 +1036,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             PageHelper.showLoader();
                             var accountNumber = model.additional.accountNumber;
                             var accountId = model.loanAccountDisbursementSchedule.loanId;
-
+                            if(model.siteCode == 'shramsarathi'){
+                                if(model._disbursement.modeOfDisbursement == "NEFT" || model._disbursement.modeOfDisbursement == "CHEQUE"){
+                                    if(model._disbursement.customerAccountNumber == null || model._disbursement.customerAccountNumber == ""){
+                                        PageHelper.setError({message: "Customer AccountNumber Required"});
+                                        return;
+                                    }
+                                }
+                            }
                             model.loanAccountDisbursementSchedule.udf1 = "Sent to Bank";
                             PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
 
