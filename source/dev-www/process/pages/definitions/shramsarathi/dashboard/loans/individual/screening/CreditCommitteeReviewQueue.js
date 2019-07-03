@@ -144,15 +144,11 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							data: 'id'
 						},
 						{
-<<<<<<< HEAD
-							title: 'BRANCH_NAME',
-=======
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
 						{
 							title: 'HUB_NAME',
->>>>>>> ecb7aaf54... <shramsarathi>#006952: Applicant name is not displayed on mobile screen
 							data: 'branchName'
 						},
 						{
