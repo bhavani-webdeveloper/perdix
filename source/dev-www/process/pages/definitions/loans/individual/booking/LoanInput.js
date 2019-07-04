@@ -428,7 +428,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         }
 
                         model.linkedAccount={};
-
+                        model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
+                        
                         if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
                             model.loanAccount.linkedAccountNumber = null;
                         }
