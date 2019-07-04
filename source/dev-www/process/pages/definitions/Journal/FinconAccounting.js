@@ -50,7 +50,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                         }
 
                     })
-                    model.totalAmount = creditSum - debitSum;
+                    model.totalAmount = Math.round((creditSum-debitSum)*100)/100;
                 }
 
                 
