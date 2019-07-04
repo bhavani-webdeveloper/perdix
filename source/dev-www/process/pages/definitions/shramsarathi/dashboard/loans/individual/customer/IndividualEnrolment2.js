@@ -135,6 +135,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                                         var index = model.customer.expenditures.length -1;
                                         model.customer.expenditures[index].frequency="Monthly";
+                                        
                                     }
                                 },
                                 "IndividualInformation.centreId1":{

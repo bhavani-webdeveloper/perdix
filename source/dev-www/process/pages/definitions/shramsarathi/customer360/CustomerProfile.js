@@ -135,6 +135,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.place",
                                 "HouseVerification.date"
                             ], "overrides": {
+                                
                                 "IndividualFinancials.expenditures":{
                                     onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                                         var index = model.customer.expenditures.length -1;
