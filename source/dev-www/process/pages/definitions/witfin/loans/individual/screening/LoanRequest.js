@@ -823,6 +823,7 @@ define([], function() {
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.loanChannels",
+                    "LoanRecommendation.stage",
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.processingFee",
                     "LoanRecommendation.udf6",
@@ -850,8 +851,9 @@ define([], function() {
                 return {
                     "overrides": {
                         "LoanRecommendation.loanChannels": {
-                            "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
-                            "required": true
+                            "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'|| model.loanProcess.loanAccount.currentStage == 'CreditApproval1'",
+                            "required": true,
+                            "orderNo": 200
                         },
                         "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
                             "required": true
@@ -1302,6 +1304,24 @@ define([], function() {
                                         "enumCode": "loan_product_frequency",
                                         "orderNo": 45
                                     },
+                                    "stage": {
+                                        "key": "loanProcess.stage",
+                                        "title": "Escalate to",
+                                        "required": true,
+                                        "type": "select",
+                                        "orderNo": 210,
+                                        "condition": "model.loanAccount.loanChannels == 'YES' && model.loanProcess.loanAccount.currentStage == 'CreditApproval1'",
+                                        "titleMap": [
+                                            {
+                                                "name": "Credit Approval2",
+                                                "value": "CreditApproval2"
+                                            },
+                                            {
+                                                "name": "Credit Approval3",
+                                                "value": "CreditApproval3"
+                                            }
+                                        ]
+                                    },
                                     "calculateNominalRate": {
                                         "title": "CALCULATE_NOMINAL_RATE",
                                         "type": "button",
@@ -1585,6 +1605,7 @@ define([], function() {
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
                     /* Setting data recieved from Bundle */
+                    // model.loanProcess.stage = null;
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = bundleModel.currentStage;
                     model.review = model.review|| {};
@@ -2001,7 +2022,7 @@ define([], function() {
                         });
 
                         PageHelper.showLoader();
-                        model.loanProcess.proceed()
+                        model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function() {
                                 PageHelper.hideLoader();
                             })
