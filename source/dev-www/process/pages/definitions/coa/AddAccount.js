@@ -116,13 +116,20 @@ define([], function() {
                                     model.glAccount.parentId = valueObj.id;
                                     model.glAccount.parentGl = valueObj.glName;
                                 }
-                            }, {
-                                "title": "ACTIVE",
-                                "type": "checkbox",
-                                "required": true,
-                                "schema": {
-                                    default: false
-                                },
+                            }, 
+                            // {
+                            //     "title": "ACTIVE",
+                            //     "type": "checkbox",
+                            //     "required": true,
+                            //     "schema": {
+                            //         default: false
+                            //     },
+                            //     "key": "glAccount.status"
+                            // },
+                            {
+                                "title": "LMS Account Status",
+                                "type": "text",
+                                "readonly": true,
                                 "key": "glAccount.status"
                             },
                             // {
