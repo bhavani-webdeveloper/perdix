@@ -3705,9 +3705,10 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                             type: "select",
                                             readonly: false,
                                             title: "CENTRE_NAME",
-                                            filter: {
-                                                "parentCode": "branch_id"
-                                            },
+                                            // filter: {
+                                            //     "parentCode": "branch_id"
+                                            // },
+                                            enumCode: "usercentre",
                                             parentEnumCode: "branch_id",
                                             orderNo: 12,
                                             parentValueExpr: "model.customer.customerBranchId",

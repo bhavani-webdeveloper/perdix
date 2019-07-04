@@ -219,8 +219,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME",
-                                    "readonly":false,
-                                    "required": true
+                                    // "readonly":true
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
@@ -3761,9 +3760,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                             type: "select",
                                             readonly: false,
                                             title: "CENTRE_NAME",
-                                            filter: {
-                                                "parentCode": "branch_id"
-                                            },
+                                            // filter: {
+                                            //     "parentCode": "branch_id"
+                                            // },
+                                            enumCode: "usercentre",
                                             parentEnumCode: "branch_id",
                                             orderNo: 12,
                                             parentValueExpr: "model.customer.customerBranchId",

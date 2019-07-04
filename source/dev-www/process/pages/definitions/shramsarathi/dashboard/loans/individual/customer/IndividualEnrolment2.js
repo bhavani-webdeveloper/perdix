@@ -3719,9 +3719,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     // readonly: true,
                                     title: "CENTRE_NAME",
                                     required: true,
-                                    filter: {
-                                        "parentCode": "branch_id"
-                                    },
+                                    // filter: {
+                                    //     "parentCode": "branch_id"
+                                    // },
+                                    "enumCode":"usercentre",
                                     parentEnumCode: "branch_id",
                                     orderNo: 12,
                                     parentValueExpr: "model.customer.customerBranchId",
