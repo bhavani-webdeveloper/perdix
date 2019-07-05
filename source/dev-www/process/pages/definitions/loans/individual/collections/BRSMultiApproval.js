@@ -4,6 +4,7 @@ define({
     dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries", "Files"],
     $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files) {
         var branch = SessionStore.getBranch();
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
         var localFormCtrl;
         return {
             "type": "search-list",
@@ -234,20 +235,13 @@ define({
                                         PageHelper.showProgress("brs-reject", "Only 1 entry can be rejected at a time.", 5000);
                                         return;
                                     }
-                                    siteCode = SessionStore.getGlobalSetting('siteCode');
+                                    
                                     var reqData = { "loanCollectionSummaryDTOs": temp };
-                                    if (siteCode == 'witfin') {
-                                        if (instrument == 'CASH') {
-                                            reqData.stage = 'Deposit';
-                                        } else {
-                                            reqData.stage = 'Rejected';
-                                        }
+
+                                    if (instrument == 'CASH' || (siteCode == 'kinara' && instrument == 'CHQ')) {
+                                        reqData.stage = 'Deposit';
                                     } else {
-                                        if (instrument == 'CASH' || instrument == 'CHQ') {
-                                            reqData.stage = 'Deposit';
-                                        } else {
-                                            reqData.stage = 'Rejected';
-                                        }
+                                        reqData.stage = 'Rejected';
                                     }
 
                                     Utils.confirm("Are You Sure?")
