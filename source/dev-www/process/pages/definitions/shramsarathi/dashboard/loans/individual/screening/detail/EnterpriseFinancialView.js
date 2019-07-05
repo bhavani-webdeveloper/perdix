@@ -27,13 +27,39 @@ define({
 				   console.log("------model");
 					console.log(resp);
 				model.incomeExpense={};
-
-				typeof(resp.destination) == "number" ? model.incomeExpense.destinationTotalIncome=resp.destination.toFixed(2) : model.incomeExpense.destinationTotalIncome=resp.destination;
-				typeof(resp.source) == "number" ? model.incomeExpense.sourceTotalIncome=resp.source.toFixed(2):model.incomeExpense.sourceTotalIncome=resp.source;
+				if(resp.destination=='NaN' || resp.destination==null){
+					resp.destination=0;
+				}else{
+					typeof(resp.destination) != 'number'? resp.destination=parseInt(resp.destination):resp.destination=resp.destination.toFixed(2);
+				}
+				if(resp.source=='NaN' || resp.source==null){
+					resp.source=0;
+				}else{
+					typeof(resp.source) != 'number'? resp.source=parseInt(resp.source):resp.source=resp.source.toFixed(2);
+				}
+				if(resp.distination_total_expense=='NaN' || resp.distination_total_expense==null){
+					resp.distination_total_expense=0;
+				}else{
+					typeof(resp.distination_total_expense) != 'number'? resp.distination_total_expense=parseInt(resp.distination_total_expense):resp.distination_total_expense=resp.distination_total_expense.toFixed(2);
+				}
+				if(resp.source_total_expense=='NaN' || resp.source_total_expense==null){
+					resp.source_total_expense=0;
+				}else{
+					typeof(resp.source_total_expense) != 'number'? resp.source_total_expense=parseInt(resp.source_total_expense):resp.source_total_expense=resp.source_total_expense.toFixed(2);
+				}
+				model.incomeExpense.destinationTotalIncome=resp.destination.toFixed(2);
+				model.incomeExpense.sourceTotalIncome=resp.source.toFixed(2);
+				model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense).toFixed(2);
+				model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense).toFixed(2);
+				// typeof(resp.distination_total_expense) != 'number'? resp.distination_total_expense=parseInt(resp.distination_total_expense):resp.distination_total_expense=resp.distination_total_expense.toFixed(2);
+				// console.log(resp.distination_total_expense);
+				// typeof(resp.distination_total_expense);
+				// typeof(resp.destination) == "number" ? model.incomeExpense.destinationTotalIncome=resp.destination.toFixed(2) : model.incomeExpense.destinationTotalIncome=resp.destination;
+				// typeof(resp.source) == "number" ? model.incomeExpense.sourceTotalIncome=resp.source.toFixed(2):model.incomeExpense.sourceTotalIncome=resp.source;
 				model.incomeExpense.incomeGrandTotal= (resp.destination + resp.source);
 				model.incomeExpense.incomeGrandTotal=model.incomeExpense.incomeGrandTotal.toFixed(2);
-				typeof(resp.distination_total_expense) == "number" ? model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense).toFixed(2): model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense);
-				typeof(resp.source_total_expense) == "number" ? model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense).toFixed(2) : model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense);
+				// typeof(resp.distination_total_expense) == "number" ? model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense).toFixed(2): model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense);
+				// typeof(resp.source_total_expense) == "number" ? model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense).toFixed(2) : model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense);
 				model.incomeExpense.expensesGrandTotal=(resp.distination_total_expense + resp.source_total_expense);
 				model.incomeExpense.expensesGrandTotal = model.incomeExpense.expensesGrandTotal.toFixed(2);
 
