@@ -5,6 +5,7 @@ define({
     $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files) {
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting('siteCode');
+        var BRSRejectionStage = (SessionStore.getGlobalSetting('BRSRejectionStage')) ? JSON.parse(SessionStore.getGlobalSetting('BRSRejectionStage')) : {};
         var localFormCtrl;
         return {
             "type": "search-list",
@@ -244,11 +245,10 @@ define({
                                     }
                                     
                                     var reqData = { "loanCollectionSummaryDTOs": temp };
-
-                                    if (instrument == 'CASH' || (siteCode == 'kinara' && instrument == 'CHQ')) {
+                                    if (instrument == 'CASH') {
                                         reqData.stage = 'Deposit';
                                     } else {
-                                        reqData.stage = 'Rejected';
+                                        reqData.stage = BRSRejectionStage[instrument] || 'Rejected';
                                     }
 
                                     Utils.confirm("Are You Sure?")
