@@ -135,9 +135,9 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager","filterFilter",
 function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager,filterFilter){
 
     var branch = SessionStore.getBranch();
     var scoreName;
@@ -148,12 +148,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         else if (typeof pr === 'object') for (var i in pr) removeNullIn(i, pr);		
     }
     var prepareData = function(res, model) {
+        if (res[0].data[0]['Existing Customer'] == 'No') {
+            model.existingCustomerStr = "New Customer";
+        } else {
+            model.existingCustomerStr = "Existing Customer";
+        }
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
         model.fullScoringDetails = res[26].data;
         //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
+        // model.secName = res[0].data[0]['Sector'];
+        // model.subSecName = res[0].data[0]['Sub-Sector'];
 
         var managementScore = model.scoreDetails[0];
         if (_.isArray(managementScore.sections)) {
@@ -166,7 +173,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             managementScore.valuePct = spacePct * 4 / 5;
         }
 
+        //model.sectorDetails = res[5];
         model.sectorDetails = res[5];
+        // model.secData = model.sectorDetails.data[0];
+
+        // model.subSectorDetails = res[6];
+        // model.subsecData = model.subSectorDetails.data[0];
         model.subSectorDetails = res[6];
         model.houseHoldPL = res[7].sections;
         model.businessPL = res[8];
@@ -286,6 +298,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
         model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
+        // model.workingCapital1 = model.ratioDetails.data[0]['Working Capital 1 - Quick Check'];
+        // model.workingCapital2 = model.ratioDetails.data[0]['Working Capital 2'];
+
         /* Scoring Sections */
 
         /* Populate seperate scoring section for ScreeningReview screen */
@@ -391,6 +406,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 score_name: model.ScoreDetails.ScoreName || scoreName
             }).$promise;
             onSuccessPromise.then(function(res){
+                BundleManager.pushEvent('financialSummary', model._bundlePageObj, res);
                 prepareData(res, model);
                 model.$prepared = true;
                 prepareDataDeferred.resolve();
@@ -451,6 +467,17 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             } else {
                 bsRight.push(item)
             }
+        });
+
+        form.push({
+            "type": "section",
+            "html": `
+                    <div class="col-sm-6">
+                    <i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
+                    </div>
+                    <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
+                    <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
+                    `
         });
 
         form.push({
@@ -995,7 +1022,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
-
+      
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12 table-box",
@@ -1047,6 +1074,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.ScoreDetails = [];
             model.customer = {};
+            model.bundleModel = bundleModel;
+            model.customer_detail = bundleModel.customer_detail;
+            model.loanAccount = bundleModel.loanAccount;
             var $this = this;
             var deferred = $q.defer();
 
@@ -1107,6 +1137,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             "loan-account-loaded": function(bundleModel, pageModel, eventModel) {
                 pageModel.loanAccount = eventModel.loanAccount;
             },
+            "business-customer": function(bundleModel, model, params) {
+                model.business = params;
+                model.business.centreName = filterFilter(formHelper.enum('centre').data, {
+                    value: model.business.centreId
+                })[0].name;
+            }
         },
         actions: {
             save: function(customerId, CBType, loanAmount, loanPurpose){
