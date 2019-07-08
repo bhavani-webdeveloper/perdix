@@ -689,7 +689,7 @@ define([],function(){
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 },     
                                 "LoanRecommendation":{
-                                    "readonly": true
+                                    "readonly": false
                                 }, 
                                 "LoanRecommendation.loanDisbursementSchedule":{
                                     "readonly": false
