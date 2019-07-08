@@ -422,7 +422,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     //     "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                     //     "type": ["integer", "string"]
                                     // }
-                                    "onChange": idCardNoValidation  
+                                    "onChange": idCardNoValidation,
+                                    "onCapture": function (result, model, form) {
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        model.customer.identityProofNo = aadhaarData.uid;
+                                        model.customer.firstName=aadhaarData.name;
+                                        model.customer.gender=aadhaarData.gender;
+                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.pincode = aadhaarData.pc;
+                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.state = aadhaarData.state;
+                                        model.customer.district = aadhaarData.dist;
+                                        model.customer.taluk = aadhaarData.vtc;
+                                        // lm="MAHIDHARPARA"
+                                    } 
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
@@ -445,7 +458,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     //     "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                     //     "type": ["integer", "string"]
                                     // },
-                                    "onChange":addressProofNoValidation
+                                    "onChange":addressProofNoValidation,
+                                    "onCapture": function (result, model, form) {
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        model.customer.identityProofNo = aadhaarData.uid;
+                                        model.customer.firstName=aadhaarData.name;
+                                        model.customer.gender=aadhaarData.gender;
+                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.pincode = aadhaarData.pc;
+                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.state = aadhaarData.state;
+                                        model.customer.district = aadhaarData.dist;
+                                        model.customer.taluk = aadhaarData.vtc;
+                                        // lm="MAHIDHARPARA"
+                                    }
                                 },
                                 "KYC.addressProofIssueDate":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
