@@ -282,7 +282,20 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 "KYC.addressProofNo": {
                                     "required": true,
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
-                                    "onChange":addressProofNoValidation
+                                    "onChange":addressProofNoValidation,
+                                    "onCapture": function (result, model, form) {
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        model.customer.addressProofNo = aadhaarData.uid;
+                                        model.customer.firstName=aadhaarData.name;
+                                        model.customer.gender=aadhaarData.gender;
+                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.pincode = aadhaarData.pc;
+                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.state = aadhaarData.state;
+                                        model.customer.district = aadhaarData.dist;
+                                        model.customer.taluk = aadhaarData.vtc;
+                                        // lm="MAHIDHARPARA"
+                                    }
                                 },
                                 "KYC.addressProofIssueDate": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -303,7 +316,20 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
 
                                 },
                                 "KYC.identityProofNo":{
-                                    "onChange": idCardNoValidation  
+                                    "onChange": idCardNoValidation,
+                                    "onCapture": function (result, model, form) {
+                                        var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                        model.customer.identityProofNo = aadhaarData.uid;
+                                        model.customer.firstName=aadhaarData.name;
+                                        model.customer.gender=aadhaarData.gender;
+                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.pincode = aadhaarData.pc;
+                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.state = aadhaarData.state;
+                                        model.customer.district = aadhaarData.dist;
+                                        model.customer.taluk = aadhaarData.vtc;
+                                        // lm="MAHIDHARPARA"
+                                    }   
                                 }
 
 

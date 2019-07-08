@@ -461,7 +461,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "onChange":addressProofNoValidation,
                                     "onCapture": function (result, model, form) {
                                         var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
-                                        model.customer.identityProofNo = aadhaarData.uid;
+                                        model.customer.addressProofNo = aadhaarData.uid;
                                         model.customer.firstName=aadhaarData.name;
                                         model.customer.gender=aadhaarData.gender;
                                         model.customer.dateOfBirth=aadhaarData.dob;
