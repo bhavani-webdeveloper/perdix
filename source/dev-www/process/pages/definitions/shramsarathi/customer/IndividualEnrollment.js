@@ -288,12 +288,13 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         model.customer.addressProofNo = aadhaarData.uid;
                                         model.customer.firstName=aadhaarData.name;
                                         model.customer.gender=aadhaarData.gender;
-                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.dateOfBirth=moment(aadhaarData.dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
                                         model.customer.pincode = aadhaarData.pc;
-                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.locality = aadhaarData.vtc;
                                         model.customer.state = aadhaarData.state;
                                         model.customer.district = aadhaarData.dist;
-                                        model.customer.taluk = aadhaarData.vtc;
+                                        model.customer.taluk = aadhaarData.po;
+                                        model.customer.villageName=aadhaarData.vtc;
                                         // lm="MAHIDHARPARA"
                                     }
                                 },
@@ -322,12 +323,13 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         model.customer.identityProofNo = aadhaarData.uid;
                                         model.customer.firstName=aadhaarData.name;
                                         model.customer.gender=aadhaarData.gender;
-                                        model.customer.dateOfBirth=aadhaarData.dob;
+                                        model.customer.dateOfBirth=moment(aadhaarData.dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
                                         model.customer.pincode = aadhaarData.pc;
-                                        model.customer.locality = aadhaarData.po;
+                                        model.customer.locality = aadhaarData.vtc;
                                         model.customer.state = aadhaarData.state;
                                         model.customer.district = aadhaarData.dist;
-                                        model.customer.taluk = aadhaarData.vtc;
+                                        model.customer.taluk = aadhaarData.po;
+                                        model.customer.villageName=aadhaarData.vtc;
                                         // lm="MAHIDHARPARA"
                                     }   
                                 }
