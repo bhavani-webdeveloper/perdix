@@ -94,7 +94,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3, 
                         "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5, 
                         "{{'FEES_DUE'|translate}}: " + item.amount2,
-                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
+                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum,
+                        "{{'Collection Priority'}}: " + item.collectionPriority
                     ]
                 },
                 getActions: function(){
