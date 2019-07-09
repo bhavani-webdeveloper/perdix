@@ -49,9 +49,9 @@ import java.math.RoundingMode;
         }
 
 	if(customerTenureInYear < 2){
-    customerTenureInYear  = 2;
+customerTenureInYear  = 2;
 
-  }
+}
     
         int cutOffInstallment = 0;
         if(frequency.equals("daily")){
