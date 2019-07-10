@@ -7,6 +7,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getCurrentBranch().branchId;
+            model.sortBy = 'collectionPriority'
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -14,6 +15,13 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 "*"
             ],
             autoSearch:false,
+            sorting:true,
+            sortByColumns:{
+                "customerName":"Customer Name",
+                "centreId":"Centre",
+                "p2pDate":"Promise to Pay Date",
+                "colllectionPriority":"Collection Priority"
+            },
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
@@ -51,7 +59,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage
+                    'per_page': pageOpts.itemsPerPage,
+                    "sortBy": searchOptions.sortBy 
                 }).$promise;
 
                 return promise;
