@@ -55,7 +55,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "customerName":"Customer Name",
                 "centreId":"Centre",
                 "p2pDate":"Promise to Pay Date",
-                "colllectionPriority":"Collection Priority"
+                "collectionPriority":"Collection Priority"
             },
             searchForm: [
                 "loan_no",
