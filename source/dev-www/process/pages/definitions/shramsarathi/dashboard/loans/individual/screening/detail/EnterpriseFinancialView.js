@@ -61,11 +61,12 @@ define({
 				// typeof(resp.destination) == "number" ? model.incomeExpense.destinationTotalIncome=resp.destination.toFixed(2) : model.incomeExpense.destinationTotalIncome=resp.destination;
 				// typeof(resp.source) == "number" ? model.incomeExpense.sourceTotalIncome=resp.source.toFixed(2):model.incomeExpense.sourceTotalIncome=resp.source;
 				model.incomeExpense.incomeGrandTotal= (resp.destination + resp.source);
-				model.incomeExpense.incomeGrandTotal=model.incomeExpense.incomeGrandTotal;
-				// typeof(resp.distination_total_expense) == "number" ? model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense).toFixed(2): model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense);
-				// typeof(resp.source_total_expense) == "number" ? model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense).toFixed(2) : model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense);
-				model.incomeExpense.expensesGrandTotal=(resp.distination_total_expense + resp.source_total_expense);
-				model.incomeExpense.expensesGrandTotal = model.incomeExpense.expensesGrandTotal;
+				model.incomeExpense.incomeGrandTotal=model.incomeExpense.incomeGrandTotal.toFixed(2);
+				typeof(resp.distination_total_expense) == "number" ? model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense).toFixed(2): model.incomeExpense.destinationTotalExpenses=(resp.distination_total_expense);
+				typeof(resp.source_total_expense) == "number" ? model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense).toFixed(2) : model.incomeExpense.sourceTotalExpenses=(resp.source_total_expense);
+				model.incomeExpense.expensesGrandTotal=(Number(resp.distination_total_expense) + Number(resp.source_total_expense));
+				model.incomeExpense.expensesGrandTotal = model.incomeExpense.expensesGrandTotal.toFixed(2);
+
 				model.incomeExpense.destinationExtra =(resp.destination - resp.distination_total_expense);
 
 				model.incomeExpense.sourceExtra = (resp.source - resp.source_total_expense);

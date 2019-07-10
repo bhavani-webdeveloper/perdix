@@ -1,21 +1,21 @@
 define({
         pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
-        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager","Queries"],
-        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager,Queries) {
+        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager","Misc"],
+        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager,Misc) {
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
                 "subTitle": "",
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel,params) {
+                    model.total={'incomeExpense':{'incomeGrandTotal':0,'expensesGrandTotal':0}};
                     console.log(model);
                     console.log("------MOdel");
                     console.log(form);
                     console.log("------Form");
                     console.log(formCtrl);
                     console.log("------FormCtrl");
-                    model.total={'incomeExpense':{'incomeGrandTotal':0,'expensesGrandTotal':0}};
-    
+          
                     var self = this;
                     model.bundlePageObj = bundlePageObj;
                     model.bundleModel = bundleModel;
@@ -30,7 +30,9 @@ define({
                         'highmark': {},
                         'customer_address': {},
                         'current_assets': []
-                    };                
+                    };      
+                    
+
                     Enrollment.getCustomerById({
                         id: model.customerId
                     }).$promise.then(function(res) {
@@ -57,7 +59,7 @@ define({
                         
 
                         BundleManager.broadcastEvent('Individual_Enrollment', res);
-                        //debugger;
+
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
                             if(model.customer.centreId == centres[i].value){
@@ -65,13 +67,7 @@ define({
                                 break;
                             }
                         }
-                        //debugger;
-                        // model.customer.presetAddress = [
-                        //     res.doorNo,
-                        //     res.street,
-                        //     res.district,
-                        //     res.state
-                        // ].join(', ') + ' - ' + res.pincode;
+
                         if(model.UIUDF.income!=undefined || model.UIUDF.income.length>0){
                             var incomeEarned=0;
                             var annualExpenses=0;
@@ -99,7 +95,7 @@ define({
                             //model.UIUDF.income[0].incomes[0].incomeEarned=0;
                             // model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
                         }
-                       // debugger;
+
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
                         model.UIUDF.family_fields.dependent_family_member = 0;/*
@@ -185,45 +181,7 @@ define({
                             }
                         })
                         model.decHouseExpanse = decExpanse;
-                        // model.household=res.expenditures;
-
-                        //Newly added 
-                    //     if(model.customer.dateOfBirth!= undefined || model.customer.dateOfBirth!=null){
-                    //         model.customer.dateOfBirth=moment(model.customer.dateOfBirth).format('DD-MM-YYYY');
-                    //     }
-                    //    if(model.customer.spouseDateOfBirth!=undefined ||model.customer.spouseDateOfBirth!=null){
-                    //     model.customer.spouseDateOfBirth=moment(model.customer.spouseDateOfBirth).format('DD-MM-YYYY');
-                    //    }
                        
-                    //    if(model.UIUDF.bankAccount.length > 0){
-                    //        if( model.UIUDF.bankAccount[0].bankingSince!=undefined || model.UIUDF.bankAccount[0].bankingSince!=null){
-                    //         model.UIUDF.bankAccount[0].bankingSince=moment(model.UIUDF.bankAccount[0].bankingSince).format('DD-MM-YYYY');
-                    //        } 
-                    //    }
-
-                    //    if( model.UIUDF.liabilities[0] != undefined){
-                    //        if(model.UIUDF.liabilities[0].startDate != undefined||model.UIUDF.liabilities[0].startDate != null){
-                    //         model.UIUDF.liabilities[0].startDate=moment( model.UIUDF.liabilities[0].startDate).format('DD-MM-YYYY');
-                    //        }
-                        
-                    //    }
-                    //    if(model.UIUDF.liabilities[0] != undefined){
-                    //     if(model.UIUDF.liabilities[0].maturityDate != undefined||model.UIUDF.liabilities[0].maturityDate != null){
-                    //     model.UIUDF.liabilities[0].maturityDate=moment( model.UIUDF.liabilities[0].maturityDate).format('DD-MM-YYYY');
-                    //     }
-                    //    }
-
-                       //taluk field from pincode query
-                       Queries.searchPincodes(
-                        model.customer.pincode  
-                    ).then(function(resp){
-                        model.customer.taluk=resp.body[0].taluk;
-                    },function(err){
-                        model.customer.taluk=null;
-                    }) 
-
-               
-
                         /*Family Section*/
                         self.form = self.formSource;
                         var family = {
@@ -379,10 +337,16 @@ define({
                     });
                     }
                     });
-    
-    
                     
-    
+                    Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){    
+                        model.total.incomeExpense.incomeGrandTotal= (resp.destination + resp.source);
+                        model.total.incomeExpense.incomeGrandTotal=model.total.incomeExpense.incomeGrandTotal.toFixed(2);
+                        
+                        model.total.incomeExpense.expensesGrandTotal=(Number(resp.distination_total_expense) + Number(resp.source_total_expense));
+				        model.total.incomeExpense.expensesGrandTotal = model.total.incomeExpense.expensesGrandTotal.toFixed(2);
+                        model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
+                    })
+        
                     CreditBureau.getCBDetails({
                         "customerId": model.customerId
                     }).$promise.then(function(res) {
@@ -1132,7 +1096,7 @@ define({
                         "colClass": "col-sm-12",
                         "readonly": true,
                         "title": "INCOME_AND_EXPENSE",
-                        "condition": "model.bundlePageObj.pageClass !='guarantor'",
+                        "condition": "model.bundlePageObj.pageClass !='guarantor' && !model.isHidden",
                         "overrideType": "default-view",
                         "items": [{
                             "type": "grid",
@@ -1385,9 +1349,6 @@ define({
     
                     }
                     },
-                    "financial-sum": function(bundleModel, model, params){
-                        model.total = params[0].data[0].financialSummaryModel;
-                    },
                     "business-customer": function(bundleModel, model, params) {
                         model.business = params;
                         for (i in params.enterpriseCustomerRelations) {
@@ -1410,11 +1371,6 @@ define({
                         model.avarage_withdrawal=params.avarage_withdrawal;
                         model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
                         model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
-                    },
-                    "financial-income" : function(bundleModel,model,params){
-                       model.total.incomeExpense.incomeGrandTotal=params.incomeExpense.incomeGrandTotal;
-                       model.total.incomeExpense.expensesGrandTotal=params.incomeExpense.expensesGrandTotal;
-                       model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
                     }
                 },
                 actions: {}
