@@ -11,7 +11,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 isAllBranchAllowed: false,
                 centresRestricted: false
             };
-
+            model.sortBy = 'collectionPriority';
             console.log($stateParams);
             PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
                 .then(
@@ -55,7 +55,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "customerName":"Customer Name",
                 "centreId":"Centre",
                 "p2pDate":"Promise to Pay Date",
-                "collectionPriority":"Collection Priority"
+                "colllectionPriority":"Collection Priority"
             },
             searchForm: [
                 "loan_no",
@@ -138,7 +138,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
                     'assignedTo': searchOptions.assignedTo,
-                    "sortBy": searchOptions.sortBy
+                    "sortBy": searchOptions.sortBy 
                 }).$promise;
                 return promise;
             },
