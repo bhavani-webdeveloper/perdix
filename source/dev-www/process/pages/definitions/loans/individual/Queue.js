@@ -46,7 +46,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					"stage": {
 						"title": "STAGE",
 						"type": "string",
-						"enumCode": "loan_stage1",
+						"enumCode": "loan_stage",
 						"x-schema-form": {
 							"type": "select",
 							"screenFilter": true
