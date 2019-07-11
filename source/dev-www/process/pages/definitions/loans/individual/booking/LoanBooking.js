@@ -191,6 +191,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(data.basicLoanDedupe) {
                         model.basicLoanDedupe = data.basicLoanDedupe;
                     }
+                    if(data.validateRepaymentDate){
+                        model.validateRepaymentDate = data.validateRepaymentDate;
+                    }
                 }, function(err) {
                     console.log(err);
                 });

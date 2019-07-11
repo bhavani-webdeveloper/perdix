@@ -1536,7 +1536,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             },
             {
                 "type": "box",
-                "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+                "title": "EXPECTED_NET_DISBURSEMENT",
                 "condition": "model.currentStage=='Screening' || model.currentStage=='Application'",
                 "items": [
                     {
@@ -1559,7 +1559,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             },
             {
                 "type": "box",
-                "title": "DEDUCTIONS_FROM_LOANAMOUNT",
+                "title": "EXPECTED_NET_DISBURSEMENT",
                 "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'||model.currentStage == 'ZonalRiskReview'",
                 readonly:true,
                 "items": [
