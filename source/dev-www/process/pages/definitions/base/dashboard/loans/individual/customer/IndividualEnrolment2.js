@@ -1333,7 +1333,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": false
                                 },
                                 "References": {
-                                    "readonly": true
+                                    "readonly": false
                                 },
                                 "TrackDetails": {
                                     "readonly": false
