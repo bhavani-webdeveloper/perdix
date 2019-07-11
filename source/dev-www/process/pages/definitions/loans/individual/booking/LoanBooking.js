@@ -191,7 +191,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(data.basicLoanDedupe) {
                         model.basicLoanDedupe = data.basicLoanDedupe;
                     }
-                    if(data.validateRepaymentDate){
+                    if(!data.validateRepaymentDate){
                         model.validateRepaymentDate = data.validateRepaymentDate;
                     }
                 }, function(err) {
@@ -1278,10 +1278,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                     if (model.loanAccount.firstRepaymentDate){
                         var date = firstRepaymentDate.get("date");
-                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && date != 5 && date != 10 && date != 15){
+                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && model.siteCode != 'kinara' && date != 5 && date != 10 && date != 15){
                             PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
                             return false;
-                        }
+                        } 
+                        if(model.validateRepaymentDate  && model.siteCode == 'kinara' && date != 5 && date != 10 && date != 15){
+                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
+                            return false;
+                        } 
                         if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
                             PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
                             return false;
@@ -1609,10 +1613,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
                     if (model.loanAccount.firstRepaymentDate){
                         var date = firstRepaymentDate.get("date");
-                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && date != 5 && date != 10 && date != 15){
+                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && model.siteCode != 'kinara' && date != 5 && date != 10 && date != 15){
                             PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
                             return false;
                         }
+                        if(model.validateRepaymentDate  && model.siteCode == 'kinara' && date != 5 && date != 10 && date != 15){
+                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
+                            return false;
+                        } 
                         if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
                             PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
                             return false;
