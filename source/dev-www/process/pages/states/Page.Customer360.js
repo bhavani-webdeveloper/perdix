@@ -13,7 +13,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
-
+	
 	var getCustomerProfilePageUrl = function() {
 		if (siteCode == 'sambandh') {
 			return "Page/Engine/sambandh.customer.IndividualEnrollment3";
@@ -428,6 +428,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"htmlClass": "row",
 			"items": [{
 				"type": "section",
+				"condition": "model.pageConfig && model.pageConfig.customerStatementReportFromDate == 'show'",
 				"htmlClass": "col-sm-5",
 				"items": [{
 					"key": "reports.fromDate",
@@ -452,23 +453,40 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"fieldHtmlClass": "btn-block",
 					"onClick": function(model, form) {
 						PageHelper.clearErrors();
-						if (!model.reports || !model.reports.fromDate || !model.reports.toDate) {
-							PageHelper.setError({message:"'From' date & 'To' date are required"});
-							return;
-						} else if (moment(model.reports.fromDate, SessionStore.getSystemDateFormat()).isAfter(moment(model.reports.toDate, SessionStore.getSystemDateFormat()), 'day')) {
-							PageHelper.setError({message:"'From' date should be less than 'To' date"});
-							return;
-						} else if (moment(model.reports.toDate, SessionStore.getSystemDateFormat()).isAfter(moment(), 'day')) {
-							PageHelper.setError({message:"'To' date cannot exceed today"});
-							return;
+						if (model.pageConfig && model.pageConfig.customerStatementReportFromDate == 'show'){
+							if(!model.reports || !model.reports.fromDate || !model.reports.toDate) {
+								PageHelper.setError({message:"'From' date & 'To' date are required"});
+								return;
+							} else if (moment(model.reports.fromDate, SessionStore.getSystemDateFormat()).isAfter(moment(model.reports.toDate, SessionStore.getSystemDateFormat()), 'day')) {
+								PageHelper.setError({message:"'From' date should be less than 'To' date"});
+								return;
+							} else if (moment(model.reports.toDate, SessionStore.getSystemDateFormat()).isAfter(moment(), 'day')) {
+								PageHelper.setError({message:"'To' date cannot exceed today"});
+								return;
+							}
+							var requestParams = {
+								auth_token: AuthTokenHelper.getAuthData().access_token,
+								report_name: "customer_statement",
+								customer_id: model.customer.id,
+								from_date: model.reports.fromDate,
+								to_date: model.reports.toDate
+							};
+						} else {
+							if(!model.reports || !model.reports.toDate) {
+								PageHelper.setError({message:"'To' date is required"});
+								return;
+							} else if (moment(model.reports.toDate, SessionStore.getSystemDateFormat()).isAfter(moment(), 'day')) {
+								PageHelper.setError({message:"'To' date cannot exceed today"});
+								return;
+							}
+							var requestParams = {
+								auth_token: AuthTokenHelper.getAuthData().access_token,
+								report_name: "customer_statement",
+								customer_id: model.customer.id,
+								to_date: model.reports.toDate
+							};
 						}
-						var requestParams = {
-							auth_token: AuthTokenHelper.getAuthData().access_token,
-							report_name: "customer_statement",
-							customer_id: model.customer.id,
-							from_date: model.reports.fromDate,
-							to_date: model.reports.toDate
-						};
+
 						url = irf.BI_BASE_URL + "/download.php?" + $httpParamSerializer(requestParams);
 						Utils.downloadFile(url);
 					}
@@ -546,6 +564,14 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		$scope.model.customer.age = moment().diff(moment(data.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
 		$scope.model.customer.nameWithAge = $scope.model.customer.fullName + ' (' + data.age + ')';
+		$scope.model.pageConfig = {
+			'customerStatementReportFromDate': 'show'
+		};
+
+		PagesDefinition.getPageConfig("Page/customer360").then(function(data){
+			$log.info(data);
+			$scope.model.pageConfig.customerStatementReportFromDate = data.customerStatementReportFromDate;
+		});
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerProfile'].onClick = function(event, menu) {
