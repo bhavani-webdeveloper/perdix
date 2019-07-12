@@ -858,7 +858,7 @@ self.renderReady = function(eventName) {
 										}
 									}
 								},{
-									"title": "KINARA_EMI",
+									"title": "Kinara EMI",
 									"amount": "",
 									"total": bpl['Kinara EMI'],
 									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
