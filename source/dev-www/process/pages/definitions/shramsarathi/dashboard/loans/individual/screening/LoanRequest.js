@@ -1455,6 +1455,10 @@ define([],function(){
                             "orderNo":10,
                             onChange:function(value,form,model){
                                 computeEMI(model);
+                                    if(model.loanAccount.emiRequested){
+                                        var tenure=value/model.loanAccount.emiRequested;
+                                        model.loanAccount.tenure=parseInt(tenure);
+                                    }    
                             }
                         },
                         "LoanRecommendation.tenure":{
@@ -2403,8 +2407,14 @@ define([],function(){
                     if(model.loanAccount.frequencyRequested == undefined){
                         model.loanAccount.frequencyRequested='Monthly';
                     }
-                   
 
+                    //tenure logic
+                    if (_.hasIn(model, 'loanAccount.loanAmount') && _.hasIn(model, 'loanAccount.emiRequested')){
+                        var tenure=model.loanAccount.loanAmount/model.loanAccount.emiRequested;
+                        model.loanAccount.tenure=parseInt(tenure);
+                    }
+                   
+                
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                  

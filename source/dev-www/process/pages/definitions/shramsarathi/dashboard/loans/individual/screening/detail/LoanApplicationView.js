@@ -332,6 +332,13 @@ define({
 //         model.loanAccount.nominees[0].nomineeDOB=moment(model.loanAccount.nominees[0].nomineeDOB).format('DD-MM-YYYY');
 //       } 
 //   }
+
+    //tenure logic
+    if (_.hasIn(model, 'loanAccount.loanAmount') && _.hasIn(model, 'loanAccount.emiRequested')){
+        var tenure=model.loanAccount.loanAmount/model.loanAccount.emiRequested;
+        model.loanAccount.tenure=parseInt(tenure);
+    }
+   
   
   
         },
@@ -714,7 +721,13 @@ define({
                         "items": [{
                             "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
-                            "required":false
+                            "required":false,
+                            onChange:function(value,form,model){
+                                if(model.loanAccount.emiRequested){
+                                    var tenure=value/model.loanAccount.emiRequested;
+                                    model.loanAccount.tenure=parseInt(tenure);
+                                }
+                            }
                            // "type": "amount",                      
                         }, 
                         {
