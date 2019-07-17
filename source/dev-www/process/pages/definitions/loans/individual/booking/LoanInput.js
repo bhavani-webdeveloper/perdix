@@ -4293,8 +4293,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             return;
                         }
                     }
-                    
-                        model.loanAccount.loanPurpose3 = !model.additional.config.loanAccount_loanPurpose3 ? model.loanAccount.loanPurpose2 : model.loanAccount.loanPurpose3 || '';
+                        try{
+                        model.loanAccount.loanPurpose3 = !model.additional.config.loanAccount_loanPurpose3 ? model.loanAccount.loanPurpose2 : model.loanAccount.loanPurpose3;
+                        }catch(e){
+                            console.log(e);
+                            // debugging purpose
+                        }
                     if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length && model.loanAccount.applicant === model.loanAccount.coBorrowers[0].coBorrowerUrnNo) {
                         PageHelper.showProgress("loan-create","Applicant & Co-applicant cannot be same",5000);
                         return false;
