@@ -18,7 +18,7 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 				if ($scope.appManifest.version != $scope.latest_version) {
 					Queries.getGlobalSettings('cordova.latest_apk_download_strategy').then(function (DownloadStrategy) {
 						if (DownloadStrategy == 'DOWNLOAD_PAGE') {
-							$scope.latest_apk_url =irf.FORM_DOWNLOAD_URL+"/server-ext/downloadApk.php";
+							$scope.latest_apk_url =irf.MANAGEMENT_BASE_URL+"/server-ext/downloadApk.php";
 							Queries.getGlobalSettings('cordova.latest_apk_force_upgrade').then(function (val) {
 								$scope.latest_apk_force_upgrade = val === 'Y';
 							});
@@ -31,6 +31,14 @@ function($scope, $log, SessionStore, Queries, $state, $timeout) {
 								});
 							});
 						}
+					}, function(err){
+						Queries.getGlobalSettings('cordova.latest_apk_url').then(function (url) {
+							$log.debug('latest_apk_url:' + url);
+							$scope.latest_apk_url = url;
+							Queries.getGlobalSettings('cordova.latest_apk_force_upgrade').then(function (val) {
+								$scope.latest_apk_force_upgrade = val === 'Y';
+							});
+						});
 					});
 				}
 			});

@@ -17,6 +17,13 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 "*"
             ],
             autoSearch:false,
+            sorting:true,
+            sortByColumns:{
+                "customerName":"Customer Name",
+                "centreId":"Centre",
+                "p2pDate":"Promise to Pay Date",
+                "collectionPriority":"Collection Priority"
+            },
             searchSchema: {
                 "type": 'object',
                 "required":["branch"],
@@ -63,7 +70,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage
+                    'per_page': pageOpts.itemsPerPage,
+                    "sortBy": searchOptions.sortBy 
                 }).$promise;
 
                 return promise;
@@ -106,7 +114,8 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                         "{{'PENAL_INTEREST'|translate}}: " + item.part3, 
                         "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5, 
                         "{{'FEES_DUE'|translate}}: " + item.amount2,
-                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
+                        "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum,
+                        "{{'Collection Priority'}}: " + item.collectionPriority
                     ]
                 },
                 getActions: function(){

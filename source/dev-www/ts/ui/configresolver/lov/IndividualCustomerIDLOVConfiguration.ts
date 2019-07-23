@@ -76,7 +76,8 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         };
 
         if (_.hasIn(model, 'customer.id')){
-            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+            BundleManager.pushEvent('refresh-all-tabs', model._bundlePageObj, {customer: model.customer});
         }
         EnrolmentProcess.fromCustomerID(valueObj.id)
             .finally(function(){

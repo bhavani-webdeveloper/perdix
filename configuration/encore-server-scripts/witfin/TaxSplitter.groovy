@@ -12,29 +12,30 @@ if (customerStateCode == null || customerStateCode.isEmpty()) {
 	customer = customerRepository.findCustomer(customerId);
 	customerStateCode = (customer == null || customer.getContact() == null)? "" : customer.getContact().getStateCode();
 }
-if (!productCode.equalsIgnoreCase("CENTRALPRODUCT")) {
-    // Localized processing
-	if (customerStateCode.equals(branchStateCode)) {
-		tax2 = tax/2;
-		tax3 = tax/2;
+if (description == null || !description.contains("NO_GST")) {
+	if (!productCode.equalsIgnoreCase("CENTRALPRODUCT")) {
+		// Localized processing
+		if (customerStateCode.equals(branchStateCode)) {
+			tax2 = tax/2;
+			tax3 = tax/2;
+		} else {
+			tax1 = tax;
+		}
+		taxBranchCode = branchCode;
 	} else {
-		tax1 = tax;
+		// Centralized processing
+		if (customerStateCode.equals(bankStateCode)) {
+			tax2 = tax/2;
+			tax3 = tax/2;
+		} else {
+			tax1 = tax;
+		}
+		taxBranchCode = branchCode;
+		// taxBranchCode = hqBranch.getBranchCode();
 	}
-	taxBranchCode = branchCode;
-} else {
-    // Centralized processing
-	if (customerStateCode.equals(bankStateCode)) {
-		tax2 = tax/2;
-		tax3 = tax/2;
-	} else {
-		tax1 = tax;
-	}
-	taxBranchCode = branchCode;
-	// if (hqBranch != null)
-	//    taxBranchCode = hqBranch.getBranchCode();
 }
-taxAmount = new BigDecimal[4];
-taxAmount[0] = tax1;
-taxAmount[1] = tax2;
-taxAmount[2] = tax3;
-taxAmount[3] = tax4;
+	taxAmount = new BigDecimal[4];
+	taxAmount[0] = tax1;
+	taxAmount[1] = tax2;
+	taxAmount[2] = tax3;
+	taxAmount[3] = tax4;

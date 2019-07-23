@@ -29,6 +29,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
+                "Page/Engine/witfin.loans.individual.screening.LoanSanctionQueue",
                 "Page/Engine/witfin.loans.individual.screening.RejectedQueue",
                 "Page/Engine/loans.individual.screening.BranchNewConversationQueue",
                 "Page/Engine/loans.individual.screening.BranchRepliedConversationQueue",
@@ -638,6 +639,30 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                     caq3Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     caq3Menu.data = '-';
+                });
+            }
+            
+
+            var lsqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.LoanSanctionQueue"];
+
+            if (lsqMenu) {
+                lsqMenu.offlineMenu = {
+                    state: 'Page.BundleOffline',
+                    pageName: 'witfin.loans.individual.screening.SanctionInput'
+                };
+                IndividualLoan.search({
+                    'stage': 'Sanction',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lsqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lsqMenu.data = '-';
                 });
             }
 

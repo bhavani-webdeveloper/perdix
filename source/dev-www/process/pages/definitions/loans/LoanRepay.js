@@ -321,7 +321,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 {
                                     "key": "repayment.payeeMobileNumber",
                                     "title": "PAYER_MOBILE_NUMBER",
-                                    "type": "string"
+                                    "type": "string",
+                                    "inputmode": "number",
+                                    "numberType": "number",
+                                    "schema": {
+                                        maxLength:10,
+                                        minLength:10
+                                    },
                                 },
                                 {
                                     "key": "repayment.payeeRelationToApplicant",
@@ -502,6 +508,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         type: "amount"
                                     },
                                     {
+                                        key: "repayment.totalDue",
+                                        readonly: true,
+                                        title: "TOTAL_DEMAND_DUE",
+                                        type: "amount"
+                                    },
+                                    {
                                         key: "repayment.totalFeeDue",
                                         readonly: true,
                                         title: "FEE_DUE",
@@ -514,6 +526,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         type: "amount"
                                     },
                                     {
+                                        key: "repayment.amount",
+                                        readonly: true,
+                                        condition:"model.siteCode == 'witfin'",
+                                        title: "Net Payoff Amount(with Due)",
+                                        type: "amount"
+									},
+									{
                                         key: "repayment.netPayoffAmountDue",
                                         readonly: true,
                                         title: "NET_PAYOFF_AMOUNT_DUE",
@@ -772,7 +791,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.bankAccountNumber",
                                 type: "lov",
                                 lovonly: true,
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'||model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
+                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'|| model.repayment.instrument=='ACH' || model.repayment.instrument == 'INTERNAL'",
                                 title:"REPAYMENT_TO_ACCOUNT",
                                 required: true,
                                 bindMap: {
@@ -797,7 +816,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.instrumentDate",
                                 title:"DATE",
                                 type:"date",
-                                condition:"model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
+                                condition:"model.siteCode != 'witfin' && (modemodel.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS')"
+                            },
+                            {
+                                key:"repayment.instrumentDate",
+                                title:"DATE",
+                                type:"date",
+                                condition:"model.siteCode == 'witfin' && (model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS')",
+                                required:true
                             },
                             {
                                 key:"repayment.visitedDate",
@@ -808,17 +834,24 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
-                                required: true,
-                                'condition':"model.siteCode != 'witfin' && model.siteCode !='KGFS'",
+                                condition:"model.siteCode == 'witfin'",
                                 type: "select",
+                                enumCode:"reason_for_delay"
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
+                                required: true,
+                                type: "select",
+                                condition:"model.siteCode != 'witfin'",
                                 titleMap: [{
                                     "name": "Business",
                                     "value": "Business"
                                 },
-                                    {
+                                {
                                         "name": "Personal",
                                         "value": "Personal"
-                                    }],
+                                }],
 
                             },
                             {
@@ -885,6 +918,35 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 // }
                                 // ]
                             },
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType =='Business'",
+                            //     // enumCode: "business_overdue_reasons"
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
+
+                            // },
+                            // {
+                            //     key: "repayment.overdueReasons",
+                            //     title: "REASON",
+                            //     type: "select",
+                            //     required: true,
+                            //     condition: "model.repayment.delayReasonType=='Personal'",
+                            //     // enumCode: "personal_overdue_reasons",
+                            //     titleMap:[
+                            //         {
+                            //             "value":"others",
+                            //             "name":"Others"
+                            //     }
+                            //     ]
+                            // },
                             {
                                 key: "repayment.reasons",
                                 title: "OVERDUE_REASON",

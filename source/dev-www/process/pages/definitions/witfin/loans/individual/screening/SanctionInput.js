@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "witfin.loans.individual.screening.TeleVerification",
+            pageUID: "witfin.loans.individual.screening.SanctionInput",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
             ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message,irfNavigator) {
                 return {
                     "type": "page-bundle",
-                    "title": "TELE_VERIFICATION",
+                    "title": "SANCTION",
                     "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                     "readonly": true,
                     "bundleDefinitionPromise": function() {
@@ -33,7 +33,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
-                                maximum: 4,
+                                maximum: 1,
                                 order:20
                             },
                             {
@@ -41,7 +41,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
-                                maximum: 3,
+                                maximum: 1,
                                 order:30
                             },
                             {
@@ -68,14 +68,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:55
                             },
-                            // {
-                            //     pageName: 'witfin.loans.individual.screening.vehiclevaluation.VehicleValuation',
-                            //     title: 'VEHICLE_VALUATION',
-                            //     pageClass: 'vehicle-valuation',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:56
-                            // },
+                            {
+                                pageName: 'witfin.loans.individual.screening.vehiclevaluation.VehicleValuation',
+                                title: 'VEHICLE_VALUATION',
+                                pageClass: 'vehicle-valuation',
+                                minimum: 1,
+                                maximum: 1,
+                                order:57
+                            },
                             {
                                 pageName: 'witfin.customer.televerification',
                                 title: 'TELE_VERIFICATION',
@@ -107,7 +107,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
-                            },
+                            },                            
                             {
                                 pageName: 'witfin.loans.individual.screening.detail.Scoring',
                                 title: 'Cam',
@@ -180,7 +180,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "TeleVerification";
+                        bundleModel.currentStage = "Sanction";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -192,7 +192,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess=loanProcess;
                                 var loanAccount = loanProcess;
-                                loanProcess.loanAccount.isValuator = "Yes";
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
                                 // $this.bundlePages.push({
@@ -207,18 +206,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //     model: {customerUrn:loanAccount.urnNo, loanId:bundleModel.loanId}
                                 // });
 
-
                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                     var _leadId = $stateParams.pageData['lead_id'];
                                     loanProcess.loanAccount.leadId = _leadId;
 
                                 }
-                                if (loanAccount.loanAccount.currentStage != 'TeleVerification'){
+                                
+                                if (loanAccount.loanAccount.currentStage != 'Sanction'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
                                 }
-                                
+
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -260,12 +259,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'vehicle-valuation',
-                                //     model: {
-                                //         loanProcess: loanProcess
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-valuation',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
@@ -331,15 +330,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'TeleVerification');
-                        Queries.getVehicleDetails()
-                        .then(function (response) {
-                            BundleManager.broadcastEvent("get-vehicle-details", response);
-                        })
-                        Queries.getCibilHighmarkMandatorySettings()
-                        .then(function(settings){
-                            BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
-                        })
+                        BundleManager.broadcastEvent('origination-stage', 'CreditApproval3');
 
                     },
                     eventListeners: {
@@ -372,7 +363,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
-                                BundleManager.broadcastEvent('new-guarantor', params);
+                                BundleManager.broadcastEvent("new-guarantor", params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
                                 case 'business':
@@ -391,9 +382,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "financialSummary": function(pageObj, bundleModel, params) {
                             BundleManager.broadcastEvent("financial-summary", params);
-                        },
-                        "refresh-all-tabs": function(pageObj, bundleModel, params){
-                            BundleManager.broadcastEvent("refresh-all-tabs-customer", params);
                         }
                     }
 
@@ -403,4 +391,3 @@ define(["perdix/domain/model/loan/LoanProcess",
         }
     }
     );
-

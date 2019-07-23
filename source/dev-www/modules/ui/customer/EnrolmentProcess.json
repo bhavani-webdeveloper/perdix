@@ -205,13 +205,13 @@
                             },
                             "noOfChequeBounced": {
                                 "key": "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
-                                "type": "amount",
+                                "type": "number",
                                 "title": "NO_OF_CHEQUE_BOUNCED",
                                 "orderNo": 150
                             },
                             "noOfEmiChequeBounced": {
                                 "key": "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
-                                "type": "amount",
+                                "type": "number",
                                 "title": "NO_OF_EMI_CHEQUE_BOUNCED",
                                 "orderNo": 160
                             },

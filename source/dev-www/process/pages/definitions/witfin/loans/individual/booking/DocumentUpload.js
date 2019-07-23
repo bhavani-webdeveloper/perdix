@@ -677,7 +677,7 @@ define({
                                         // },
                                         {
                                             "type": "section",
-                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' && model.allExistingDocs[arrayIndex].documentStatus != null && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED'  && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
                                             "htmlClass": "col-sm-3",
                                             "items": [{
                                                 title: "Upload",
@@ -693,6 +693,7 @@ define({
                                         },
                                         {
                                             "type": "section",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED'  && model.allExistingDocs[arrayIndex].$mandatory == 'YES' ",
                                             "htmlClass": "col-sm-3",
                                             "items": [{
                                                 title: "Upload",

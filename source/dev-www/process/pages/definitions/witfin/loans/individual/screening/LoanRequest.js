@@ -12,7 +12,7 @@ define([], function() {
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
             BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
-
+            var installmentRounding = SessionStore.getGlobalSetting('installmentRounding') || 'RoundNearest';
 
             var self;
             var validateForm = function(formCtrl) {
@@ -52,7 +52,18 @@ define([], function() {
                 BundleManager.resetBundlePagesFormState(pageClassList);
                 return failed;
             }
-
+            var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null && listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.length;i++){
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
+                    }
+                }
+                else{
+                    model[baseKey] = {};
+                }
+            }
             var excelRate = function(nper, pmt, pv, fv, type, guess) {
                 // Sets default values for missing parameters
                 fv = typeof fv !== 'undefined' ? fv : 0;
@@ -145,10 +156,15 @@ define([], function() {
                     }
                     var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
                     var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
-                    var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    if(installmentRounding && installmentRounding == 'RoundUp') {
+                        var estimatedEmi = Math.ceil(parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    } else {
+                        var estimatedEmi = Math.round(parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    }
+
                     return {
                         nominalRate: nominalRate,
-                        estimatedEmi: Math.round(estimatedEmi)
+                        estimatedEmi: estimatedEmi
                     };
                 } else {
                     throw new Error("Invalid input for nominal rate calculation");
@@ -660,6 +676,28 @@ define([], function() {
                                 }
                             }
                         },
+                        "Sanction": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
+                            ],
+                            "overrides": {
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                },
+                                "LoanRecommendation":{
+                                    "orderNo":60
+                                }
+                            }
+                        },
 
                         "REJECTED": {
                             "excludes": [
@@ -785,6 +823,7 @@ define([], function() {
                     "LoanRecommendation.processingFeePercentage",
                     "LoanRecommendation.securityEmiRequired",
                     "LoanRecommendation.loanChannels",
+                    "LoanRecommendation.stage",
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.processingFee",
                     "LoanRecommendation.udf6",
@@ -808,12 +847,13 @@ define([], function() {
 
             }
 
-            var formRequest = function(model) { 
+            var formRequest = function(model) {
                 return {
                     "overrides": {
                         "LoanRecommendation.loanChannels": {
-                            "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'",
-                            "required": true
+                            "condition": "model.loanProcess.loanAccount.currentStage == 'CreditApproval2'|| model.loanProcess.loanAccount.currentStage == 'CreditApproval1'",
+                            "required": true,
+                            "orderNo": 200
                         },
                         "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
                             "required": true
@@ -852,6 +892,7 @@ define([], function() {
                             }
                         },
                         "PreliminaryInformation.tenureRequested": {
+                            "title":"TENURE_REQUESETED_IN_MONTHS",
                             "required": true,
                             onChange: function(modelValue, form, model) {
                                 model.loanAccount.estimatedEmi = null;
@@ -897,7 +938,6 @@ define([], function() {
                         "actionbox.save": {
                             "buttonType": "submit"
                         }
-                        
                     },
                     "includes": getIncludes(model),
                     "excludes": [
@@ -981,7 +1021,7 @@ define([], function() {
                                         "title": "DSA_PAYOUT_IN_PERCENTAGE",
                                         "orderNo": 30,
                                         onChange: function(modelValue, form, model) {
-                                            model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                            model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                         }
                                     },
                                     "fee3": {
@@ -1056,7 +1096,7 @@ define([], function() {
                                                 var frequencyRequested;
                                                 var advanceEmi = model.loanAccount.estimatedEmi;
                                                 processFee = Math.round(((model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested)* 100) / 100;
-                                                dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                dsaPayout = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
                                                 frankingCharge = model.loanAccount.fee3;
                                                 model.loanAccount.vExpectedProcessingFee = processFee;
                                                 model.loanAccount.dsaPayoutFee = dsaPayout;
@@ -1264,6 +1304,24 @@ define([], function() {
                                         "enumCode": "loan_product_frequency",
                                         "orderNo": 45
                                     },
+                                    "stage": {
+                                        "key": "loanProcess.stage",
+                                        "title": "Escalate to",
+                                        "required": true,
+                                        "type": "select",
+                                        "orderNo": 210,
+                                        "condition": "model.loanAccount.loanChannels == 'YES' && model.loanProcess.loanAccount.currentStage == 'CreditApproval1'",
+                                        "titleMap": [
+                                            {
+                                                "name": "Credit Approval2",
+                                                "value": "CreditApproval2"
+                                            },
+                                            {
+                                                "name": "Credit Approval3",
+                                                "value": "CreditApproval3"
+                                            }
+                                        ]
+                                    },
                                     "calculateNominalRate": {
                                         "title": "CALCULATE_NOMINAL_RATE",
                                         "type": "button",
@@ -1339,7 +1397,7 @@ define([], function() {
                             "type": "box",
                             "orderNo": 999,
                             "title": "POST_REVIEW",
-                            "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.currentStage != 'Rejected'",
+                            "condition": "model.loanAccount.customerId && model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.currentStage != 'Rejected'",
                             "items": [{
                                 key: "review.action",
                                 type: "radios",
@@ -1537,8 +1595,8 @@ define([], function() {
                             }
                         ]
                     }
-                };
-            }
+                }
+            };
 
             return {
                 "type": "schema-form",
@@ -1547,9 +1605,9 @@ define([], function() {
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
                     /* Setting data recieved from Bundle */
+                    // model.loanProcess.stage = null;
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = bundleModel.currentStage;
-
                     model.review = model.review|| {};
 
                     if (!model.loanAccount.id){
@@ -1587,7 +1645,8 @@ define([], function() {
                     }
 
                     model.loanAccount.processingFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
-                    model.loanAccount.dsaPayoutFee = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                    model.loanAccount.dsaPayoutFee = Math.round(((model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested)*100)/100;
+
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1611,7 +1670,6 @@ define([], function() {
                     }
                     model.loanAccount.expectedInterestRate=Math.round(model.loanAccount.expectedInterestRate * 100)/100;
                     var self = this;
-                   
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
                     p1.then(function(repo) {
@@ -1624,6 +1682,7 @@ define([], function() {
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
+
                     if(_.hasIn(model.loanProcess, 'loanAccount')) {
                         model.loanAccount = model.loanProcess.loanAccount;
                     }
@@ -1645,6 +1704,11 @@ define([], function() {
                     ]
                 },
                 eventListeners: {
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {                        
+                        clearAll('loanAccount',["customerId"],model);  
+                                                         
+                                       
+                    },
                         "new-applicant": function(bundleModel, model, params){
 
                             $log.info(model.loanAccount.loanCustomerRelations);
@@ -1958,7 +2022,7 @@ define([], function() {
                         });
 
                         PageHelper.showLoader();
-                        model.loanProcess.proceed()
+                        model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function() {
                                 PageHelper.hideLoader();
                             })

@@ -15,9 +15,10 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 var journalDetailsClass;
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.glAcNo = "";
                 model.entries = [];
-                model.glcodes = [];
+                // model.glcodes = [];
                 model.entries.push(model.entries.length + 1)
                 var result = [];
                 model.entryType = [{
@@ -49,8 +50,11 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                         }
 
                     })
-                    model.totalAmount = creditSum - debitSum;
+                    model.totalAmount = Math.round((creditSum-debitSum)*100)/100;
                 }
+
+                
+
                 model.getLoanAccountNumber = function(loanNumb) {
                     console.log(loanNumb)
                     return Queries.getloanAccountsByLikeAccountNumber(loanNumb).then(function(res) {
@@ -59,12 +63,21 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                         console.log(err)
                     })
                 }
-                Journal.listAccountCode({
-                    'glType': 'LEDGER'
-                }).$promise.then(function(response) {
-                    model.glcodes = response.body;
-                    console.log(model.glcodes)
-                });
+                 Journal.listAccountCode({
+                     'glType': 'LEDGER',
+                     'per_page': 10000
+                 }).$promise.then(function(response) {
+                     model.glcodes = response.body;
+                     console.log(model.glcodes)
+                 });
+                 model.formatGlCode = function($model){
+                    var glDetails = _.find(model.glcodes, {productCode: $model});
+                    if(glDetails) {
+                        return glDetails.glName;
+                    }
+                    return "";
+                }
+                
 
                 var pageDefPath = "perdix/domain/model/journal/finconaccounting/FinconPostingProcess";
                 var journaldetail = "perdix/domain/model/journal/finconaccounting/JournalDetail";
@@ -140,6 +153,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.transactionSection.valueDate",
                                 "FinconAccounting.transactionSection.billNumber",
                                 "FinconAccounting.transactionSection.billDate",
+                                "FinconAccounting.transactionSection.costCentre",
                                 "FinconAccounting.instrumentSection",
                                 "FinconAccounting.instrumentSection.billUpload",
                                 "FinconAccounting.instrumentSection.instrumentType",
@@ -159,6 +173,24 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 ""
                             ],
                             "options": {
+                                "repositoryAdditions": {
+                                    "FinconAccounting": {
+                                        "items": {
+                                            "transactionSection":{
+                                                "items": {
+                                                    "costCentre": {
+                                                        "key": "journal.journalHeader.costCentre",
+                                                        "title": "COST_CENTRE",
+                                                        "type": "select",
+                                                        "orderNo": 80,
+                                                        "condition":"model.siteCode=='witfin'",
+                                                        "enumCode": "cost_centre"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [{
                                     "condition": "!$stateParams.pageId",
                                     "type": "actionbox",
@@ -241,37 +273,37 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                             </ul>\
                                           </div>\
                                         </script>\
-                                        <div class='row'> \
+                                        <div class='row' ng-if='model.glcodes'> \
                                             <div class='col-xs-12'> \
                                             <table class='text-center'>\
                                                 <thead>\
-                                                    <th class='col-xs-3'>GL_AC_NO</th>\
+                                                    <th class='col-xs-2'>GL AC Name</th>\
                                                     <th class='col-xs-1'>Type</th>\
-                                                    <th class='col-xs-2'>Amount</th>\
-                                                    <th class='col-xs-3'>Loan Account No</th>\
-                                                    <th class='col-xs-2'>Narration</th>\
+                                                    <th class='col-xs-1'>Amount</th>\
+                                                    <th class='col-xs-2'>Loan Account No</th>\
+                                                    <th class='col-xs-5'>Narration</th>\
                                                     <th class='col-xs-1'>Delete</th>\
                                                 </thead>\
                                                 <tbody>\
                                                     <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'>\
-                                                        <td class='col-xs-3'>\
+                                                        <td class='col-xs-2'>\
                                                             <div> \
-                                                                <input type=\"text\" class=\"form-control\" ng-change='myFun()' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
+                                                                <input type=\"text\" class=\"form-control\" ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-input-formatter=\"model.formatGlCode($model)\" typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
                                                             </div>\
                                                         </td>\
-                                                        <td class='col-xs-2'> \
+                                                        <td class='col-xs-1'> \
                                                             <select class='form-control' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' ng-model=\"d['drCrIndicator']\" schema-validate='form' ng-options='item.value as item.name for item in model.entryType'> <option value=''>{{('CHOOSE'|translate)+' '+(form.title|translate)}}</option> </select>\
                                                         \
                                                         </td>\
                                                         <td class='col-xs-1'>\
-                                                            <input ng-model=\"d['transactionAmount']\" type='number' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
+                                                            <input ng-model=\"d['transactionAmount']\" type='number' step='any' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
                                                         </td>\
-                                                        <td class='col-xs-3'>\
+                                                        <td class='col-xs-2'>\
                                                             <div> \
-                                                                <input  typeahead-append-to-body=\"true\" class=\"form-control\" ng-required=\"model.journal.journalHeader.entryType.toLowerCase() == 'payment - account' || model.journal.journalHeader.entryType.toLowerCase() == 'journal - account' || model.journal.journalHeader.entryType.toLowerCase() == 'receipt - account' || model.journal.journalHeader.entryType.toLowerCase() == 'contra - journal' \" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb.account_number  as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
+                                                            <input  typeahead-append-to-body=\"true\" class=\"form-control\" ng-required=\"model.journal.journalHeader.entryType.toLowerCase() == 'payment - account' || model.journal.journalHeader.entryType.toLowerCase() == 'journal - account' || model.journal.journalHeader.entryType.toLowerCase() == 'receipt - account' || model.journal.journalHeader.entryType.toLowerCase() == 'contra - journal' \" ng-model=\"d['relatedAccountNo']\" uib-typeahead=\"loanNumb.account_number  as loanNumb.account_number for loanNumb in model.getLoanAccountNumber($viewValue) | limitTo:10\"  typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplat.html\" >\
                                                             </div>\
                                                         </td>\
-                                                        <td class='col-xs-2'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
+                                                        <td class='col-xs-5'><textarea rows=\"1\" ng-model=\"d['remarks']\" class='form-control' />\
                                                         </td>\
                                                         <td class='col-xs-1'><a href='' ng-click='model.delete($index)'>Delete</a>\
                                                         </td>\
@@ -326,6 +358,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 // model.journal.journalHeader.instrumentNumber = parseInt(res.journalHeader.instrumentNumber);
                                 journalDetailsClass = JournalDetails;
                                 model.myFunc("p", res.journalHeader.journaldetails)
+                               // model.formatGlCode(res.journalHeader.journaldetails)
                             })
                         }
 
@@ -354,6 +387,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                             PageHelper.showProgress("Posting Save", "Saved succeded", 3000);
                         })
                         .subscribe(function(out) {
+                            model.finconProcess = out
                             console.log(out)
                         }, function(err) {
                             console.log(err);

@@ -64,6 +64,17 @@ define({
                                 }
 
                             })
+                            Journal.listAccountCode({
+                                'productCode': model.journal.creditGLNo
+                            }).$promise.then(function(response) {
+                                model.journal.creditGLName = response.body[0].glName
+                            });
+                            Journal.listAccountCode({
+                                'productCode': model.journal.debitGLNo
+                            }).$promise.then(function(response) {
+                                model.journal.debitGLName = response.body[0].glName       
+                           });
+
 
 
 

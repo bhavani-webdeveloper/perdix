@@ -119,8 +119,8 @@
                "pincode": {
                   "title": "Pincode",
                   "type": "string",
-                  "minLength": 6,
-                  "maxLength": 6,
+                  "minimum": 100000,
+                  "maximum": 999999,
                   "captureStages": [
                      "Assignment Pending",
                      "Incomplete",

@@ -101,8 +101,11 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                 "BranchPostingEntry.transactionName",
                 "BranchPostingEntry.transactionDescription",
                 "BranchPostingEntry.entryType",
+                "BranchPostingEntry.branchId",
                 "BranchPostingEntry.creditGLNo",
                 "BranchPostingEntry.debitGLNo",
+                "BranchPostingEntry.creditGLName",
+                "BranchPostingEntry.debitGLName",
                 "BranchPostingEntry.transactionAmount",
                 "BranchPostingEntry.billNo",
                 "BranchPostingEntry.billDate",
@@ -158,10 +161,11 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                 "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"'
                             },
                             "BranchPostingEntry.ifscCode": {
-                                "condition": 'model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")',
+                                "condition": '(model.journal.journalEntryDto.entryType == ("Payment - Account") || model.journal.journalEntryDto.entryType == ("Payment") || model.journal.journalEntryDto.entryType == ("Receipt - Account") || model.journal.journalEntryDto.entryType == ("Receipt")) && model.journal.journalEntryDto.instrumentType.toLowerCase() == "cheque" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "neft" || model.journal.journalEntryDto.instrumentType.toLowerCase() == "rtgs"',
                                 "resolver": "JournalIFSCLOVConfiguration",
                                 "type": "lov",
-                                "lovonly": true
+                                "lovonly": true,
+                                "required":true
                             },
                             "BranchPostingEntry.relatedAccountNo1": {
                                 "resolver": "JournalIFSCAccountNoConfiguration",
@@ -196,7 +200,27 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         "type": "button",
                                         "title": "PRINT VOUCHER",
                                         "onClick": "actions.printPDF(model, formCtrl, form, $event)"
-                                        }
+                                        },
+                                        "debitGLName": {
+                                            "key": "journal.journalEntryDto.debitGLName",
+                                            "title": "Debit GL Name",
+                                            "orderNo": 45,
+                                            "readonly":true
+                                        },
+                                        "creditGLName": {
+                                            "key": "journal.journalEntryDto.creditGLName",
+                                            "title": "Credit GL Name",
+                                            "orderNo": 55,
+                                            "readonly":true
+                                        },
+                                        "branchId" :{
+                                            "key": "journal.journalEntryDto.branchId",
+                                            "title": "BRANCH_NAME",
+                                            "orderNo": 35,
+                                            "type": "select",
+                                            "enumCode": "branch_id",
+                                            "readonly": true
+                                        },
                                     }
                                 }
                             },
@@ -311,13 +335,31 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                         }
                     };
 
-                    var journalId = $stateParams.pageId;
-                    if (journalId) {
-                        PageHelper.showLoader();
-                        PageHelper.showProgress("page-init", "Loading...", 5000);
-                        var journalId = $stateParams.pageId;
-                        if (!journalId) {
-                            PageHelper.hideLoader();
+                                    model.branchProcess = journal;
+                                    model.journal.journalEntryDto = {};
+                                    model.journal.journalEntryDto = journal.journalEntryDto;
+                                    Journal.listAccountCode({
+                                        'productCode': model.journal.journalEntryDto.creditGLNo.split(":")[2]
+                                    }).$promise.then(function(response) {
+                                        model.journal.journalEntryDto.creditGLName = response.body[0].glName
+                                    });
+                                    Journal.listAccountCode({
+                                        'productCode': model.journal.journalEntryDto.debitGLNo.split(":")[2]
+                                    }).$promise.then(function(response) {
+                                        model.journal.journalEntryDto.debitGLName = response.body[0].glName       
+                                   });
+                                    UIRepository.getPostingEntryUIRepository().$promise
+                                    .then(function(repo){
+                                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                                    })
+                                    .then(function(form){
+                                        console.log(form)
+                                        self.form = form;
+                                    });
+                                    PageHelper.hideLoader();
+                                })
+                            }
+                            $log.info("Journal page  is initiated ");
                         } else {
                             BranchPostingProcess.getJournal(journalId)
                             .finally(function() {
@@ -336,7 +378,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                     console.log(form)
                                     self.form = form;
                                 });
-                                PageHelper.hideLoader();
+                                                               // model.journal.journalEntryDto.branchId = SessionStore.getCurrentBranch().branchId;
                             })
                         }
                         $log.info("Journal page  is initiated ");
@@ -411,7 +453,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "relatedAccountNo": {
                                             "title": "RELATED_ACCOUNT_NO",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                         "relatedAccountNo1": {
                                             "title": "RELATED_ACCOUNT_NO",
@@ -455,7 +497,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "valueDate": {
                                             "title": "VALUE_DATE",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                         "instrumentBankName": {
                                             "title": "INSTRUMENT_BANK_NAME",
@@ -479,7 +521,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "ifscCode": {
                                             "title": "IFSC_CODE",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                     }
                                 }

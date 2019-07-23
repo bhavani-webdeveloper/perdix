@@ -60,11 +60,24 @@ export class JournalTransactionLOVConfiguration extends LOVElementConfiguration 
 
     onSelect: Function = function(valueObj, model, context){
 
+        let Journal = AngularResourceService.getInstance().getNGService("Journal");
+        Journal.listAccountCode({
+            'productCode': model.journal.journalEntryDto.creditGLNo
+        }).$promise.then(function(response) {
+            model.journal.journalEntryDto.creditGLName = response.body[0].glName
+        });
+        Journal.listAccountCode({
+            'productCode': model.journal.journalEntryDto.debitGLNo
+        }).$promise.then(function(response) {
+            model.journal.journalEntryDto.debitGLName = response.body[0].glName
+        });
+
+
 
     };
 
     initialize: Function = function(model, form, parentModel, context) {
-
+       
 
     };
 

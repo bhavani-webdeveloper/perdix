@@ -25,7 +25,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             model.siteCode = SessionStore.getGlobalSetting('siteCode');
             PageHelper.showLoader();
             model.bankDepositSummary = {};
-
+            model.loanCollections = [];
             var depositListPromise = Queries.getDepositList(SessionStore.getLoginname())
             .then(function (res){
                 $log.info(res);
@@ -33,6 +33,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 model.loanAccounts = [];
                 for (var i=0; i< res.body.length;i++){
                     var cashDeposit = res.body[i];
+                    model.loanCollections.push(cashDeposit);
                     model.pendingCashDeposits.push(
                         {
                             loan_ac_no: cashDeposit.account_number,
@@ -121,7 +122,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     "htmlClass": "row",
                     "items": [{
                         "type": "section",
-                        "htmlClass": "col-xs-1 col-md-1",
+                        "htmlClass": "col-xs-2 col-md-1",
                         "items": [{
                             "key":"pendingCashDeposits[].check",
                             "title":" ",
@@ -148,7 +149,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     },
                     {
                         "type": "section",
-                        "htmlClass": "col-xs-4 col-md-4",
+                        "htmlClass": "col-xs-3 col-md-4",
                         "items": [{
                             "key": "pendingCashDeposits[].amount_collected",
                             "readonly":true,
@@ -218,6 +219,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 type: "lov",
                 "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
                 lovonly: true,
+                required:true,
                 inputMap: {
                     "ifscCode": {
                         "key": "bankDepositSummary.ifscCode"
@@ -251,10 +253,30 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     ];
                 },
             },
-            {
+             {
                 "key":"bankDepositSummary.bankBranchDetails",
-                "title":"DEPOSITED_BANK_BRANCH"
-            }
+                "title":"DEPOSITED_BANK_BRANCH",
+                required:true
+            },
+            {
+                title: "Deposit Date",
+                condition: "model.siteCode == 'witfin'",
+                key: "bankDepositSummary.depositDate",
+                type: "date",
+                required:true
+            },
+            {
+
+                title: "Bank Challan",
+                condition: "model.siteCode == 'witfin'",
+                key: "bankDepositSummary.challanFileId",
+                type: "file",
+                fileType: "gallery",
+                category: "Collection",
+                subCategory: "Cheque",
+                required:true
+            },
+
             ]
         },{
             "type": "actionbox",
@@ -322,6 +344,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                         loanCollectionIds.push(model.pendingCashDeposits[i].repaymentId);
                     }
                 }
+                model.bankDepositSummary.loanCollections = _.cloneDeep(model.loanCollections);
                 var reqData = {
                     'bankDepositSummary': _.cloneDeep(model.bankDepositSummary),
                     'loanCollectionIds':_.cloneDeep(loanCollectionIds)
@@ -340,6 +363,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                     }
                 }, function(errorResponse){
                     PageHelper.hideLoader();
+                    PageHelper.showProgress('deposit-cash', 'Request is failed', 500);
                     PageHelper.showErrors(errorResponse);
                 });
             },

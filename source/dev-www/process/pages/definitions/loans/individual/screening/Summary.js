@@ -133,6 +133,67 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
     $scope.scoringTableData = _tData;
 }]);
 
+irf.pageCollection.directive("irfScoringDisplay", function(){
+
+    return {
+        restrict: 'E',
+        scope: {  scoringData : '=irfScoringData'},
+        templateUrl: 'process/pages/templates/irf-scoring-display.html',
+        controller: 'irfScoringDisplayController'
+    }
+}).controller("irfScoringDisplayController", ["$scope", function($scope){
+    var _tData = {
+        "IndividualScores": [],
+        "OtherScores": [],
+        "OverAllScore":{}
+    };
+    var sd = $scope.scoringData.SubscoreDetails;
+    var ss = $scope.scoringData.SubscoreScores;
+    _tData.OverAllScore = $scope.scoringData.ScoreCalculationDetails;
+    _.forOwn(sd, function(v,k){
+        var _vsd = {};
+        _vsd['name'] = k;
+        _vsd['isIndividualScore'] = false;
+        _vsd['Score'] = ss[k];
+        if ( _.has(v, '__isIndividualScore') && v['__isIndividualScore'] == 'YES') {
+            _vsd['isIndividualScore'] = true;
+        }
+        // Data handling for non individual scores
+        if (_vsd['isIndividualScore'] == false){
+            _vsd['parameterData'] = v;
+            _tData.OtherScores.push(_vsd);
+        } else if (_vsd['isIndividualScore'] == true){
+            _vsd['customerParameterMapping'] = {};
+            _vsd['parameters'] = [];
+
+            var cids = v['CustomerIds'];
+
+            for (var i=0;i<cids.length; i++){
+                var _id = cids[i];
+                if (!_id)
+                    continue;
+                _vsd['customerParameterMapping'][_id] = {
+                    'Details' : v[_id].CustomerDetails,
+                    'Parameters': {}
+                };
+
+                _.forEach(v[_id].data, function(pData){
+                    _vsd['customerParameterMapping'][_id]['Parameters'][pData['Parameter']] = pData;
+                    if (_vsd['parameters'].indexOf(pData['Parameter'])<0){
+                        _vsd['parameters'].push(pData['Parameter']);
+                    }
+                })
+            }
+            _vsd['customerParameterMapping'] = _.sortBy(_vsd['customerParameterMapping'], [function(o) { return o.Details.Relation; }]);
+            _tData.IndividualScores.push(_vsd);
+        }
+        
+    })
+
+    $scope.scoringTableData = _tData;
+}]);
+
+
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
 ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager","filterFilter",

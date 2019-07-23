@@ -1326,6 +1326,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if(model.loanAccount.currentStage !='TeleVerification') {
                         readonly_status=true;
                     }
+                    else{
+                        readonly_status= false;
+                    }
                     // Setting necessary parties to child arrays.
                     model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;

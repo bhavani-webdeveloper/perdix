@@ -60,7 +60,7 @@ define(
                             "excludes": [
                                 "NewVehicleDetails.category",
                                 "NewVehicleDetails.segment",
-                                "VehicleLoanIncomesInformation",
+                                //"VehicleLoanIncomesInformation",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
@@ -733,6 +733,44 @@ define(
                             }
                         }
                     },
+                    "Sanction": {
+                        "excludes": [
+                            "NewVehicleDetails.category1",
+                            "NewVehicleDetails.segment1",
+                            "NewVehicleDetails.category2",
+                            "NewVehicleDetails.segment2",
+                            "VehicleViability.calculateVehicleDetails"  
+                        ],
+                        "overrides": {
+                            "VehicleLoanIncomesInformation": {
+                                "readonly": true
+                            },
+                            "VehicleExpensesInformation": {
+                                "readonly": true
+                            },
+                            "VehicleViability": {
+                                "readonly": true
+                            },
+                            "VehicleViability1": {
+                                "readonly": true
+                            },
+                            "NewVehicleDetails": {
+                                "readonly": true
+                            },
+                            "VehicleAssetUse": {
+                                "readonly": true
+                            },
+                            "VehicleRouteDetails": {
+                                "readonly": true
+                            },
+                            "vehicleLoanDocuments": {
+                                "readonly": true
+                            },
+                            "VehiclePhotoCaptures": {
+                                "readonly": true
+                            }
+                        }
+                    },
                     "loanProcess.loanAccount.isReadOnly": {
                         "Yes": {
                             "excludes": [
@@ -820,6 +858,7 @@ define(
                     "NewVehicleDetails.assetDetails",
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
+                    "NewVehicleDetails.registrationNumber2",
                     "NewVehicleDetails.originalInvoiceValue",
                     "NewVehicleDetails.permitType",
                     "NewVehicleDetails.price",
@@ -1149,8 +1188,7 @@ define(
                         },
                         "NewVehicleDetails.registrationNumber": {
                             "orderNo": 110,
-                            "required": true,
-                            "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'Used'"
+                            "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'New'"
                         },
                         "NewVehicleDetails.originalInvoiceValue": {
                             "orderNo": 120,
@@ -1532,24 +1570,13 @@ define(
                                         "key":"loanAccount.vehicleLoanDetails.price",
                                         "title": "PURCHASE_PRICE"
                                     },
-                                    "engineNo": {
-                                        "key": "loanAccount.vehicleLoanDetails.engineNo",
-                                        "title": "ENGINE_NO"
-                                    },
-                                    "chasisNo": {
-                                        "key": "loanAccount.vehicleLoanDetails.chasisNo",
-                                        "title": "CHASIS_NO"
-                                    },
-                                    "registrationDate": {
-                                        "key": "loanAccount.vehicleLoanDetails.registrationDate",
-                                        "title": "REGISTRATION_DATE",
-                                        "type": "date"
-                                    },
-                                    "ownerSerialNo": {
-                                        "key": "loanAccount.vehicleLoanDetails.ownerSerialNo",
-                                        "title": "OWNER_SERIAL_NO",
-                                        "type": "string",
-                                            fieldType: "number"
+                                    "registrationNumber2":{
+                                        "orderNo": 110,
+                                        "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+                                        "type": "text",
+                                        "title": "REGN_NO",
+                                        "required": true,
+                                        "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'Used'"
                                     }
                                 }
                             },
@@ -1616,13 +1643,13 @@ define(
                                        "type": "number",
                                        "readonly": "true"
                                     },
-                                    "fuelConsumptionPerHour": {
-                                        "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
-                                        "title": "FUEL_CONSUMPTION_PER_HOUR",
-                                        "type": "number",
-                                        "readonly": "true",
-                                        "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
-                                    },
+                                    // "fuelConsumptionPerHour": {
+                                    //     "key": "loanAccount.vehicleLoanDetails.fuelConsumptionPerHour",
+                                    //     "title": "FUEL_CONSUMPTION_PER_HOUR",
+                                    //     "type": "number",
+                                    //     "readonly": "true",
+                                    //     "condition": "model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'construction equipment'"
+                                    // },
                                     "validation": {
                                         "key": "loanAccount.vehicleLoanDetails.validation",
                                         "title": "VALIDATION",
@@ -1888,7 +1915,7 @@ define(
                     }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
                         model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
                     }
-                    model.loanAccount.payLoad = Number(model.loanAccount.payLoad);
+                    model.loanAccount.vehicleLoanDetails.payLoad = Number(model.loanAccount.vehicleLoanDetails.payLoad);
                     var self = this;
 
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;

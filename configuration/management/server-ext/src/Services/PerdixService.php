@@ -71,7 +71,6 @@ class PerdixService
 
         return $parsedArr;
     }
-
     public function clearAllCache() {
         $this->login();
         $settings = Settings::getInstance()->getSettings();

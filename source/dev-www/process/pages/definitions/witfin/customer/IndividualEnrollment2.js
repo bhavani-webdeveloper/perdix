@@ -1,3 +1,4 @@
+
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
@@ -242,6 +243,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
+                                "KYC.customerId": {
+                                    "readonly": true
+                                }
                                 // "PhysicalAssets": {
                                 //     "readonly": true
                                 // },
@@ -806,6 +810,50 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.location"
                             ]
                         },
+                        "Sanction": {
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "T_FAMILY_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                }
+                            },
+                            "excludes": [
+                                "ContactInformation.location"
+                            ]
+                        },
                         "REJECTED": {
                             "overrides": {
                                 "KYC": {
@@ -1013,6 +1061,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.maritalStatus": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
+                    "FamilyDetails.familyMembers.salary":{
+                        "title":"NET_ANNUAL_INCOME"
+                    },
                     "ContactInformation.locality": {
                         "readonly" : true
                     },
@@ -1177,9 +1228,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements": {
                        "startEmpty": true 
-                    },
-                    "FamilyDetails.familyMembers.salary":{
-                        "title":"NET_ANNUAL_INCOME"
                     }
                 }
             }
@@ -1374,8 +1422,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "title": "LOCATION",
                                         "type": "geotag",
                                         "orderNo": 10,
-                                        "latitude": "latitude",
-                                        "longitude": "longitude",
+                                        "latitude": "customer.latitude",
+                                        "longitude": "customer.longitude",
                                     },
                                     "locatingHouse": {
                                         "key": "customer.udf.userDefinedFieldValues.udf16",
@@ -1748,7 +1796,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "items": [
                                     {
                                         "type": "button",
-                                        "title": "UPDATE_ENROLMENT",
+                                        "title": "SAVE",
                                         "onClick": "actions.proceed(model, formCtrl, form, $event)",
                                         "buttonType": "submit"
                                     }
@@ -1819,7 +1867,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             'firstName': model.customer.firstName
                         }
                         // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                     }
                     return $q.resolve();
                 },

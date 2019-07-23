@@ -82,10 +82,6 @@ let config = {
                     {
                         "name":"MandatoryFieldsPolicy",
                         "arguments": null
-                    },
-                    {
-                        "name":"LoanDerivedFieldsUpdate",
-                        "arguments": null
                     }
                 ]
             },

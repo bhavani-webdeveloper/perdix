@@ -112,3 +112,5 @@ customerInfo.list = SELECT * from customer where id = :customer_id
 partnerCode.list = SELECT DISTINCT partner_code as `partnerCode` from bank_account_master where partner_code is not null and partner_code<>''
 
 productTypeAndProductName.list = SELECT product_type as `productType`, product_name as `productName` from product_type_master
+loanRepaymentStatus.list = SELECT lr.account_number,lr.repayment_amount_in_paisa,lr.repayment_status FROM loan_repayment_details  lr WHERE lr.account_number = :account_number and lr.instrument_type IN ('ACH','PDC') and lr.repayment_status = 'Pending for Clearing'
+enterpiseCustomerDetails = SELECT c.id,c.customer_branch_id,c.centre_id,c.first_name as 'firstName',c.customer_type as 'customerType',c.mobile_phone as 'mobileNumber',CONCAT_WS(", ",c.door_no,c.street,c.locality,c.district) as 'address',e.enterprise_type FROM `customer` c LEFT JOIN enterprise e ON c.enterprise_id = e.id WHERE c.id in (select ecr.customer_id from  enterprise_customer_relations ecr where ecr.linked_to_customer_id = :individualCustomerId)

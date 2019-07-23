@@ -14,7 +14,7 @@
          "order":2,
          "code":"Deposit",
          "name":"Deposit",
-         "stageType":"DEPOSIT",
+         "stageType":"CAPTURE",
          "sendSms":"Yes",
          "transactionTypeForSms": {"Scheduled Demand":"ODCollection","Advance Repayment":"ODCollection","Fee Payment":"ODCollection","PenalInterestPayment":"ODCollection","Pre-closure":"ODCollection"},
          "isBankAccountReversal":true,

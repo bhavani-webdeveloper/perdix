@@ -19,17 +19,29 @@ export class SoleProprietorshipBusinessConfiguration extends SelectElementConfig
         }
         if (value == 'Sole Proprietorship' && !_.isNumber(model.customer.id)) {
             PageHelper.showLoader("Loading...");
-            Queries.getEnterpriseCustomerId(model.loanProcess.applicantEnrolmentProcess.customer.id)
+            Queries.getEnterpriseCustomerIds(model.loanProcess.applicantEnrolmentProcess.customer.id)
                 .then(function (response) {
-                    if (!response || !response.customer_id) {
-                        return false;
-                    }
+                    // if (!response || !response.customer_id) {
+                    //     return false;
+                    // }
 
-                    if (response.customer_id == model.customer.id) {
-                        return false;
-                    }
+                    // if (response.customer_id == model.customer.id) {
+                    //     return false;
+                    // }
 
-                    return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
+                    // return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
+                    if (response.body){
+                         let cList = _.filter(response.body,{'enterprise_type' : value ,'customer_branch_id' : model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId});
+                        if (_.isUndefined(cList) || cList.length == 0){
+                            return null;
+                        }
+                        if (cList.length > 1){
+                            PageHelper.showProgress("change-enterprise-type", "Applicant enrolled to multiple businesses. Selecting the first one.", 5000);
+                        } 
+                        return EnrolmentProcess.fromCustomerID(cList[0].id).toPromise();
+                    } else {
+                        return null;
+                    }
                 })
                 .then(function (enrolmentProcess) {
                     if (!enrolmentProcess) {

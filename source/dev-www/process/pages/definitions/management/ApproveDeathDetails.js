@@ -98,12 +98,12 @@ define({
                                     ],
                                     "message": "Death marking approved"     
                                 };
-                                PageHelper.clearErrors();
+                               // PageHelper.clearErrors();
                                 PageHelper.showLoader();
                                 DeathMarking.updateDeadMarkingStatus(req).$promise.then(function(resp) {
                                     PageHelper.showProgress("ApproveDeathDetails-pages", "Death Marking Approved Successfully", 3000);
                                     irfNavigator.goBack();
-                                }, function(err) {
+                                }, function(err){           
                                     PageHelper.showErrors(err);
                                 }).finally(function() {
                                     PageHelper.hideLoader();
@@ -128,6 +128,7 @@ define({
                                     Utils.alert("Death Marking Rejected Successfully");
                                     irfNavigator.goBack();
                                 }, function(err) {
+                                    
                                     PageHelper.showErrors(err);
                                 }).finally(function() {
                                     PageHelper.hideLoader();

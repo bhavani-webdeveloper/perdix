@@ -7,11 +7,21 @@ define({
         Queries.getLoanProductDocumentsRejectReasons("individual_loan").then(function(resp){
             docRejectReasons = resp;
         });
+
+        var formConfig = function(individual,entity,model){
+            model.additional.isIndividual = individual ? true : false;
+            model.additional.isEntity = entity ? true : false;
+        };
         return {
             "type": "schema-form",
             "title": "DOCUMENT_VERIFICATION",
             "subTitle": " ",
             initialize: function(model, form, formCtrl) {
+                var loanDocumentsArray=[];
+                var masterDocumentsArray=[];
+                var allExistingDocs=[];
+                var uploadedExistingDocs=[];
+                var remainingDocsArray=[];
                 $log.info("Demo Customer Page got initialized");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -21,6 +31,21 @@ define({
                 IndividualLoan.get({ id: $stateParams.pageId }).$promise.then(function(res) {
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
+                    uploadedExistingDocs=_.cloneDeep(res.loanDocuments);
+
+                    model.loanAccount.disbursementTransactionType="Manual";
+
+                    // PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode},function(response,headersGetter){
+                    //     model.loanAccount.isRegisterBank=response;
+                    //     if(model.loanAccount.isRegisterBank){
+                    //         model.loanAccount.disbursementTransactionType="Auto";
+                    //     }
+
+                    // },function(resp){
+                    // });
+                   
+                    //model.loanAccount.isRegisterBank = PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode});
+                   
                     /* DO BASIC VALIDATION */
                     if (res.currentStage!= 'DocumentVerification'){
                         PageHelper.showProgress('load-loan', 'Loan is in different Stage', 2000);
@@ -45,6 +70,79 @@ define({
                     var availableDocCodes = [];
                     LoanBookingCommons.getDocsForProduct(model.loanAccount.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {
                         $log.info(docsForProduct);
+                        
+                        masterDocumentsArray=docsForProduct;
+                        for(var i=0;i<masterDocumentsArray.length;i++){
+                            var pushFlag = true;
+                            if (uploadedExistingDocs && uploadedExistingDocs.length) {
+                                for(var j=0;j<uploadedExistingDocs.length;j++){
+                                    if (!uploadedExistingDocs[j]) continue;
+                                    if(masterDocumentsArray[i].document_code == uploadedExistingDocs[j].document){
+                                        allExistingDocs.push({
+                                            "documentId": uploadedExistingDocs[j].documentId,
+                                            "id": uploadedExistingDocs[j].id,
+                                            "loanId": uploadedExistingDocs[j].loanId,
+                                            "$title": masterDocumentsArray[i].document_description ||
+                                                masterDocumentsArray[i].document_name ||
+                                                masterDocumentsArray[i].document_code,
+                                            "$downloadRequired": masterDocumentsArray[i].download_required,
+                                            "$mandatory": masterDocumentsArray[i].mandatory,
+                                            "isHidden": false,
+                                            "documentStatus": uploadedExistingDocs[j].documentStatus,
+                                            "remarks":uploadedExistingDocs[j].remarks,
+                                            "rejectReason":uploadedExistingDocs[j].rejectReason,
+                                            "document":uploadedExistingDocs[j].document
+                                        });
+                                        pushFlag=false;
+                                        uploadedExistingDocs[j]=null;
+                                    }
+                                }
+                            }
+                            if(pushFlag){
+                                allExistingDocs.push({
+                                    "$formsKey": masterDocumentsArray[i].forms_key,
+                                    "$key": masterDocumentsArray[i].forms_key,
+                                    "documentId": null,
+                                    "id": null,
+                                    "loanId": $stateParams.pageId,
+                                    "$title":masterDocumentsArray[i].document_description || masterDocumentsArray[i].document_name || masterDocumentsArray[i].document_code || 'No Title Defined',
+                                    "$downloadRequired": masterDocumentsArray[i].download_required,
+                                    "$mandatory": masterDocumentsArray[i].mandatory,
+                                    "isHidden": false,
+                                    "documentStatus":null,
+                                    "remarks":null,
+                                    "rejectReason":null,
+                                    "document":masterDocumentsArray[i].document_code
+                                });
+                            }
+                        }
+                       
+                        if (uploadedExistingDocs && uploadedExistingDocs.length) {
+                           
+                            for (var i = 0; i < uploadedExistingDocs.length; i++) {
+                                if (uploadedExistingDocs[i]) {
+                                    remainingDocsArray.push({
+                                        "$formsKey": null,
+                                        "$key": null,
+                                        "documentId": uploadedExistingDocs[i].documentId,
+                                        "id": uploadedExistingDocs[i].id,
+                                        "loanId": uploadedExistingDocs[i].loanId,
+                                        "$title": uploadedExistingDocs[i].document || 'No Title Defined',
+                                        "$downloadRequired": false,
+                                        "$mandatory": null,
+                                        "isHidden": false,
+                                        "documentStatus": uploadedExistingDocs[i].documentStatus,
+                                        "remarks":uploadedExistingDocs[i].remarks,
+                                        "rejectReason":uploadedExistingDocs[i].rejectReason,
+                                        "document":uploadedExistingDocs[i].document
+                                    });
+                                }
+                            }
+                        }
+                
+                        model.remainingDocsArray = remainingDocsArray;
+                        model.allExistingDocs = allExistingDocs;
+                        
                         for (var i = 0; i < loanDocuments.length; i++) {
                             availableDocCodes.push(loanDocuments[i].document);
                             var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
@@ -60,9 +158,19 @@ define({
                         }
                         PageHelper.hideLoader();
                     },
+                    
                     function(httpRes) {
                         PageHelper.hideLoader();
                     });
+                    model.additional = {};
+                    Queries.getCustomerById(model.loanAccount.customerId,true).then(function(customer){
+                        if (customer.customerType == "Individual")
+                            formConfig(true,false,model);
+                        else
+                            formConfig(false,true,model);
+                    },function(err){
+                        formConfig(false,true,model);
+                    })
                 },
                 function(httpRes) {
                     PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -209,14 +317,15 @@ define({
                                 var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
                                 Utils.downloadFile(fileUrl);
                         }
-                    }, {
+                    },  //allExistingDocs form
+                    {
                         "type": "fieldset",
                         "title": "DOCUMENT_VERIFICATION",
                         "items": [{
                             "type": "array",
                             "notitle": true,
                             "view": "fixed",
-                            "key": "loanAccount.loanDocuments",
+                            "key": "allExistingDocs",
                             "add": null,
                             "remove": null,
                             "items": [{
@@ -226,7 +335,7 @@ define({
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
                                     "items": [{
-                                        "key": "loanAccount.loanDocuments[].$title",
+                                        "key": "allExistingDocs[].$title",
                                         "notitle": true,
                                         "title": " ",
                                         "readonly": true
@@ -234,28 +343,43 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "key": "loanDocs[].downloadRequired",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentId",
+                                    "condition":"model.allExistingDocs[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
                                     "items": [{
                                         "title": "DOWNLOAD_FORM",
-                                        "notitle": true,
                                         "fieldHtmlClass": "btn-block",
                                         "style": "btn-default",
                                         "icon": "fa fa-download", 
                                         "type": "button",
                                         "readonly": false,
-                                        "key": "loanAccount.loanDocs[].documentId",
+                                        "key": "allExistingDocs[].documentId",
                                         "onClick": function(model, form, schemaForm, event) {
-                                            var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                            var fileId = model.allExistingDocs[schemaForm.arrayIndex].documentId;
                                             Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                         }
                                     }]
-                                }, {
+                                }, 
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"!model.allExistingDocs[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
+                                    "items": [{
+                                        "title": "No File",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "allExistingDocs[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                        }
+                                    }] 
+                                },{
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
                                     "items": [{
-                                        "key": "loanAccount.loanDocuments[].documentStatus",
-                                        "condition": "model.loanAccount.loanDocuments[arrayIndex].documentId",
+                                        "key": "allExistingDocs[].documentStatus",
                                         "title": "Status",
                                         "notitle": true,
                                         "type": "select",
@@ -270,17 +394,17 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-3",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED'",
                                     "items": [{
                                         title: "Reason",
                                         notitle: true,
                                         placeholder: "Reason",
-                                        key: "loanAccount.loanDocuments[].rejectReason",
+                                        key: "allExistingDocs[].rejectReason",
                                         type: "lov",
                                         lovonly: true,
                                         searchHelper: formHelper,
                                         search: function(inputModel, form, model, context) {
-                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.loanAccount.loanDocuments[context.arrayIndex].document},true);
+                                            var f = $filter('filter')(docRejectReasons, {"document_code": model.allExistingDocs[context.arrayIndex].document},true);
                                             return $q.resolve({
                                                 "header": {
                                                     "x-total-count": f && f.length
@@ -292,34 +416,110 @@ define({
                                             return [item.reject_reason];
                                         },
                                         onSelect: function(result, model, context) {
-                                            model.loanAccount.loanDocuments[context.arrayIndex].rejectReason = result.reject_reason;
+                                            model.allExistingDocs[context.arrayIndex].rejectReason = result.reject_reason;
                                         }
                                     }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED'",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
                                         placeholder: "Remarks",
-                                        key: "loanAccount.loanDocuments[].remarks"
+                                        key: "allExistingDocs[].remarks"
                                     }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-5",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED'",
+                                    "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED'",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
                                         placeholder: "Remarks",
-                                        key: "loanAccount.loanDocuments[].remarks"
+                                        key: "allExistingDocs[].remarks"
                                     }]
                                 }]
-                            }] // END of array items
+                            }] 
                         }]
-                    }] // END of box items
-            },
+                    },
+                    { // remaining docs array
+                        "type": "fieldset",
+                        "title": "Additional Documents",
+                        "items": [{
+                            "type": "array",
+                            "notitle": true,
+                            "view": "fixed",
+                            "key": "remainingDocsArray",
+                            "add": null,
+                            "remove": null,
+                            "items": [{
+                                "type": "section",
+                                "htmlClass": "row",
+                                "items": [{
+                                    "type": "section",
+                                    "htmlClass": "col-sm-3",
+                                    "items": [{
+                                        "key": "remainingDocsArray[].$title",
+                                        "notitle": true,
+                                        "title": " ",
+                                        "readonly": true
+                                    }]
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"model.remainingDocsArray[arrayIndex].documentId",
+                                    "key": "allExistingDocs[].downloadRequired",
+                                    "items": [{
+                                        "title": "DOWNLOAD_FORM",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "remainingDocsArray[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                            var fileId = model.remainingDocsArray[schemaForm.arrayIndex].documentId;
+                                            if(fileId){
+                                                Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            }
+                                        }
+                                    }]
+                                }, 
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition":"!model.remainingDocsArray[arrayIndex].documentId",
+                                    "key": "remainingDocsArray[].downloadRequired",
+                                    "items": [{
+                                        "title": "No File",
+                                        "fieldHtmlClass": "btn-block",
+                                        "style": "btn-default",
+                                        "icon": "fa fa-download", 
+                                        "type": "button",
+                                        "readonly": false,
+                                        "key": "remainingDocsArray[].documentId",
+                                        "onClick": function(model, form, schemaForm, event) {
+                                        }
+                                    }] 
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-2",
+                                    "condition": "model.remainingDocsArray[arrayIndex].documentStatus === 'REJECTED'",
+                                    "items": [{
+                                        title: "Remarks",
+                                        notitle: true,
+                                        placeholder: "Remarks",
+                                        key: "remainingDocsArray[].remarks"
+                                    }]
+                                },
+                                
+                            ]
+                            }] 
+                        }]
+                    }
+                ]},   // END of box items
             {
                 "type": "box",
                 "readonly":true,
@@ -564,8 +764,28 @@ define({
             actions: {
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
-                    Utils.confirm("Are You Sure?").then(function(){
-                        var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
+                    Utils.confirm("Are You Sure?").then(function () {
+                        model.loanAccount.loanDocuments = [];
+
+                        if (model.allExistingDocs) {
+                          
+                            for (var i = 0; i < model.allExistingDocs.length; i++) {
+
+                                if (model.allExistingDocs[i].documentId) {
+
+                                    model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                }
+                            }
+                        }
+                        if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                            for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                if (model.remainingDocsArray[j].documentId) {
+                                    model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                }
+                            }
+                        }
+
+                        var reqData = { loanAccount: _.cloneDeep(model.loanAccount) };
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
                         reqData.stage = "Rejected";
@@ -574,16 +794,16 @@ define({
                         PageHelper.showProgress("update-loan", "Working...");
                         IndividualLoan.update(reqData)
                             .$promise
-                            .then(function(res){
+                            .then(function (res) {
                                 PageHelper.showProgress("update-loan", "Done.", 3000);
                                 $state.go('Page.Engine', {
                                     pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
-                            }, function(httpRes){
+                            }, function (httpRes) {
                                 PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
                             })
-                            .finally(function(){
+                            .finally(function () {
                                 PageHelper.hideLoader();
                             })
                     })
@@ -592,25 +812,45 @@ define({
                     $log.info("Inside save()");
                     Utils.confirm("Are You Sure?")
                         .then(
-                            function(){
-                                var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
-                                reqData.loanAccount.status = 'HOLD';
-                                reqData.loanProcessAction = "SAVE";
-                                reqData.remarks = model.review.remarks;
-                                PageHelper.showLoader();
-                                IndividualLoan.create(reqData)
-                                    .$promise
-                                    .then(function(res){
-                                        $state.go('Page.Engine', {
-                                            pageName: 'loans.individual.booking.PendingVerificationQueue'
-                                        });
-                                    }, function(httpRes){
-                                        PageHelper.showErrors(httpRes);
-                                    })
-                                    .finally(function(httpRes){
-                                        PageHelper.hideLoader();
-                                    })
+                        function () {
+
+                            model.loanAccount.loanDocuments = [];
+
+                            if (model.allExistingDocs) {
+                                replaceFlag = false;
+                                for (var i = 0; i < model.allExistingDocs.length; i++) {
+
+                                    if (model.allExistingDocs[i].documentId) {
+
+                                        model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                    }
+                                }
                             }
+                            if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                                for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                    if (model.remainingDocsArray[j].documentId) {
+                                        model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                    }
+                                }
+                            }
+                            var reqData = { loanAccount: _.cloneDeep(model.loanAccount) };
+                            reqData.loanAccount.status = 'HOLD';
+                            reqData.loanProcessAction = "SAVE";
+                            reqData.remarks = model.review.remarks;
+                            PageHelper.showLoader();
+                            IndividualLoan.create(reqData)
+                                .$promise
+                                .then(function (res) {
+                                    $state.go('Page.Engine', {
+                                        pageName: 'loans.individual.booking.PendingVerificationQueue'
+                                    });
+                                }, function (httpRes) {
+                                    PageHelper.showErrors(httpRes);
+                                })
+                                .finally(function (httpRes) {
+                                    PageHelper.hideLoader();
+                                })
+                        }
                         );
                 },
                 viewLoan: function(model, formCtrl, form, $event) {
@@ -649,6 +889,22 @@ define({
                         return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
+                        model.loanAccount.loanDocuments=[];
+                        if (model.allExistingDocs) {
+                            for(var i=0;i< model.allExistingDocs.length;i++){
+                                if( model.allExistingDocs[i].documentId){
+                                    model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                }
+                            }
+                         }
+                         if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                                for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                    if(model.remainingDocsArray[j].documentId){
+                                        model.remainingDocsArray[j].document=model.remainingDocsArray[j].$title;
+                                        model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                    }  
+                                }
+                            }
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
                         reqData.loanProcessAction = "PROCEED";
@@ -674,55 +930,73 @@ define({
                     })
 
                 },
-                proceed: function(model, form, formName) {
-
-                    if (PageHelper.isFormInvalid(form)){
+                proceed: function (model, form, formName) {
+                    if (PageHelper.isFormInvalid(form)) {
                         return false;
                     }
+             
+                    model.loanAccount.loanDocuments=[];
+                    model.loanAccount.tempMasterDocuments = [];
 
-                    var reqData = {
+                    
+                    if (model.allExistingDocs) {
+                        for(var i=0;i< model.allExistingDocs.length;i++){
+                            if( model.allExistingDocs[i].documentId){
+                                model.loanAccount.tempMasterDocuments.push(model.allExistingDocs[i]);
+                                model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                            }
+                        }
+                     }
+                     if (model.remainingDocsArray && model.remainingDocsArray.length) {
+                            for (var j = 0; j < model.remainingDocsArray.length; j++) {
+                                if(model.remainingDocsArray[j].documentId){
+                                    model.remainingDocsArray[j].document=model.remainingDocsArray[j].$title;
+                                    model.loanAccount.loanDocuments.push(model.remainingDocsArray[j]);
+                                }  
+                            }
+                        }
+                
+                    var reqParamData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED'
                     };
-                    var docStatuses = [];
                     var allowedStatues = ['APPROVED', 'REJECTED'];
-                    var redirectToUploadFlag = false;
-                    for (var i = 0; i < reqData.loanAccount.loanDocuments.length; i++) {
-                        var doc = reqData.loanAccount.loanDocuments[i];
-                        if (doc.documentId) {
-                            if (_.indexOf(allowedStatues, doc.documentStatus) == -1) {
-                                PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.',3000);
-                                return;
-                            }
-                            if (doc.documentStatus == 'REJECTED') {
-                                redirectToUploadFlag = true;
-                            }
+                    reqParamData.loanAccount.status = null;
+                     var redirectToUploadFlag = false;
+                    for (var i = 0; i < reqParamData.loanAccount.tempMasterDocuments.length; i++) {
+                        var doc = reqParamData.loanAccount.tempMasterDocuments[i];
+                        if (_.indexOf(allowedStatues, doc.documentStatus) == -1) {
+                            PageHelper.showProgress('update-loan', 'Invalid document status selected. Only Approved or Rejected are allowed.', 3000);
+                            return;
+                        }
+
+                        if (doc.documentStatus == 'REJECTED') {
+                            redirectToUploadFlag = true;
                         }
                     }
-
                     if (redirectToUploadFlag == true) {
-                        reqData['stage'] = 'DocumentUpload';
+                        reqParamData['stage'] = 'DocumentUpload';
                     }
 
                     PageHelper.showProgress('update-loan', 'Working...');
                     PageHelper.showLoader();
-                    console.log(JSON.stringify(reqData));
-                    return IndividualLoan.update(reqData)
+                    console.log(JSON.stringify(reqParamData));
+                    return IndividualLoan.update(reqParamData)
                         .$promise
                         .then(
-                            function(res) {
+                            function (res) {
                                 PageHelper.showProgress('update-loan', 'Done.', 2000);
                                 $state.go('Page.Engine', {
                                     pageName: 'loans.individual.booking.PendingVerificationQueue'
                                 });
                                 return;
                             },
-                            function(httpRes) {
+                            function (httpRes) {
                                 PageHelper.showProgress('update-loan', 'Unable to proceed.', 2000);
                                 PageHelper.showErrors(httpRes);
                             }
                         )
-                        .finally(function() {
+                        .finally(function () {
                             PageHelper.hideLoader();
                         })
                 },

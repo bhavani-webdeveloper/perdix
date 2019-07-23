@@ -139,6 +139,56 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				]
 			},
 			"Page/Engine/customer360.CustomerHistorySummary",
+			"Page/Engine/customer360.CustomerDeathMarking"
+		]
+	};
+	//"Page/CustomerHistory",
+
+	var witfinCustomerDefinition = {
+		"title": "CUSTOMER_360",
+		"items": [
+			getCustomerProfilePageUrl(),
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					{
+						"title": "NEW_LOAN",
+						"iconClass": "fa fa-key",
+						"items": [
+							"Page/Engine/Loans.NewJewel",
+							"Page/Engine/Loans.NewMEL"
+						]
+					},
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/customer360.loans.Service"
+				]
+			},
+			{
+                "title": "CREDIT_BUREAU",
+                "iconClass": "fa fa-user",
+                "items": [
+                    {
+                        "title": "CREDIT_BUREAU",
+                        "iconClass": "fa fa-user",
+                        "items": [
+                            ]
+                    },
+                    "Page/Engine/customer360.Idencheck",
+					"Page/Engine/customer360.CreditBureauResults"
+                ]
+            } ,
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.CustomerDeathMarking",
 			"Page/Engine/customer360.loans.CustomerGroupsView",
 			"Page/Engine/customer360.ViewInsurance"
@@ -224,7 +274,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory"
+			"Page/Engine/customer360.CustomerHistorySummary"
 		]
 	};
 
@@ -501,7 +551,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		}).$promise.then(function(response) {
 			var fullDefinition = customerDefinition;
 			if (siteCode == "witfin") {
-				var fullDefinition = witfinCustomerDefinition;
+				fullDefinition = witfinCustomerDefinition;
 			}
 			if (response.customerType === 'Enterprise') {
 				fullDefinition = enterpriseDefinition;

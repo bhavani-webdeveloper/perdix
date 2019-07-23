@@ -21,7 +21,7 @@ irf.models.factory('Queries', [
             }).$promise;
         };
 
-        resource.searchPincodes = function(pincode, district, state, division, region, taluk) {
+        resource.searchPincodes = function(pincode, district, state, region, division, taluk) {
             var deferred = $q.defer();
             var request = {
                 "pincode": pincode || '',
@@ -557,6 +557,24 @@ irf.models.factory('Queries', [
             resource.getResult("latestLoanRepayments.list", {
                 account_number: accountNumber
             }, 1).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getLoanRepaymentStatus = function(accountNumber) {
+            var deferred = $q.defer();
+            resource.getResult("loanRepaymentStatus.list", {
+                account_number: accountNumber
+            }, 10).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -1182,6 +1200,24 @@ irf.models.factory('Queries', [
                     }
                 }, deferred.reject)
             return deferred.promise;
+        };
+        resource.getEnterpriseCustomerIds = function(individualCustomerId){
+            var deferred = $q.defer();
+            var request = {};
+            request.individualCustomerId = individualCustomerId;
+            resource.getResult("enterpiseCustomerDetails", request)
+                .then(function(response){
+                    if (response && response.results) {
+                        var result = {
+                            headers: {
+                                "x-total-count": response.results.length
+                            },
+                            body: response.results
+                        };
+                        deferred.resolve(result);
+                    }
+                }, deferred.reject);
+                return deferred.promise;
         };
 
 
