@@ -56,13 +56,13 @@ define({
                 {
                     "key": "product.productCategory",
                     "type": "select",
-                    "enumCode": "product_category_loan_type",
+                    "enumCode": "loan_product_category",
                     "required": true,
                     "condition":"!model.productId"
                 },{
                     "key": "product.productCategory",
                     "type": "select",
-                    "enumCode": "product_category_loan_type",
+                    "enumCode": "loan_product_category",
                     "readonly":true,
                     "condition":"model.productId"
                 }, {
