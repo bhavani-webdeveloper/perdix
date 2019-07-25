@@ -420,7 +420,7 @@ if (isset($_GET)) {
                 } elseif ($applicant[$al]['business_involvement'] == 'Part Time') {
                     $weightage_manipulation = $full_involvement_weight / $part_time;
                 } else {
-                    $weightage_manipulation = 0;
+                    $weightage_manipulation = 1;
                 }
             } else {
                 $weightage_manipulation = 1;
