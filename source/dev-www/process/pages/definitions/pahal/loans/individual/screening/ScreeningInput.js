@@ -310,6 +310,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                     return deferred.promise;
 
                 },
+
+                "offlineInitialize": function (bundleModel) {
+                    var deferred = $q.defer();
+                    $this = this;
+                    $this.bundleModel = bundleModel;
+                    LoanProcess.plainToClass(bundleModel.loanProcess)
+                        .subscribe(function (loanProcess) {
+                            $this.bundleModel.loanProcess = loanProcess;
+                            deferred.resolve();
+                        });
+                    return deferred.promise;
+                },
+                
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
                     BundleManager.broadcastEvent('origination-stage', 'Screening');
@@ -372,7 +385,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
                                 BundleManager.broadcastEvent("new-guarantor", params);
-                                 break;
+                                break;
                             case 'business':
                                 $log.info("New Business Enrolment");
                                 bundleModel.business = params.customer;

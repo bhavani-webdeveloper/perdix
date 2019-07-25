@@ -163,6 +163,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
@@ -266,6 +267,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                         }
                         return deferred.promise;
                     },
+
+                    "offlineInitialize": function (bundleModel) {
+                        var deferred = $q.defer();
+                        $this = this;
+                        $this.bundleModel = bundleModel;
+                        LoanProcessts.plainToClass(bundleModel.loanProcess)
+                            .subscribe(function (loanProcess) {
+                                $this.bundleModel.loanProcess = loanProcess;
+                                deferred.resolve();
+                            });
+                        return deferred.promise;
+                    },
+
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
                         BundleManager.broadcastEvent('origination-stage', 'TeleVerification1');

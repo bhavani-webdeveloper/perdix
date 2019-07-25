@@ -268,7 +268,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts": {
                                     "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets" : {
+                                    "readonly": true
                                 }
+
                             },
                             "excludes": [
                             ]
@@ -417,6 +427,48 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.location"
                             ]
                         },
+                        "DeviationApproval":{
+                            "overrides": {
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "CustomerDocumentUpload": {
+                                    "readonly": true
+                                },
+                                "CustomerLicenceDetails":{
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "BankAccounts": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                }
+                            }
+
+                        },
                         "REJECTED": {
                             "overrides": {
                                 "KYC": {
@@ -541,10 +593,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.spouseDateOfBirth":{
                         "condition": "model.customer.spouseDateOfBirth.toLowerCase() == 'married'"
                     },
-                    "BankAccounts.customerBankAccounts": {
+                    "IndividualInformation.firstName":{
+                        onCapture: function(result, model, form) {
+                            PageHelper.showLoader();
+                            var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            Queries.searchPincodes(aadhaarData.pc).then(function(response) {
+                                $log.info(response);
+                                if (response.body && response.body.length) {
+                                    model.customer.district = response.body[0].district;
+                                    model.customer.state = response.body[0].state;
+                                }
+                                PageHelper.hideLoader();
+                            });
+                        }
+                    },
+                     "BankAccounts.customerBankAccounts.bankStatements": {
                         startEmpty: true
                     },
-                    "BankAccounts.customerBankAccounts.bankStatements":{
+                    "BankAccounts.customerBankAccounts": {
                         startEmpty: true
                     },
                     "BankAccounts.customerBankAccounts.accountNumber": {
@@ -567,7 +633,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     //     "onChange": calculateVehiclesFree
                     // },
                     "IndividualInformation.photoImageId": {
-                        "required": true
+                        "required": true,
+                        "offline": true
                     },
                     "IndividualInformation.dateOfBirth": {
                         "onChange": function (modelValue, form, model) {
@@ -655,7 +722,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "KYC.addressProofNo": {
-                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                        onCapture: function(result, model, form) {
+                            PageHelper.showLoader();
+                            var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            Queries.searchPincodes(aadhaarData.pc).then(function(response) {
+                                $log.info(response);
+                                if (response.body && response.body.length) {
+                                    model.customer.district = response.body[0].district;
+                                    model.customer.state = response.body[0].state;
+                                }
+                                PageHelper.hideLoader();
+                            });
+                        }
                     },
                     "KYC.addressProof" :{
                         "readonly": true
@@ -729,6 +807,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingState": {
                         "condition": "!model.customer.mailSameAsResidence"
+                    },
+                    "KYC.addressProofImageId": {
+                        "offline": true
+                    },
+                    "CustomerDocumentUpload.customerDocuments.fileId": {
+                        "offline": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto" : {
+                        "offline": true
+                    },
+                    "KYC.additionalKYCs.kyc1ImagePath": {
+                        "offline": true
+                    },
+                    "KYC.identityProofImageId": {
+                        "offline": true
                     },
                     "KYC.customerId": {
                         type: "lov",
@@ -842,7 +935,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         onSelect: function (valueObj, model, context) {
                             PageHelper.showProgress('customer-load', 'Loading customer...');
-                            
                             var enrolmentDetails = {
                                 'customerId': model.customer.id,
                                 'customerClass': model._bundlePageObj.pageClass,
@@ -1039,6 +1131,373 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             }
 
+            var formRequest = function (model) {
+                return {
+                    "overrides": overridesFields(model),
+                    "includes": getIncludes(model),
+                    "excludes": [
+                        "KYC.addressProofSameAsIdProof",
+                    ],
+                    "options": {
+                        "repositoryAdditions": {
+                            "ResidenceVerification": {
+                                "type": "box",
+                                "title": "RESIDENCE_VERIFICATION",
+                                "orderNo": 999,
+                                "items": {
+                                    "location": {
+                                        "key": "customer.latitude",
+                                        "title": "LOCATION",
+                                        "type": "geotag",
+                                        "orderNo": 10,
+                                        "latitude": "customer.latitude",
+                                        "longitude": "customer.longitude",
+                                    },
+                                    "locatingHouse": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf16",
+                                        "title": "LOCATING_HOUSE",
+                                        "type": "select",
+                                        "orderNo": 20,
+                                        "enumCode": "locating_house"
+                                    },
+                                    "distanceFromHouse": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf2",
+                                        "type": "text",
+                                        "orderNo": 30,
+                                        "title": "DISTANCE_FROM_HOUSE",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "visibleIndicator": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf3",
+                                        "type": "radios",
+                                        "enumCode": "decisionmaker",
+                                        "orderNo": 40,
+                                        "title": "VISIBLE_INDICATOR",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "commentOnLocality": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf4",
+                                        "type": "text",
+                                        "orderNo": 50,
+                                        "title": "COMMENT_ON_LOCALITY",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "residenceStatus": {
+                                        "key": "customer.ownership",
+                                        "type": "select",
+                                        "enumCode": "residence_status",
+                                        "title": "RESIDENCE_STATUS",
+                                        "orderNo": 60,
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "contactInformationConfirmed": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf5",
+                                        "type": "radios",
+                                        "title": "CONTACT_INFORMATION_CONFIRMED",
+                                        "orderNo": 70,
+                                        "enumCode": "decisionmaker",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "remarks": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf11",
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf5=='NO'",
+                                        "type": "text",
+                                        "title": "REMARKS",
+                                        "orderNo": 80,
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "stayAtResidence": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf6",
+                                        "type": "select",
+                                        "enumCode": "decisionmaker",
+                                        "orderNo": 90,
+                                        "title": "STAY_AT_RESIDENCE",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "noYearsAtResidence": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf10",
+                                        "type": "select",
+                                        "orderNo": 100,
+                                        "enumCode": "years_residence",
+                                        "title": "No_YEARS_AT_RESIDENCE",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "namePlate": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf7",
+                                        "type": "select",
+                                        "enumCode": "decisionmaker",
+                                        "title": "NAME_PLATE",
+                                        "orderNo": 110,
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "localityType": {
+                                        "key": "customer.localityType",
+                                        "type": "select",
+                                        "orderNo": 120,
+                                        "enumCode": "locality_type",
+                                        "title": "LOCALITY_TYPE",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "typeOfAccomodation": {
+                                        "key": "customer.accomodationType",
+                                        "type": "select",
+                                        "enumCode": "accomodation_type",
+                                        "orderNo": 130,
+                                        "title": "ACCOMODATION_TYPE",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "areaSQFT": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf8",
+                                        "title": "AREA_SQFT",
+                                        "type": "select",
+                                        "orderNo": 140,
+                                        "enumCode": "area_sqft",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "HouseVerificationPhoto": {
+                                        "key": "customer.houseVerificationPhoto",
+                                        "title": "HOUSE VERIFICATION PHOTO",
+                                        "orderNo": 150,
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "onChange": function () {
+                                            console.log("INSIDE ONCHANGE1");
+                                        },
+                                        "viewParams": function (modelValue, form, model) {
+                                            getLocation().then((pos) => {
+                                                console.log("successful");
+                                                model.customer.latitude = pos.coords.latitude;
+                                                model.customer.longitude = pos.coords.longitude;
+                                            });
+                                            getLocation().catch((err) => {
+                                                console.log(err);
+                                            });
+                                        }
+
+                                        //     "title": "HOUSE_VERIFICATION_PHOTO",
+                                        //     "category": "CustomerEnrollment",
+                                        //     "subCategory": "PHOTO",
+                                        //     "onChange": function(){
+                                        //         console.log("INSIDE ONCHANGE1");
+                                        //     },
+                                        //     "viewParams" : function(modelValue, form, model) {
+                                        //         getLocation().then((pos)=>{
+                                        //             console.log("successful");
+                                        //             model.customer.latitude = pos.coords.latitude;
+                                        //             model.customer.longitude = pos.coords.longitude;
+                                        //         });
+                                        //         getLocation().catch((err)=>{
+                                        //             console.log(err);
+                                        //         });
+                                        //     }
+
+                                    },
+
+                                    "remarksOnBusiness": {
+                                        "key": "customer.udf.userDefinedFieldValues.udf9",
+                                        "title": "REMAKRS_ON_BUISNESS",
+                                        "orderNo": 160,
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                }
+                            },
+                            "Liabilities": {
+                                "items": {
+                                    "liabilities": {
+                                        "items": {
+                                            "udf1": {
+                                                "title": "VEHICLE_MODEL",
+                                                "type": "string",
+                                                "key": "customer.liabilities[].udf1"
+                                            },
+                                            "customerLiabilityRepayments": {
+                                                "key": "customer.liabilities[].customerLiabilityRepayments",
+                                                "type": "array",
+                                                "startEmpty": true,
+                                                "title": "REPAYMENT_DETAILS",
+                                                "items": {
+                                                    "emiNo": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
+                                                        "title": "EMI_NO",
+                                                        "type": "number",
+                                                        "required": true
+                                                    },
+                                                    "emiAmount": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
+                                                        "title": "EMI_AMOUNT",
+                                                        "type": "number",
+                                                        "required": true
+                                                    },
+                                                    "emiDueDate": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
+                                                        "title": "EMI_DUE_DATE",
+                                                        "type": "date",
+                                                        "required": true
+                                                    },
+                                                    "actualRepaymentDate": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
+                                                        "title": "ACTUAL_REPAYMENT_DATE",
+                                                        "type": "date",
+                                                        "required": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "IndividualInformation": {
+                                "items": {
+                                    "customerCategory": {
+                                        "key": "customer.customerCategory",
+                                        "title": "CUSTOMER_CATEGORY",
+                                        "type": "select",
+                                        "enumCode": "lead_category",
+                                        "orderNo": 85,
+                                        "required": true
+                                    }
+
+                                }
+                            },
+                            "CustomerDocumentUpload": {
+                                "type": "box",
+                                "title": "CUSTOMER_DOCUMENT_UPLOAD",
+                                "orderNo": 80,
+                                "items": {
+                                    "customerDocuments": {
+                                        "type": "array",
+                                        "title": "DOCUMENT_UPLOAD",
+                                        "key": "customer.customerDocuments",
+                                        "startEmpty": true,
+                                        "items": {
+                                            "fileType": {
+                                                "type": "select",
+                                                "enumCode": "document_file_type",
+                                                "key": "customer.customerDocuments[].fileType",
+                                                "title": "DOCUMENT_NAME",
+                                                "required": true
+                                            },
+                                            "fileId": {
+                                                "key": "customer.customerDocuments[].fileId",
+                                                "type": "file",
+                                                "fileType": "application/pdf",
+                                                "using": "scanner",
+                                                "title": "DOCUMENT_UPLOAD",
+                                                "category": "CustomerEnrollment",
+                                                "subCategory": "KYC1",
+                                                "required": true
+                                            },
+                                            "documentDate": {
+                                                "key": "customer.customerDocuments[].documentDate",
+                                                "title": "ISSUE_DATE",
+                                                "type": "date"
+                                            },
+                                            "udfDate1": {
+                                                "key": "customer.customerDocuments[].udfDate1",
+                                                "title": "EXPIRY_DATE",
+                                                "type": "date"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "CustomerLicenceDetails": {
+                                "title": "MUTLI_TYPE_LICENCE_CAPTURE",
+                                "type": "box",
+                                "orderNo": 85,
+                                "items": {
+                                    "customerLicenceDetails": {
+                                        "type": "array",
+                                        "title": "MUTLI_TYPE_LICENCE_CAPTURE",
+                                        "startEmpty": true,
+                                        "key": "customer.customerLicenceDetails",
+                                        "items": {
+                                            "licence1Type": {
+                                                "key": "customer.customerLicenceDetails[].licence1Type",
+                                                "title": "LICENCE_TYPE",
+                                                "type": "select",
+                                                "enumCode": "licence_type",
+                                                "required": true
+                                            },
+                                            "licence1ValidFrom": {
+                                                "key": "customer.customerLicenceDetails[].licence1ValidFrom",
+                                                "title": "LICENCE_VALID_FROM",
+                                                "type": "date"
+                                            },
+                                            "licence1ValidTo": {
+                                                "key": "customer.customerLicenceDetails[].licence1ValidTo",
+                                                "title": "LICENCE_VALID_TO",
+                                                "type": "date"
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        },
+                        "additions": [{
+                                "type": "actionbox",
+                                "condition": "!model.customer.currentStage",
+                                "orderNo": 1200,
+                                "items": [{
+                                    "type": "submit",
+                                    "title": "SUBMIT"
+                                }]
+                            },
+                            {
+                                "targetID": "IndividualInformation",
+                                "items": [{
+                                    "key": "customer.centreId",
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "title": "CENTRE_NAME",
+                                    "orderNo": 21,
+                                    "readonly": true
+                                }]
+                            },
+                            {
+                                "type": "actionbox",
+                                "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification1' || model.loanProcess.loanAccount.currentStage=='TeleVerification2')",
+                                "orderNo": 1200,
+                                "items": [{
+                                    "type": "button",
+                                    "title": "UPDATE_ENROLMENT",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)",
+                                    "buttonType": "submit"
+                                }]
+                            }
+                        ]
+                    }
+                }
+            }
+
             function getLoanCustomerRelation(pageClass){
                 switch (pageClass){
                     case 'applicant':
@@ -1077,381 +1536,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Form rendering starts */
                     var self = this;
-                    var formRequest = {
-                        "overrides": overridesFields(model),
-                        "includes": getIncludes(model),
-                        "excludes": [
-                            "KYC.addressProofSameAsIdProof",
-                        ],
-                        "options": {
-                            "repositoryAdditions": {
-                                "ResidenceVerification": {
-                                    "type": "box",
-                                    "title": "RESIDENCE_VERIFICATION",
-                                    "orderNo": 999,
-                                    "items": {
-                                        "location": {
-                                            "key": "customer.latitude",
-                                            "title": "LOCATION",
-                                            "type": "geotag",
-                                            "orderNo": 10,
-                                            "latitude": "customer.latitude",
-                                            "longitude": "customer.longitude",
-                                        },
-                                        "locatingHouse": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf16",
-                                            "title": "LOCATING_HOUSE",
-                                            "type":"select",
-                                            "orderNo": 20,
-                                            "enumCode": "locating_house"
-                                        },
-                                        "distanceFromHouse": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf2",
-                                            "type": "text",
-                                            "orderNo": 30,
-                                            "title": "DISTANCE_FROM_HOUSE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "visibleIndicator": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf3",
-                                            "type": "radios",
-                                            "enumCode": "decisionmaker",
-                                            "orderNo": 40,
-                                            "title": "VISIBLE_INDICATOR",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "commentOnLocality": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf4",
-                                            "type": "text",
-                                            "orderNo": 50,
-                                            "title": "COMMENT_ON_LOCALITY",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "residenceStatus": {
-                                            "key": "customer.ownership",
-                                            "type": "select",
-                                            "enumCode": "residence_status",
-                                            "title": "RESIDENCE_STATUS",
-                                            "orderNo": 60,
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "contactInformationConfirmed": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf5",
-                                            "type": "radios",
-                                            "title": "CONTACT_INFORMATION_CONFIRMED",
-                                            "orderNo": 70,
-                                            "enumCode": "decisionmaker",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "remarks": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf11",
-                                            "condition": "model.customer.udf.userDefinedFieldValues.udf5=='NO'",
-                                            "type": "text",
-                                            "title": "REMARKS",
-                                            "orderNo": 80,
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "stayAtResidence": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf6",
-                                            "type": "select",
-                                            "enumCode":"decisionmaker",
-                                            "orderNo": 90,
-                                            "title": "STAY_AT_RESIDENCE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "noYearsAtResidence": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf10",
-                                            "type": "select",
-                                            "orderNo": 100,
-                                            "enumCode":"years_residence",
-                                            "title": "No_YEARS_AT_RESIDENCE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "namePlate": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf7",
-                                            "type": "select",
-                                            "enumCode":"decisionmaker",
-                                            "title": "NAME_PLATE",
-                                            "orderNo": 110,
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "localityType": {
-                                            "key": "customer.localityType",
-                                            "type": "select",
-                                            "orderNo": 120,
-                                            "enumCode": "locality_type",
-                                            "title": "LOCALITY_TYPE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "typeOfAccomodation": {
-                                            "key": "customer.accomodationType",
-                                            "type": "select",
-                                            "enumCode": "accomodation_type",
-                                            "orderNo": 130,
-                                            "title": "ACCOMODATION_TYPE",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "areaSQFT": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf8",
-                                            "title": "AREA_SQFT",
-                                            "type":"select",
-                                            "orderNo": 140,
-                                            "enumCode":"area_sqft",
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "HouseVerificationPhoto": {
-                                            "key": "customer.houseVerificationPhoto",
-                                            "title": "HOUSE VERIFICATION PHOTO",
-                                            "orderNo": 150,
-                                            "type": "file",
-                                            "fileType": "application/pdf",
-                                            "using": "scanner",
-                                            "onChange": function(){
-                                                console.log("INSIDE ONCHANGE1");
-                                            },
-                                            "viewParams" : function(modelValue, form, model) {
-                                                getLocation().then((pos)=>{
-                                                    console.log("successful");
-                                                    model.customer.latitude = pos.coords.latitude;
-                                                    model.customer.longitude = pos.coords.longitude;
-                                                });
-                                                getLocation().catch((err)=>{
-                                                    console.log(err);
-                                                });
-                                            }
-
-                                            //     "title": "HOUSE_VERIFICATION_PHOTO",
-                                            //     "category": "CustomerEnrollment",
-                                            //     "subCategory": "PHOTO",
-                                            //     "onChange": function(){
-                                            //         console.log("INSIDE ONCHANGE1");
-                                            //     },
-                                            //     "viewParams" : function(modelValue, form, model) {
-                                            //         getLocation().then((pos)=>{
-                                            //             console.log("successful");
-                                            //             model.customer.latitude = pos.coords.latitude;
-                                            //             model.customer.longitude = pos.coords.longitude;
-                                            //         });
-                                            //         getLocation().catch((err)=>{
-                                            //             console.log(err);
-                                            //         });
-                                            //     }
-
-                                        },
-
-                                        "remarksOnBusiness": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf9",
-                                            "title": "REMAKRS_ON_BUISNESS",
-                                            "orderNo": 160,
-                                            "schema": {
-                                                "type": "string"
-                                            }
-                                        },
-                                    }
-                                },
-                                "Liabilities": {
-                                    "items": {
-                                        "liabilities": {
-                                            "items": {
-                                                "udf1": {
-                                                        "title": "VEHICLE_MODEL",
-                                                        "type": "string",
-                                                        "key": "customer.liabilities[].udf1"
-                                                    },
-                                                    "customerLiabilityRepayments" : {
-                                                        "key": "customer.liabilities[].customerLiabilityRepayments",
-                                                        "type": "array",
-                                                        "startEmpty": true,
-                                                        "title": "REPAYMENT_DETAILS",
-                                                        "items": {
-                                                            "emiNo": {
-                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
-                                                                "title": "EMI_NO",
-                                                                "type": "number",
-                                                                "required": true
-                                                            },
-                                                            "emiAmount": {
-                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
-                                                              "title": "EMI_AMOUNT",
-                                                              "type": "number",
-                                                              "required": true
-                                                            },
-                                                            "emiDueDate": {
-                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
-                                                              "title": "EMI_DUE_DATE",
-                                                              "type": "date",
-                                                              "required": true
-                                                            },
-                                                            "actualRepaymentDate": {
-                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
-                                                                "title": "ACTUAL_REPAYMENT_DATE",
-                                                                "type": "date",
-                                                                "required": true
-                                                            }
-                                                        }
-                                                    }
-                                            }
-                                        }
-                                    }
-                                },
-                                "IndividualInformation": {
-                                    "items": {
-                                        "customerCategory": {
-                                            "key": "customer.customerCategory",
-                                            "title": "CUSTOMER_CATEGORY",
-                                            "type": "select",
-                                            "enumCode": "lead_category",
-                                            "orderNo": 85,
-                                            "required":true
-                                        }
-
-                                    }
-                                },
-                                "CustomerDocumentUpload": {
-                                    "type": "box",
-                                    "title": "CUSTOMER_DOCUMENT_UPLOAD",
-                                    "orderNo": 80,
-                                    "items": {
-                                        "customerDocuments": {
-                                            "type": "array",
-                                            "title": "DOCUMENT_UPLOAD",
-                                            "key": "customer.customerDocuments",
-                                            "startEmpty": true,
-                                            "items": {
-                                                "fileType": {
-                                                    "type": "select",
-                                                    "enumCode": "document_file_type",
-                                                    "key": "customer.customerDocuments[].fileType",
-                                                    "title": "DOCUMENT_NAME",
-                                                    "required": true
-                                                },
-                                                "fileId": {
-                                                    "key": "customer.customerDocuments[].fileId",
-                                                    "type": "file",
-                                                    "fileType": "application/pdf",
-                                                    "using": "scanner",
-                                                    "title": "DOCUMENT_UPLOAD",
-                                                    "category": "CustomerEnrollment",
-                                                    "subCategory": "KYC1",
-                                                    "required": true
-                                                },
-                                                "documentDate": {
-                                                    "key": "customer.customerDocuments[].documentDate",
-                                                    "title": "ISSUE_DATE",
-                                                    "type": "date"
-                                                },
-                                                "udfDate1": {
-                                                    "key": "customer.customerDocuments[].udfDate1",
-                                                    "title": "EXPIRY_DATE",
-                                                    "type": "date"
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "CustomerLicenceDetails": {
-                                    "title": "MUTLI_TYPE_LICENCE_CAPTURE",
-                                    "type": "box",
-                                    "orderNo": 85,
-                                    "items": {
-                                        "customerLicenceDetails": {
-                                            "type": "array",
-                                            "title": "MUTLI_TYPE_LICENCE_CAPTURE",
-                                            "startEmpty": true,
-                                            "key": "customer.customerLicenceDetails",
-                                            "items": {
-                                                "licence1Type": {
-                                                    "key": "customer.customerLicenceDetails[].licence1Type",
-                                                    "title": "LICENCE_TYPE",
-                                                    "type": "select",
-                                                    "enumCode": "licence_type",
-                                                    "required": true
-                                                },
-                                                "licence1ValidFrom": {
-                                                      "key": "customer.customerLicenceDetails[].licence1ValidFrom",
-                                                      "title": "LICENCE_VALID_FROM",
-                                                      "type": "date"
-                                                },
-                                                "licence1ValidTo": {
-                                                      "key": "customer.customerLicenceDetails[].licence1ValidTo",
-                                                      "title": "LICENCE_VALID_TO",
-                                                      "type": "date"
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                            },
-                            "additions": [
-                                {
-                                    "type": "actionbox",
-                                    "condition": "!model.customer.currentStage",
-                                    "orderNo": 1200,
-                                    "items": [
-                                        {
-                                            "type": "submit",
-                                            "title": "SUBMIT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "targetID": "IndividualInformation",
-                                    "items":[
-                                        {
-                                            "key": "customer.centreId",
-                                            "type": "select",
-                                            "enumCode": "centre",
-                                            "title": "CENTRE_NAME",
-                                            "orderNo": 21,
-                                            "readonly": true
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal' || model.loanProcess.loanAccount.currentStage=='TeleVerification1' || model.loanProcess.loanAccount.currentStage=='TeleVerification2')",
-                                    "orderNo": 1200,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)",
-                                            "buttonType": "submit"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    };
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
                         })
                         .then(function(form){
                             self.form = form;
@@ -1548,6 +1636,41 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                 },
                 offline: false,
+
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    var self = this;
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (model.pageClass == "applicant" && _.hasIn(model.loanProcess, 'applicantEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.applicantEnrolmentProcess;
+                    } else if ((model.pageClass == "co-applicant") && _.hasIn(model.loanProcess, 'coApplicantsEnrolmentProcesses')) {
+                        var key = _.findIndex(model.loanProcess.coApplicantsEnrolmentProcesses, function (enrolment) {
+                            return enrolment.customer.id = model.customer.id;
+                        });
+                        if (key != -1) {
+                            model.enrolmentProcess = model.loanProcess.coApplicantsEnrolmentProcesses[key];
+                        }
+                    } else if (model.pageClass == "guarantor" && _.hasIn(model.loanProcess, 'guarantorsEnrolmentProcesses')) {
+                        var key = _.findIndex(model.loanProcess.guarantorsEnrolmentProcesses, function (enrolment) {
+                            return enrolment.customer.id = model.customer.id;
+                        });
+                        if (key != -1) {
+                            model.enrolmentProcess = model.loanProcess.guarantorsEnrolmentProcesses[key];
+                        }
+                    }
+
+                    if (_.hasIn(model, 'enrolmentProcess') && _.hasIn(model.enrolmentProcess, 'customer')) {
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function (repo) {
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
+                        })
+                        .then(function (form) {
+                            self.form = form;
+                        });
+                },
+                 
                 getOfflineDisplayItem: function (item, index) {
                     return [
                         item.customer.urnNo,
@@ -1640,7 +1763,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                //BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: value.customer});
                             }, function (err) {
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

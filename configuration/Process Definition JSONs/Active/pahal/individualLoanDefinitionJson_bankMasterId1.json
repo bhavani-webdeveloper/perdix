@@ -11,7 +11,6 @@
       "name": "Screening",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false,
       "riskScoreName": "ScreeningScore",
       "allowedRoles": [
@@ -24,7 +23,6 @@
       "name": "Tele Verification 1",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -33,7 +31,6 @@
       "name": "Field Investigation",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -42,7 +39,6 @@
       "name": "Field Investigation",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -51,7 +47,6 @@
       "name": "Field Investigation",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -60,7 +55,6 @@
       "name": "Go-no-go Approval 1",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -72,7 +66,6 @@
       "name": "Application",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -83,11 +76,11 @@
       "code": "ApplicationReview",
       "name": "ApplicationReview",
       "stageType": "CAPTURE",
-      "sendSms": "Yes",
+      "sendSms": "No",
       "smsCategory": "ApplicationReview",
       "isAccountOpening": false,
       "allowedRoles": [
-        "WM"
+         "WM"
       ]
     },
     {
@@ -95,8 +88,8 @@
       "code": "TeleVerification2",
       "name": "Tele Verification 2",
       "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
+      "sendSms": "Yes",
+      "smsCategory": "ApplicationReview",
       "isAccountOpening": false
     },
     {
@@ -105,7 +98,6 @@
       "name": "Vehicle Valuation",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -114,7 +106,6 @@
       "name": "Credit Appraisal",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false
     },
     {
@@ -122,8 +113,7 @@
       "code": "CreditApproval",
       "name": "Credit Approval",
       "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "LoanBooking",
+      "sendSms": "No",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -134,8 +124,7 @@
       "code": "Rejected",
       "name": "Rejected",
       "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "UponRejection",
+      "sendSms": "No",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -146,8 +135,7 @@
       "code": "LoanInitiation",
       "name": "Loan Input",
       "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "Sanction",
+      "sendSms": "No",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -159,7 +147,6 @@
       "name": "Pending for Partner",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -170,8 +157,8 @@
       "code": "LoanBooking",
       "name": "Loan Booking",
       "stageType": "CAPTURE",
-      "sendSms": "No",
-      "smsCategory": "LoanBooking",
+      "sendSms": "Yes",
+      "smsCategory": "Sanction",
       "isAccountOpening": true,
       "allowedRoles": [
         "WM"
@@ -182,8 +169,7 @@
       "code": "DocumentUpload",
       "name": "Document Download and Upload",
       "stageType": "CAPTURE",
-      "sendSms": "Yes",
-      "smsCategory": "LoanBooking",
+      "sendSms": "No",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -195,7 +181,6 @@
       "name": "Document Verification",
       "stageType": "CAPTURE",
       "sendSms": "No",
-      "smsCategory": "LoanBooking",
       "isAccountOpening": false,
       "allowedRoles": [
         "WM"
@@ -207,7 +192,6 @@
       "name":"Completed",
       "stageType":"CAPTURE",
       "sendSms":"No",
-      "smsCategory":"LoanBooking",
       "isAccountOpening":false,
       "allowedRoles":[
          "WM"
@@ -6630,6 +6614,31 @@
             ]
           },
           "udf7": {
+            "type": "string",
+            "captureStages": [
+               "ScreeningReview",
+                "ApplicationReview",
+                "GoNoGoApproval1",
+                "CreditApproval",
+                "Screening",
+                "Application",
+                "VehicleValuation",
+                "FieldInvestigation1",
+                "FieldInvestigation2",
+                "FieldInvestigation3",
+                "TeleVerification1", 
+                "TeleVerification2",
+                "CreditAppraisal",
+                "LoanInitiation",
+                "PendingForPartner",
+                "LoanBooking",
+                "DocumentUpload",
+                "DocumentVerification",
+                "Completed"
+             ]
+          },
+          "udf8": {
+            "title": "Processing fee type",
             "type": "string",
             "captureStages": [
                "ScreeningReview",

@@ -36,6 +36,10 @@ let config = {
                     {
                         "name": "DefaultCalculatedVehicleDetailsPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "ProcessingFeeInRupees",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -76,6 +80,10 @@ let config = {
                     {
                         "name":"LoanDerivedFieldsUpdate",
                         "arguments": null
+                    },
+                    {
+                        "name": "ProcessingFeeInPaisa",
+                        "arguments": {}
                     }
                 ]
             },
@@ -87,6 +95,10 @@ let config = {
                     },
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
+                        "arguments": {}
+                    },
+                    {
+                        "name": "ProcessingFeeInRupees",
                         "arguments": {}
                     }
                 ],
@@ -125,6 +137,10 @@ let config = {
                     }, {
                         "name": "CustomerEnrolmentCompletedPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "ProcessingFeeInPaisa",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -161,6 +177,10 @@ let config = {
                     {
                         "name": "DefaultVehicleDocumentsPolicy",
                         "arguments": {}
+                    },
+                    {
+                        "name": "ProcessingFeeInRupees",
+                        "arguments": {}
                     }
                 ],
                 "overrides": [
@@ -185,5 +205,4 @@ let config = {
         }
     }
 }
-
 export = config;

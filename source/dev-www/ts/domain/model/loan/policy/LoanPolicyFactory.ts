@@ -25,6 +25,8 @@ import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleD
 import {DefaultIndividualReferencePolicy} from './DefaultIndividualReferencePolicy';
 import {LoanVirtualFieldsPolicy} from './LoanVirtualFieldsPolicy';
 import {VerifyEnrollmentSpokePolicy} from './VerifyEnrollmentSpokePolicy'
+import {ProcessingFeeInRupees} from './ProcessingFeeInRupees';
+import {ProcessingFeeInPaisa} from './ProcessingFeeInPaisa';
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -91,6 +93,10 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new LoanVirtualFieldsPolicy();
             case 'VerifyEnrollmentSpokePolicy':
                 return new VerifyEnrollmentSpokePolicy();
+            case 'ProcessingFeeInRupees':
+                return new ProcessingFeeInRupees();
+                case 'ProcessingFeeInPaisa':
+                    return new ProcessingFeeInPaisa();
             default:
                 return null;
         }

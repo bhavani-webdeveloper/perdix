@@ -68,7 +68,23 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'vehicle-details',
                             minimum: 1,
                             maximum: 1,
-                            order:65
+                            order:70
+                        },
+                        {
+                            pageName: 'loans.individual.screening.CBCheck',
+                            title: 'CB_CHECK',
+                            pageClass: 'cb-check',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 80
+                        }, 
+                        {
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 90
                         },
                         {
                             pageName: 'loans.individual.screening.Review',
@@ -76,7 +92,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-review',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:100
                         }                        
                     ]);
                 },
@@ -158,6 +174,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             PageHelper.hideLoader();
                         })
                             .subscribe(function(loanProcess){
+                            loanProcess.loanAccount.currentStage = 'LoanView';
                             bundleModel.loanProcess = loanProcess;
                             bundleModel.loanProcess.loanAccount.isReadOnly = "Yes";
                                var loanAccount = loanProcess;
@@ -241,49 +258,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
-                                deferred.resolve();
-
-                            });
-
-                    } else {
-                        LoanProcess.createNewProcess()
-                            .subscribe(function(loanProcess){
-                                bundleModel.loanProcess = loanProcess;
-                                loanProcess.loanAccount.currentStage = 'Screening';
-                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
-
-                                    var _leadId = $stateParams.pageData['lead_id'];
-                                    loanProcess.loanAccount.leadId = _leadId;
-
-                                    }
-                                if (loanProcess.applicantEnrolmentProcess){
-                                    $this.bundlePages.push({
-                                        pageClass: "applicant",
-                                        model: {
-                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
-                                }
-
-                                if (loanProcess.loanCustomerEnrolmentProcess) {
-                                    $this.bundlePages.push({
-                                        pageClass: "business",
-                                        model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
-                                }
-
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-request',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
@@ -291,22 +265,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
-
-                                $this.bundlePages.push({
-                                    pageClass: 'vehicle-details',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
 
                                 deferred.resolve();
+
                             });
+
                     }
                     return deferred.promise;
 

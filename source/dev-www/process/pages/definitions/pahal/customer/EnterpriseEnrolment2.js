@@ -481,6 +481,397 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         }
                     }
                 }
+            
+            var formRequest = function (model) {
+                return {
+                    "overrides": {
+                        "CommercialCBCheck": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                        },
+                        "Liabilities": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                        },
+                        "IndividualReferences": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
+                        },
+                        "TrackDetails": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
+                        },
+                        "TangibleNetWorth": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                        },
+                        "BankAccounts.customerBankAccounts.accountNumber": {
+                            "type": "password",
+                            "required": true
+                        },
+                        "BankAccounts.customerBankAccounts.bankStatements": {
+                            startEmpty: true
+                        },
+                        "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                            "type": "string",
+                            "title": "CONFIRMED_ACCOUNT_NUMBER",
+                            "required": true
+                        },
+                        "ContactInformation.locality": {
+                            "readonly": true
+                        },
+                        "ContactInformation.villageName": {
+                            "readonly": true
+                        },
+                        "ContactInformation.district": {
+                            "readonly": true
+                        },
+                        "ContactInformation.state": {
+                            "readonly": true
+                        },
+                        "ContactInformation.pincode": {
+                            fieldType: "number",
+                            resolver: "PincodeLOVConfiguration"
+                        },
+                        "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                            "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                        },
+                        "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                            "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                        },
+                        "EnterpriseInformation.enterpriseCustomerRelations.relationshipType": {
+                            "required": true
+                        },
+                        "EnterpriseInformation": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                        },
+                        "ContactInformation": {
+                            "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
+                        },
+                        "EnterpriseInformation.enterpriseType": {
+                            "title": "ENTERPRISE_TYPE",
+                            "resolver": "SoleProprietorshipBusinessConfiguration"
+                        },
+                        "EnterpriseInformation.centreId": {
+                            "readonly": true
+                        },
+                        "EnterpriseInformation.customerBranchId": {
+                            "readonly": true
+                        },
+                        "BankAccounts": {
+                            "condition": "model.customer.enterprise.enterpriseType == 'Enterprise'"
+                        },
+                        "BankAccounts.customerBankAccounts": {
+                            startEmpty: true
+                        },
+                        "Liabilities.liabilities": {
+                            startEmpty: true
+                        },
+
+                        "Liabilities.liabilities.frequencyOfInstallment": {
+                            "title": "REPAYMENT_FREQUENCY",
+                            "required": true
+                        },
+                        "Liabilities.liabilities.noOfInstalmentPaid": {
+                            "title": "TENURE",
+                            "required": true
+                        },
+                        "Liabilities.liabilities.startDate": {
+                            "title": "LOAN_START_DATE",
+                            "required": true
+                        },
+                        "TrackDetails.vehiclesFree": {
+                            "readonly": true
+                        },
+                        "IndividualReferences.verifications": {
+                            "view": "fixed",
+                            "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
+                            "add": null,
+                            "remove": null
+                        },
+                        "IndividualReferences.verifications.relationship": {
+                            "type": "select",
+                            "enumCode": "reference_type",
+                            "title": "REFERENCE_TYPE",
+                            "orderNo": 10,
+                            "required": true
+                        },
+                        "IndividualReferences.verifications.referenceFirstName": {
+                            "orderNo": 20,
+                            "title": "NAME",
+                            "required": true
+                        },
+                        "IndividualReferences.verifications.mobileNo": {
+                            "orderNo": 30,
+                            "title": "PHONE_NO",
+                            "required": true
+                        },
+                        "IndividualReferences.verifications.knownSince": {
+                            "orderNo": 40
+                        },
+                        "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
+                            "readonly": true
+                        },
+                        "EnterpriseAssets.enterpriseAssets": {
+                            "startEmpty": true
+                        },
+                        "EnterpriseAssets.enterpriseAssets.udf5": {
+                            "orderNo": 10
+                        },
+                        "EnterpriseAssets.enterpriseAssets.endUse": {
+                            "orderNo": 20
+                        },
+                        "EnterpriseAssets.enterpriseAssets.natureOfUse": {
+                            "orderNo": 30
+                        },
+                        "EnterpriseAssets.enterpriseAssets.udf3": {
+                            "orderNo": 40
+                        },
+                        "EnterpriseAssets.enterpriseAssets.udf4": {
+                            "orderNo": 50
+                        },
+                        "EnterpriseAssets.enterpriseAssets.manufacturer": {
+                            "title": "MAKE",
+                            "orderNo": 60
+                        },
+                        "EnterpriseAssets.enterpriseAssets.vehicleMakeModel": {
+                            "orderNo": 70
+                        },
+                        "EnterpriseAssets.enterpriseAssets.yearOfManufacture": {
+                            "orderNo": 80
+                        },
+                        "EnterpriseAssets.enterpriseAssets.udf1": {
+                            "orderNo": 90
+                        },
+                        "EnterpriseAssets.enterpriseAssets.udf2": {
+                            "orderNo": 100
+                        },
+                        "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
+                            "orderNo": 110
+                        },
+                        "EnterpriseInformation.photoImageId": {
+                            "offline": true 
+                        },
+                        "EnterpriseInformation.enterpriseRegistrations.documentId": {
+                            "offline": true 
+                        },
+                        "enterpriseDocuments.enterpriseDocuments.fileId": {
+                            "offline": true 
+                        },
+                        "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                            "offline": true
+                        },
+                        "CommercialCBCheck.enterpriseBureauDetails.fileId": {
+                            "offline": true
+                        }
+                    },
+                    "includes": getIncludes(model),
+                    "excludes": [
+                        "EnterpriseInformation.referredBy",
+                        "EnterpriseInformation.referredName",
+                        "EnterpriseInformation.businessHistory",
+                        "EnterpriseInformation.noOfPartners",
+                        "EnterpriseInformation.anyPartnerOfPresentBusiness",
+                        "EnterpriseInformation.partnershipDissolvedDate",
+                        "EnterpriseInformation.businessType",
+                        "EnterpriseInformation.businessActivity",
+                        "EnterpriseInformation.businessSector",
+                        "EnterpriseInformation.businessSubsector"
+                    ],
+                    "options": {
+                        "repositoryAdditions": {
+                            "Liabilities": {
+                                "items": {
+                                    "liabilities": {
+                                        "items": {
+                                            "udf1": {
+                                                "title": "VEHICLE_MODEL",
+                                                "type": "string",
+                                                "key": "customer.liabilities[].udf1"
+                                            },
+                                            "customerLiabilityRepayments": {
+                                                "key": "customer.liabilities[].customerLiabilityRepayments",
+                                                "type": "array",
+                                                "startEmpty": true,
+                                                "title": "REPAYMENT_DETAILS",
+                                                "items": {
+                                                    "emiNo": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
+                                                        "title": "EMI_NO",
+                                                        "type": "number",
+                                                        "required": true
+                                                    },
+                                                    "emiAmount": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
+                                                        "title": "EMI_AMOUNT",
+                                                        "type": "number",
+                                                        "required": true
+                                                    },
+                                                    "emiDueDate": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
+                                                        "title": "EMI_DUE_DATE",
+                                                        "type": "date",
+                                                        "required": true
+                                                    },
+                                                    "actualRepaymentDate": {
+                                                        "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
+                                                        "title": "ACTUAL_REPAYMENT_DATE",
+                                                        "type": "date",
+                                                        "required": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "EnterpriseInformation": {
+                                "items": {
+                                    "netBusinessIncome": {
+                                        "type": "number",
+                                        "title": "CASH_PROFIT",
+                                        "key": "customer.enterprise.netBusinessIncome"
+                                        // "condition": "model.customer.customerCategory.toLowerCase() == 'captive - retail'"
+                                    }
+                                }
+
+                            },
+                            "CommercialCBCheck": {
+                                "type": "box",
+                                "title": "COMMERCIAL_CB_CHECK",
+                                "orderNo": 25,
+                                "items": {
+                                    "enterpriseBureauDetails": {
+                                        "key": "customer.enterpriseBureauDetails",
+                                        "title": "CB Check",
+                                        "type": "array",
+                                        "add": null,
+                                        "remove": null,
+                                        "view": "fixed",
+                                        "items": {
+                                            "bureau": {
+                                                "key": "customer.enterpriseBureauDetails[].bureau",
+                                                "title": "BUREAU",
+                                                "type": "select",
+                                                "titleMap": {
+                                                    "CIBIL": "CIBIL",
+                                                    "Highmark": "Highmark"
+                                                },
+                                                "required": true
+                                            },
+                                            "fileId": {
+                                                key: "customer.enterpriseBureauDetails[].fileId",
+                                                title: "FILE",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                using: "scanner",
+                                                offline: true,
+                                                "required": true
+                                            },
+                                            "doubtful": {
+                                                key: "customer.enterpriseBureauDetails[].doubtful",
+                                                title: "DOUBTFUL_ACS",
+                                                type: "number"
+                                            },
+                                            "loss": {
+                                                key: "customer.enterpriseBureauDetails[].loss",
+                                                title: "LOSS_ACS",
+                                                type: "number"
+                                            },
+                                            "specialMentionAccount": {
+                                                key: "customer.enterpriseBureauDetails[].specialMentionAccount",
+                                                title: "SPECIAL_MENTION_ACS",
+                                                type: "number"
+                                            },
+                                            "standard": {
+                                                key: "customer.enterpriseBureauDetails[].standard",
+                                                title: "STANDARD_ACS",
+                                                type: "number"
+                                            },
+                                            "subStandard": {
+                                                key: "customer.enterpriseBureauDetails[].subStandard",
+                                                title: "SUB_STANDARD_ACS",
+                                                type: "number"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "EnterpriseAssets": {
+                                "items": {
+                                    "enterpriseAssets": {
+                                        "items": {
+                                            "udf1": {
+                                                "key": "customer.enterpriseAssets[].udf1",
+                                                "type": "select",
+                                                "title": "BODY_TYPE",
+                                                "enumCode": "business_asset_description"
+                                            },
+                                            "udf2": {
+                                                "key": "customer.enterpriseAssets[].udf2",
+                                                "type": "select",
+                                                "title": "SUB_TYPE",
+                                                "enumCode": "business_asset_sub_description",
+                                                "parentEnumCode": "business_asset_description",
+                                                "parentValueExpr": "model.customer.enterpriseAssets[arrayIndexes[0]].udf1"
+                                            },
+                                            "udf3": {
+                                                "key": "customer.enterpriseAssets[].udf3",
+                                                "title": "SEGMENT",
+                                            },
+                                            "udf4": {
+                                                "key": "customer.enterpriseAssets[].udf4",
+                                                "title": "CATEGORY"
+                                            },
+                                            "udf5": {
+                                                "key": "customer.enterpriseAssets[].udf5",
+                                                "type": "select",
+                                                "enumCode": "new_vehicle_category",
+                                                "title": "VEHICLE_TYPE"
+                                            },
+                                            "yearOfManufacture": {
+                                                "title": "MANUFACTURER_YEAR",
+                                                "key": "customer.enterpriseAssets[].yearOfManufacture"
+
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
+                        "additions": [{
+                                "type": "actionbox",
+                                "condition": "!model.customer.currentStage",
+                                "orderNo": 1200,
+                                "items": [{
+                                    "type": "submit",
+                                    "title": "SUBMIT"
+                                }]
+                            },
+                            {
+                                "type": "actionbox",
+                                "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification1'|| model.loanProcess.loanAccount.currentStage=='TeleVerification2' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal')",
+                                "orderNo": 1200,
+                                "items": [{
+                                    "type": "button",
+                                    "title": "UPDATE",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                }]
+                            },
+                            {
+                                "orderNo": 1,
+                                "type": "box",
+                                "title": "BUSINESS_SELECTION",
+                                "items": [{
+                                        "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.applicantEnrolmentProcess.customer.currentStage != 'Completed'",
+                                        "type": "section",
+                                        "htmlClass": "alert alert-warning",
+                                        "html": "<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
+                                        "orderNo": 10
+                                    },
+                                    "EnterpriseInformation.enterpriseType"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            
 
             return {
                 "type": "schema-form",
@@ -505,385 +896,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
                     p1
                     .then(function(repo){
-                        var formRequest = {
-                            "overrides": {
-                                "CommercialCBCheck": {
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
-                                },
-                                "Liabilities": {
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
-                                },
-                                "IndividualReferences":{
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
-                                },
-                                "TrackDetails":{
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise' || model.customer.enterprise.enterpriseType.toLowerCase() == 'sole proprietorship'"
-                                },
-                                "TangibleNetWorth": {
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
-                                },
-                                "BankAccounts.customerBankAccounts.accountNumber": {
-                                    "type": "password",
-                                    "required": true
-                                },
-                                "BankAccounts.customerBankAccounts.bankStatements":{
-                                    startEmpty: true
-                                },
-                                "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
-                                    "type": "string",
-                                    "title": "CONFIRMED_ACCOUNT_NUMBER",
-                                    "required": true
-                                },
-                                "ContactInformation.locality": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.villageName": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.district": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.state": {
-                                    "readonly": true
-                                },
-                                "ContactInformation.pincode": {
-                                     fieldType: "number",
-                                     resolver: "PincodeLOVConfiguration"
-                                },
-                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
-                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
-                                },
-                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
-                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
-                                },
-                                "EnterpriseInformation.enterpriseCustomerRelations.relationshipType": {
-                                    "required": true
-                                },
-                                "EnterpriseInformation": {
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
-                                },
-                                "ContactInformation": {
-                                    "condition": "model.customer.enterprise.enterpriseType=='Enterprise'"
-                                },
-                                "EnterpriseInformation.enterpriseType": {
-                                    "title": "ENTERPRISE_TYPE",
-                                    "resolver": "SoleProprietorshipBusinessConfiguration"
-                                },
-                                "EnterpriseInformation.centreId" : {
-                                    "readonly": true
-                                },
-                                "EnterpriseInformation.customerBranchId" :{
-                                    "readonly": true
-                                },
-                                "BankAccounts": {
-                                    "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
-                                },
-                                "BankAccounts.customerBankAccounts": {
-                                    startEmpty: true
-                                },
-                                "Liabilities.liabilities": {
-                                    startEmpty: true
-                                },
-
-                                "Liabilities.liabilities.frequencyOfInstallment": {
-                                    "title": "REPAYMENT_FREQUENCY",
-                                    "required": true
-                                },
-                                "Liabilities.liabilities.noOfInstalmentPaid": {
-                                    "title": "TENURE",
-                                    "required": true
-                                },
-                                "Liabilities.liabilities.startDate": {
-                                    "title": "LOAN_START_DATE",
-                                    "required": true
-                                },
-                                "TrackDetails.vehiclesFree": {
-                                    "readonly": true
-                                },
-                                "IndividualReferences.verifications": {
-                                    "view":"fixed",
-                                    "titleExpr": "model.customer.verifications[arrayIndexes[0]].relationship",
-                                    "add": null,
-                                    "remove": null
-                                },
-                                "IndividualReferences.verifications.relationship": {
-                                    "type": "select",
-                                    "enumCode": "reference_type",
-                                    "title": "REFERENCE_TYPE",
-                                    "orderNo": 10,
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.referenceFirstName": {
-                                    "orderNo": 20,
-                                    "title": "NAME",
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.mobileNo": {
-                                    "orderNo": 30,
-                                    "title": "PHONE_NO",
-                                    "required": true
-                                },
-                                "IndividualReferences.verifications.knownSince": {
-                                    "orderNo": 40
-                                },
-                                "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName" :{
-                                    "readonly": true
-                                },
-                                "EnterpriseAssets.enterpriseAssets": {
-                                    "startEmpty": true
-                                },
-                                "EnterpriseAssets.enterpriseAssets.udf5": {
-                                    "orderNo": 10
-                                },
-                                "EnterpriseAssets.enterpriseAssets.endUse" : {
-                                    "orderNo": 20
-                                },
-                                "EnterpriseAssets.enterpriseAssets.natureOfUse": {
-                                    "orderNo": 30
-                                },
-                                "EnterpriseAssets.enterpriseAssets.udf3": {
-                                    "orderNo": 40
-                                },
-                                "EnterpriseAssets.enterpriseAssets.udf4": {
-                                    "orderNo": 50
-                                },
-                                "EnterpriseAssets.enterpriseAssets.manufacturer": {
-                                    "title": "MAKE",
-                                    "orderNo": 60
-                                },
-                                "EnterpriseAssets.enterpriseAssets.vehicleMakeModel": {
-                                    "orderNo": 70
-                                },
-                                "EnterpriseAssets.enterpriseAssets.yearOfManufacture": {
-                                    "orderNo": 80
-                                },
-                                "EnterpriseAssets.enterpriseAssets.udf1": {
-                                    "orderNo": 90
-                                },
-                                "EnterpriseAssets.enterpriseAssets.udf2": {
-                                    "orderNo": 100
-                                },
-                                "EnterpriseAssets.enterpriseAssets.valueOfAsset": {
-                                    "orderNo": 110
-                                }
-                            },
-                            "includes": getIncludes(model),
-                            "excludes": [
-                                "EnterpriseInformation.referredBy",
-                                "EnterpriseInformation.referredName",
-                                "EnterpriseInformation.businessHistory",
-                                "EnterpriseInformation.noOfPartners",
-                                "EnterpriseInformation.anyPartnerOfPresentBusiness",
-                                "EnterpriseInformation.partnershipDissolvedDate",
-                                "EnterpriseInformation.businessType",
-                                "EnterpriseInformation.businessActivity",
-                                "EnterpriseInformation.businessSector",
-                                "EnterpriseInformation.businessSubsector"
-                            ],
-                            "options": {
-                                "repositoryAdditions": {
-                                    "Liabilities": {
-                                        "items": {
-                                            "liabilities": {
-                                                "items": {
-                                                    "udf1": {
-                                                        "title": "VEHICLE_MODEL",
-                                                        "type": "string",
-                                                        "key": "customer.liabilities[].udf1"
-                                                    },
-                                                    "customerLiabilityRepayments" : {
-                                                        "key": "customer.liabilities[].customerLiabilityRepayments",
-                                                        "type": "array",
-                                                        "startEmpty": true,
-                                                        "title": "REPAYMENT_DETAILS",
-                                                        "items": {
-                                                            "emiNo": {
-                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].emiNo",
-                                                                "title": "EMI_NO",
-                                                                "type": "number",
-                                                                "required": true
-                                                            },
-                                                            "emiAmount": {
-                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiAmount",
-                                                              "title": "EMI_AMOUNT",
-                                                              "type": "number",
-                                                              "required": true
-                                                            },
-                                                            "emiDueDate": {
-                                                              "key": "customer.liabilities[].customerLiabilityRepayments[].emiDueDate",
-                                                              "title": "EMI_DUE_DATE",
-                                                              "type": "date",
-                                                              "required": true
-                                                            },
-                                                            "actualRepaymentDate": {
-                                                                "key": "customer.liabilities[].customerLiabilityRepayments[].actualRepaymentDate",
-                                                                "title": "ACTUAL_REPAYMENT_DATE",
-                                                                "type": "date",
-                                                                "required": true
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "EnterpriseInformation": {
-                                        "items": {
-                                            "netBusinessIncome": {
-                                                "type": "number",
-                                                "title": "CASH_PROFIT",
-                                                "key": "customer.enterprise.netBusinessIncome"
-                                                // "condition": "model.customer.customerCategory.toLowerCase() == 'captive - retail'"
-                                            }
-                                        }
-
-                                    },
-                                    "CommercialCBCheck": {
-                                        "type": "box",
-                                        "title": "COMMERCIAL_CB_CHECK",
-                                        "orderNo": 25,
-                                        "items": {
-                                        "enterpriseBureauDetails" : {
-                                            "key": "customer.enterpriseBureauDetails",
-                                            "title":"CB Check",
-                                            "type": "array",
-                                            "add": null,
-                                            "remove": null,
-                                            "view": "fixed",
-                                            "items": {
-                                                "bureau" : {
-                                                    "key":"customer.enterpriseBureauDetails[].bureau",
-                                                    "title":"BUREAU",
-                                                    "type":"select",
-                                                    "titleMap": {
-                                                          "CIBIL": "CIBIL",
-                                                          "Highmark": "Highmark"
-                                                    },
-                                                    "required": true   
-                                                },
-                                                "fileId": {
-                                                      key:"customer.enterpriseBureauDetails[].fileId",
-                                                      title:"FILE",
-                                                      type:"file",
-                                                      fileType:"application/pdf",
-                                                      using: "scanner",
-                                                      offline:true,
-                                                      "required": true
-                                                },
-                                                "doubtful": {
-                                                    key:"customer.enterpriseBureauDetails[].doubtful",
-                                                    title:"DOUBTFUL_ACS",
-                                                    type:"number"
-                                                },
-                                                "loss": {
-                                                    key:"customer.enterpriseBureauDetails[].loss",
-                                                    title:"LOSS_ACS",
-                                                    type:"number"
-                                                },
-                                                "specialMentionAccount": {
-                                                    key:"customer.enterpriseBureauDetails[].specialMentionAccount",
-                                                    title:"SPECIAL_MENTION_ACS",
-                                                    type:"number"
-                                                },
-                                                "standard": {
-                                                    key:"customer.enterpriseBureauDetails[].standard",
-                                                    title:"STANDARD_ACS",
-                                                    type:"number"
-                                                },
-                                                "subStandard": {
-                                                    key:"customer.enterpriseBureauDetails[].subStandard",
-                                                    title:"SUB_STANDARD_ACS",
-                                                    type:"number"
-                                                }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "EnterpriseAssets": {
-                                        "items": {
-                                            "enterpriseAssets": {
-                                                "items": {
-                                                    "udf1": {
-                                                        "key": "customer.enterpriseAssets[].udf1",
-                                                        "type": "select",
-                                                        "title": "BODY_TYPE",
-                                                        "enumCode": "business_asset_description"
-                                                    },
-                                                    "udf2": {
-                                                        "key": "customer.enterpriseAssets[].udf2",
-                                                        "type": "select",
-                                                        "title": "SUB_TYPE",
-                                                        "enumCode": "business_asset_sub_description",
-                                                        "parentEnumCode": "business_asset_description",
-                                                        "parentValueExpr": "model.customer.enterpriseAssets[arrayIndexes[0]].udf1"  
-                                                    },
-                                                    "udf3": {
-                                                        "key": "customer.enterpriseAssets[].udf3",
-                                                        "title": "SEGMENT",
-                                                    },
-                                                    "udf4": {
-                                                          "key": "customer.enterpriseAssets[].udf4",
-                                                          "title": "CATEGORY"  
-                                                    },
-                                                    "udf5": {
-                                                        "key": "customer.enterpriseAssets[].udf5",
-                                                        "type": "select",
-                                                        "enumCode": "new_vehicle_category",
-                                                        "title": "VEHICLE_TYPE"
-                                                    },
-                                                    "yearOfManufacture": {
-                                                        "title": "MANUFACTURER_YEAR",
-                                                        "key": "customer.enterpriseAssets[].yearOfManufacture"
-
-                                                    }
-                                                },               
-                                            }
-                                        }
-                                    }
-                                },
-                                "additions": [
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "!model.customer.currentStage",
-                                        "orderNo": 1200,
-                                        "items": [
-                                            {
-                                                "type": "submit",
-                                                "title": "SUBMIT"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.loanProcess.loanAccount.currentStage=='Screening' || model.loanProcess.loanAccount.currentStage=='Application' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation1' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation2' || model.loanProcess.loanAccount.currentStage=='FieldInvestigation3' || model.loanProcess.loanAccount.currentStage=='TeleVerification1'|| model.loanProcess.loanAccount.currentStage=='TeleVerification2' || model.loanProcess.loanAccount.currentStage=='CreditAppraisal')",
-                                        "orderNo": 1200,
-                                        "items": [
-                                            {
-                                                "type": "button",
-                                                "title": "UPDATE",
-                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "orderNo": 1,   
-                                        "type": "box",
-                                        "title": "BUSINESS_SELECTION",
-                                        "items":[
-                                            {
-                                                "condition": "model.loanProcess.applicantEnrolmentProcess.customer.id == null || model.loanProcess.applicantEnrolmentProcess.customer.currentStage != 'Completed'",
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Applicant not yet enrolled.</h4> Kindly save Applicant details.",
-                                                "orderNo": 10
-                                            },
-                                            "EnterpriseInformation.enterpriseType"
-                                        ]
-                                    }
-                                ]
-                            }
-                        };
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model);
                     })
                     .then(function(form){
                         self.form = form;
@@ -891,6 +904,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     
                 },
                 offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanCustomerEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
+                    })
+                },
                 getOfflineDisplayItem: function(item, index){
                     return [
                         item.customer.firstName,

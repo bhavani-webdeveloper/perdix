@@ -6,7 +6,6 @@
          "name":"M.T Disbursement",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -20,7 +19,6 @@
          "name":"M.T Disbursement",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -34,7 +32,6 @@
          "name":"FRO APPROVAL",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -48,7 +45,6 @@
          "name":"CRO APPROVAL",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -62,7 +58,6 @@
          "name":"Multi Tranche Booking",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -76,7 +71,6 @@
          "name":"Doc Generation and Upload",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "WM"
          ],
@@ -90,7 +84,6 @@
          "name":"Doc Verification",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"Disbursed",
          "allowedRoles":[
             "APPROVER"
          ],
@@ -104,7 +97,6 @@
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
          "sendSms":"No",
-         "smsCategory":"SentForDisbursement",
          "allowedRoles":[
             "WM"
          ],
@@ -118,7 +110,6 @@
          "name":"Rejected Disbursement",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"RejectedDisbursement",
          "allowedRoles":[
             "WM"
          ],
@@ -132,7 +123,7 @@
          "name":"Disbursement Confirmation",
          "stageType":"DISBURSEMENTCONFIRMATION",
          "sendSms":"Yes",
-         "smsCategory":"Disbursed",
+         "smsCategory": "Disbursed",
          "documentTrackingRequired":"Yes",
          "allowedRoles":[
             "WM"
@@ -147,7 +138,6 @@
         "name": "Disbursement Document Upload",
         "stageType": "CAPTURE",
         "sendSms": "No",
-        "smsCategory": "Disbursed",
         "isAccountOpening": false,
         "allowedRoles": [
           "WM"

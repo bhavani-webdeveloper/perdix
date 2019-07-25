@@ -55,14 +55,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     pageInit();
-
+                    
+                    model.pageConfig = {
+                        ShowPayerInfo: false,
+                        repaymentDateIsReadonly: false
+                    };
                     PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
                     .then(function(data){
-                        // defaulting
-                        var defaultConfig = {
-                            ShowPayerInfo: false
-                        };
-                        _.defaults(data, defaultConfig);
+                        _.defaults(data, model.pageConfig);
                         model.pageConfig = data;
                         // if (typeof data.conditionConfig != undefined){
                         //     titleMapConfig(data.conditionConfig,model);
@@ -594,10 +594,21 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition:"model.repayment.chequeNumber"
                             },
                             {
+                                condition: "model.pageConfig.repaymentDateIsReadonly == true",
+                                key: "repayment.repaymentDate",
+                                type: "date",
+                                readonly: true
+                            },
+                            {
+                                condition: "model.pageConfig.repaymentDateIsReadonly == false",
                                 key: "repayment.repaymentDate",
                                 type: "date"
                             },
-                            "repayment.cashCollectionRemark",
+                            {
+                                "key": "repayment.cashCollectionRemark",
+                                "type": "string",
+                                "required": true
+                            },
                             {
                                 "type": "fieldset",
                                 "title": "Fingerprint",
@@ -1212,6 +1223,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     postData.loanCollection.payeeMobileNumber = model.repayment.payeeMobileNumber;
                                     postData.loanCollection.payeeRelationToApplicant = model.repayment.payeeRelationToApplicant;
                                     postData.loanCollection.bookedNotDuePenalInterest=model.repayment.bookedNotDuePenalInterest;
+                                    postData.loanCollection.cashCollectionRemarks = model.repayment.cashCollectionRemark;
 
                                     if (model.repayment.id) {
                                         postData.loanCollection.feeAmount = 0;

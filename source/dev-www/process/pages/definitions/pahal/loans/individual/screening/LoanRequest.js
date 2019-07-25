@@ -156,7 +156,7 @@ define([], function() {
                             frequencyFactor = 4;
                             break;
                         case 'H':
-                        case 'Half Yearly':
+                        case 'HalfYearly':
                             frequencyFactor = 2;
                             break;
                         case 'W':
@@ -303,7 +303,6 @@ define([], function() {
                         },
                         "TeleVerification2": {
                             "excludes": [
-                                "FieldInvestigationDetails",
                                 "LoanRecommendation.commercialCibilCharge"
                             ],
                             "overrides": {
@@ -339,6 +338,31 @@ define([], function() {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
                                 "LoanRecommendation.commercialCibilCharge"
+                            ],
+                            "overrides": {
+                                "TeleVerification": {
+                                    "readonly": true
+                                },
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
+                                },
+                                "PayerDetails": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "DeviationApproval": {
+                            "excludes": [
+                                "PreliminaryInformation.calculateEmi"
                             ],
                             "overrides": {
                                 "TeleVerification": {
@@ -413,6 +437,9 @@ define([], function() {
                                 },
                                 "PayerDetails": {
                                     "readonly": true
+                                },
+                                "LoanRecommendation": {
+                                    "readOnly": true
                                 }
                             }
                         }
@@ -452,6 +479,8 @@ define([], function() {
                     "DeductionsFromLoan.fee4",
                     // "DeductionsFromLoan.expectedPortfolioInsurancePremium",
                     "DeductionsFromLoan.dealIrr",
+                    "DeductionsFromLoan.processingFeeType",
+                    "DeductionsFromLoan.processingFeeInPaisa",
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
@@ -470,6 +499,8 @@ define([], function() {
                     "LoanRecommendation.commercialCibilCharge",
                     "LoanRecommendation.calculateNominalRate",
                     "LoanRecommendation.udf6",
+                    "LoanRecommendation.processingFeeType",
+                    "LoanRecommendation.processingFeeInPaisa",
                     "TeleVerification",
                     "TeleVerification.verifications",
                     "TeleVerification.verifications.personContacted",
@@ -511,6 +542,509 @@ define([], function() {
 
             }
 
+            var formRequest = function (model) {
+                return {
+                    "overrides": {
+                        "PreliminaryInformation.productCategory": {
+                            "orderNo": 45
+                        },
+                        "PreliminaryInformation.expectedInterestRate": {
+                            "title": "NOMINAL_RATE",
+                            "readonly": true
+                        },
+                        "TeleVerification.verifications.personContacted": {
+                            "required": true
+                        },
+                        "TeleVerification.verifications.personContacted": {
+                            "required": true
+                        },
+                        "LoanRecommendation.interestRate": {
+                            "title": "NOMINAL_RATE",
+                            "readonly": true
+                        },
+                        "LoanRecommendation.tenure": {
+                            onChange: function (modelValue, form, model) {
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                            }
+                        },
+                        "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
+                            "required": true
+                        },
+                        "VehicleExpensesInformation.VehicleExpenses.expenseAmount": {
+                            "required": true
+                        },
+
+                        "DeductionsFromLoan.estimatedEmi": {
+                            "readonly": true,
+                            "condition": "model.loanAccount.securityEmiRequired == 'YES'"
+                        },
+                        "PreliminaryInformation.loanAmountRequested": {
+                            onChange: function (modelValue, form, model) {
+                                model.loanAccount.estimatedEmi = null;
+                            }
+                        },
+                        "PreliminaryInformation.estimatedEmi": {
+                            "required": true,
+                            "readonly": true
+                        },
+                        "PreliminaryInformation.frequencyRequested": {
+                            "required": true,
+                            onChange: function (modelValue, form, model) {
+                                model.loanAccount.estimatedEmi = null;
+                                model.loanAccount.expectedInterestRate = null;
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                            }
+                        },
+                        "PreliminaryInformation.udf5": {
+                            "required": true,
+                            onChange: function (modelValue, form, model) {
+                                model.loanAccount.estimatedEmi = null;
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                model.loanAccount.expectedInterestRate = null;
+                            }
+                        },
+                        "PreliminaryInformation.tenureRequested": {
+                            "required": true,
+                            onChange: function (modelValue, form, model) {
+                                model.loanAccount.estimatedEmi = null;
+                                model.loanAccount.expectedInterestRate = null;
+                            }
+                        },
+                        "LoanDocuments.loanDocuments.documentId": {
+                            "offline": true
+                        },
+                        "actionbox.save": {
+                            "buttonType": "submit"
+                        },
+                        "DeductionsFromLoan.expectedProcessingFeePercentage": {
+                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8 == 'Percentage'",
+                            "required": true
+                        },
+                        "LoanRecommendation.processingFeePercentage": {
+                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8 == 'Percentage'",
+                            "required": true
+                        }
+                    },
+                    "includes": getIncludes(model),
+                    "excludes": [
+                        ""
+                    ],
+                    "options": {
+                        "repositoryAdditions": {
+                            "PreliminaryInformation": {
+                                "items": {
+                                    "parentLoanAccount": {
+                                        "key": "loanAccount.parentLoanAccount",
+                                        "title": "PARENT_LOAN_ACCOUNT",
+                                        "orderNo": 45,
+                                        "condition": "model.loanAccount.loanPurpose1 == 'Insurance Loan'"
+                                    },
+                                    "udf5": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
+                                        "title": "FLAT_RATE",
+                                        "type": "string",
+                                        "orderNo": 75
+                                    },
+                                    "productCategory": {
+                                        "key": "loanAccount.productCategory",
+                                        "title": "PRODUCT_TYPE",
+                                        "enumCode": "loan_product_category",
+                                        "type": "select",
+                                        "required": true
+                                    },
+                                    "calculateEmi": {
+                                        "title": "CALCULATE_EMI",
+                                        "type": "button",
+                                        "onClick": function (model, formCtrl) {
+                                            try {
+                                                var obj = calculateNominalRate(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
+                                                model.loanAccount.expectedInterestRate = obj.nominalRate;
+                                                model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                            } catch (e) {
+                                                console.log(e);
+                                                PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
+                                            }
+
+                                        }
+                                    }
+                                }
+                            },
+
+                            "DeductionsFromLoan": {
+                                "items": {
+                                    "dsaPayout": {
+                                        "key": "loanAccount.dsaPayout",
+                                        "type": "number",
+                                        "title": "DSA_PAYOUT_IN_PERCENTAGE",
+                                        "orderNo": 30
+                                    },
+                                    "fee3": {
+                                        "key": "loanAccount.fee3",
+                                        "title": "HOSPI_CASH_INSURANCE",
+                                        "orderNo": 40
+                                    },
+                                    "expectedPortfolioInsurancePremium": {
+                                        "key": "loanAccount.expectedPortfolioInsurancePremium",
+                                        "title": "LOAN_PROTECTION_INSURANCE",
+                                        "orderNo": 50
+                                    },
+                                    "fee4": {
+                                        "key": "loanAccount.fee4",
+                                        "title": "VEHICLE_INSURANCE",
+                                        "orderNo": 60
+                                    },
+                                    "OtherFee": {
+                                        "key": "loanAccount.fee5",
+                                        "title": "OTHER_DEDUCTIONS",
+                                        "orderNo": 65
+                                    },
+                                    "dealIrr": {
+                                        "key": "loanAccount.dealIrr",
+                                        "title": "XIRR",
+                                        "type": "number",
+                                        "orderNo": 110,
+                                        "readonly": true
+                                    },
+                                    "calculateDisbursedAmount": {
+                                        "type": "button",
+                                        "title": "CALCULATE_XIRR",
+                                        "orderNo": 90,
+                                        onClick: function (model, formCtrl) {
+                                            if (model.loanAccount.estimatedEmi == null) {
+                                                PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 5000);
+                                            } else {
+                                                var processFee;
+                                                var dsaPayout;
+                                                var frequency;
+                                                var frequencyRequested;
+                                                var advanceEmi = model.loanAccount.estimatedEmi;
+                                                processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
+                                                dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
+                                                frankingCharge = model.loanAccount.fee3;
+                                                model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
+                                                switch (model.loanAccount.frequencyRequested) {
+                                                    case 'Monthly':
+                                                        frequency = "MONTH";
+                                                        break;
+                                                    case 'Weekly':
+                                                        frequency = "WEEK";
+                                                        break;
+                                                    case 'Yearly':
+                                                        frequency = "YEAR";
+                                                        break;
+                                                    case 'Fortnightly':
+                                                        frequency = "FORTNIGHT";
+                                                        break;
+                                                    case 'Quarterly':
+                                                        frequency = "QUARTER";
+                                                        break;
+                                                    case 'Daily':
+                                                        frequency = "DAY";
+                                                        break;
+                                                }
+                                                switch (model.loanAccount.frequencyRequested) {
+                                                    case 'Daily':
+                                                        frequencyRequested = 1;
+                                                        break;
+                                                    case 'Fortnightly':
+                                                        frequencyRequested = 15;
+                                                        break;
+                                                    case 'Monthly':
+                                                        frequencyRequested = 30;
+                                                        break;
+                                                    case 'Quarterly':
+                                                        frequencyRequested = 120;
+                                                        break;
+                                                    case 'Weekly':
+                                                        frequencyRequested = 7;
+                                                        break;
+                                                    case 'Yearly':
+                                                        frequencyRequested = 365;
+                                                }
+
+                                                LoanProcess.findPreOpenSummary({
+                                                        "loanAmount": model.loanAccount.loanAmountRequested,
+                                                        "tenure": model.loanAccount.tenureRequested,
+                                                        "frequency": frequency,
+                                                        "normalInterestRate": model.loanAccount.expectedInterestRate,
+                                                        "productCode": "IRRTP",
+                                                        "moratoriumPeriod": "0",
+                                                        "openDate": Utils.getCurrentDate(),
+                                                        "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
+                                                        "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
+                                                        "scheduledDisbursementDate": Utils.getCurrentDate(),
+                                                        "scheduledDisbursementAmount": model.netDisbursementAmount
+                                                    })
+                                                    .$promise
+                                                    .then(function (resp) {
+                                                        $log.info(resp);
+                                                        model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                    });
+                                            }
+                                        }
+                                    },
+                                    "securityEmiRequired": {
+                                        "key": "loanAccount.securityEmiRequired",
+                                        "title": "ADVANCE_EMI",
+                                        "type": "radios",
+                                        "orderNo": 70
+                                    },
+                                    "processingFeeType": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                                        "title": "PROCESSING_FEE_TYPE",
+                                        "type": "radios",
+                                        "required": true,
+                                        "titleMap": {
+                                            "Percentage": "Percentage",
+                                            "Flat Amount": "Flat Amount"
+                                        },
+                                        "onChange": function (modelValue, form, model) {
+                                            model.loanAccount.expectedProcessingFeePercentage = null;
+                                            model.loanAccount.processingFeeInPaisa = null;
+                                        },
+                                        "orderNo": 5
+                                    },
+                                    "processingFeeInPaisa": {
+                                        "key": "loanAccount.processingFeeInPaisa",
+                                        "title": "PROCESSING_FEE_AMOUNT",
+                                        "type": "amount",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8 == 'Flat Amount'",
+                                        "required": true,
+                                        "orderNo": 10
+                                    }
+                                }
+                            },
+                            "LoanRecommendation": {
+                                "items": {
+                                    "udf6": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                        "title": "FLAT_RATE",
+                                        "type": "string",
+                                        "required": true,
+                                        "orderNo": 25
+                                    },
+                                    "calculateNominalRate": {
+                                        "title": "CALCULATE_NOMINAL_RATE",
+                                        "type": "button",
+                                        onClick: function (model, formCtrl) {
+                                            try {
+                                                var obj = calculateNominalRate(model.loanAccount.loanAmount,
+                                                    model.loanAccount.frequency,
+                                                    model.loanAccount.tenure,
+                                                    parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
+                                                model.loanAccount.interestRate = obj.nominalRate;
+                                                model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                            } catch (e) {
+                                                console.log(e);
+                                                PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
+                                            }
+                                        }
+                                    },
+                                    "processingFeeType": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                                        "title": "PROCESSING_FEE_TYPE",
+                                        "type": "radios",
+                                        "required": true,
+                                        "titleMap": {
+                                            "Percentage": "Percentage",
+                                            "Flat Amount": "Flat Amount"
+                                        },
+                                        "onChange": function (modelValue, form, model) {
+                                            model.loanAccount.processingFeePercentage = null;
+                                            model.loanAccount.processingFeeInPaisa = null;
+                                        },
+                                        "orderNo": 35
+                                    },
+                                    "processingFeeInPaisa": {
+                                        "key": "loanAccount.processingFeeInPaisa",
+                                        "title": "PROCESSING_FEE_AMOUNT",
+                                        "type": "amount",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8 == 'Flat Amount'",
+                                        "required": true,
+                                        "orderNo": 40
+                                    }
+                                }
+                            },
+
+                            "FieldInvestigationDetails": {
+                                "type": "box",
+                                "orderNo": 300,
+                                "title": "FIELD_INVESTIGATION_DETAILS",
+                                "items": {
+                                    "fieldInvestigationDecision": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2",
+                                        "type": "select",
+                                        "title": "FI_DECISION",
+                                        "enumCode": "fi_decision"
+                                    },
+                                    "fieldInvestigationReason": {
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                                        "type": "select",
+                                        "title": "FI_REASON",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Refer to Credit'",
+                                        "enumCode": "fi_reason",
+                                        "parentEnumCode": "fi_decision",
+                                        "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2"
+                                    }
+                                }
+                            },
+                            "PostReview": {
+                                "type": "box",
+                                "orderNo": 999,
+                                "title": "POST_REVIEW",
+                                "condition": "model.loanAccount.id",
+                                "items": {
+                                    "options": {
+                                        key: "review.action",
+                                        type: "radios",
+                                        titleMap: {
+                                            "REJECT": "REJECT",
+                                            "SEND_BACK": "SEND_BACK",
+                                            "PROCEED": "PROCEED",
+                                            "HOLD": "HOLD"
+                                        }
+                                    },
+                                    "proceed": {
+                                        type: "section",
+                                        condition: "model.review.action=='PROCEED'",
+                                        items: {
+                                            "remarks": {
+                                                title: "REMARKS",
+                                                key: "loanProcess.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            "valuator": {
+                                                "title": "VALUATOR",
+                                                "key": "loanAccount.valuator",
+                                                "type": "select",
+                                                "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
+                                                "titleMap": {
+                                                    "test": "test"
+                                                }
+                                            },
+                                            "proceedButton": {
+                                                key: "review.proceedButton",
+                                                type: "button",
+                                                title: "PROCEED",
+                                                buttonType: "submit",
+                                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                                            }
+                                        }
+                                    },
+                                    "sendBack": {
+                                        type: "section",
+                                        condition: "model.review.action=='SEND_BACK'",
+                                        items: {
+                                            "remarks": {
+                                                title: "REMARKS",
+                                                key: "loanProcess.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            "stage": {
+                                                key: "loanProcess.stage",
+                                                "required": true,
+                                                type: "lov",
+                                                autolov: true,
+                                                lovonly: true,
+                                                title: "SEND_BACK_TO_STAGE",
+                                                bindMap: {},
+                                                searchHelper: formHelper,
+                                                search: function (inputModel, form, model, context) {
+                                                    var stage1 = model.loanProcess.loanAccount.currentStage;
+                                                    var targetstage = formHelper.enum('targetstage').data;
+                                                    var out = [];
+                                                    for (var i = 0; i < targetstage.length; i++) {
+                                                        var t = targetstage[i];
+                                                        if (t.field1.toUpperCase() == stage1.toUpperCase()) {
+                                                            out.push({
+                                                                name: getStageNameByStageCode(t.name),
+                                                                value: t.code
+                                                            })
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function (valueObj, model, context) {
+                                                    model.review.targetStage1 = valueObj.name;
+                                                    model.loanProcess.stage = valueObj.value;
+
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            },
+                                            "sendBackButton": {
+                                                key: "review.sendBackButton",
+                                                type: "button",
+                                                title: "SEND_BACK",
+                                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                                            }
+                                        }
+                                    },
+                                    "reject": {
+                                        type: "section",
+                                        condition: "model.review.action=='REJECT'",
+                                        items: {
+                                            "remarks": {
+                                                title: "REMARKS",
+                                                key: "loanProcess.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            "rejectReason": {
+                                                title: "REJECT_REASON",
+                                                fieldType: "string",
+                                                key: "loanAccount.rejectReason",
+                                                "type": "lov",
+                                                "autolov": true,
+                                                "resolver": "RejectReasonLOVConfiguration"
+                                            },
+                                            "rejectButton": {
+                                                key: "review.rejectButton",
+                                                type: "button",
+                                                title: "REJECT",
+                                                required: true,
+                                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                                            }
+                                        }
+                                    },
+                                    "hold": {
+                                        type: "section",
+                                        condition: "model.review.action=='HOLD'",
+                                        items: {
+                                            "remarks": {
+                                                title: "REMARKS",
+                                                key: "review.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            "holdButton": {
+                                                key: "review.holdButton",
+                                                type: "button",
+                                                title: "HOLD",
+                                                required: true,
+                                                onClick: "actions.holdAction(model, formCtrl, form, $event)"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+           
+
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
@@ -535,447 +1069,10 @@ define([], function() {
                     // model.loanAccount.accountUserDefinedFields = model.loanAccount.accountUserDefinedFields || {};
 
                     var self = this;
-                    var formRequest = {
-                        "overrides": {
-                            "PreliminaryInformation.productCategory": {
-                                "orderNo": 45
-                            },
-                            "PreliminaryInformation.expectedInterestRate": {
-                                "title": "NOMINAL_RATE",
-                                "readonly": true
-                            },
-                            "TeleVerification.verifications.personContacted": {
-                                "required": true
-                            },
-                            "TeleVerification.verifications.personContacted": {
-                                "required": true
-                            },
-                            "LoanRecommendation.interestRate": {
-                                "title": "NOMINAL_RATE",
-                                "readonly": true
-                            },
-                            "LoanRecommendation.tenure": {
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                }
-                            },
-                            "VehicleLoanIncomesInformation.VehicleLoanIncomes.incomeAmount": {
-                                "required": true
-                            },
-                            "VehicleExpensesInformation.VehicleExpenses.expenseAmount": {
-                                "required": true
-                            },
-
-                            "DeductionsFromLoan.estimatedEmi": {
-                                "readonly": true,
-                                "condition": "model.loanAccount.securityEmiRequired == 'YES'"
-                            },
-                            "PreliminaryInformation.loanAmountRequested": {
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.estimatedEmi = null;
-                                }
-                            },
-                            "PreliminaryInformation.estimatedEmi": {
-                                "required": true,
-                                "readonly": true
-                            },
-                            "PreliminaryInformation.frequencyRequested": {
-                                "required": true,
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.expectedInterestRate = null;
-                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                }
-                            },
-                            "PreliminaryInformation.udf5": {
-                                "required": true,
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                    model.loanAccount.expectedInterestRate = null;
-                                }
-                            },
-                            "PreliminaryInformation.tenureRequested": {
-                                "required": true,
-                                onChange: function(modelValue, form, model) {
-                                    model.loanAccount.estimatedEmi = null;
-                                    model.loanAccount.expectedInterestRate = null;
-                                }
-                            }
-                        },
-                        "includes": getIncludes(model),
-                        "excludes": [
-                            ""
-                        ],
-                        "options": {
-                            "repositoryAdditions": {
-                                "PreliminaryInformation": {
-                                    "items": {
-                                        "parentLoanAccount": {
-                                            "key": "loanAccount.parentLoanAccount",
-                                            "title": "PARENT_LOAN_ACCOUNT",
-                                            "orderNo" : 45,
-                                            "condition": "model.loanAccount.loanPurpose1 == 'Insurance Loan'"
-                                        },
-                                        "udf5": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
-                                            "title" : "FLAT_RATE",
-                                            "type": "string",
-                                            "orderNo" : 75
-                                        },
-                                        "productCategory": {
-                                            "key": "loanAccount.productCategory",
-                                            "title": "PRODUCT_TYPE",
-                                            "enumCode": "loan_product_category",
-                                            "type": "select",
-                                            "required": true
-                                        },
-                                        "calculateEmi": {
-                                            "title": "CALCULATE_EMI",
-                                            "type": "button",
-                                            "onClick": function(model, formCtrl) {
-                                                try{
-                                                    var obj = calculateNominalRate(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
-                                                    model.loanAccount.expectedInterestRate = obj.nominalRate;
-                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
-                                                } catch (e){
-                                                    console.log(e);
-                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                },
-
-                                "DeductionsFromLoan": {
-                                    "items": {
-                                        "dsaPayout": {
-                                            "key": "loanAccount.dsaPayout",
-                                            "type": "number",
-                                            "title": "DSA_PAYOUT_IN_PERCENTAGE",
-                                            "orderNo": 30
-                                        },
-                                        "fee3": {
-                                            "key": "loanAccount.fee3",
-                                            "title": "HOSPI_CASH_INSURANCE",
-                                            "orderNo": 40
-                                        },
-                                        "expectedPortfolioInsurancePremium": {
-                                            "key": "loanAccount.expectedPortfolioInsurancePremium",
-                                            "title": "LOAN_PROTECTION_INSURANCE",
-                                            "orderNo": 50
-                                        },
-                                        "fee4": {
-                                            "key": "loanAccount.fee4",
-                                            "title": "VEHICLE_INSURANCE",
-                                            "orderNo": 60
-                                        },
-                                        "OtherFee": {
-                                            "key": "loanAccount.fee5",
-                                            "title": "OTHER_DEDUCTIONS",
-                                            "orderNo": 65
-                                        },
-                                        "dealIrr": {
-                                            "key": "loanAccount.dealIrr",
-                                            "title": "XIRR",
-                                            "type": "number",
-                                            "orderNo": 110,
-                                            "readonly": true
-                                        },
-                                        "calculateDisbursedAmount": {
-                                            "type": "button",
-                                            "title": "CALCULATE_XIRR",
-                                            "orderNo": 90,
-                                            onClick: function(model, formCtrl) {
-                                                if (model.loanAccount.estimatedEmi == null) {
-                                                    PageHelper.showProgress('calculateXirr', 'Please Click Calculate EMI Button', 5000);
-                                                } else {
-                                                    var processFee;
-                                                    var dsaPayout;
-                                                    var frequency;
-                                                    var frequencyRequested;
-                                                    var advanceEmi = model.loanAccount.estimatedEmi;
-                                                    processFee = (model.loanAccount.expectedProcessingFeePercentage / 100) * model.loanAccount.loanAmountRequested;
-                                                    dsaPayout = (model.loanAccount.dsaPayout / 100) * model.loanAccount.loanAmountRequested;
-                                                    frankingCharge = model.loanAccount.fee3;
-                                                    model.netDisbursementAmount = model.loanAccount.loanAmountRequested - processFee - advanceEmi + dsaPayout;
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Monthly':
-                                                            frequency = "MONTH";
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequency = "WEEK";
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequency = "YEAR";
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequency = "FORTNIGHT";
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequency = "QUARTER";
-                                                            break;
-                                                        case 'Daily':
-                                                            frequency = "DAY";
-                                                            break;
-                                                    }
-                                                    switch (model.loanAccount.frequencyRequested) {
-                                                        case 'Daily':
-                                                            frequencyRequested = 1;
-                                                            break;
-                                                        case 'Fortnightly':
-                                                            frequencyRequested = 15;
-                                                            break;
-                                                        case 'Monthly':
-                                                            frequencyRequested = 30;
-                                                            break;
-                                                        case 'Quarterly':
-                                                            frequencyRequested = 120;
-                                                            break;
-                                                        case 'Weekly':
-                                                            frequencyRequested = 7;
-                                                            break;
-                                                        case 'Yearly':
-                                                            frequencyRequested = 365;
-                                                    }
-
-                                                    LoanProcess.findPreOpenSummary({
-                                                            "loanAmount": model.loanAccount.loanAmountRequested,
-                                                            "tenure": model.loanAccount.tenureRequested,
-                                                            "frequency": frequency,
-                                                            "normalInterestRate": model.loanAccount.expectedInterestRate,
-                                                            "productCode": "IRRTP",
-                                                            "moratoriumPeriod": "0",
-                                                            "openDate": Utils.getCurrentDate(),
-                                                            "branchId": model.loanAccount.branchId || model.loanProcess.applicantEnrolmentProcess.customer.customerBranchId,
-                                                            "firstRepaymentDate": moment().add(frequencyRequested, 'days').format("YYYY-MM-DD"),
-                                                            "scheduledDisbursementDate": Utils.getCurrentDate(),
-                                                            "scheduledDisbursementAmount": model.netDisbursementAmount
-                                                        })
-                                                        .$promise
-                                                        .then(function(resp) {
-                                                            $log.info(resp);
-                                                            model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
-                                                        });
-                                                }
-                                            }
-                                        },
-                                        "securityEmiRequired": {
-                                            "key": "loanAccount.securityEmiRequired",
-                                            "title": "ADVANCE_EMI",
-                                            "type": "radios",
-                                            "orderNo": 70
-                                        }
-                                    }
-                                },
-                                "LoanRecommendation": {
-                                    "items": {
-                                        "udf6": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
-                                            "title": "FLAT_RATE",
-                                            "type": "string",
-                                            "required": true,
-                                            "orderNo": 25
-                                        },
-                                        "calculateNominalRate": {
-                                            "title": "CALCULATE_NOMINAL_RATE",
-                                            "type": "button",
-                                            onClick: function(model, formCtrl) {
-                                                try{
-                                                    var obj = calculateNominalRate(model.loanAccount.loanAmount,
-                                                        model.loanAccount.frequency,
-                                                        model.loanAccount.tenure,
-                                                        parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6));
-                                                    model.loanAccount.interestRate = obj.nominalRate;
-                                                    model.loanAccount.estimatedEmi = obj.estimatedEmi;
-                                                } catch (e){
-                                                    console.log(e);
-                                                    PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                
-                                "FieldInvestigationDetails": {
-                                    "type": "box",
-                                    "orderNo": 300,
-                                    "title": "FIELD_INVESTIGATION_DETAILS",
-                                    "items": {
-                                        "fieldInvestigationDecision": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2",
-                                            "type": "select",
-                                            "title": "FI_DECISION",
-                                            "enumCode": "fi_decision"
-                                        },
-                                        "fieldInvestigationReason": {
-                                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
-                                            "type": "select",
-                                            "title": "FI_REASON",
-                                            "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Negative' || model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2 == 'Refer to Credit'",
-                                            "enumCode": "fi_reason",
-                                            "parentEnumCode": "fi_decision",
-                                            "parentValueExpr": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf2"
-                                        }
-                                    }
-                                },
-                                "PostReview": {
-                                    "type": "box",
-                                    "orderNo": 999,
-                                    "title": "POST_REVIEW",
-                                    "condition": "model.loanAccount.id",
-                                    "items": {
-                                        "options": {
-                                            key: "review.action",
-                                            type: "radios",
-                                            titleMap: {
-                                                "REJECT": "REJECT",
-                                                "SEND_BACK": "SEND_BACK",
-                                                "PROCEED": "PROCEED",
-                                                "HOLD": "HOLD"
-                                            }
-                                        },
-                                        "proceed": {
-                                            type: "section",
-                                            condition: "model.review.action=='PROCEED'",
-                                            items: {
-                                                "remarks": {
-                                                    title: "REMARKS",
-                                                    key: "loanProcess.remarks",
-                                                    type: "textarea",
-                                                    required: true
-                                                },
-                                                "valuator": {
-                                                    "title": "VALUATOR",
-                                                    "key": "loanAccount.valuator",
-                                                    "type": "select",
-                                                    "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase – Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')",
-                                                    "titleMap": {
-                                                        "test": "test"
-                                                    }
-                                                },
-                                                "proceedButton": {
-                                                    key: "review.proceedButton",
-                                                    type: "button",
-                                                    title: "PROCEED",
-                                                    onClick: "actions.proceed(model, formCtrl, form, $event)"
-                                                }
-                                            }
-                                        },
-                                        "sendBack": {
-                                            type: "section",
-                                            condition: "model.review.action=='SEND_BACK'",
-                                            items: {
-                                                "remarks": {
-                                                    title: "REMARKS",
-                                                    key: "loanProcess.remarks",
-                                                    type: "textarea",
-                                                    required: true
-                                                },
-                                                "stage": {
-                                                    key: "loanProcess.stage",
-                                                    "required": true,
-                                                    type: "lov",
-                                                    autolov: true,
-                                                    lovonly: true,
-                                                    title: "SEND_BACK_TO_STAGE",
-                                                    bindMap: {},
-                                                    searchHelper: formHelper,
-                                                    search: function(inputModel, form, model, context) {
-                                                        var stage1 = model.loanProcess.loanAccount.currentStage;
-                                                        var targetstage = formHelper.enum('targetstage').data;
-                                                        var out = [];
-                                                        for (var i = 0; i < targetstage.length; i++) {
-                                                            var t = targetstage[i];
-                                                            if (t.field1.toUpperCase() == stage1.toUpperCase()) {
-                                                                out.push({
-                                                                    name: getStageNameByStageCode(t.name),
-                                                                    value: t.code
-                                                                })
-                                                            }
-                                                        }
-                                                        return $q.resolve({
-                                                            headers: {
-                                                                "x-total-count": out.length
-                                                            },
-                                                            body: out
-                                                        });
-                                                    },
-                                                    onSelect: function(valueObj, model, context) {
-                                                        model.review.targetStage1 = valueObj.name;
-                                                        model.loanProcess.stage = valueObj.value;
-
-                                                    },
-                                                    getListDisplayItem: function(item, index) {
-                                                        return [
-                                                            item.name
-                                                        ];
-                                                    }
-                                                },
-                                                "sendBackButton": {
-                                                    key: "review.sendBackButton",
-                                                    type: "button",
-                                                    title: "SEND_BACK",
-                                                    onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                                                }
-                                            }
-                                        },
-                                        "reject": {
-                                            type: "section",
-                                            condition: "model.review.action=='REJECT'",
-                                            items: {
-                                                "remarks": {
-                                                    title: "REMARKS",
-                                                    key: "loanProcess.remarks",
-                                                    type: "textarea",
-                                                    required: true
-                                                },
-                                                "rejectReason": {
-                                                    title: "REJECT_REASON",
-                                                    fieldType: "string",
-                                                    key: "loanAccount.rejectReason",
-                                                    "type": "lov",
-                                                    "autolov": true,
-                                                    "resolver": "RejectReasonLOVConfiguration"
-                                                },
-                                                "rejectButton": {
-                                                    key: "review.rejectButton",
-                                                    type: "button",
-                                                    title: "REJECT",
-                                                    required: true,
-                                                    onClick: "actions.reject(model, formCtrl, form, $event)"
-                                                }
-                                            }
-                                        },
-                                        "hold": {
-                                            type: "section",
-                                            condition: "model.review.action=='HOLD'",
-                                            items: {
-                                                "remarks": {
-                                                    title: "REMARKS",
-                                                    key: "review.remarks",
-                                                    type: "textarea",
-                                                    required: true
-                                                },
-                                                "holdButton": {
-                                                    key: "review.holdButton",
-                                                    type: "button",
-                                                    title: "HOLD",
-                                                    required: true,
-                                                    onClick: "actions.holdAction(model, formCtrl, form, $event)"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    };
 
                     UIRepository.getLoanProcessUIRepository().$promise
                         .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
                         })
                         .then(function(form){
                             self.form = form;
@@ -983,6 +1080,20 @@ define([], function() {
 
                 },
                 offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanAccount')) {
+                        model.loanAccount = model.loanProcess.loanAccount;
+                    }
+                    var self = this;
+                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
+                    }, function (err) {
+                        console.log(err);
+
+                    })
+                },
                 getOfflineDisplayItem: function(item, index) {
                     return [
                         item.customer.firstName,

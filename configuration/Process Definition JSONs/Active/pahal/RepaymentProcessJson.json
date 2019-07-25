@@ -5,6 +5,8 @@
          "code":"Initiation",
          "name":"Initiation",
          "stageType":"CAPTURE",
+         "sendSms": "No",
+         "smsCategory": "ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "WM"
@@ -15,8 +17,8 @@
          "code":"Deposit",
          "name":"Deposit",
          "stageType":"DEPOSIT",
-         "sendSms":"Yes",
-         "smsCategory":"ODCollection",
+         "sendSms": "Yes",
+         "smsCategory": "ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "APPROVER"
@@ -28,6 +30,7 @@
          "name":"BRSValidation",
          "stageType":"CAPTURE",
          "brsStage":"yes",
+         "sendSms": "No",
          "allowedRoles":[
             "APPROVER"
          ]
@@ -37,6 +40,7 @@
          "code":"CreditValidation",
          "name":"Credit Validation",
          "stageType":"CAPTURE",
+         "sendSms": "No",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "WM"
@@ -47,6 +51,7 @@
          "code":"PartialPayment",
          "name":"PartialPayment",
          "stageType":"CAPTURE",
+         "sendSms": "No",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "APPROVER"
