@@ -88,7 +88,7 @@ function($log, $q, SessionStore, languages, dateFormats, $translate, PM,
 			type: "box",
 			title: "PROFILE_SETTINGS",
 			items: [
-				"settings.dateFormat",
+				// "settings.dateFormat",
 				"settings.language",
 				"settings.loginMode",
 				"settings.offlinePin",
