@@ -12,6 +12,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             $log.info("pendingDisbursementDays is not available");
         });
 
+        Queries.getGlobalSettings("loan.collection.repaymentDays").then(function (value) {
+            repaymentDaysValidationExist = true;
+            repaymentDates = value.split(',').map(Number);
+        }, function (err) {
+            repaymentDaysValidationExist = false;
+            $log.info(err);
+        });
+
         var isCBCheckValid = function (model) {
             var deferred = $q.defer();
             var customerIdList = [model.loanAccount.customerId];
@@ -191,9 +199,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(data.basicLoanDedupe) {
                         model.basicLoanDedupe = data.basicLoanDedupe;
                     }
-                    if(!data.validateRepaymentDate){
-                        model.validateRepaymentDate = data.validateRepaymentDate;
-                    }
+                    // if(!data.validateRepaymentDate){
+                    //     model.validateRepaymentDate = data.validateRepaymentDate;
+                    // }
                 }, function(err) {
                     console.log(err);
                 });
@@ -1276,23 +1284,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var diffDays = scheduledDisbursementDate.diff(sanctionDate, "days");
                     if(model.loanAccount.firstRepaymentDate)
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
-                    if (model.loanAccount.firstRepaymentDate){
-                        var date = firstRepaymentDate.get("date");
-                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && model.siteCode != 'kinara' && date != 5 && date != 10 && date != 15){
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
-                            return false;
-                        } 
-                        if(model.validateRepaymentDate  && model.siteCode == 'kinara' && date != 5 && date != 10 && date != 15){
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
-                            return false;
-                        } 
-                        if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
-                            PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
-                            return false;
-                        }
-                        if(model.siteCode == 'pahal' && date != 5 && date != 10 && date != 15 && date != 20  ) {
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10, 15 or 20",5000);
-                            return false;
+                    if (model.loanAccount.firstRepaymentDate && repaymentDaysValidationExist) {
+                        if (_.isArray(repaymentDates)) {
+                            var date = firstRepaymentDate.get("date");
+                            if (!_.includes(repaymentDates, date)) {
+                                PageHelper.showProgress("loan-create", "First repayment date should be " + repaymentDates, 10000);
+                                return false;
+                            }
                         }
                     }
 
@@ -1611,23 +1609,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var diffDays = scheduledDisbursementDate.diff(sanctionDate, "days");
                     if(model.loanAccount.firstRepaymentDate)
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
-                    if (model.loanAccount.firstRepaymentDate){
-                        var date = firstRepaymentDate.get("date");
-                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && model.siteCode != 'kinara' && date != 5 && date != 10 && date != 15){
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
-                            return false;
-                        }
-                        if(model.validateRepaymentDate  && model.siteCode == 'kinara' && date != 5 && date != 10 && date != 15){
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
-                            return false;
-                        } 
-                        if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
-                            PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
-                            return false;
-                        }
-                        if(model.siteCode == 'pahal' && date != 5 && date != 10 && date != 15 && date != 20  ) {
-                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10, 15 or 20",5000);
-                            return false;
+                    if (model.loanAccount.firstRepaymentDate && repaymentDaysValidationExist) {
+                        if (_.isArray(repaymentDates)) {
+                            var date = firstRepaymentDate.get("date");
+                            if (!_.includes(repaymentDates, date)) {
+                                PageHelper.showProgress("loan-create", "First repayment date should be " + repaymentDates, 10000);
+                                return false;
+                            }
                         }
                     }
 
