@@ -10,7 +10,7 @@ FROM ".DB_SCHEMA.".users u
   LEFT JOIN ".DB_SCHEMA.".user_roles ur ON u.user_id = ur.user_id
   LEFT JOIN ".DB_SCHEMA.".roles r ON ur.role_id = r.id
 WHERE u.user_id like concat(?, '%')
-AND u.user_name like concat(?, '%')
+AND u.user_name like concat(?, '%') limit 20
 ";
 
 try {
@@ -22,6 +22,7 @@ try {
 		$userName = $_GET['userName'];
 
 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		$connection->set_charset('utf8mb4');
 		$stmt = $connection->prepare($QUERY);
 		$stmt->bind_param('ss', $userId, $userName);
 		$stmt->execute();
