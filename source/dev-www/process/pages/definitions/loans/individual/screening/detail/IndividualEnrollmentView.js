@@ -272,7 +272,7 @@ define({
                     $log.warn(res);                    
                     model.cibil_highmark = res;
                     if (res.cibil != null) {
-                        model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[0].score;
+                        model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[1].score;
                         model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
                         model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
                         model.UIUDF.cibil.sanctioned_amount = (res.cibil.cibilLoanDetails.length!=0)?res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount:"";
