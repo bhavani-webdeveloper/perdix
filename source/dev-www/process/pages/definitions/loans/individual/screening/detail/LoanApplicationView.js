@@ -2,10 +2,10 @@ define({
     pageUID: "loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanAccount", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC", "kinara.IndividualLoanHelper"
     ],
     $pageFn: function($log, $state,LoanAccount, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC, KinaraIndividualLoanHelper) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>'+data+'</strong>';
         }
@@ -17,7 +17,7 @@ define({
             else
             return "NA";
         }
-
+        
         var postAPI = function(model){
             if (_.isNull(model.summaryData) || _.isNull(model.finData)){
                 return null;
@@ -59,7 +59,6 @@ define({
                     color_hexadecimal: item.color_hexadecimal
                 });
             }
-
             model.additional = {};
             var prepareFinancialData={};
             if(model.summaryData){
@@ -108,13 +107,16 @@ define({
                 });
         }
 
-
+        var showNetDisbursmentDetails = 'N';
+        if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+            showNetDisbursmentDetails = 'Y';
+        }
         var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
                     BundleManager.deleteOffline().then(function() {
                         PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
-                    });
+                    }); 
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
@@ -211,33 +213,36 @@ define({
         // Psychometric Required for applicants & co-applicants
         if (_.isArray(loanAccount.loanCustomerRelations)) {
             var psychometricIncomplete = false;
-            var enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations;
-            for (i in loanAccount.loanCustomerRelations) {
-                if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
-                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
-                    if (_.isArray(enterpriseCustomerRelations)) {
-                        var psychometricRequiredUpdated = false;
-                        for (j in enterpriseCustomerRelations) {
-                            if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
-                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
-                                psychometricRequiredUpdated = true;
+            if(model.customer){
+
+                var enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations;
+                for (i in loanAccount.loanCustomerRelations) {
+                    if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
+                        loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                    } else if (loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
+                        if (_.isArray(enterpriseCustomerRelations)) {
+                            var psychometricRequiredUpdated = false;
+                            for (j in enterpriseCustomerRelations) {
+                                if (enterpriseCustomerRelations[j].linkedToCustomerId == loanAccount.loanCustomerRelations[i].customerId && _.lowerCase(enterpriseCustomerRelations[j].businessInvolvement) == 'full time') {
+                                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
+                                    psychometricRequiredUpdated = true;
+                                }
                             }
-                        }
-                        if (!psychometricRequiredUpdated) {
+                            if (!psychometricRequiredUpdated) {
+                                loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
+                            }
+                        } else {
                             loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
                         }
                     } else {
                         loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
                     }
-                } else {
-                    loanAccount.loanCustomerRelations[i].psychometricRequired = 'NO';
-                }
-                if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
-                    loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
-                }
-                if (loanAccount.loanCustomerRelations[i].psychometricRequired == 'YES' && loanAccount.loanCustomerRelations[i].psychometricCompleted == 'NO') {
-                        psychometricIncomplete = true;
+                    if (!loanAccount.loanCustomerRelations[i].psychometricCompleted) {
+                        loanAccount.loanCustomerRelations[i].psychometricCompleted = 'NO';
+                    }
+                    if (loanAccount.loanCustomerRelations[i].psychometricRequired == 'YES' && loanAccount.loanCustomerRelations[i].psychometricCompleted == 'NO') {
+                            psychometricIncomplete = true;
+                    }
                 }
             }
             if (psychometricIncomplete) {
@@ -247,7 +252,7 @@ define({
 
         return true;
     }
-
+    var preLoanAccountSave=false;
     var validateCibilHighmark = function(model){
         var cibilMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "cibilMandatory") && _.isString(model.cibilHighmarkMandatorySettings.cibilMandatory) && model.cibilHighmarkMandatorySettings.cibilMandatory=='N')?"N":"Y";
         var highmarkMandatory = (_.hasIn(model.cibilHighmarkMandatorySettings, "highmarkMandatory") && _.isString(model.cibilHighmarkMandatorySettings.highmarkMandatory) && model.cibilHighmarkMandatorySettings.highmarkMandatory=='N')?"N":"Y";
@@ -321,8 +326,13 @@ define({
             "type": "schema-form",
             "title": "LOAN_RECOMMENDATION",
             "subTitle": "",
+            initializeUI: function(model, form, formCtrl, singlePageDefinition, bundleModel){
+                if (showNetDisbursmentDetails == "Y") {
+                KinaraIndividualLoanHelper.computePreOpenFeeData(model, formCtrl);
+                }
+            },
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                
+                model.showPreOpenData = false;
                 model.finData = null;
                 model.summaryData = null;
                 model.currentStage = bundleModel.currentStage;
@@ -337,10 +347,8 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 if(model.loanAccount.securityEmiRequired == null){
-                    model.loanAccount.securityEmiRequired='Yes';
+                    model.loanAccount.securityEmiRequired='YES';
                 }
-               
-
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -357,7 +365,8 @@ define({
                             "machineAttachedToBuilding": model.loanAccount.collateral[i].machineAttachedToBuilding,
                             "hypothecatedToBank": model.loanAccount.collateral[i].hypothecatedToBank,
                             "electricityAvailable": model.loanAccount.collateral[i].electricityAvailable,
-                            "spaceAvailable": model.loanAccount.collateral[i].spaceAvailable
+                            "spaceAvailable": model.loanAccount.collateral[i].spaceAvailable,
+                            "collateral1FilePath": model.loanAccount.collateral[i].collateral1FilePath
                         });
                     }
                 }
@@ -425,7 +434,19 @@ define({
                         key: "loanAccount.npa",
                         title: "IS_NPA"
                     }]
-                }]
+                },
+                {
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                        title: "OTHER_LINKED_ACCOUNTS",
+                        type: "string",
+                        "readonly": true,
+                        condition: "model.siteCode =='kinara'",
+                    }]
+                }
+        ]   
             }, {
                 "type": "box",
                 "readonly": true,
@@ -452,6 +473,10 @@ define({
                             "title": "BASE_LOAN_ACCOUNT",
                             "condition": "model.loanAccount.baseLoanAccount"
 
+                        },
+                        {
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                            "title": "ELIGIBLE_FOR_HERVIKAS",
                         },
                         {
                             "key": "loanAccount.loanPurpose1",
@@ -543,37 +568,6 @@ define({
                 "readonly": true,
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "Deductions From Loan Amount",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.expectedProcessingFeePercentage",
-                            "title": "Expected Processing Fee(in%)",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.expectedCommercialCibilCharge",
-                            "title": "Expected CIBIL Charges",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI(in Rs.)",
-                            "type": "amount"
-                        }]
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
                 "title": "Asset Purchase Details",
                 /*
                                     "condition":"model.loanAccount.loanPurpose1==model.asset_Details.Assetpurchase"*/
@@ -626,7 +620,15 @@ define({
                             }, {
                                 "data": "spaceAvailable",
                                 "title": "Space Available"
-                            },];
+                            }, {
+                                "title": "Machine Quotation",
+                                "data": "collateral1FilePath",
+                                "render": function(data, type, full, meta) {
+                                    var url = [];
+                                    url.push(Model_ELEM_FC.fileStreamUrl + "/" + data);
+                                    return data ?'<a href="' + url[0]+ '" style="cursor:pointer">Download</a>': '';
+                                }
+                            }];
                         }
                     }
                 ]
@@ -761,6 +763,18 @@ define({
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                            {
+                                "key": "loanAccount.processingFeePercentage",
+                                "title": "Processing Fee(in%)"
+                            },{
+                            "key": "loanAccount.commercialCibilCharge",
+                            "title": "CIBIL Charges",
+                            "type": "amount"
                         },
                         {
                             key: "loanAccount.securityEmiRequired",
@@ -769,38 +783,80 @@ define({
                             "enumCode": "decisionmaker",
                             "required":true,
                             onChange:function(value,form,model){
-                                if(value === 'Yes'){
-                                   model.loanAccount.securityEmiRejectReason=null; 
+                                if (value.toLowerCase() === 'yes') {
+                                    model.loanAccount.securityEmiOverrideReason = null;
+                                    model.loanAccount.estimatedEmi = model.loanAccount.expectedEmi;
+                                } else {
+                                    model.loanAccount.estimatedEmi = 0;
                                 }
-                                }
+                            }
+                        },
+                        { 
+                            condition:"model.loanAccount.securityEmiRequired == 'NO'",
+                            key: "loanAccount.securityEmiOverrideReason",
+                            type: "select",
+                            title: "REASON",
+                            "required":true,
+                            titleMap:{
+                                "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                                "Tenure less than 12 months":"Tenure less than 12 months",
+                                "Existing Customer":"Existing Customer",
+                                "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
+                            }
+                        }]
+                    }]
+                }]
+            }, {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "EXPECTED_NET_DISBURSEMENT",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                            {
+                                key:"preOpenFeeData.loanAmount",
+                                "type": "amount",
+                                "title": "LOAN_AMOUNT",
+                                readonly: true,
+                            },
+                            {
+                            "key": "preOpenFeeData.expectedCommercialCibilCharges",
+                            "type": "amount",
+                            "title": "COMMERCIAL_CIBIL_CHARGE",
+                        }, {
+                            key: "preOpenFeeData.expectedProcessingFee",
+                            "type": "amount",
+                            "title": "Expected Processing Fee",
+                        }, {
+                            key: "preOpenFeeData.expectedSecurityEMI",
+                            "type": "amount",
+                            "title": "Expected Security EMI",
+                        }, {
+                            key: "preOpenFeeData.expectedPortfolioInsuranceAmount",
+                            "type": "amount",
+                            "title": "Expected Portfolio Insurance with GST",
                         }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
-                            "type": "amount"
+                            key: "preOpenFeeData.payoffAmountForLinkedAccount",
+                            "type": "amount",
+                            "title": "Expected Payoff for linked account",
                         }, {
-                            "key": "loanAccount.processingFeePercentage",
-                            "title": "Processing Fee(in%)"
+                            key: "preOpenFeeData.documentCharges",
+                            "type": "amount",
+                            "title": "Expected Documentation Charges",
                         }, {
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI"
-                        }, {
-                            "key": "loanAccount.commercialCibilCharge",
-                            "title": "CIBIL Charges",
-                            "type": "amount"
-                        },
-                        { 
-                            condition:"model.loanAccount.securityEmiRequired == 'No'",
-                            key: "loanAccount.securityEmiRejectReason",
-                            type: "select",
-                            title: "REASON",
-                            "required":true,
-                            titleMap:{
-                                "No Reason":"No Reason"
-                            }
+                            key: "preOpenFeeData.netDisbursementAmount",
+                            "type": "amount",
+                            "title": "Expected Net Disbursable Amount",
                         }]
                     }]
                 }]
@@ -869,7 +925,7 @@ define({
                         }]
             },{
                 "type": "box",
-                "title": "Expected turover",
+                "title": "Expected turnover",
                 "readOnly": true,
                 "colClass": "col-sm-12",
                 "items":[{
@@ -1127,7 +1183,7 @@ define({
                         return;
                     }
                                 //   security EMI & Reject Reason validation
-                    if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                    if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiOverrideReason === null){
                         PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
                         return false;
                     }
@@ -1162,6 +1218,7 @@ define({
                                     .then(function(res) {
 
                                         model.loanAccount = res.loanAccount;
+                                        model.loanAccount.loanAmount=res.loanAccount.loanAmount;
                                         if (model.temp.loanCustomerRelations && model.temp.loanCustomerRelations.length) {
                                             for (i in model.temp.loanCustomerRelations) {
                                                 for (j in model.loanAccount.loanCustomerRelations) {
@@ -1175,6 +1232,10 @@ define({
                                         BundleManager.pushEvent('new-loan', model._bundlePageObj, {
                                             loanAccount: model.loanAccount
                                         });
+                                        if (showNetDisbursmentDetails == "Y") {
+                                        KinaraIndividualLoanHelper.computePreOpenFeeData(model, formCtrl);
+                                        }
+                                        preLoanAccountSave=true;
                                         if (completeLead === true && _.hasIn(model, "lead.id")) {
                                             var reqData = {
                                                 lead: _.cloneDeep(model.lead),
@@ -1370,9 +1431,36 @@ define({
                     return;
                 }
 */
-
+                /* cheking  details is saved or not */
+                var showNetDisbursmentDetails = 'N';
+                if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+                    showNetDisbursmentDetails = 'Y';
+                }
+                if (showNetDisbursmentDetails == "Y") {
+                    if(!model.preOpenFeeData){
+                     PageHelper.setError({
+                         message: "Please save account before proceeding"
+                     });
+                     PageHelper.hideLoader();
+                     return false;
+                    }
+                    if (model.preOpenFeeData.netDisbursementAmount < 0) {
+                        PageHelper.setError({
+                            message: "disubrsement amount can not be less than : 0"
+                        });
+                        PageHelper.hideLoader();
+                        return false;
+                    }
+                    if(!preLoanAccountSave){
+                        PageHelper.setError({
+                            message: "Please save account before proceeding"
+                        });
+                        PageHelper.hideLoader();
+                        return false;
+                    }
+                }
                 //   security EMI & Reject Reason validation
-                if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiRejectReason === null){
+                if(model.loanAccount.securityEmiRequired === 'No' && model.loanAccount.securityEmiOverrideReason === null){
                     PageHelper.showProgress("enrolment","Please select security EMI Reject Reason.", 5000);
                     return false;
                 }

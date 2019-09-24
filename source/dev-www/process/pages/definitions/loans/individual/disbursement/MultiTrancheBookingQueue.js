@@ -72,7 +72,7 @@ define({
                         'page': 1,
                         'per_page': 100,
                         'sortBy':null,
-                        //'branchId': searchOptions.branchId
+                        'branchId': searchOptions.branchId
                     }).$promise;
 
                     return promise;

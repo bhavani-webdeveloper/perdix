@@ -11,6 +11,8 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
                 "Page/Engine/loans.individual.achpdc.ACHMandateQueue",
                 "Page/Engine/loans.individual.achpdc.ACHClose",
                 "Page/Engine/loans.individual.achpdc.PDCRegistration",
+                "Page/Engine/loans.individual.achpdc.PartnerToSponsorBankAccountMapping",
+                "Page/Engine/loans.individual.achpdc.UploadSponsorBankAccount"
             ]
         };
         var achpdcTransactionDefinition = {

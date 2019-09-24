@@ -29,9 +29,12 @@ function base_path(){
 }
 
 function get_validator(){
+    global $capsule;
 	$loader = new FileLoader(new Filesystem(), __DIR__ . DIRECTORY_SEPARATOR . 'lang');
     $translator = new Translator($loader, 'en');
     $validation = new Factory($translator, new Container);
+    $dbPresenceVerifier = new DatabasePresenceVerifier($capsule->getDatabaseManager());
+    $validation->setPresenceVerifier($dbPresenceVerifier);
     return $validation;
 }
 

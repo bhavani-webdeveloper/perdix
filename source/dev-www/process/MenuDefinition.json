@@ -60,6 +60,7 @@
         "Page/Adhoc/arohan.dashboard.CPV.CPVDashboard",
         "Page/Adhoc/arohan.dashboard.fcu.FcuQueue",
         "Page/Adhoc/arthan.loans.LoanOriginationDashboard",
+        "Page/Adhoc/loans.IncomingPaymentDashboard",
         
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
@@ -118,6 +119,7 @@
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/Adhoc/management.VillageCreationDashboard",
+                "age/Adhoc/management.NotificationConfigurationDashboard",
                 "Page/Engine/management.Patch",
                 "Page/Adhoc/management.branchadmin.BranchAdminDashboard",
                 "Page/ScoreParameterMaintenanceDashboard",

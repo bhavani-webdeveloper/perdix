@@ -31,7 +31,7 @@ if (isset($_GET)) {
         die();
     }
 
-    $error_log = "";  
+    $error_log = "";
     $CustomerLoanId = (!empty($_GET['LoanId']))? intval(filter_var(($defaultDb->getPdo()->quote($_GET['LoanId'])), FILTER_SANITIZE_NUMBER_INT)): $_GET['LoanId'];
     $authInfo = 'Bearer '.$_GET['auth_token'];
     $SessionUserName = "admin";
@@ -143,7 +143,7 @@ if (isset($_GET)) {
         http_response_code(404);
         $response->json([ 'error' => 'no '.$msg]);
         exit();
-    } 
+    }
 
     if($isScoringOptimizationEnabled == 'true' ){
         $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
@@ -155,10 +155,21 @@ if (isset($_GET)) {
             AND ScoreName = '$ScoreName'
             AND ApiVersion = '2'
         ";
+        $isScoreMasterUpdated=" SELECT c.ScoreName 
+            FROM sc_calculation c , score_master m 
+            WHERE
+            c.ApplicationId='$CustomerLoanId' 
+            AND c.ScoreName = '$ScoreName' 
+            AND c.ScoreName=m.ScoreName
+            AND c.updated_at > m.last_edited_at 
+            AND m.status = 'ACTIVE'
+            AND (m.Stage = '$currentStage' OR m.Stage = 'All') LIMIT 1  ";
 
-        $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+            $scoreMasterQuery = (array) collect($defaultDb->select($isScoreMasterUpdated))->first();
 
-        if(sizeof($row) > 0 ){
+            $row = (array) collect($defaultDb->select($ScoreCalcCheckQuery))->first();
+
+        if(sizeof($row) > 0 && sizeof($scoreMasterQuery)>0 ){
             $response->setStatusCode(200)->json([ 'ScoreDetails' => [ 'ScoreName' => $ScoreName] ]);
             exit();
         }
@@ -197,6 +208,7 @@ if (isset($_GET)) {
                 LEFT JOIN (SELECT customer_id, IFNULL(SUM(installment_amount_in_paisa), 0) AS `amount` FROM $perdix_db.loans WHERE customer_id=$CustomerId) liab ON liab.customer_id=l.customer_id
                 WHERE l.id=$CustomerLoanId
                 ";
+    $i=0;
 
     $working_capital_details= (array) collect($defaultDb->select($working_capital_query))->first();
     $working_capital[$i]['Working Capital 1 - Quick Check'] = $working_capital_details['Working Capital 1 - Quick Check'];
@@ -393,6 +405,8 @@ if (isset($_GET)) {
                 $weightage_manipulation = 1;
             }
 
+            $ListColumn = array();
+
             //get all parameters mapped with core db and the scoring type
             $GetCustomerInputs = "SELECT
                 score_master.OverallPassValue AS 'OverallPassValue',
@@ -488,8 +502,12 @@ if (isset($_GET)) {
 
                         $DefinedScoreValue = $defaultDb->select($ScoreValue);
 
-                        foreach(  $DefinedScoreValue as $DefinedScoreValues){        
+                        foreach(  $DefinedScoreValue as $DefinedScoreValues){
                             $DefinedScoreValues = (array) $DefinedScoreValues;
+                            if (!in_array($Column, $ListColumn)) {
+                            array_push($ListColumn,$Column);
+
+
                             if ($DefinedScoreValues['Value'] > 0){
                                 $calculateWeightage = ((($DefinedScoreValues['Value'] / $DefinedScoreValues['MaxParameterScore']) * $DefinedScoreValues['ParameterWeightage']) / 100);
                             }
@@ -497,7 +515,7 @@ if (isset($_GET)) {
                             if ($DefinedScoreValues['nonNegotiable'] == '1') {
                                 $non_negotiable++;
                             }
-                            
+
                             $TempArray = array();
 
                             $TempArray['score_calc_id'] = "$AutoID";
@@ -520,14 +538,35 @@ if (isset($_GET)) {
                             $CurrentParameters[$CustomerId][$TempArray['ParameterName']] = $TempArray;
                             $InsertValues .= "('" . implode("','", $TempArray) . "'),";
                             $TempArray['mitigant'] = explode("|", $DefinedScoreValues['mitigant']);
-
+                            $TempArray['MaxParameterScore'] = $DefinedScoreValues['MaxParameterScore'];
+                            $TempArray['nonNegotiable']=$DefinedScoreValues['subscoreName'];
                             unset($TempArray['score_calc_id']);
                             unset($TempArray['created_by']);
-
+                            $ListColumn[$Column]=$TempArray;
+                            unset($TempArray['nonNegotiable']);
+                            unset($TempArray['MaxParameterScore']);
                             array_push($ConsolidatedArray, $TempArray);
                             $WeightageValue = $WeightageValue + $calculateWeightage;
                             $OverallMaxWeightedScore = $OverallMaxWeightedScore + $calculateMaxWeightage;
-                        }
+                       }
+                            else{
+
+
+                                if ($ListColumn[$Column]['Value'] > 0) {
+                                    $calculateWeightage = ((($ListColumn[$Column]['ParamterScore'] /$ListColumn[$Column]['MaxParameterScore']) * $ListColumn[$Column]['ParameterWeightage']) / 100);
+                                }
+                                $calculateMaxWeightage = $ListColumn[$Column]['ParameterWeightage'] / 100;
+                                if ($ListColumn[$Column]['nonNegotiable'] == '1') {
+                                    $non_negotiable++;
+                                }
+                                $ListColumn[$Column]['subscore_name']=$DefinedScoreValues['subscoreName'];
+                                unset($ListColumn[$Column]['nonNegotiable']);
+                                unset($ListColumn[$Column]['MaxParameterScore']);
+                                array_push($ConsolidatedArray,$ListColumn[$Column] );
+                            }
+
+                }
+
                     }
                 }
             }
@@ -590,7 +629,7 @@ if (isset($_GET)) {
                 apiVersion = '2'
                 WHERE id = $AutoID
                 AND ApplicationId = '$CustomerLoanId'";
-    
+
     $defaultDb->update($FinalScoreCalculation);
     $response->setStatusCode(200)->json([ 'ScoreDetails' => $AvailCustomerParams ]);
     exit();

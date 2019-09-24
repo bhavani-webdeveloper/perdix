@@ -21,6 +21,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return [
                     "LenderAccountDetails",
                     "LenderAccountDetails.lenderName",
+                    "LenderAccountDetails.alternateLenderId",
                     "LenderAccountDetails.lenderAccountNumber",
                     "LenderAccountDetails.repaymentTenure",
                     "ScheduleUpload",
@@ -66,12 +67,21 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                             "key": "lenderEnrolmentProcess.customer.firstName",
                                             "title": "LENDER_NAME",
                                             "type": "string",
+                                            "orderNo": 20,
                                             "readonly": true
+                                        },
+                                        "alternateLenderId":{
+                                            "type": "text",
+                                            "title": "ALTERNATE_LENDER_ID",
+                                            "key": "liabilityAccount.udf1",
+                                            "orderNo": 30,
+                                            "readonly": true 
                                         },
                                         "lenderAccountNumber": {
                                             "key": "liabilityAccount.lenderAccountNumber",
                                             "title": "LENDER_ACCOUNT_NUMBER",
                                             "type": "string",
+                                            "orderNo": 10, 
                                             "readonly": true
                                         },
                                         "repaymentTenure": {

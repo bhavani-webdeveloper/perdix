@@ -1,0 +1,307 @@
+[
+    {
+      "displayName": "Collection Transaction Name",
+      "parameter": "collection.transactionName",
+      "type": "string"
+    },
+    {
+      "displayName": "Collection Repayment Type",
+      "parameter": "collection.repaymentType",
+      "type": "string"
+    },
+    {
+      "displayName": "Collection Instrument Type",
+      "parameter": "collection.instrumentType",
+      "type": "string"
+    },
+    {
+      "displayName": "Collection Repayment Amount",
+      "parameter": "collection.repaymentAmount",
+      "type": "number"
+    },
+    {
+      "displayName": "Collection Id",
+      "parameter": "collection.id",
+      "type": "number"
+    },
+    {
+        "displayName": "Collection Is Closure",
+        "parameter": "collection.idClosure",
+        "type": "boolean"
+      },
+    {
+      "displayName": "Loan Account Id",
+      "parameter": "loanAccount.id",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Amount",
+      "parameter": "loanAccount.loanAmount",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Product Category",
+      "parameter": "loanAccount.productCategory",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Linked Account Number",
+      "parameter": "loanAccount.linkedAccountNumber",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Transaction Type",
+      "parameter": "loanAccount.transactionType",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Literate Witness Middle Name",
+      "parameter": "loanAccount.literateWitnessMiddleName",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Literate Witness First Name",
+      "parameter": "loanAccount.literateWitnessFirstName",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Amount Requested",
+      "parameter": "loanAccount.loanAmountRequested",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Accout Purpose",
+      "parameter": "loanAccount.loanPurpose1",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Channels",
+      "parameter": "loanAccount.loanChannels",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Tenure",
+      "parameter": "loanAccount.tenure",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Disbursed Amount",
+      "parameter": "disbursement.disbursedAmount",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Disbursement Amount",
+      "parameter": "loanAccountDisbursementSchedule.disbursementAmount",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Disbursed Amount",
+      "parameter": "loanAccountDisbursementSchedule.disbursedAmount",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Account Transaction Id",
+      "parameter": "loanAccountDisbursementSchedule.transactionId",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Account Mode Of Disbursement",
+      "parameter": "loanAccountDisbursementSchedule.modeOfDisbursement",
+      "type": "string"
+    },
+    {
+      "displayName": "LMS Product Master Bank Id",
+      "parameter": "lMSProductMaster.bankId",
+      "type": "number"
+    },
+    {
+      "displayName": "LMS Product Master Product Name",
+      "parameter": "lMSProductMaster.productName",
+      "type": "string"
+    },
+    {
+      "displayName": "LMS Product Master Product Code",
+      "parameter": "lMSProductMaster.productCode",
+      "type": "string"
+    },
+    {
+      "displayName": "LMS Product Master Cms Product",
+      "parameter": "lMSProductMaster.cmsProduct",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Repayment Enrollment Id",
+      "parameter": "loanRepaymentDetails.enrollmentId",
+      "type": "string"
+    },
+    {
+      "displayName": "Loan Repayment Account Number",
+      "parameter": "loanRepaymentDetails.accountNumber",
+      "type": "number"
+    },
+    {
+      "displayName": "Loan Repayment Repayment Date",
+      "parameter": "loanRepaymentDetails.repaymentDate",
+      "type": "date"
+    },
+    {
+      "displayName": "Loan Repayment Repayment Status",
+      "parameter": "loanRepaymentDetails.repaymentStatus",
+      "type": "string"
+    },
+    {
+      "displayName": "Lead Name",
+      "parameter": "lead.leadName",
+      "type": "string"
+    },
+    {
+      "displayName": "Lead Area",
+      "parameter": "lead.area",
+      "type": "string"
+    },
+    {
+      "displayName": "Lead Business Name",
+      "parameter": "lead.businessName",
+      "type": "string"
+    },
+    {
+      "displayName": "Lead Udf Id",
+      "parameter": "lead.udfId",
+      "type": "number"
+    },
+    {
+      "displayName": "Customer Applicant Enrollment Id",
+      "parameter": "customerApplicant.enrollmentId",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Urn No",
+      "parameter": "customerApplicant.urnNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant First Name",
+      "parameter": "customerApplicant.firstName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Middle Name",
+      "parameter": "customerApplicant.middleName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Fasther First Name",
+      "parameter": "customerApplicant.fatherFirstName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Fasther Middle Name",
+      "parameter": "customerApplicant.fathermiddleName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Fasther Last Name",
+      "parameter": "customerApplicant.fatherLastName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Land Line No",
+      "parameter": "customerApplicant.landLineNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Mobile No",
+      "parameter": "customerApplicant.mobileNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Date Of Birth",
+      "parameter": "customerApplicant.dateOfBirth",
+      "type": "date"
+    },
+    {
+      "displayName": "Customer Applicant Kgfs Name",
+      "parameter": "customerApplicant.kgfsName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Applicant Pin Code",
+      "parameter": "customerApplicant.pinCode",
+      "type": "number"
+    },
+    {
+      "displayName": "Customer Enterprise Enrollment Id",
+      "parameter": "customerEnterprise.enrollmentId",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Urn No",
+      "parameter": "customerEnterprise.urnNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise First Name",
+      "parameter": "customerEnterprise.firstName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Middle Name",
+      "parameter": "customerEnterprise.middleName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Fasther First Name",
+      "parameter": "customerEnterprise.fatherFirstName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Fasther Middle Name",
+      "parameter": "customerEnterprise.fathermiddleName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Fasther Last Name",
+      "parameter": "customerEnterprise.fatherLastName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Land Line No",
+      "parameter": "customerEnterprise.landLineNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Mobile No",
+      "parameter": "customerEnterprise.mobileNo",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Date Of Birth",
+      "parameter": "customerEnterprise.dateOfBirth",
+      "type": "date"
+    },
+    {
+      "displayName": "Customer Enterprise Kgfs Name",
+      "parameter": "customerEnterprise.kgfsName",
+      "type": "string"
+    },
+    {
+      "displayName": "Customer Enterprise Pin Code",
+      "parameter": "customerEnterprise.pinCode",
+      "type": "number"
+    },
+    {
+      "displayName": "User Id",
+      "parameter": "users.login",
+      "type": "string"
+    },
+    {
+      "displayName": "User Name ",
+      "parameter": "users.userName",
+      "type": "string"
+    },
+    {
+      "displayName": "User Role Code",
+      "parameter": "users.roleCode",
+      "type": "string"
+    }
+  ]

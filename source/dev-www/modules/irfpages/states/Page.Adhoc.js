@@ -1,5 +1,10 @@
-irf.pages.controller("PageAdhocCtrl", ["$scope", "$stateParams", function($scope, $stateParams) {
+irf.pages.controller("PageAdhocCtrl", ["$scope", "$stateParams","PagesDefinition","SessionStore", function($scope, $stateParams,PagesDefinition,SessionStore) {
 	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
+	$scope.error = false;
+	if (!PagesDefinition.isStateAllowed(SessionStore.getPageUri() == undefined? window.location.hash.substring(2): SessionStore.getPageUri())) { 
+		$scope.error = true;
+		$scope.errorMessage = "Page is not allowed";
+	}
 }]);
 irf.pages.directive("irfPageAdhoc", ["$stateParams", "$templateRequest", "$compile", function($stateParams, $templateRequest, $compile) {
 	return {

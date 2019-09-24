@@ -1,7 +1,7 @@
 irf.pages.controller('LoginCtrl',
 ['$scope', 'authService', '$log', '$state', '$stateParams', 'irfStorageService', 'SessionStore', 'Utils', 'irfNavigator',
 function($scope, authService, $log, $state, $stateParams, irfStorageService, SessionStore, Utils, irfNavigator){
-
+	
 	var failedLogin = function(arg) {
 		$log.error(arg);
 		if (arg.data && arg.data.error_description) {
@@ -19,27 +19,6 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 
 	var successLogin = function(refresh) {
 		$scope.showLoading = true;
-		if (Utils.isCordova) {
-			window.MacAddress.getMacAddress(
-				function(macAddress) {
-					macaddress=macAddress;
-					window.plugins.imei.get(
-						function(imei) {
-						  imeinumber=imei;
-						  authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
-						
-						},
-						function() {
-						  console.log("error in loading imei");
-						  authService.login(username,password,macaddress).then(function() { successLogin(refresh) }, failedLogin);
-						 
-						}
-					  );
-					},function(fail) {
-						authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
-					}
-				);
-			}
 		authService.postLogin(refresh).then(function() {
 			irfNavigator.goHome();
 			if (refresh) {
@@ -52,31 +31,8 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 
 	var doLogin = function(username, password, refresh) {
 		$scope.showLoading = 'cc';
-		$log.info("doLogin()")
-		var macaddress=null;
-		var imeinumber=null;
-		if (Utils.isCordova) {
-			window.MacAddress.getMacAddress(
-				function(macAddress) {
-					macaddress=macAddress;
-					window.plugins.imei.get(
-						function(imei) {
-						  imeinumber=imei;
-						  authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
-						},
-						function() {
-						  console.log("error in loading imei");
-						  authService.login(username,password,macaddress).then(function() { successLogin(refresh) }, failedLogin);
-						}
-					  );
-				},function(fail) {
-					authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
-					}
-				);
-		}
-		else{
-			authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
-		}
+		$log.info("doLogin()");
+		authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
 		
 	};
 

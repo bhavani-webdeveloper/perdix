@@ -57,23 +57,15 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 		credentials.client_secret = 'mySecretOAuthSecret';
 		credentials.client_id='application';
 		credentials.skip_relogin = 'yes';
-		macaddress=credentials.macaddress;
+		var macaddress=credentials.macaddress;
 		var imeiNumber=credentials.imeinumber;
-		delete credentials.imeinumber;
-		if (Utils.isCordova) {
-			$http.defaults.headers.common['X-MAC-ADDRESS'] = macaddress;
-			return resource.login({ "imeiNumber": imeiNumber }, credentials, function (response) {
-				$http.defaults.headers.common['X-MAC-ADDRESS'] = undefined;
-				AuthTokenHelper.setAuthData(response);
-			});
-		}
-		else{
-			return resource.login(credentials,function(response){
-				//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
-				$http.defaults.headers.common['X-MAC-ADDRESS']= undefined;
-				AuthTokenHelper.setAuthData(response);
-			});
-		}
+			
+		$http.defaults.headers.common['X-MAC-ADDRESS'] = macaddress;
+		return resource.login({ "imeiNumber": imeiNumber }, credentials, function (response) {
+			$http.defaults.headers.common['X-MAC-ADDRESS'] = undefined;
+			AuthTokenHelper.setAuthData(response);
+		});
+		
 		
 	};
 

@@ -2,6 +2,31 @@ String.prototype.startsWith = function(sub) {
 	return this.substring(0, sub.length) == sub;
 };
 
+var userDeviceDetails = {};
+try {
+    var isCordovaFlag = typeof cordova !== 'undefined';
+    if (isCordovaFlag) {
+        var a = window.MacAddress.getMacAddress(
+            function (macAddress) {
+                userDeviceDetails.macaddress = macAddress;
+                window.plugins.imei.get(
+                    function (imei) {
+                        userDeviceDetails.imeinumber = imei;
+                    },
+                    function () {
+                        console.log("error in loading imei");
+                    }
+                );
+            },
+            function (fail) {
+                console.log("error in loading mac");
+            }
+        );
+    }
+
+} catch (error) {
+    console.log("error in catch");
+}
 // check latest update from below link
 // https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser/9851769
 var userAgent = {
@@ -9,7 +34,7 @@ var userAgent = {
 	isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
 	// Firefox 1.0+
 	isFirefox: typeof InstallTrigger !== 'undefined',
-	// Safari 3.0+ "[object HTMLElementConstructor]" 
+	// Safari 3.0+ "[object HTMLElementConstructor]"
 	isSafari: /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification)),
 	// Internet Explorer 6-11
 	isIE: /*@cc_on!@*/false || !!document.documentMode,
@@ -42,7 +67,7 @@ if (irf.appConfig.FILESYSTEM_ENABLED) {
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 	navigator.webkitPersistentStorage.requestQuota(100*1024*1024, function(grantedBytes) {
-		window.requestFileSystem(window.PERSISTENT, grantedBytes, function(fs) {	
+		window.requestFileSystem(window.PERSISTENT, grantedBytes, function(fs) {
 			console.log('Opened file system: ' + fs.name);
 			fileSystem.root = fs.root;
 			fileSystem.viewDirectory = function() {

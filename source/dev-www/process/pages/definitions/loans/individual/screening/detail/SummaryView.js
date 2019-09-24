@@ -27,7 +27,7 @@ define({
             model.fullScoringDetails = res[26].data;
             //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
-
+          
 
             var managementScore = model.scoreDetails[0];
             var res1 = model.scoreDetails[0].sections[0].data;

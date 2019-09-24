@@ -61,7 +61,7 @@
          "code":"ApplicationReview",
          "name":"Application Review",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"ApplicationReview",
          "isAccountOpening":false,
          "riskScoreName":"RiskScore3",
@@ -111,7 +111,7 @@
          "code":"CentralRiskReview",
          "name":"Central Risk Review",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"FieldAppraisal",
          "isAccountOpening":false,
          "allowedRoles":[
@@ -124,7 +124,7 @@
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
          "authorizationCount":2,
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"Approval",
          "isAccountOpening":false,
          "allowedRoles":[
@@ -148,7 +148,7 @@
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
-         "sendSms": "Yes",
+         "sendSms": "No",
          "smsCategory": "UponRejection",
          "isAccountOpening": false,
          "allowedRoles": [
@@ -160,7 +160,7 @@
          "code":"LoanInitiation",
          "name":"Loan Input",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"Sanction",
          "isAccountOpening":false,
          "allowedRoles":[
@@ -208,7 +208,7 @@
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"LoanBooking",
          "isAccountOpening":false,
          "allowedRoles":[
@@ -371,6 +371,15 @@
                },
                "linkedAccountNumber":{
                   "title":"linked Account Number",
+                  "type":"string",
+                  "minimum":1,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
+                  ]
+               },
+               "accountNumber":{
+                  "title":"Account Number",
                   "type":"string",
                   "minimum":1,
                   "maximum":10000000,
@@ -617,10 +626,20 @@
                   "minLength":1,
                   "maxLength":100,
                   "captureStages":[
-                     "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","Sanction", "LoanInitiation", 
+                     "Screening", 
+                     "ScreeningReview",
+                     "Application",
+                     "ApplicationReview",
+                     "FieldAppraisal",
+                     "Sanction", 
+                     "LoanInitiation", 
                      "PendingForPartner",
-                      "DocumentUpload",
-                      "DocumentVerification"
+                     "DocumentUpload",
+                     "DocumentVerification",
+                     "FieldAppraisalReview",
+                     "ZonalRiskReview",
+                     "CentralRiskReview",
+                     "CreditCommitteeReview"
                   ]
                },
    
@@ -1035,7 +1054,7 @@
                   "title": "estimatedEmi",
                   "type": "number",
                   "captureStages": [
-                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal", "LoanBooking"
                   ]
                },
                "expectedPortfolioInsurancePremium": {
@@ -1203,7 +1222,8 @@
                   "title":"scheduleStartDate",
                   "type":"string",
                   "captureStages":[
-                     "LoanInitiation"
+                     "LoanInitiation", 
+                     "LoanBooking"
                   ]
                },
                "status": {
@@ -1226,7 +1246,31 @@
                       "LoanBooking"
                   ]
                },
-               "securityEmiRejectReason":{
+               "securityEmiOverrideReason":{
+                  "title": "status",
+                  "type": "string",
+                  "captureStages": [
+                      "Screening",
+                      "ScreeningReview",
+                      "Application",
+                      "ApplicationReview",
+                      "FieldAppraisal",
+                      "FieldAppraisalReview",
+                      "ZonalRiskReview",
+                      "CentralRiskReview",
+                      "CreditCommitteeReview",
+                      "Rejected",
+                      "Sanction",
+                      "LoanInitiation",
+                      "PendingForPartner",
+                      "LoanBooking",
+                      "DocumentUpload",
+                      "DocumentVerification",
+                      "Dedupe"
+                  ]
+
+               },
+               "expectedDisbursementAmount":{
                   "title": "status",
                   "type": "string",
                   "captureStages": [
@@ -3977,7 +4021,22 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
+               },
+               "udf6":{
+                  "title":"udf6",
+                  "type":"string",
+                  "captureStages":[
+                     "Screening","ScreeningReview","Application","ApplicationReview","FieldAppraisal","FieldAppraisalReview","SanctionInput","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Sanction","LoanInitiation","LoanBooking","LinkedAccountVerification","DocumentUpload","DocumentVerification"
+                  ]
+               },
+               "udf8": {
+                  "title": " Eligible for HerVikas",
+                  "type": "string",
+                  "captureStages": [
+                     "FieldAppraisal"
+                  ]
                }
+
             }
          },
          "userDefinedDateFields":{
@@ -4252,6 +4311,13 @@
                         "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
                      ]
                   },
+                  "mobilePhone":{
+                     "title":"mobilePhone",
+                     "type":"string",
+                     "captureStages":[
+                        "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
+                     ]
+                  },
                   "customerBankBranchName":{
                      "title":"customerBankBranchName",
                      "type":"string",
@@ -4332,6 +4398,24 @@
                  },
                   "linkedAccountTotalFeeDue": {
                      "title": "linkedAccountTotalFeeDue",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
+                  },
+                  "linkedAccountSecurityDeposit": {
+                     "title": "linkedAccountSecurityDeposit",
+                     "type": "string",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "LoanBooking"
+                     ]
+                  },
+                  "linkedAccountPayOffAmountWithDue":{
+                     "title": "linkedAccountPayOffAmountWithDue",
                      "type": "string",
                      "minLength": 1,
                      "maxLength": 100,

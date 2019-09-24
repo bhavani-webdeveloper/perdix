@@ -1591,6 +1591,17 @@
                             "BasicEnrolment",
                             "Completed"
                         ]
+                    },
+                    "udf3":
+                    {
+                        "title": "A Numerical Value",
+                        "type": "number",
+                        "minLength": 1,
+                        "maxLength": 500,
+                        "captureStages": [
+                            "BasicEnrolment",
+                            "Completed"
+                        ]
                     }
                 }
             },

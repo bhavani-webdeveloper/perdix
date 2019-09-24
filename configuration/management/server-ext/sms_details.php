@@ -18,7 +18,7 @@ $sms_template_path = $settings['paths']['sms_template_path'];
 $dotEnv =  new Dotenv\Dotenv($sms_template_path,'smsTemplate.txt');
 $dotEnv->load();
 
-$repaymentReminderHistory = DB::table('global_settings')->where('name', 'repaymentReminderHistory')->first();
+$repaymentReminderHistory = DB::table('global_settings')->where('name', 'repaymentReminderSmsInterval')->first();
 //echo $repaymentReminderHistory->value;
 $frequencies= explode(",", $repaymentReminderHistory->value);
 

@@ -1,13 +1,16 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanRequest"),
 ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-"BundleManager", "PsychometricTestService", "LeadHelper", "$filter", "Psychometric", "Messaging",
+"BundleManager", "PsychometricTestService", "LeadHelper", "$filter", "Psychometric", "Messaging", "kinara.IndividualLoanHelper",
 function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-    BundleManager, PsychometricTestService, LeadHelper, $filter, Psychometric, Messaging){
+    BundleManager, PsychometricTestService, LeadHelper, $filter, Psychometric, Messaging, KinaraIndividualLoanHelper){
 
     var branch = SessionStore.getBranch();
-
+    var showNetDisbursmentDetails = 'N';
+    if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+        showNetDisbursmentDetails = 'Y';
+    }
     var validateForm = function(formCtrl){
         formCtrl.scope.$broadcast('schemaFormValidate');
         if (formCtrl && formCtrl.$invalid) {
@@ -232,7 +235,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             if( typeof model.enterprise.enterpriseCustomerRelations != 'undefined'){
                enterpriseCustomerRelations = model.enterprise.enterpriseCustomerRelations;
             }
-           
             for (i in loanAccount.loanCustomerRelations) {
                 if (loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
                     loanAccount.loanCustomerRelations[i].psychometricRequired = 'YES';
@@ -311,7 +313,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         }
         return true;
     }
-
+    
     var computeEstimatedEMI = function(model){
             var fee = 0;
             if(model.loanAccount.commercialCibilCharge)
@@ -457,24 +459,33 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
         "title": "LOAN_REQUEST",
         "subTitle": "BUSINESS",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-           
+            model.siteCode=SessionStore.getGlobalSetting('siteCode');
+            model.showPreOpenData = false;
             model.currentStage = bundleModel.currentStage;
             model.customer=model.customer || {};
+
             model.review = model.review|| {};
             model.temp=model.temp||{}
             model.linkedAccount={};
+            model.loanTransferLoanAccount={};
             model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
             model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.show = true;
+            // model.branch = SessionStore.getCurrentBranch().branchId;
+            model.branch = SessionStore.getCurrentBranch().branchId;
+
             if (_.hasIn(model, 'loanAccount')){
                 $log.info('Printing Loan Account');
                 $log.info(model.loanAccount);
+            //for PreOpeFEEDEtails
+            // computePreOpenFeeData(model);
+
                  /* Fixing on urgent basis , but better to get this detail from api getting model data only ,
-                             1)give data from backend/server , so we can save multiple api call 
-                             2) Some how , lead loaded - event is not working, we have data there already , 
+                             1)give data from backend/server , so we can save multiple api call
+                             2) Some how , lead loaded - event is not working, we have data there already ,
                              */
                  /*calling individual loan api to get the current loan amount for validating that loan amount requested should be greater then current loan amount */
-                 if (!(_.isNull(model.loanAccount.transactionType)) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
+                 if (!(_.isNull(model.loanAccount.transactionType)) && (model.loanAccount.transactionType.toLowerCase() == 'renewal' || model.loanAccount.transactionType == 'Loan Transfer' )) {
                     //  var p1 = IndividualLoan.search({
                     //      accountNumber: model.loanAccount.linkedLoanAccountNo
                     //  }).$promise;
@@ -494,31 +505,34 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         $log.info("loan request Individual/find api failure" + err);
                     });
                  }
+
                 if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
                     if(model.loanAccount.estimatedEmi){
-                        model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
-                    } else {
-                        if(model.currentStage=='ScreeningReview') {
-                            computeEMI(model);
+                            model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
                         } else {
-                            computeEstimatedEMI(model);
+                            if(model.currentStage=='ScreeningReview') {
+                                computeEMI(model);
+                            } else {
+                                computeEstimatedEMI(model);
+                            }
                         }
                     }
-                }
-              
-                if( model.loanAccount.securityEmiRequired == null){
-                    model.loanAccount.securityEmiRequired="Yes";
-                }
-            } else {
+                    if( model.loanAccount.securityEmiRequired == null){
+                            model.loanAccount.securityEmiRequired="YES";
+                     }
+                } else {
                 model.customer = model.customer || {};
                 model.customer.customerType = "Enterprise";
                 model.loanAccount = {};
                 model.loanAccount.loanCustomerRelations = [];
+                if(model.currentStage=='Screening'){
+                model.loanAccount.expectedProcessingFeePercentage =2;
+               }
                 // model.loanAccount.frequency = 'M';
                 model.loanAccount.isRestructure = false;
                 model.loanAccount.documentTracking = "PENDING";
                 model.loanAccount.collectionPaymentType=model.loanAccount.collectionPaymentType||"Others";
-                model.loanAccount.securityEmiRequired="Yes";
+                model.loanAccount.securityEmiRequired="YES";
                 /* END OF TEMP CODE */
             }
             if (bundlePageObj){
@@ -572,6 +586,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 if(model.currentStage=='Rejected')
                                 {
                                     model.review.preStage = model.loanSummary[i].preStage;
+                                    model.review.targetStage1 = getStageNameByStageCode(model.loanSummary[i].preStage);
                                     model.review.targetStage = model.loanSummary[i].preStage;
                                 }
                             }
@@ -698,7 +713,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
-                } else if(model.loanAccount.transactionType == 'New Loan') {
+                }  else if(model.loanAccount.transactionType == 'New Loan') {
                     model.loanAccount.linkedAccountNumber = null;
                 }
             },
@@ -731,6 +746,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                 model.loanAccount.loanCentre.branchId = params.customer.customerBranchId;
                 model.loanAccount.loanCentre.centreId = params.customer.centreId;
+                model.loanAccount.payeeMobileNumber = params.customer.mobilePhone;
                 model.enterprise = params.customer;
             },
             "business-loaded": function(bundleModel, model, params){
@@ -887,6 +903,52 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "title": "PRELIMINARY_INFORMATION",
                 "condition":"model.currentStage == 'Screening' || model.currentStage == 'Application'",
                 "items": [
+                     {
+                        key: "loanAccount.baseLoanAccount",
+                        title: "BASE_LOAN_ACCOUNT",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+
+                     },
+                     {
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        readonly:true,
+                        required: false,
+                        type:"text",
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                     },
+                     {
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        enumCode:"transaction_type_3",
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.siteCode =='kinara'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount')) {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
+
+                     },
+                     {
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        enumCode:"transaction_type_5",
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.siteCode !='kinara'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
+
+                     },
+                     {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
+                    },
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
@@ -894,7 +956,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "lov",
                         lovonly: true,
                         autolov: true,
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
+                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType != 'Loan Transfer'",
                         searchHelper: formHelper,
                         search: function(inputModel, form, model, context) {
                             var out=[];
@@ -944,45 +1006,79 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal' && model.loanAccount.transactionType != 'Loan Transfer'"
                     },
                     {
-                        key: "loanAccount.baseLoanAccount",
-                        title: "BASE_LOAN_ACCOUNT",
-                        readonly:true,
-                        required: false,
-                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-
+                        key:"loanAccount.linkedAccountNumber",
+                        title:"LINKED_ACCOUNT_NUMBER",
+                        type: "lov",
+                        autolov: true,
+                        condition:"model.loanAccount.transactionType == 'Loan Transfer' && model.siteCode =='kinara'",
+                        searchHelper: formHelper,
+                        inputMap: {
+                            "accountNumber":{
+                                key:"loanAccount.accountNumber",
+                                "title":"LOAN_ACCOUNT_NUMBER"
                      },
-                     {
-                        key: "loanAccount.transactionType",
-                        title: "TRANSACTION_TYPE",
-                        readonly:true,
-                        required: false,
-                        type:"text",
-                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                            "customerName":{
+                                key:"customer.firstName",
+                                "title":"ENTITY_NAME"
                      },
-                     {
-                        key: "loanAccount.transactionType",
-                        title: "TRANSACTION_TYPE",
-                        type: "select",
-                        "titleMap":{
-                            "New Loan":"New Loan",
-                            //"Renewal":"Renewal",
-                            "Loan Restructure":"Loan Restructure",
-                            "Internal Foreclosure":"Internal Foreclosure"
+                            "branchName":{
+                                key:"customer.branch",
+                                "type": "select",
+                                "enumCode":"branch",
+                                "title":"BRANCH",
                         },
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
-                        onChange:function(value,form,model){
-                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
-                                model.loanAccount.linkedAccountNumber = null;
+                            "centreName":{
+                                key:"customer.centreId",
+                                "title":"SPOKE",
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
                             }
-                        }
+                        },
+                        outputMap: {
+                               "accountNumber":"loanAccount.accountNumber",
+                               "customerName":"customer.firstName",
+                               "branchName":"customer.branch",
+                               "centreName":"customer.centreId",
+                        },
+                        searchHelper: formHelper,
+                        initialize: function(inputModel) {
+                            $log.info(inputModel);
+                        },
+                        search: function(inputModel, form, model, context) {
+                             return IndividualLoan.search({
+                                    'stage': "Completed",
+                                    'accountNumber': inputModel.accountNumber,
+                                    'branchName': inputModel.branchName,
+                                    'centreCode': inputModel.centreName,
+                                    'customerName': inputModel.customerName,
+                                    'isClosed':false,
 
-                     },
+
+                                }).$promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            $log.info(item);
+                            return [
+                                item.accountNumber,
+                                item.customerName,
+                                item.branchName,
+                                item.centreName,
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.linkedAccountNumber = valueObj.accountNumber;
+                        }
+                    },
                     {
-                        key: "loanAccount.npa",
-                        title: "IS_NPA",
+                        key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                        title: "OTHER_LINKED_ACCOUNTS",
+                        type:"string",
+                        //readonly:true,
+                        condition:"model.loanAccount.transactionType == 'Loan Transfer' && model.siteCode =='kinara'",
                     },
                     {
                         key: "loanAccount.loanPurpose1",
@@ -1050,13 +1146,19 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type:"select",
                         enumCode:"loan_product_category",
                         onChange:function(value,form,model){
+                            var changeFlag=true;
                             var b= model.loanAccount.productCategory.replace('–','');
                             for(var i=0;i<model.totalProductCategoryByEMI.length;i++){
                                 var temp=model.totalProductCategoryByEMI[i].replace('–','');
                                 if(temp ==b){
-                                    model.loanAccount.securityEmiRequired='Yes';
+                                    model.loanAccount.securityEmiRequired='YES';
+                                    model.loanAccount.securityEmiOverrideReason=null;
+                                    changeFlag=false;
                                     break;
-                                }  
+                                }
+                            }
+                            if(changeFlag){
+                                model.loanAccount.securityEmiRequired="NO";
                             }
                         }
                      },
@@ -1067,6 +1169,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "REQUESTED_LOAN_AMOUNT",
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
+                           model.loanAccount.estimatedEmi=model.loanAccount.expectedEmi;
                         }
                     },
                     {
@@ -1077,6 +1180,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         enumCode: "frequency",
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
+                            model.loanAccount.estimatedEmi=model.loanAccount.expectedEmi;
                         }
                     },
                     {
@@ -1086,14 +1190,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "TENURE_REQUESETED",
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
+                            model.loanAccount.estimatedEmi=model.loanAccount.expectedEmi;
                         }
                     },
                     {
                         key: "loanAccount.expectedInterestRate",
                         type: "number",
                         title: "EXPECTED_INTEREST_RATE",
+                        "required":true,
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
+                            model.loanAccount.estimatedEmi=model.loanAccount.expectedEmi;
                         }
                     },
                     {
@@ -1110,19 +1217,25 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         "required":true,
                         condition:"model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe'",
                         onChange:function(value,form,model){
-                            if(value === 'Yes'){
-                               model.loanAccount.securityEmiRejectReason=null; 
+                            if (value === 'YES') {
+                                model.loanAccount.securityEmiOverrideReason = null;
+                                model.loanAccount.estimatedEmi = model.loanAccount.expectedEmi;
+                            } else {
+                                model.loanAccount.estimatedEmi = 0;
                             }
-                            }
+                        }
                     },
-                    { 
-                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe')",
-                        key: "loanAccount.securityEmiRejectReason",
+                    {
+                        condition:"model.loanAccount.securityEmiRequired.toLowerCase() == 'no' && (model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.currentStage != 'Dedupe')",
+                        key: "loanAccount.securityEmiOverrideReason",
                         type: "select",
                         title: "REASON",
                         "required":true,
                         titleMap:{
-                            "No Reason":"No Reason"
+                            "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                            "Tenure less than 12 months":"Tenure less than 12 months",
+                            "Existing Customer":"Existing Customer",
+                            "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
                         }
                     },
                     {
@@ -1153,9 +1266,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     },
                     {
-                        key: "loanAccount.expectedPortfolioInsurancePremium",
-                        title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
-                        readonly:true
+                        key: "loanAccount.expectedCommercialCibilCharge",
+                        "type": "amount",
+                         "title": "EXPECTED_COMMERCIAL_CIBIL_CHARGE",
+                         "required":true
                     },
                     {
                         "type": "section",
@@ -1177,8 +1291,71 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "condition": "model.currentStage=='ScreeningReview' || model.currentStage == 'Dedupe' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisal'|| model.currentStage == 'FieldAppraisalReview' ||model.currentStage == 'ZonalRiskReview'|| model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                 "items": [
                     {
+                        key: "loanAccount.baseLoanAccount",
+                        title: "BASE_LOAN_ACCOUNT",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+
+                     },
+                     {
+                         key: "loanAccount.transactionType",
+                         title: "TRANSACTION_TYPE",
+                         readonly:true,
+                         required: false,
+                         condition: "model.currentStage =='Sanction' || model.currentStage =='ScreeningReview' || model.currentStage =='loanView' || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                     },
+                      {
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        required:false,
+                        enumCode:"transaction_type_3",
+                        condition: "model.currentStage !='Sanction' && model.currentStage !='ScreeningReview' && model.currentStage !='loanView' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.siteCode=='kinara'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount')) {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
+
+                    },
+                     {
+                        key: "loanAccount.transactionType",
+                        title: "TRANSACTION_TYPE",
+                        type: "select",
+                        required:false,
+                        enumCode:"transaction_type_1",
+                        condition: "model.currentStage !='Sanction' && model.currentStage !='loanView' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.siteCode !='kinara'",
+                        onChange:function(value,form,model){
+                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                model.loanAccount.linkedAccountNumber = null;
+                            }
+                        }
+
+                    },
+                    {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
+                        condition: "model.currentStage !='Sanction' && model.currentStage !='ScreeningReview' && model.currentStage !='loanView' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.siteCode=='kinara'",
+
+                    },
+                    {
+                        key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                        title: "ELIGIBLE_FOR_HERVIKAS",
+                        condition: "model.currentStage =='FieldAppraisal'",
+                        type:"select",
+                        "enumCode":"decisionmaker1"
+                    },
+                    {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA",
+                        readonly:true,
+                        condition: "model.currentStage =='Sanction' || model.currentStage =='ScreeningReview' || model.currentStage =='loanView' || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+
+                    },
+                    {
                         key:"loanAccount.linkedAccountNumber",
-                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
+                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType != 'Loan Transfer' &&  model.currentStage !='loanView'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1209,53 +1386,65 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        condition: "(model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal' ) )",
                         type: "lov",
-                        lovonly: true,
                         autolov: true,
-                        clear:true,
+                        condition:"model.loanAccount.transactionType == 'Loan Transfer' && model.siteCode =='kinara' && model.currentStage =='FieldAppraisal' ",
                         searchHelper: formHelper,
+                        inputMap: {
+                            "accountNumber":{
+                                key:"loanAccount.accountNumber",
+                                "title":"LOAN_ACCOUNT_NUMBER"
+                            },
+                            "customerName":{
+                                key:"customer.firstName",
+                                "title":"ENTITY_NAME"
+                            },
+                            "branchName":{
+                                key:"customer.branch",
+                                "type": "select",
+                                "enumCode":"branch",
+                                "title":"BRANCH",
+                            },
+                            "centreName":{
+                                key:"customer.centreId",
+                                "title":"SPOKE",
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                            }
+                        },
+                        outputMap: {
+                               "accountNumber":"loanAccount.accountNumber",
+                               "customerName":"customer.firstName",
+                               "branchName":"customer.branch",
+                               "centreName":"customer.centreId",
+                        },
+                        searchHelper: formHelper,
+                        initialize: function(inputModel) {
+                            $log.info(inputModel);
+                        },
                         search: function(inputModel, form, model, context) {
-                            var out=[];
-                            var promise = LoanProcess.viewLoanaccount(
-                            {
-                                urn: model.enterprise.urnNo
-                            }).$promise.then(function(res){
-                                if(res && res.body && res.body.length && res.body.length>0){
-                                    for(i in res.body){
-                                        if(res.body[i].operationalStatus=='Active'){
-                                            out.push(res.body[i]);
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                }else{
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": res.body.length
-                                        },
-                                        body: res.body
-                                    });
-                                }
-                            });
-                            return promise;
+                             return IndividualLoan.search({
+                                    'stage': "Completed",
+                                    'accountNumber': inputModel.accountNumber,
+                                    'branchName': inputModel.branchName,
+                                    'centreCode': inputModel.centreName,
+                                    'customerName': inputModel.customerName,
+
+
+                                }).$promise;
                         },
                         getListDisplayItem: function(item, index) {
                             $log.info(item);
                             return [
-                                item.accountId,
-                                item.glSubHead,
-                                item.amount,
-                                item.npa,
+                                item.accountNumber,
+                                item.customerName,
+                                item.branchName,
+                                item.centreName,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.loanAccount.npa = valueObj.npa;
-                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountNumber;
                         }
                     },
                     {
@@ -1263,45 +1452,28 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
                         required: false,
-                        condition: "(model.currentStage =='Sanction' && model.loanAccount.transactionType != 'New Loan') || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "((model.currentStage =='Sanction' || model.currentStage =='loanView' || model.currentStage =='ScreeningReview') && model.loanAccount.transactionType != 'New Loan') || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
+                    // {
+                    //     key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                    //     title: "ELIGIBLE_FOR_HERVIKAS",
+                    //     condition: "model.currentStage =='FieldAppraisal'",
+                    //     type:"select",
+                    //     "enumCode":"decisionmaker1"
+                    // },
+                    //here
                     {
-                        key: "loanAccount.baseLoanAccount",
-                        title: "BASE_LOAN_ACCOUNT",
+                        key:"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                        title:"OTHER_LINKED_ACCOUNTS",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-
-                     },
-                     {
-                         key: "loanAccount.transactionType",
-                         title: "TRANSACTION_TYPE",
-                         readonly:true,
-                         required: false,
-                         condition: "model.currentStage =='Sanction' || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                     },
-                     {
-                        key: "loanAccount.transactionType",
-                        title: "TRANSACTION_TYPE",
-                        type: "select",
-                        required:false,
-                        "titleMap":{
-                            "New Loan":"New Loan",
-                            "Renewal":"Renewal",
-                            "Loan Restructure":"Loan Restructure",
-                            "Internal Foreclosure":"Internal Foreclosure"
-                        },
-                        condition: "model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
-                        onChange:function(value,form,model){
-                            if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
-                                model.loanAccount.linkedAccountNumber = null;
-                            }
-                        }
-
+                        condition: "((model.currentStage =='Sanction' || model.currentStage =='loanView' || model.currentStage =='ScreeningReview') && model.loanAccount.transactionType != 'New Loan') || model.loanAccount.transactionType.toLowerCase() == 'renewal' && model.siteCode =='kinara'"
                     },
                     {
-                        key: "loanAccount.npa",
-                        title: "IS_NPA",
+                        key: "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                        title: "OTHER_LINKED_ACCOUNTS",
+                        type:"string",
+                        condition:"model.loanAccount.transactionType == 'Loan Transfer' && model.siteCode =='kinara' && model.currentStage =='FieldAppraisal' ",
                     },
                     {
                         key: "loanAccount.loanPurpose1",
@@ -1403,19 +1575,22 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         "readonly":false,
                         condition:"model.currentStage == 'Rejected' || model.currentStage == 'loanView'",
                         onChange:function(value,form,model){
-                            if(value === 'Yes'){
-                               model.loanAccount.securityEmiRejectReason=null; 
+                            if(value === 'YES'){
+                               model.loanAccount.securityEmiOverrideReason=null;
                             }
                             }
                     },
-                    { 
-                        condition:"model.loanAccount.securityEmiRequired == 'No' && (model.currentStage == 'Rejected' || model.currentStage == 'loanView')",
-                        key: "loanAccount.securityEmiRejectReason",
+                    {
+                        condition:"model.loanAccount.securityEmiRequired.toLowerCase() == 'no' && (model.currentStage == 'Rejected' || model.currentStage == 'loanView')",
+                        key: "loanAccount.securityEmiOverrideReason",
                         type: "select",
                         title: "REASON",
                         "required":true,
                         titleMap:{
-                            "No Reason":"No Reason"
+                            "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                            "Tenure less than 12 months":"Tenure less than 12 months",
+                            "Existing Customer":"Existing Customer",
+                            "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
                         },
                         "readonly":false
                     },
@@ -1447,11 +1622,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "PDC":"PDC",
                             "Others":"Others"
                         }
-                    },
-                    {
-                        key: "loanAccount.expectedPortfolioInsurancePremium",
-                        title: "EXPECTED_PORTFOLIO_INSURANCE_PREMIUM",
-                        readonly:true
                     },
                     {
                         "type": "section",
@@ -2395,17 +2565,20 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     required:true,
                     onChange:function(value,form,model){
                     if(value === 'Yes'){
-                       model.loanAccount.securityEmiRejectReason=null; 
+                       model.loanAccount.securityEmiOverrideReason=null;
                     }
                     }
                 },
-                { 
-                    condition:"model.loanAccount.securityEmiRequired == 'No'",
-                    key: "loanAccount.securityEmiRejectReason",
+                {
+                    condition:"model.loanAccount.securityEmiRequired.toLowerCase() == 'no'",
+                    key: "loanAccount.securityEmiOverrideReason",
                     type: "select",
                     title: "REASON",
                     titleMap:{
-                        "No Reason":"No Reason"
+                        "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                        "Tenure less than 12 months":"Tenure less than 12 months",
+                        "Existing Customer":"Existing Customer",
+                        "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
                     },
                     "readonly":false,
                     required:true
@@ -2511,18 +2684,21 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     required: true,
                     onChange:function(value,form,model){
                         if(value === 'Yes'){
-                           model.loanAccount.securityEmiRejectReason=null; 
+                           model.loanAccount.securityEmiOverrideReason=null;
                         }
                         }
                 },
-                { 
-                    condition:"model.loanAccount.securityEmiRequired == 'No'",
-                    key: "loanAccount.securityEmiRejectReason",
+                {
+                    condition:"model.loanAccount.securityEmiRequired.toLowerCase() == 'no'",
+                    key: "loanAccount.securityEmiOverrideReason",
                     type: "select",
                     title: "REASON",
                     "required":true,
                     titleMap:{
-                        "No Reason":"No Reason"
+                        "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                        "Tenure less than 12 months":"Tenure less than 12 months",
+                        "Existing Customer":"Existing Customer",
+                        "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
                     },
                     readonly:false
                 }]
@@ -2666,6 +2842,58 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 ]
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "type": "box",
+                "title": "EXPECTED_NET_DISBURSEMENT",
+                "condition": "model.showPreOpenData",
+                readonly: true,
+                "items": [
+                        {
+                            key:"preOpenFeeData.loanAmount",
+                            "type": "amount",
+                            "title": "LOAN_AMOUNT",
+                            readonly: true,
+                        },
+                        {
+                        key: "preOpenFeeData.expectedCommercialCibilCharges",
+                        "type": "amount",
+                        "title": "COMMERCIAL_CIBIL_CHARGE",
+                        readonly: true,
+                    },
+                    {
+                        key: "preOpenFeeData.expectedProcessingFee",
+                        "type": "amount",
+                        "title": "EXPECTED_PROCESSING_FEE",
+                        readonly: true
+                    },
+                    {
+                        key: "preOpenFeeData.expectedSecurityEMI",
+                        "type": "amount",
+                        "title": "EXPECTED_SECURITY_EMI",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.expectedPortfolioInsuranceAmount",
+                        "type": "amount",
+                        "title": "EXPECTED_PORTFOLIO_INSUARANCE_WITH_GST",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.payoffAmountForLinkedAccount",
+                        "type": "amount",
+                        "title": "EXPECTED_PAYOFF_FOR_LINKED_ACCOUNT",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.documentCharges",
+                        "type": "amount",
+                        "title": "EXPECTED_DOCUMENT_CHARGES",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.netDisbursementAmount",
+                        "type": "amount",
+                        "title": "EXPECTED_NET_DISBURSABLE_AMOUNT",
+                        readonly: true
                     }
                 ]
             },
@@ -2873,7 +3101,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         readonly: true,
                         type: "textarea",
                     }, {
-                        key: "review.targetStage",
+                        key: "review.targetStage1",
                         title: "SEND_BACK_TO_STAGE",
                         type: "lov",
                         lovonly:true,
@@ -2888,7 +3116,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 var t = targetstage[i];
                                 if (t.field1 == stage1) {
                                     out.push({
-                                        name: t.name,
+                                        name: getStageNameByStageCode(t.name),
+                                        value:t.code
                                     })
                                 }
                             }
@@ -2900,7 +3129,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                         },
                         onSelect: function(valueObj, model, context) {
-                            model.review.targetStage = valueObj.name;
+                            model.review.targetStage1 = valueObj.name;
+                            model.review.targetStage = valueObj.value;
                         },
                         getListDisplayItem: function(item, index) {
                             return [
@@ -3018,8 +3248,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             IndividualLoan.create(reqData)
                                 .$promise
                                 .then(function(res){
-
                                     model.loanAccount = res.loanAccount;
+                                    
+                                    if (showNetDisbursmentDetails == "Y") {
+                                        KinaraIndividualLoanHelper.computePreOpenFeeData(model);
+                                    }
                                     if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
                                         if(model.loanAccount.estimatedEmi){
                                             model.loanAccount.expectedEmi = model.loanAccount.estimatedEmi;
@@ -3114,6 +3347,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             sendBack: function(model, formCtrl, form, $event){
                 $log.info("Inside sendBack()");
                 PageHelper.clearErrors();
+                if(model.currentStage=='Sanction'){
+                    model.loanAccount.sanctionDate=null;
+                    model.loanAccount.numberOfDisbursements=null;
+                    model.loanAccount.disbursementSchedules=[];
+                }
 
                 if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage==null || model.review.targetStage==""){
                     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
@@ -3232,11 +3470,12 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 $log.info(DedupeEnabled);
 
                 $log.info("Inside submit()");
+              
 
                 PageHelper.clearErrors();
                 var nextStage = null;
                 var dedupeCustomerIdArray = [];
-               if( !_.isNull(model.loanAccount.transactionType)&& (model.loanAccount.transactionType.toLowerCase() =='renewal'|| model.loanAccount.transactionType=='Internal Foreclosure')){
+               if( !_.isNull(model.loanAccount.transactionType) && (model.loanAccount.transactionType.toLowerCase() =='renewal'|| model.loanAccount.transactionType=='Internal Foreclosure' ||  model.loanAccount.transactionType =='Loan Transfer')){
                     if(!model.loanAccount.linkedAccountNumber){
                         var res = {
                             data: {
@@ -3248,16 +3487,36 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         return;
                     }
                }
+               var showNetDisbursmentDetails = 'N';
+               if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+                   showNetDisbursmentDetails = 'Y';
+               }
+               if (showNetDisbursmentDetails == "Y") {
+                   if(!model.preOpenFeeData){
+                    PageHelper.setError({
+                        message: "Please save account before proceeding"
+                    });
+                    PageHelper.hideLoader();
+                    return false;
+                   }
+                   if (model.preOpenFeeData.netDisbursementAmount < 0) {
+                       PageHelper.setError({
+                           message: "disubrsement amount can not be less than : 0"
+                       });
+                       PageHelper.hideLoader();
+                       return false;
+                   }
+               }
                 /* TODO Call proceed servcie for the loan account */
                 // if(isEnrollmentsSubmitPending(model)){
                 //     return
                 // }
                 /* 1)validating loan amount requested should be greater then current loan account */
-                if(!_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase() =='renewal'){
+                if(!_.isNull(model.loanAccount.transactionType) && (model.loanAccount.transactionType.toLowerCase() =='renewal')){
                     if(model.linkedLoanAmount && (model.loanAccount.loanAmountRequested < model.linkedLoanAmount || ( !_.isNull(model.loanAccount.loanAmount) && model.loanAccount.loanAmount < model.linkedLoanAmount))){
                         var res = {
                             data: {
-                                error: 'Loan Amount Requested/Recommended should be greater than or equal to current loan amount' +"  "+ model.linkedLoanAmount 
+                                error: 'Loan Amount Requested/Recommended should be greater than or equal to current loan amount' +"  "+ model.linkedLoanAmount
                             }
                         };
                         PageHelper.hideLoader();
@@ -3273,8 +3532,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                            return;
                         }
 
-                    } 
+                    }
                 }
+
+
 
                 if (!validateForm(formCtrl)){
                     PageHelper.hideLoader();
@@ -3439,7 +3700,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                             return p2_2;
                         })
-                        mandatoryPromises.push(p2);   
+                        mandatoryPromises.push(p2);
                     } else {
                         var p2 = $q.when()
                         .then(function(){
@@ -3467,9 +3728,9 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             });
                             return p2_2;
                         })
-                        mandatoryPromises.push(p2);  
+                        mandatoryPromises.push(p2);
                     }
-                     
+
 
                         // Dedupe call
                         if (DedupeEnabled == 'Y') {

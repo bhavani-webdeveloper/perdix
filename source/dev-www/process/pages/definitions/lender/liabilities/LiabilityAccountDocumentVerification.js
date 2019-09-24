@@ -66,6 +66,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return [
                     "DocumentVerification",
                     "DocumentVerification.lenderId",
+                    "DocumentVerification.alternateLenderId",
                     "DocumentVerification.lenderName",
                     "DocumentVerification.documentDownload",
                     "DocumentVerification.lenderDocuments",
@@ -163,6 +164,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                         "lenderId": {
                                             "key": "liabilityAccount.lenderId",
                                             "title": "LENDER_ID",
+                                            "orderNo": 10,
+                                            "readonly": true
+                                        },
+                                        "alternateLenderId":{
+                                            "title": "ALTERNATE_LENDER_ID",
+                                            "key": "liabilityAccount.udf1",
+                                            "orderNo": 20,
                                             "readonly": true
                                         },
                                         "lenderName": {

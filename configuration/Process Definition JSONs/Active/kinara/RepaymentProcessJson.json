@@ -15,6 +15,8 @@
        "order":2,
        "code":"BranchDeposit",
        "name":"BranchDeposit",
+       "sendSms":"Yes",
+       "transactionTypeForSms": {"Scheduled Demand":"ODCollection","Advance Repayment":"ODCollection","Fee Payment":"ODCollection","PenalInterestPayment":"ODCollection","Pre-closure":"ODCollection"},
        "stageType":"CAPTURE",
        "isBankAccountReversal":true,
        "allowedRoles":[
@@ -36,8 +38,8 @@
         "code":"Deposit",
         "name":"Deposit",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"ODCollection",
+        "sendSms":"No",
+        "transactionTypeForSms": {"Scheduled Demand":"ODCollection","Advance Repayment":"ODCollection","Fee Payment":"ODCollection","PenalInterestPayment":"ODCollection","Pre-closure":"ODCollection"},
         "isBankAccountReversal":true,
         "allowedRoles":[
            "APPROVER"
@@ -47,8 +49,10 @@
         "order":5,
         "code":"BRSValidation",
         "name":"BRSValidation",
+        "sendSms":"Yes",
+        "transactionTypeForSms": {"Scheduled Demand":"ODCollection","Advance Repayment":"ODCollection","Fee Payment":"ODCollection","PenalInterestPayment":"ODCollection","Pre-closure":"ODCollection"},
         "stageType":"CAPTURE",
-        "brsStage":"yes",
+        "brsStage":"No",
         "allowedRoles":[
            "APPROVER"
         ]
@@ -79,6 +83,15 @@
          "WM"
        ]
        
+      },
+      {
+       "order":9,
+       "code":"BounceCorrection",
+       "name":"BounceCorrection",
+       "stageType":"CAPTURE",
+       "allowedRoles":[
+         "WM"
+       ]
      }
   ]
 }

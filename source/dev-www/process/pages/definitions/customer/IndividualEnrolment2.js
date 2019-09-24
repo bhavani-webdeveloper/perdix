@@ -58,7 +58,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                     allowedCentres.push(centres[i]);
                 }
             }
-
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
             model.currentStage = bundleModel.currentStage;
 
             if (_.hasIn(model, 'loanRelation')){
@@ -427,7 +427,16 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                 //readonly:true,
                                 required:true,
                                 type:"select",
+                                condition: "model.siteCode != 'kinara'",
                                 "enumCode": "identity_proof"
+                            },
+                            {
+                                key:"customer.addressProof",
+                                //readonly:true,
+                                required:true,
+                                type:"select",
+                                condition: "model.siteCode == 'kinara'",
+                                "enumCode": "address_proof"
                             },
                             {
                                 key:"customer.addressProofImageId",
@@ -441,7 +450,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                condition: "model.customer.addressProof === 'Aadhar Card'",
                                 type:"file",
                                 required: true,
-                                fileType:"application/pdf", 
+                                fileType:"application/pdf",
                                 using: "scanner",
                                 title: "Aadhar Declaration",
                                 "category": "CustomerEnrollment",
@@ -626,7 +635,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                                condition: "model.customer.addressProof === 'Aadhar Card'",
                                 type:"file",
                                 required: true,
-                                fileType:"application/pdf", 
+                                fileType:"application/pdf",
                                 using: "scanner",
                                 title: "Aadhar Declaration",
                                 "category": "CustomerEnrollment",
@@ -2883,7 +2892,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrolment2"),["$log", "$
                         reqData.customer.panNo = reqData.customer.identityProofNo;
                     }
                     if (reqData.customer.identityProof != 'Pan Card' &&
-                        !_.isNull(reqData.customer.identityProofNo)){       
+                        !_.isNull(reqData.customer.identityProofNo)){
                         reqData.customer.panNo = null;
                     }
 

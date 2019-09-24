@@ -1,13 +1,14 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "Utils", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfNavigator","translateFilter",
-function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfNavigator, translateFilter) {
+["$log", "Utils", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfNavigator","translateFilter","PagesDefinition",
+function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfNavigator, translateFilter,PagesDefinition) {
 	var self = this;
 
 	$scope.boxHeads = [];
 
-	$scope.openHead = function(head, $event) {
+		$scope.openHead = function(head, $event) {
 		$event.preventDefault();
 		$scope.showHeads = false;
+
 		$(head.box).show().find('.box-header').css('cursor', 'pointer').one('click', function(event) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -182,6 +183,10 @@ function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager
 	$scope.pageNameHtml = irf.pageNameHtml($stateParams.pageName);
 	$scope.pageId = $stateParams.pageId;
 	$scope.error = false;
+	if (!PagesDefinition.isStateAllowed(SessionStore.getPageUri() == undefined? window.location.hash.substring(2): SessionStore.getPageUri())) {
+		$scope.error = true;
+		$scope.errorMessage = "Page is not allowed";
+	}
 	try {
 		$scope.page = $injector.get(irf.page($scope.pageName));
 		aquireLock().then(setupPage);
@@ -189,7 +194,7 @@ function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager
 		if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page($scope.pageName)+"Provider")) {
 			$log.error("Loading Dynamic page...");
 		} else {
-			$log.error(e);
+			$log.error(e); 
 		}
 		try {
 			var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");

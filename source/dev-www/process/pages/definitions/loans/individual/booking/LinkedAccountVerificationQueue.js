@@ -2,12 +2,12 @@
 define({
     pageUID: "loans.individual.booking.LinkedAccountVerificationQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "LoanBookingCommons","$filter"],
-    $pageFn: function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, LoanBookingCommons, $filter) {
-  
+    dependencies: ["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "LoanBookingCommons","$filter","Locking"],
+    $pageFn: function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, LoanBookingCommons, $filter,Locking) {
+
     return {
         "type": "search-list",
-        "title": "INTERNAL_FORECLOSURE_OR_RENEWAL_VERIFICATION_QUEUE", 
+        "title": "LINKED_ACCOUNT_VERIFICATION_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
@@ -69,7 +69,7 @@ define({
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        
+
                         "x-schema-form": {
                             "type": "lov",
                             "lovonly": true,
@@ -94,7 +94,7 @@ define({
                             },
                         }
                     },
-                    
+
                     "account_number": {
                         "title": "LOAN_ACCOUNT_NUMBER",
                         "type": "string"
@@ -156,7 +156,7 @@ define({
                     return [
                         item.customerName ,
                         "<em>Loan Amount: Rs."+item.loanAmount+", Sanction Date: "+item.sanctionDate + "</em>",
-                     
+
                     ]
                 },
                 getActions: function(){

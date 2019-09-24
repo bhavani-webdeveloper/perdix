@@ -161,11 +161,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "LiabilityRepayments": {
                         "orderNo": 80
                     },
-                    "LenderAccountDetails.lenderId": {
-                        // searchHelper: formHelper,
-                        "resolver": "LenderIDLOVConfiguration",
-                        "orderNo": 90
-                    },
+                    // "LenderAccountDetails.lenderId": {
+                    //     // searchHelper: formHelper,
+                    //     "resolver": "LenderIDLOVConfiguration",
+                    //     "orderNo": 10
+                    // },
                     "LenderAccountDetails.lenderAccountNumber": {
                         "required": true
                     },
@@ -393,6 +393,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return [
                     "LenderAccountDetails",
                     "LenderAccountDetails.lenderId",
+                    "LenderAccountDetails.alternateLenderId",
                     "LenderAccountDetails.lenderAccountNumber",
                     "LenderAccountDetails.sourcingAgent",
 
@@ -504,6 +505,48 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
+                                "LenderAccountDetails":{
+                                    "items":{
+                                        "lenderId":{
+                                            key: "liabilityAccount.lenderId",
+                                            type: "lov",
+                                            lovonly: true,
+                                            "orderNo": 10,
+                                            bindMap: {
+                                            },
+                                            inputMap: {
+                                                "firstName": {
+                                                    "key": "customer.firstName",
+                                                    "title": "LENDER_NAME"
+                                                }
+                                            },
+                                            outputMap: {
+                                                "lenderId": "customer.id",
+                                                "alternateLenderId": "liabilityAccount.udf1"
+                                            },
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model) {
+                                                if (!inputModel.branchName)
+                                                    inputModel.branchName = SessionStore.getBranch();
+                                                return Queries.getLenderInfo(inputModel.branchName,inputModel.firstName)
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    [item.firstName, item.fatherFirstName].join(' '),
+                                                    item.id,
+                                                    item.alternateLenderId
+                                                    
+                                                ];
+                                            }
+                                        },
+                                        "alternateLenderId":{
+                                            "type": "text",
+                                            "title": "ALTERNATE_LENDER_ID",
+                                            "key": "liabilityAccount.udf1",
+                                            "orderNo": 20 
+                                        }
+                                    }
+                                },
                                 "DisbursementDetails": {
                                     "items": {                            
                                         "bookDebtPercentage": {

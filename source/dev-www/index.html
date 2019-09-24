@@ -198,6 +198,7 @@
 <script src="process/models/v1/bank/BankMaster.js"></script>
 <script src="process/models/v1/bank/SurveyInformation.js"></script>
 <script src="process/models/v1/customer/CustomerBankBranch.js"></script>
+<script src="process/models/v1/loans/PayeeValidation.js"></script>
 <script src="process/models/v1/customer/Dedupe.js"></script>
 <script src="process/pages/definitions/customer/Dashboard.js"></script>
 
@@ -221,6 +222,7 @@
 <script src="process/models/v1/loans/DocumentTracking.js"></script>
 <script src="process/models/v1/excelUpload/ExcelUpload.js"></script>
 <script src="process/models/v1/loans/Inventory.js"></script>
+<script src="process/models/v1/loans/IncomingPayment.js"></script>
 <script src="process/models/v1/loans/ACHPDCBatchProcess.js"></script>
 <script src="process/models/v1/loans/SecurityEMIRefundResource.js"></script>
 <script src="process/models/v1/management/ReferenceCode.js"></script>
@@ -356,6 +358,8 @@
 <script src="process/pages/definitions/lead/LeadReject.js"></script>
 <script src="process/pages/definitions/lead/ReadyForScreeningQueue.js"></script>
 
+<script src="process/pages/definitions/kinara/helper/IndividualLoanHelper.js"></script>
+
 <script src="process/pages/definitions/bank/Survey.js"></script>
 <script src="process/pages/definitions/bank/SurveyDashboard.js"></script>
 
@@ -470,6 +474,8 @@
 <script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
 <script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
 <script src="process/pages/definitions/loans/group/GroupLoanRepay.js"></script>
+
+<script src="process/pages/definitions/loans/incomingPayment/IncomingPaymentDashboard.js"></script>
 
 <script src="process/pages/definitions/loans/individual/LoanBookingQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/Queue.js"></script>
@@ -587,6 +593,7 @@
 <script src="process/pages/definitions/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/kinara/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/kinara/loans/individual/collections/CreditValidationQueue.js"></script>
+<script src="process/pages/definitions/kinara/loans/individual/collections/BounceCorrectionQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmation.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursementQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursement.js"></script>
@@ -594,9 +601,10 @@
 
 <script src="process/pages/definitions/loans/individual/collections/BouncePromiseQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/BounceRecoveryQueue.js"></script>
-
+<script src="process/pages/definitions/workflow/CustomerApprovalInit.js" ></script>
 <script src="process/pages/definitions/loans/individual/collections/BounceQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/CreditValidation.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/CollectionHelper.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/BRSApproval.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/BRSApprovalQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/P2PUpdate.js"></script>
@@ -771,6 +779,7 @@
 <script src="process/pages/definitions/base/dashboard/loans/individual/screening/SpokeNewConversationQueue.js"></script>
 <script src="process/pages/definitions/base/dashboard/loans/individual/screening/SpokeRepliedConversationQueue.js"></script>
 <script src="process/pages/definitions/workflow/CustomerApproval.js"></script>
+<script src="process/pages/definitions/workflow/CustomerApprovalApprove.js"></script>
 
 <script src="process/pages/definitions/base/dashboard/loans/individual/screening/CentralRiskReviewQueue.js"></script>
 <script src="process/pages/definitions/base/dashboard/loans/individual/screening/CentralRiskReview.js"></script>

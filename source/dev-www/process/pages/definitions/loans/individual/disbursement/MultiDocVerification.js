@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerification"), ["$log", "SchemaResource", "SessionStore", "$state", "$stateParams", "$filter", "PageHelper", "formHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "$q","PaymentBank",
-    function($log, SchemaResource, SessionStore, $state, $stateParams, $filter, PageHelper, formHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, $q, PaymentBank) {
+irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerification"), ["$log", "SchemaResource", "SessionStore", "$state", "$stateParams", "$filter", "PageHelper", "formHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "$q","PaymentBank","PayeeValidation","Enrollment",
+    function($log, SchemaResource, SessionStore, $state, $stateParams, $filter, PageHelper, formHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, $q, PaymentBank, PayeeValidation, Enrollment) {
 
         var docRejectReasons = [];
         Queries.getLoanProductDocumentsRejectReasons().then(function(resp){
@@ -34,6 +34,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                 }
                 model.loanAccountDisbursementSchedule = {};
                 model.loanAccountDisbursementSchedule = _.cloneDeep(model._DocVerifyQueue);
+                model.autoPaymentMaximumAmount = SessionStore.getGlobalSetting("payment.AutoPaymentMaximumAmount");
                 PageHelper.showLoader();
                 IndividualLoan.get({
                     id: model.loanAccountDisbursementSchedule.loanId
@@ -41,6 +42,37 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
                     model.loanAccountDisbursementSchedule.disbursementTransactionType = model.loanAccount.disbursementTransactionType;
+                    if(!model.loanAccount.disbursementTransactionType){
+                        model.loanAccountDisbursementSchedule.disbursementTransactionType="Manual";
+                    }else{
+                        model.loanAccountDisbursementSchedule.disbursementTransactionType = model.loanAccount.disbursementTransactionType;
+                    }
+
+                    if(model.loanAccount.loanAmount > model.autoPaymentMaximumAmount){
+                        model.loanAccount.isMaxLoanAmount=true;
+                        model.loanAccountDisbursementSchedule.disbursementTransactionType="Manual";
+                    }else{
+                        PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode},
+                        function(response,headersGetter){
+                            //sucess
+                            model.isVerifiedBank=true;
+                            model.beneficiaryAccValidationStatus =true;
+                            model.loanAccountDisbursementSchedule.disbursementTransactionType="Auto";
+
+                            Enrollment.getCustomerById({
+                                id: model.loanAccount.customerId
+                            },
+                            function(res) {
+                                model.customer = res;
+                            });
+
+                        },
+                        function(resp){
+                            model.isVerifiedBank=false;
+                            model.loanAccount.disbursementTransactionType="Manual";
+                        });
+                    }
+
                     $log.info("Loan account fetched");
                     Queries.getLoanProductDocuments(model.loanAccount.productCode, "MultiTranche", "DocumentUpload").then(function(docs) {
                         var docsForProduct = [];
@@ -101,12 +133,25 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                     "items": [{
                         "type": "fieldset",
                         "title": "DISBURSEMENT_ACCOUNT_DETAILS",
-                        "items": [{
+                        "items": [
+                            {
+                                "type": "section",
+                                "htmlClass": "alert alert-warning",
+                                "condition": "model.beneficiaryAccValidationRes.Body.status=='Failed'",
+                                "html":"<h4><i class='icon fa fa-warning'></i>Beneficiary Validation Failed!</h4> {{model.PaymentBenificiaryValidationDetail.responseErrorMessage}}"
+                            },
+                            {
+                                "type": "section",
+                                "htmlClass": "alert alert-success",
+                                "condition": "model.beneficiaryAccValidationRes.Body.status=='Success'",
+                                "html":"<h4><i class='icon fa fa-check'></i>Beneficiary Validation Success </h4> Beneficiary Validation Success"
+                            },
+                            {
                             "key": "loanAccountDisbursementSchedule.party",
                             "type": "text",
                             "readonly":true,
                             "title":"PARTY"
-                        }, 
+                        },
                         {
                             key: "loanAccountDisbursementSchedule.customerNameInBank",
                             title: "CUSTOMER_NAME_IN_BANK",
@@ -116,17 +161,17 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                             key: "loanAccountDisbursementSchedule.customerAccountNumber",
                             title: "CUSTOMER_BANK_ACC_NO",
                             "readonly":true
-                        }, 
+                        },
                         {
                             key: "loanAccountDisbursementSchedule.ifscCode",
                             title: "CUSTOMER_BANK_IFSC",
                             "readonly":true
-                        }, 
+                        },
                         {
                             key: "loanAccountDisbursementSchedule.customerBankName",
                             title: "CUSTOMER_BANK",
                             "readonly":true
-                        }, 
+                        },
                         {
                             key: "loanAccountDisbursementSchedule.customerBankBranchName",
                             title: "BRANCH_NAME",
@@ -140,12 +185,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                             autolov: true,
                             searchHelper: formHelper,
                             search: function(inputModel, form, model, context) {
-                                var out = [{mode: "Manual"}];   
-                                if(model.loanAccount.disbursementTransactionType=="Auto"){
+                                var out = [{mode: "Manual"}];
+                                    if(model.isVerifiedBank && !model.loanAccount.isMaxLoanAmount && model.loanAccount.disbursementTransactionType=="Auto"){
                                     out.push({
                                         mode: "Auto"
                                     });
-                                } 
+                                }
                                 return $q.resolve({
                                     headers: {
                                         "x-total-count": out.length
@@ -154,16 +199,29 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                                 });
                             },
                             onSelect: function(valueObj, model, context) {
-                                model.loanAccount.modeOfDisburments = valueObj.mode;
+                                model.loanAccountDisbursementSchedule.disbursementTransactionType = valueObj.mode;
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
-                                    item.mode                                
+                                    item.mode
                                 ];
                             },
                             onChange: function(value, form, model) {
-                            
+
                             }
+                        },
+                        {
+                            key: "loanAccount.payeeValidationButton",
+                            "type": "button",
+                            title: "BENEFICIARY_VALIDATION",
+                            "condition": "model.beneficiaryAccValidationStatus && model.isVerifiedBank && !model.loanAccount.isMaxLoanAmount && model.loanAccountDisbursementSchedule.disbursementTransactionType=='Auto'",
+                            "onClick": "actions.payeeValidation(model, formCtrl, form, $event)"
+                        },
+                        {
+                            key: "PaymentBenificiaryValidationDetail.responseErrorMessage",
+                            "condition":"PaymentBenificiaryValidationDetail.responseErrorMessage!= 'null'",
+                            title: "Validation Description",
+                            "readonly":true
                         }]
                     }]
                 },
@@ -296,6 +354,41 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                 return SchemaResource.getDisbursementSchema().$promise;
             },
             actions: {
+                payeeValidation: function(model, formCtrl, form, $event){
+                    var reqData ={
+                        "beneficiaryAccValidationReq": {
+                            "Body": {
+                                "accountNumber": model.loanAccount.customerBankAccountNumber,
+                                "beneficiaryMobileNumber": model.customer.mobilePhone,
+                                "beneficiaryName": model.loanAccount.disbursementSchedules[0].customerNameInBank.replace(/[^a-zA-Z]/g, ''),
+                                "ifscCode": model.loanAccount.customerBankIfscCode
+                            }
+                        }
+                    };
+                    PageHelper.showLoader();
+                    PayeeValidation.validation(reqData,function(response,headersGetter){
+                        model.beneficiaryAccValidationStatus = response.PayeeValidationDetail.beneficiaryAccValidationRes.Body.status;
+                        model.beneficiaryAccValidationRes = response.PayeeValidationDetail.beneficiaryAccValidationRes;
+                        model.PaymentBenificiaryValidationDetail = response.PaymentBenificiaryValidationDetail;
+
+                        if(!model.PaymentBenificiaryValidationDetail.responseErrorCode)
+                            model.PaymentBenificiaryValidationDetail.responseErrorMessage = 'success';
+
+                        model.beneficiaryAccValidationStatus= false
+                        if(model.beneficiaryAccValidationRes.Body.status=="Failed"){
+                            model.loanAccountDisbursementSchedule.disbursementTransactionType="Manual";
+                            model.isVerifiedBank=false;
+                        }
+
+                        PageHelper.hideLoader();
+                    },function(httpRes){
+                        PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                        PageHelper.showErrors(httpRes);
+                        PageHelper.hideLoader();
+                    });
+
+
+                },
                 /*submit: function(model, form, formName){
                     var reqData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
@@ -340,6 +433,20 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                         })
                 }*/
                 submit: function(model, form, formName) {
+                    
+
+                    if(model.loanAccountDisbursementSchedule.disbursementTransactionType=="Auto"){
+                        if(model.PaymentBenificiaryValidationDetail){
+                            if(model.PaymentBenificiaryValidationDetail.responseErrorMessage.toUpperCase() != 'Success'.toUpperCase()){
+                                PageHelper.showProgress('update-loan', 'Perform beneficiary Validation', 3000);
+                                return false;
+                            }
+                        }else{
+                            PageHelper.showProgress('update-loan', 'Perform beneficiary Validation', 3000);
+                            return false;
+                        }
+                    }
+
                     if (window.confirm("Are you sure?")) {
                         PageHelper.showLoader();
                         var reqData = _.cloneDeep(model);
@@ -376,7 +483,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                             }, function(resp) {
                                 PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
                                 PageHelper.showErrors(resp);
-    
+
                             }).$promise.finally(function() {
                                 PageHelper.hideLoader();
                             });
@@ -393,11 +500,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.MultiDocVerif
                             }, function(resp) {
                                 PageHelper.showProgress("upd-disb", "Oops. An error occurred", "5000");
                                 PageHelper.showErrors(resp);
-    
+
                             }).$promise.finally(function() {
                                 PageHelper.hideLoader();
                             });
-                        }       
+                        }
                     }
                 }
             }

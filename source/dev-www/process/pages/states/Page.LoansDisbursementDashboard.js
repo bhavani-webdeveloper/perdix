@@ -37,6 +37,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'ReadyForDisbursement',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 rfdqMenu.data = response.headers['x-total-count'];
@@ -64,6 +65,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'DisbursementConfirmation',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1,
             }).$promise.then(function(response,headerGetter){
                 dcqMenu.data = Number(response.headers['x-total-count']);
@@ -77,6 +79,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'Completed',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 drqMenu1.data = Number(response.headers['x-total-count']);
@@ -90,6 +93,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'RejectedDisbursement',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 rdqMenu.data = response.headers['x-total-count'];
@@ -103,6 +107,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'MTDisbursementDataCapture',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 mtqMenu.data = response.headers['x-total-count'];
@@ -144,6 +149,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'MTBooking',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 mtbqMenu.data = response.headers['x-total-count'];
@@ -157,6 +163,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'DocumentUpload',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 emisgqMenu.data = response.headers['x-total-count'];
@@ -170,6 +177,7 @@ function($log, $scope, PagesDefinition, SessionStore, IndividualLoan) {
             IndividualLoan.searchDisbursement({
                 'currentStage': 'DocumentVerification',
                 'page': 1,
+                'branchId':customerBranchId,
                 'per_page': 1
             }).$promise.then(function(response,headerGetter){
                 mdvqMenu.data = response.headers['x-total-count'];

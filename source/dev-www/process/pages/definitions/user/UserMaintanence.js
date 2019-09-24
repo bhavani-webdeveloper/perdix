@@ -12,6 +12,17 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                 return "MAPPED_BRANCH";
             
             }
+            var mobileNumberValidation= function(phone){
+                if(!phone)
+                    return true;
+                phone=phone.toString();
+                var phoneNum = phone.replace(/[^\d]/g, '');
+                if( phoneNum.length == 10) {  
+                    return true;  
+                }else{
+                    return false;  
+                }
+            }
             var branchNameTitleMap = function(branches,model){
                 var userBranchLength = model.user.userBranches.length;
                 var arrayIndex = 0;
@@ -73,6 +84,9 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
+
+                                model.user.mobileNumber =  Number(model.user.mobileNumber);
+                                model.user.mobileNumber2 = Number(model.user.mobileNumber2); 
                                 model.user.userState = "ACTIVE";
                                 var branches = formHelper.enum('branch_id').data;
                                 for (var i = 0; i < branches.length; i++) {
@@ -143,6 +157,16 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 key: "user.email",
                                 title: "EMAIL",
                                 required: true
+                            },
+                            {
+                                key: "user.mobileNumber",
+                                title: "PRIMARY_MOBILE_NUMBER",
+                                type: "number"
+                            },
+                            {
+                                key: "user.mobileNumber2",
+                                title: "ALTERNATE_MOBILE_NUMBER",
+                                type: "number",
                             },
                             {
                                 key: "user.validUntil",
@@ -349,6 +373,18 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 return;
                             }
                         }
+                        if(!mobileNumberValidation(model.user.mobileNumber)){
+                            PageHelper.showProgress("user-validate", "Invalide Mobile Number", 5000);
+                            return;
+                        }
+                        if(!mobileNumberValidation(model.user.mobileNumber2)){
+                            PageHelper.showProgress("user-validate", "Invalide  Alternative Mobile Number", 5000);
+                            return;
+                        }
+                        if(model.user.mobileNumber==model.user.mobileNumber2){
+                            PageHelper.showProgress("user-validate", "Primary and alternate mobile number cannot be same number", 5000);
+                            return;
+                        }
                         PageHelper.showLoader();
                         try {
                             Queries.getBankName(model.bankId).then(function(data){
@@ -407,6 +443,8 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
 
                                         }
 
+                                    },function(){
+                                        PageHelper.hideLoader();
                                     })
 
                             })

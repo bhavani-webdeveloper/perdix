@@ -1,9 +1,9 @@
 
 irf.pages.controller("Customer360Ctrl",
 ["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment",
-"entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper",
+"entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper","irfProgressMessage","$http",
 function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment,
-	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper){
+	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper,irfProgressMessage,$http){
 	$log.info("Customer360 loaded");
 
 	$scope.branch = SessionStore.getBranch();
@@ -536,9 +536,99 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 								to_date: model.reports.toDate
 							};
 						}
+						if (siteCode == 'kinara') {
 
-						url = irf.BI_BASE_URL + "/download.php?" + $httpParamSerializer(requestParams);
-						Utils.downloadFile(url);
+						    var reqData = {}
+						    reqData.auth_data = {
+						        'auth_token': AuthTokenHelper.getAuthData().access_token,
+						    }
+						    reqData.report_name = 'customer_statement_report';
+						    reqData.filters = [];
+						    reqData.filters.push({
+						        "operator": "=",
+						        "parameter": "from_date",
+						        "value": model.reports.fromDate
+						    });
+						    reqData.filters.push({
+						        "operator": "=",
+						        "parameter": "to_date",
+						        "value": model.reports.toDate
+						    });
+						    reqData.filters.push({
+						        "operator": "=",
+						        "parameter": "urn",
+						        "value": model.customer.urnNo
+						    });
+
+						    irfProgressMessage.pop("Reports", "Downloading Report. Please wait...");
+						    $http.post(
+						        irf.BI_BASE_URL + '/newdownload.php',
+						        reqData, {
+						            responseType: 'arraybuffer'
+						        }
+						    ).then(function (response) {
+						        var headers = response.headers();
+						        if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
+						            var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
+						            console.log(decodedString);
+						            PageHelper.showErrors({
+						                data: {
+						                    error: decodedString
+						                }
+						            });
+						            irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+						            return;
+						        }
+						        var blob = new Blob([response.data], {
+						            type: headers['content-type']
+						        });
+						        if (!$("#reportdownloader").length) {
+						            var l = document.createElement('a');
+						            l.id = "reportdownloader";
+						            document.body.appendChild(l);
+						        }
+						        $("#reportdownloader").css({
+						            "position": "absolute",
+						            "height": "-1px",
+						            "top": "-100px",
+						            "left": "-100px",
+						            "width": "-100px",
+						        });
+						        var link = document.getElementById("reportdownloader");
+						        link.href = window.URL.createObjectURL(blob);
+
+						        if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
+						            var filename = headers["content-disposition"].split('filename=')[1];
+						            link.download = filename.replace(/"/g, "");
+						        } else {
+						            link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+						        }
+						        link.click();
+						        irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
+						    }, function (err) {
+						        var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
+						        PageHelper.showErrors({
+						            data: {
+						                error: decodedString
+						            }
+						        });
+						        irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+						    }).finally(function () {
+						        PageHelper.hideLoader();
+						    });
+						}
+						else{
+
+							var requestParams = {
+								auth_token: AuthTokenHelper.getAuthData().access_token,
+								report_name: "customer_statement",
+								customer_id: model.customer.id,
+								from_date: model.reports.fromDate,
+								to_date: model.reports.toDate
+							};
+							url = irf.BI_BASE_URL + "/download.php?" + $httpParamSerializer(requestParams);
+							Utils.downloadFile(url);
+						}
 					}
 				}]
 			}]

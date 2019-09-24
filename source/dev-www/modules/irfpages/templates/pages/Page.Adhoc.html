@@ -6,6 +6,7 @@
             <div class="modal-content effect2">
                 <div class="modal-header">
                     <h4 class="modal-title">{{'Page is missing/having errors' | translate}}</h4>
+                    <h4 class="modal-title">{{errorMessage ||('Page is missing/having errors' | translate)}}</h4>
                 </div>
                 <div class="modal-body">
                     <h4 style="position:absolute;top:10%;left:0;width:100%;text-align:center" ng-bind-html="pageNameHtml"></h4>
@@ -16,4 +17,4 @@
             </div>
         </div>
     </section>
-</div>
+</div> 

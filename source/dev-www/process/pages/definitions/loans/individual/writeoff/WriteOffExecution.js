@@ -14,6 +14,18 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount, Pa
                 model.loanAccount = model._loanAccount;
                 model.loanAccount.accountNumber = model._loanAccount.accountId;
                 model.loanAccount.writeOffDate = model._loanAccount.transactionDate;
+
+                var promise = LoanAccount.get({accountId: model.loanAccount.accountNumber}).$promise;
+                promise.then(function (data) { /* SUCCESS */
+                    model.loanAccountAPi= data;
+                    irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
+                }, function (resData) {
+                    irfProgressMessage.pop('loading-loan-details', 'Error loading Loan details.', 4000);
+                    PageHelper.showErrors(resData);
+                    irfNavigator.goBack();
+                    //backToLoansList();
+                });
+
             }
             model.loanAccount.remarks = "";
 
@@ -54,18 +66,44 @@ function($log, Enrollment, SessionStore, $state, SchemaResource, LoanAccount, Pa
                     "readonly": true
                 },
                 {
+                    "title": "PRINCIPAL_DUE",
+                    "key": "loanAccountAPi.totalPrincipalDue",
+                    "readonly": true
+                },
+                {
+                    "title": "INTEREST_DUE",
+                    "key": "loanAccountAPi.totalNormalInterestDue",
+                    "readonly": true
+                },
+                {
+                    "title": "PENAL_INTEREST_DUE",
+                    "key": "loanAccountAPi.totalPenalInterestDue",
+                    "readonly": true
+                },
+                {
                     "title": "TOTAL_DEMAND_DUE",
                     "key": "loanAccount.amount1",
                     "readonly": true
                 },
                 {
-                    "title": "PRINCIPAL_DUE",
-                    "key": "loanAccount.part1",
+                    "title": "FEE_DUE",
+                    "key": "loanAccountAPi.totalFeeDue",
+                    "readonly": true
+                }, 
+                {
+                    "title": "PRINCIPAL_NOT_DUE",
+                    "key": "loanAccountAPi.principalNotDue",
                     "readonly": true
                 },
                 {
-                    "title": "INTEREST_DUE",
-                    "key": "loanAccount.part2",
+                    "title": "BOOKED_NOT_DUE_NORMAL_INTEREST",
+                    "key": "loanAccountAPi.bookedNotDueNormalInterest",
+                    "readonly": true
+                },
+               
+                {
+                    "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
+                    "key": "loanAccountAPi.bookedNotDuePenalInterest",
                     "readonly": true
                 },
                 {

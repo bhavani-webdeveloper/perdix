@@ -12,6 +12,30 @@ define({
                 model.loanAccountDisbursementSchedule.scheduledDisbursementDate = moment(new Date(modelValue.setDate(modelValue.getDate()+1))).format("YYYY-MM-DD");
             }
         };
+        var populateDisbursementDate1 = function(modelValue,form,model){
+            if (modelValue){
+                modelValue = new Date(modelValue);
+                model.loanAccountDisbursementSchedule.scheduledDisbursementDate = moment(new Date(modelValue.setDate(modelValue.getDate()))).format("YYYY-MM-DD");
+            }
+        };
+
+        var populateDisbursementScheduledDate = function(modelValue,form,model) {
+            var now= moment().format('HH:MM');
+            var today=model.loanAccountDisbursementSchedule.customerSignatureDate ;
+            var tomorrow= moment(model.loanAccountDisbursementSchedule.customerSignatureDate).add("days", 1).format(SessionStore.getSystemDateFormat());
+           // model._currentDisbursement.customerSignatureDate = today;
+            if(now < model.disbursementCutOffTime){
+               model.loanAccountDisbursementSchedule.scheduledDisbursementDate = today;
+               model.CutOffdate=moment(today);
+               model.CutOffTime=false;
+               model.scheduledDisbursementAllowedDate= moment(today).add("days", model.disbursementRestrictionDays);
+            }else{
+               model.loanAccountDisbursementSchedule.scheduledDisbursementDate = tomorrow;
+               model.CutOffdate=moment(tomorrow);
+               model.CutOffTime=true;
+               model.scheduledDisbursementAllowedDate= moment(tomorrow).add("days", model.disbursementRestrictionDays);
+            }
+        };
 
         return {
             "type": "schema-form",
@@ -19,6 +43,7 @@ define({
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Multi Tranche Page got initialized");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 if (!$stateParams.pageData)
                 {
                     $log.info("Screen directly launched hence redirecting to queue screen");
@@ -27,6 +52,8 @@ define({
                 }
                 model.loanAccountDisbursementSchedule = {};
                 model.loanAccountDisbursementSchedule = _.cloneDeep($stateParams.pageData);
+                model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
+                model.disbursementRestrictionDays= Number(SessionStore.getGlobalSetting("disbursementRestrictionDays") || 0);
             },
             offline: false,
             getOfflineDisplayItem: function(item, index){
@@ -63,8 +90,19 @@ define({
                         "key": "loanAccountDisbursementSchedule.customerSignatureDate",
                         "title": "CUSTOMER_SIGNATURE_DATE",
                         "type": "date",
+                        "condition":"!model.disbursementCutOffTime",
                         "onChange":function(modelValue,form,model){
                             populateDisbursementDate(modelValue,form,model);
+                        }
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.customerSignatureDate",
+                        "title": "CUSTOMER_SIGNATURE_DATE",
+                        "type": "date",
+                        "condition":"model.disbursementCutOffTime",
+                        "onChange":function(modelValue,form,model){
+                            populateDisbursementDate1(modelValue,form,model);
+                            populateDisbursementScheduledDate(modelValue,form,model)
                         }
                     },
                     {
@@ -90,7 +128,7 @@ define({
                         if(window.confirm("Are you sure?")){
                             var customerSignatureDate = moment(model.loanAccountDisbursementSchedule.customerSignatureDate,SessionStore.getSystemDateFormat());
                             var scheduledDisbursementDate = moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
-                            if (scheduledDisbursementDate.diff(customerSignatureDate, "days") <= 0) {
+                            if (scheduledDisbursementDate.diff(customerSignatureDate, "days") < 0) {
                                PageHelper.showProgress("upd-disb", "Scheduled disbursement date should be greater than Customer sign date", 5000);
                                return false;
                             }

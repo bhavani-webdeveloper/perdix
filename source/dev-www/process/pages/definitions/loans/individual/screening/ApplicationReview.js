@@ -84,7 +84,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
             // },
             {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
-                title: 'Portfolio Analytics',
+                title: 'Portfolio Analysis',
                 pageClass: 'portfolio-analytics',
                 minimum: 1,
                 maximum: 1,

@@ -2,6 +2,7 @@ irf.models.factory('ACH',
 ["$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "Upload", "$q", "PageHelper",
 function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, PageHelper) {
         var endpoint = BASE_URL + '/api/ach';
+        var endpoint1= BASE_URL + '/api';
         var endpintManagement = irf.MANAGEMENT_BASE_URL + '/server-ext/achdemandlist.php?';
         var endpintManagementACHPDC = irf.MANAGEMENT_BASE_URL + '/server-ext/achpdcdemandlist.php?';
         /*
@@ -43,6 +44,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                 method: 'PUT',
                 isArray:true,
                 url: endpoint + '/statusupdate'
+            },
+            updateSponsorBankAccounts: {
+                method: 'PUT',
+                url: endpoint1 + '/sponsorBankAccounts'
             },
             ACHClose: {
                 method: 'PUT',
@@ -112,6 +117,24 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
                     file: file,
                     repaymentMode:'ACH'
                 }
+            }).then(function(resp){
+                // TODO handle success
+                PageHelper.showProgress("page-init", "Done.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp){
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
+
+
+        resource.sponsorBankUpload = function(file, progress) {
+            var deferred = $q.defer()
+            Upload.upload({
+                url: BASE_URL + "/api/uploadSponsorBankAccountsFile",
+                file: file
             }).then(function(resp){
                 // TODO handle success
                 PageHelper.showProgress("page-init", "Done.", 2000);

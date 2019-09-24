@@ -298,8 +298,8 @@ irf.pages.factory('BundleLog', ['$log', function($log){
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore","PagesDefinition",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore,PagesDefinition) {
     var self = this;
 
     $scope.pages = [];
@@ -308,6 +308,11 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, ir
     $scope.pageId = $stateParams.pageId;
     $scope.anchorLnks = [];
     $scope.bundleModel = {};
+    $scope.error = false;
+	if (!PagesDefinition.isStateAllowed(SessionStore.getPageUri() == undefined? window.location.hash.substring(2): SessionStore.getPageUri())) {
+		$scope.error = true;
+		$scope.errorMessage = "Page is not allowed";
+	}
 
     var boxColumnHook = function(page){
         var topElements = page.form;

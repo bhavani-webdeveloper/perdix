@@ -1,13 +1,17 @@
 define({
     pageUID: "loans.individual.booking.LinkedAccountVerification",
     pageType: "Engine",
-    dependencies: ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper","PagesDefinition", "Enrollment", "Utils","Queries", "$q", "formHelper"],
-    $pageFn: function($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper,PagesDefinition, Enrollment, Utils,Queries, $q, formHelper) {
-           
+    dependencies: ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper","PagesDefinition", "Enrollment", "Utils","Queries", "$q", "formHelper","kinara.IndividualLoanHelper","LoanAccount"],
+    $pageFn: function($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper,PagesDefinition, Enrollment, Utils,Queries, $q, formHelper, KinaraIndividualLoanHelper,LoanAccount) {
+
 
         var branch = SessionStore.getBranch();
         var pendingDisbursementDays;
 
+        var showNetDisbursmentDetails = 'N';
+       if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+           showNetDisbursmentDetails = 'Y';
+       }
         Queries.getGlobalSettings("loan.individual.booking.pendingDisbursementDays").then(function(value){
             pendingDisbursementDays = Number(value);
             $log.info("pendingDisbursementDays:" + pendingDisbursementDays);
@@ -24,7 +28,7 @@ define({
             Queries.getLatestCBCheckDoneDateByCustomerIds(customerIdList).then(function(resp) {
                 if(resp && resp.length > 0){
                     for (var i = 0; i < resp.length; i++) {
-                        if (moment().diff(moment(resp[i].created_at, SessionStore.getSystemDateFormat()), 'days') <= 
+                        if (moment().diff(moment(resp[i].created_at, SessionStore.getSystemDateFormat()), 'days') <=
                             Number(SessionStore.getGlobalSetting('cerditBureauValidDays'))) {
                             validUrns.push(urns[customerIdList.indexOf(resp[i].customer_id)]);
                         }
@@ -54,8 +58,8 @@ define({
                 model.loanAccount.productCode, model.loanAccount.id).then(function(resp) {
                     try {
                         if(resp && Number(resp) > 0) {
-                            deferred.reject({data: {error: "The Entity with URN: " + model.loanAccount.urnNo + 
-                                " and Applicant URN: " + model.loanAccount.applicant + " is already having an active loan or loan application for the same product " 
+                            deferred.reject({data: {error: "The Entity with URN: " + model.loanAccount.urnNo +
+                                " and Applicant URN: " + model.loanAccount.applicant + " is already having an active loan or loan application for the same product "
                                 + model.loanAccount.productCode + "."}});
                         } else {
                             deferred.resolve();
@@ -156,6 +160,9 @@ define({
 
         return {
             "type": "schema-form",
+            "processType": "Loan",
+            "processName": "Booking",
+            "lockingRequired": true,
             "title": "INTERNAL_FORECLOSURE_OR_RENEWAL_ACCOUNT_VERIFICATION",
             initialize: function (model, form, formCtrl) {
                 $log.info("Individual Loan Booking Page got initialized");
@@ -175,7 +182,7 @@ define({
                 }, function(err) {
                     console.log(err);
                 });
-               
+
                 PagesDefinition.getPageConfig("Page/Engine/loans.individual.booking.LoanBooking").then(function(data){
                     if(data.postDatedTransactionNotAllowed && data.postDatedTransactionNotAllowed != '') {
                         model.postDatedTransactionNotAllowed = data.postDatedTransactionNotAllowed;
@@ -191,8 +198,7 @@ define({
                     .$promise
                     .then(
                         function (res) {
-
-                            $log.info(res);
+                                    $log.info(res);
 
                             /* DO BASIC VALIDATION */
                             if (res.currentStage!= 'LinkedAccountVerification'){
@@ -218,6 +224,19 @@ define({
                             }
 
                             model.loanAccount = res;
+
+                           /** added to fetch Security Deposit for Internal ForeClosure Details : rj */
+                            model.linkedAccountCbsData={};
+                            if (!(_.isNull(model.loanAccount.transactionType))) {
+                                LoanAccount.get({
+                                   accountId: model.loanAccount.linkedAccountNumber
+                               })
+                               .$promise.then(function(res){
+                                   model.linkedAccountCbsData=res;
+                               },function(err){
+                                   $log.info("loan request Individual/find api failure" + err);
+                               });
+                            }
 
                             if(model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue && model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee){
                                 model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue = (model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue - model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee);
@@ -253,7 +272,7 @@ define({
                                     }
                                 }
                             }
-                            
+
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                             model.loanAccount.loan_coBorrowers = [];
                             model.loanAccount.loan_guarantors = [];
@@ -280,7 +299,7 @@ define({
                                     ids.push(model.loanAccount.loanCustomerRelations[i].customerId);
                                 }
                             }
-                           
+
                             Queries.getCustomerBasicDetails({
                                 urns: urns,
                                 ids: ids
@@ -288,9 +307,9 @@ define({
                                 function (resQuery) {
                                     if (_.hasIn(resQuery.urns, model.loanAccount.applicant))
                                         model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name;
-                                    
+
                                     if (_.hasIn(resQuery.urns, model.loanAccount.portfolioInsuranceUrn))
-                                        model.loanAccount.portfolioInsuranceCustomerName = resQuery.urns[model.loanAccount.portfolioInsuranceUrn].first_name;   
+                                        model.loanAccount.portfolioInsuranceCustomerName = resQuery.urns[model.loanAccount.portfolioInsuranceUrn].first_name;
                                     for (var i=0;i<model.loanAccount.loan_coBorrowers.length; i++){
                                         if (_.hasIn(resQuery.ids, model.loanAccount.loan_coBorrowers[i].customerId))
                                              model.loanAccount.loan_coBorrowers[i].coBorrowerName = resQuery.ids[model.loanAccount.loan_coBorrowers[i].customerId].first_name;
@@ -298,7 +317,7 @@ define({
                                     for (var i=0;i<model.loanAccount.loan_guarantors.length; i++){
                                         if (_.hasIn(resQuery.ids, model.loanAccount.loan_guarantors[i].customerId))
                                              model.loanAccount.loan_guarantors[i].guaFirstName = resQuery.ids[model.loanAccount.loan_guarantors[i].customerId].first_name;
-                                    }   
+                                    }
                                 },
                                 function (errQuery) {
                                 }
@@ -315,6 +334,9 @@ define({
                                 }
                             }
 
+                            if(showNetDisbursmentDetails =="Y"){
+                                KinaraIndividualLoanHelper.computePreOpenFeeData(model);
+                            }
                             /* Now load the customer */
                             Enrollment.getCustomerById({id: model.loanAccount.customerId})
                                 .$promise
@@ -326,7 +348,10 @@ define({
                                         PageHelper.showProgress('load-loan', "Error while loading customer details", 2000);
                                     }
                                 )
-                        }, function (httpRes) {
+
+
+
+                            }, function (httpRes) {
                             PageHelper.showProgress('load-loan', 'Some error while loading the loan details', 2000)
                         }
                     )
@@ -337,7 +362,7 @@ define({
             },
             form: [{
                 "type": "box",
-                "title": "UPDATE_ACCOUNT", 
+                "title": "UPDATE_ACCOUNT",
                 "colClass": "col-sm-6",
                 "readonly":true,
                 "items": [
@@ -401,28 +426,28 @@ define({
                             if(repaymentDate < disbursementSchedules){
                                 model._currentDisbursement.scheduledDisbursementDate = null;
                                 PageHelper.showProgress("loan-create","Disbursement date should be lesser than Repayment date",5000);
-                            }  
-                        } 
+                            }
+                        }
                     },
                 ]
             }, {
                 "type": "box",
-                "title": "LOAN_DETAILS", 
+                "title": "LOAN_DETAILS",
                 "colClass": "col-sm-6",
                 "readonly":true,
                 "items": [
                     {
                         "key": "loanAccount.partnerCode",
-                        "title": "PARTNER_NAME",//add label in translation                        
+                        "title": "PARTNER_NAME",//add label in translation
                         "type": "select",
                         "enumCode":"partner",
                         "readonly": true
                     },
                     {
                         "key": "loanAccount.partnerCode",
-                        "title": "PARTNER_CODE",                        
+                        "title": "PARTNER_CODE",
                         "readonly": true
-                    },                    
+                    },
                     /*{
                         "key": "loanAccount.loanType",
                         "readonly": true
@@ -527,7 +552,7 @@ define({
                         "key":"additional.portfolioUrnSelector",
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type":"string",
-                        "readonly": true                     
+                        "readonly": true
                     },
                     {
                         key:"loanAccount.portfolioInsuranceUrn",
@@ -602,7 +627,7 @@ define({
                                 ]
                             }
                         ]
-                    }, 
+                    },
                     {
                         "type":"fieldset",
                         "readonly":true,
@@ -808,7 +833,7 @@ define({
             "items": [{
                     "key": "loanAccount.applicant",
                     "title": "APPLICANT_URN_NO",
-                    "type":"text",                    
+                    "type":"text",
                 },
                 {
                     "key":"loanAccount.applicantName",
@@ -839,7 +864,7 @@ define({
                                 {
                                     "key": "loanAccount.loan_coBorrowers[].coBorrowerUrnNo",
                                     "title": "CO_APPLICANT_URN_NO",
-                                    "type":"text"                                 
+                                    "type":"text"
                                 },
                                 {
                                     key:"loanAccount.loan_coBorrowers[].coBorrowerName",
@@ -862,7 +887,7 @@ define({
                             items:[{
                                 "key": "loanAccount.loan_guarantors[].guaUrnNo",
                                 "title": "URN_NO",
-                                "type":"text"                              
+                                "type":"text"
             },
             {
                                 key:"loanAccount.loan_guarantors[].guaFirstName",
@@ -874,7 +899,7 @@ define({
             ]},
             {
                 "type": "box",
-                "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
+                "title": "LINKED_ACCOUNT_DETAILS",
                 "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber",
                 "items": [{
                     "key": "loanAccount.transactionType",
@@ -891,7 +916,13 @@ define({
                             "key": "loanAccount.linkedAccountNumber",
                             "title": "LINKED_ACCOUNT_NUMBER",
                             "readonly": true
-                        }, {
+                        },
+                         {
+                            "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                            "title":"OTHER_LINKED_ACCOUNTS",
+                            "readonly":true,
+                        },
+                        {
                             "key": "loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue",
                             "title": "TOTAL_PRINCIPAL_DUE",
                             "readonly": true
@@ -911,6 +942,11 @@ define({
                             "key": "loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee",
                             "title": "TOTAL_PRECLOSURE_FEE_DUE",
                             "readonly": true
+                        },
+                        {
+                            "key": "linkedAccountCbsData.securityDeposit",
+                            "title": "SECURITY_DEPOSIT",
+                            "readonly": true,
                         }
                     ]
                 },
@@ -980,7 +1016,59 @@ define({
                 },
                 ]
             },
-
+            /** removed for temporal fix
+             {
+                "type": "box",
+                "title": "ACTUAL_NET_DISBURSEMENT",
+                "condition": "!model.showPreOpenData && model.siteCode == 'kinara'",
+                "items": [
+                    {
+                        key:"preOpenFeeData.loanAmount",
+                        "type": "amount",
+                        "title": "LOAN_AMOUNT",
+                        readonly: true,
+                    },
+                    {
+                        key: "preOpenFeeData.expectedCommercialCibilCharges",
+                        "type": "amount",
+                        "title": "ACTUAL_CIBIL_CHARGES",
+                        readonly: true,
+                    },
+                    {
+                        key: "preOpenFeeData.expectedProcessingFee",
+                        "type": "amount",
+                        "title": "ACTUAL_PROCESSSING_FEE",
+                        readonly: true
+                    },
+                    {
+                        key: "preOpenFeeData.expectedSecurityEMI",
+                        "type": "amount",
+                        "title": "ACTUAL_SECURITY_EMI",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.expectedPortfolioInsuranceAmount",
+                        "type": "amount",
+                        "title": "ACTUAL_PORTFOLIO_INSURANCE_WITH_GST",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.payoffAmountForLinkedAccount",
+                        "type": "amount",
+                        "title": "ACTUAL_PAYOFF_FOR_LINKED_ACCOUNT",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.documentCharges",
+                        "type": "amount",
+                        "title": "ACTUAL_DOCUMENTATION_CHARGES",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.netDisbursementAmount",
+                        "type": "amount",
+                        "title": "ACTUAL_DISBURSABLE_AMOUNT",
+                        readonly: true
+                    }
+                ]
+            },
+            **/
             {
                 "type": "box",
                 "title": "POST_REVIEW",
@@ -1005,7 +1093,7 @@ define({
                             "HOLD": "HOLD"
                         }
                     },
-                    
+
                     {
                         type: "section",
                         condition: "model.review.action=='REJECT'",
@@ -1051,7 +1139,7 @@ define({
                                     ];
                                 }
                             },
-                                
+
                             {
                                 key: "review.rejectButton",
                                 type: "button",
@@ -1167,7 +1255,7 @@ define({
                                             documents.documentId=model.loanAccount.waiverdocumentId;
                                             documents.documentStatus=model.loanAccount.waiverdocumentstatus;
                                             documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
-                                            documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                            documents.remarks=model.loanAccount.waiverdocumentremarks;
                                         }
                                     }
                                 }
@@ -1205,7 +1293,7 @@ define({
                                     documents.documentId=model.loanAccount.waiverdocumentId;
                                     documents.documentStatus=model.loanAccount.waiverdocumentstatus;
                                     documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
-                                    documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                    documents.remarks=model.loanAccount.waiverdocumentremarks;
                                 }
                             }
                         }
@@ -1244,7 +1332,7 @@ define({
                                 documents.documentId=model.loanAccount.waiverdocumentId;
                                 documents.documentStatus=model.loanAccount.waiverdocumentstatus;
                                 documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
-                                documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                documents.remarks=model.loanAccount.waiverdocumentremarks;
                             }
                         }
                     }

@@ -64,12 +64,12 @@ irf.pageCollection.directive('renderHtml',function($compile){
                     ele.html(scope.col.data);
                     $compile(ele.contents())(scope);
                 }
-                
+
             }
             else{
                 ele.html(scope.col.data);
                 $compile(ele.contents())(scope);
-            }            
+            }
         }
     }
 })
@@ -127,7 +127,7 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
             _vsd['customerParameterMapping'] = _.sortBy(_vsd['customerParameterMapping'], [function(o) { return o.Details.Relation; }]);
             _tData.IndividualScores.push(_vsd);
         }
-        
+
     })
 
     $scope.scoringTableData = _tData;
@@ -203,10 +203,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     var branch = SessionStore.getBranch();
     var scoreName;
 
-    function removeNullIn(prop, obj) {		
-        var pr = obj[prop];		
-        if (pr === null || pr === undefined) delete obj[prop];		
-        else if (typeof pr === 'object') for (var i in pr) removeNullIn(i, pr);		
+    function removeNullIn(prop, obj) {
+        var pr = obj[prop];
+        if (pr === null || pr === undefined) delete obj[prop];
+        else if (typeof pr === 'object') for (var i in pr) removeNullIn(i, pr);
     }
     var prepareData = function(res, model) {
         if (res[0].data[0]['Existing Customer'] == 'No') {
@@ -218,6 +218,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
         model.fullScoringDetails = res[26].data;
+        model.appReview = res[27];
         //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
         // model.secName = res[0].data[0]['Sector'];
@@ -260,16 +261,17 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.stockDetails = res[23];
         model.nonMachineryDetails = res[24];
         model.hypothecationType = res[25];
+        model.appReview = res[27];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         model.ratioDetails.data[0] = _.omit(model.ratioDetails.data[0],['Average Bank Deposit']);
         model.enterpriseDetails.data[0] = _.omit(model.enterpriseDetails.data[0],['Average Bank Balances']);
-   
-        var tempRatioDetails=model.ratioDetails.data[0];		    
+
+        var tempRatioDetails=model.ratioDetails.data[0];
     //  _.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
-        for (var i in tempRatioDetails) {		
-            removeNullIn(i, tempRatioDetails);		
-        }		
+        for (var i in tempRatioDetails) {
+            removeNullIn(i, tempRatioDetails);
+        }
         _.merge(model.enterpriseDetails.data[0], tempRatioDetails);
 
         /* Populate values for Balance Sheet */
@@ -438,6 +440,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
         model.enterpriseDetailsData = model.enterpriseDetails.data[0];
         model.enterpriseDetailsData["Hypothecation Type"] = model.hypothecationType.data[0]["Hypothecation Type"];
+        model.appReviewPrediction = model.appReview.data[0];
 
     }; // END OF prepareData()
 
@@ -463,7 +466,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             model.ScoreDetails = response.ScoreDetails;
         }).finally(function(){
             var onSuccessPromise = Scoring.financialSummary({
-                loan_id: model.cbModel.loanId, 
+                loan_id: model.cbModel.loanId,
                 score_name: model.ScoreDetails.ScoreName || scoreName
             }).$promise;
             onSuccessPromise.then(function(res){
@@ -614,7 +617,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-        
+
         if (model.fullScoringDetails){
             form.push({
                 type: "box",
@@ -630,6 +633,61 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             })
         }
         
+        // App Review
+        var appCounter = 0;
+        var appLeft = [];
+        var appRight = [];
+        var appCounter = 0;
+        var indicator = [];
+        if(model.appReview.data[0]){
+            model.appReview.data[0].Risk_indicator = '<span class="square-color-box" style="display:inline-block;background:{{model.appReview.data[0].Colour}}; width:40px;vertical-align: text-bottom;"></span> ' + model.appReview.data[0].Risk_indicator ;
+            }
+        _.forIn(model.appReviewPrediction, function (value, key) {
+            var item = {
+                key: "appReviewPrediction." + key,
+                title: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, ' '),
+                type: "string",
+                readonly: true,
+            };
+            if (item.title == 'Risk indicator' || item.title == 'Colour') {
+                indicator.push(item);
+                item.type ='html';
+            }
+            else if (appCounter++ % 2 == 0) {
+                appLeft.push(item)
+            } else {
+                appRight.push(item)
+            }
+        });
+        indicator.pop();
+        appLeft =  indicator.concat(appLeft);
+
+        form.push({
+            "type": "box",
+            "colClass": "col-sm-12 table-box",
+            "title": "APPLICATION_REVIEW_PREDICTION",
+            "readonly": true,
+            condition: " model.siteCode != 'IREPDhan'",
+            "items": [
+                {
+                    type: "section",
+                    htmlClass: "row",
+                    items: [
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            items: appLeft
+                        },
+                        {
+                            type: "section",
+                            htmlClass: "col-sm-6",
+                            items: appRight
+                        }
+                    ]
+                }
+            ]
+        })
+
         form.push({
             type: "box",
             colClass: "col-sm-12",

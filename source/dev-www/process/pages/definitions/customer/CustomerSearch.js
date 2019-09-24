@@ -133,7 +133,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					},
 					"branch": {
 						"title": "BRANCH_NAME",
-						"type": ["integer", "null"],
+						"type": ["string", "null"],
 						"enumCode": "branch_id",
 						"parentEnumCode": "bank",
 						"parentValueExpr": "model.bankId",
@@ -161,7 +161,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 				return formHelper;
 			},
 			getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
-				debugger;
 				/* GET BRANCH NAME */
 				var branches = formHelper.enum('branch').data;
 				var siteCode= SessionStore.getGlobalSetting("siteCode");

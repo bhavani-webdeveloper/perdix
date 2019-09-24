@@ -102,17 +102,17 @@ $settings = [
     ],
     'form_db' => [
         'driver' => 'mysql',
-        'host' => getenv('DB_HOST'),
-        'database' => getenv('DB_FORM_NAME'),
-        'username' => getenv('DB_USER'),
-        'password' => getenv('DB_PASSWORD'),
+        'host' => getenv('FORM_DB_HOST'),
+        'database' => getenv('FORM_DB_NAME'),
+        'username' => getenv('FORM_DB_USER'),
+        'password' => getenv('FORM_DB_PASSWORD'),
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
         'options' => [
             PDO::ATTR_EMULATE_PREPARES => true,
         ]
-        ]
+    ]
 ];
 
 $bi_etl = getenv('BIETL_DB_NAME', 'bietl');
@@ -134,3 +134,5 @@ $capsule->addConnection($settings['encore_db'], 'encore_db');
 $capsule->addConnection($settings['form_db'], 'form_db');
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
+
+

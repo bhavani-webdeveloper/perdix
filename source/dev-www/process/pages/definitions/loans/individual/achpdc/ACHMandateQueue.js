@@ -102,7 +102,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateQueue"), 
 							desc: "",
 							icon: "fa fa-download",
 							fn: function(item, index) {
-								window.open(irf.FORM_DOWNLOAD_URL + "?form_name=ach_loan&record_id=" + item.accountId);
+								window.open(irf.FORM_DOWNLOAD_URL + "?form_name=ach_loan&record_id=" + item.loanId);
 							},
 							isApplicable: function(item, index) {
 									return true;

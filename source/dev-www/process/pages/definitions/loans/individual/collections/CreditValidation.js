@@ -39,7 +39,6 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     });
                     return;
                 }
-                console.log(model._credit);
 
                 model.pageRules = {
                     forceToTransAuth: false
@@ -87,6 +86,9 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                                 model.loanAccount.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
                                 model.loanAccount.netPayoffAmountDue = Utils.roundToDecimal(model.loanAccount.netPayoffAmount + model.loanAccount.totalDemandDue);
                                 model.creditValidation = model.creditValidation || {};
+                                /** added empty object in array to startEmpty */
+                                model.collections=[{}];
+                                model.creditValidation.notPaid="Approve";
                                 model.creditValidation.enterprise_name = data.customer1FirstName;
                                 model.creditValidation.productCode = data.productCode;
                                 model.creditValidation.urnNo = data.customerId1;
@@ -341,31 +343,170 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     //                               }
                     // },
 
-                    {
+                   {
                         key: "creditValidation.notPaid",
-                        title: "REJECT",
-                        type: "checkbox",
-                        "schema": {
-                            "default": false
+                        type: "radios",
+                        "title": "ACTION",
+                        "default": "Approve",
+                        "titleMap":{
+                            "Approve":"Approve",
+                            "Reject":"Reject",
+                            "Correct":"Correct"
                         },
-                    }, {
+                        onChange:
+                        function(result, model, context) {
+                            model.securityRefund.bankAccountNo = result.bankAccountNo;
+                            model.securityRefund.accountHolderName = result.accountHolderName;
+                            model.securityRefund.accountType = result.accountType;
+                            model.securityRefund.IFSCode = result.IFSCode;
+                            model.securityRefund.bankName = result.bankName;
+                            model.securityRefund.bankBranch = result.bankBranch;
+                        }
+                        
+                    },
+                    
+                    {
                         key: "creditValidation.reject_reason",
                         title: "REJECT_REASON",
                         required: true,
                         type: "select",
-                        titleMap: [{
-                            "name": "Amount not credited in account",
-                            "value": "1"
-                        }],
-                        condition: "model.creditValidation.notPaid"
+                        condition: "model.creditValidation.notPaid == 'Reject'",
+                        titleMap:{
+                            "1":"Amount not credited in account",
+                        }
                     }, {
                         key: "creditValidation.reject_remarks",
                         title: "REJECT_REMARKS",
-                        required: true,
                         readonly: false,
+                        //required: true,
                         type: "textarea",
-                        condition: "model.creditValidation.notPaid"
-                    }
+                        condition: "model.creditValidation.notPaid == 'Reject'"
+                    },
+                    {
+                        type: "box",
+                        title: "CORRECTION",
+                        //view: "fixed",
+                        startEmpty:true,
+                        colClass: "col-sm-12",
+                        condition: "model.creditValidation.notPaid == 'Correct'",                
+                        items: [
+                            {
+                                key: "collections",
+                                type: "array",
+                                // title: "CORRECTION",
+                                "titleExpr": "'Correction - '+ model.collections[arrayIndex].accountNumber",
+                                startEmpty: true,
+                                onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                                    var allocatedAmount = 0;
+                                    if (model.collections.length > 1) {
+                                        for (i = 0; i < model.collections.length - 1; i++) {
+                                            allocatedAmount += parseFloat(model.collections[i].amount);
+                                        }   
+                                    }
+                                    if (allocatedAmount > model.creditValidation.amountCollected) {
+                                        PageHelper.showProgress("err", "Correct Amount should not be greater than Amount Collected", 5000);
+                                        return false;
+                                    }
+                                },
+                                items: [
+                                    {
+                                        key: "collections[].accountNumber",
+                                        type: "lov",
+                                        title: "CORRECT_ACCOUNT",
+                                        required: true,
+                                        lovonly: true,
+                                        inputMap: {
+                                            "accountNumber": {
+                                                key: "collections[].accountNumber",
+                                            },
+                                            "customerName": {
+                                                key: "collections[].customerName",
+                                            },
+                                            "branchName": {
+                                                key: "collections[].branchName",
+                                                "type": "select",
+                                                "enumCode": "branch",
+                                            },
+                                            "centreName": {
+                                                "key": "collections[].centreName",
+                                                "type": "select",
+                                                "enumCode": "centre",
+                                                "parentEnumCode": "branch",
+                                            },
+                                        },
+                                        outputMap: {
+                                            "accountNumber": "collections[arrayIndex].accountNumber",
+                                            "customerName":"collections[arrayIndex].customerName",
+                                            "branchName":"collections[arrayIndex].branchName",
+                                            "centreName":"collections[arrayIndex].centreName",
+                                        },
+                                        searchHelper: formHelper,
+                                        initialize: function(inputModel) {
+                                            $log.info(inputModel);
+                                        },
+                                        search: function(inputModel, form, model, context) {
+                                            return IndividualLoan.search({
+                                                   'stage': "Completed",
+                                                   'accountNumber': inputModel.accountNumber,
+                                                   'branchName': inputModel.branchName,
+                                                   'centreCode': inputModel.centreName,
+                                                   'customerName': inputModel.customerName,
+                                                   'isClosed':false,
+               
+               
+                                               }).$promise;
+                                       },
+                                       getListDisplayItem: function(item, index) {
+                                           $log.info(item);
+                                           return [
+                                               item.accountNumber,
+                                               item.customerName,
+                                               item.branchName,
+                                               item.centreName,
+                                           ];
+                                       },
+                                        onSelect: function (valueObj, model, context) {
+                                            model.loanAccount.linkedAccountNumber = valueObj.accountNumber;
+                                            var allocatedAmount = 0;
+                                            if (model.collections.length > 0) {
+                                                for (i = 0; i < model.collections.length - 1; i++) {
+                                                    allocatedAmount = parseFloat(allocatedAmount) + parseFloat(model.collections[i].amount);
+                                                }
+                                                if (allocatedAmount > parseFloat(_.toNumber(model.creditValidation.amountCollected))) {
+                                                    PageHelper.showProgress("err", "Correct Amount should not be greater than Amount Collected", 5000);
+                                                }
+                                                else {
+                                                    var lastElementAllocatedAmount = parseFloat(_.toNumber(model.creditValidation.amountCollected)) - (allocatedAmount);
+                                                    model.collections[model.collections.length - 1].amount = parseFloat(_.toNumber(lastElementAllocatedAmount).toFixed(2));
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        key: "collections[].amount",
+                                        readonly: false,
+                                        required: true,
+                                        type: "amount",
+                                        title: "CORRECT_AMOUNT",
+                                        onChange: function (result, model, context) {
+                                            var totalAmount = 0;
+                                            if (result >= 0) {
+                                                for (var i = 0; i < context.collections.length; i++) {
+                                                    totalAmount += context.collections[i].amount;
+                                                }
+                                                if (totalAmount > context.creditValidation.amountCollected) {
+                                                    PageHelper.showProgress("err", "Correct Amount should not be greater than Amount Collected", 5000);
+                                                }
+                                            } else {
+                                                PageHelper.showProgress("err", "Negative numbers are not allowed", 5000);
+                                            }
+                                        }
+                                    },
+                                ]
+                            },
+                        ]
+                    },
+                    
                 ]
             }, {
                 "type": "box",
@@ -454,14 +595,48 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 submit: function (model, form, formName) {
                     $log.info("Inside submit()");
                     console.warn(model);
+                    var accountNumberArray = model.collections.map(function (item) { return item.accountNumber });
+                    var isDuplicateAccount = accountNumberArray.some(function (item, idx) {
+                        return accountNumberArray.indexOf(item) != idx
+                    });
+                    if (isDuplicateAccount == true) {
+                        PageHelper.showErrors({
+                            data: {
+                                error: "Duplicate account numbers are not allowed"
+                            }
+                        })
+                        return false;
+                    } else {
+                        for (i = 0; i < model.collections.length; i++) {
+                            if (model.collections[i].amount <= 0) {
+                                PageHelper.showErrors({
+                                    data: {
+                                        error: "Correct amount should not be zero"
+                                    }
+                                })
+                                return false;
+                            }
+                        }
+                    }
                     Utils.confirm("Are You Sure?")
                         .then(function () {
                             PageHelper.showLoader();
+                            if(model.creditValidation.notPaid=='Correct'){
+                                if(model.collections && model.collections.length>0){
+                                    /** checking the correction details provided */
+                                }else{
+                                    PageHelper.hideLoader();
+                                    PageHelper.setError({
+                                        message: "Please give the correction details" 
+                                    });
+                                   return;
+                                }
+                            }
                             var loanCollection = _.cloneDeep(model._credit);
                             var reqParams = {};
                             reqParams.loanCollection = loanCollection;
                             reqParams.repaymentProcessAction = "PROCEED";
-                            if (model.creditValidation.notPaid) {
+                            if (model.creditValidation.notPaid == 'Reject') {
                                 reqParams.stage = "Rejected";
                                 $log.info("Inside NoPayment()");
                             } else if (model.creditValidation.statusValue == 1 && model.pageRules.forceToTransAuth == false) {
@@ -486,18 +661,37 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             if (reqParams.loanCollection.instrumentType == 'SUSPENSE') {
                                 reqParams.loanCollection.instrumentType = 'NEFT';
                             }
-
-                            LoanCollection.update(reqParams, function (resp, header) {
-                                PageHelper.hideLoader();
-                                $state.go('Page.Engine', {
-                                    pageName: 'loans.individual.collections.CreditValidationQueue',
-                                    pageId: null
+                            if (model.creditValidation.notPaid=='Correct') {
+                                var postParams = {};
+                                postParams.collections = model.collections;
+                                postParams.loanCollectionId = model._credit.id;
+                                postParams.stage = "BounceCorrection";
+                                LoanCollection.postCorrectionDetailsOfCollection(postParams, function (resp, header) {
+                                    $log.info("Inside postCorrectionDetails()");
+                                    PageHelper.hideLoader();
+                                    $state.go('Page.Engine', {
+                                        pageName: 'loans.individual.collections.CreditValidationQueue',
+                                        pageId: null
+                                    });
+                                }, function (resp) {
+                                    PageHelper.showErrors(resp);
+                                    return false;
+                                }).$promise.finally(function () {
+                                    PageHelper.hideLoader();
                                 });
-                            }, function (resp) {
-                                PageHelper.showErrors(resp);
-                            }).$promise.finally(function () {
-                                PageHelper.hideLoader();
-                            });
+                            } else {
+                                LoanCollection.update(reqParams, function (resp, header) {
+                                    PageHelper.hideLoader();
+                                    $state.go('Page.Engine', {
+                                        pageName: 'loans.individual.collections.CreditValidationQueue',
+                                        pageId: null
+                                    });
+                                }, function (resp) {
+                                    PageHelper.showErrors(resp);
+                                }).$promise.finally(function () {
+                                    PageHelper.hideLoader();
+                                });
+                            }
                             /*
                             if (model.creditValidation.notPaid) {
                                 $log.info("Inside NoPayment()");

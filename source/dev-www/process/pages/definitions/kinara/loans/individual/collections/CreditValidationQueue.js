@@ -1,10 +1,12 @@
 irf.pageCollection.factory(irf.page("kinara.loans.individual.collections.CreditValidationQueue"),
 ["$log", "formHelper", "LoanCollection", "$state", "SessionStore", "$q", "entityManager","irfNavigator","Utils","PageHelper",
 function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManager,irfNavigator,Utils,PageHelper){
+    var localFormCtrl;
     return {
         "type": "search-list",
         "title": "CREDIT_VALIDATION_QUEUE",
         initialize: function (model, form, formCtrl) {
+            localFormCtrl = formCtrl;
             model.branch = SessionStore.getCurrentBranch().branchId;
             $log.info("search-list sample got initialized");
         },
@@ -18,7 +20,8 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                     "title": "TRANSACTION_TYPE",
                     "key":"instrumentType",
                     "type":"select",
-                    "enumCode":"collection_instrument_type"
+                    "enumCode":"collection_instrument_type",
+
                 },  //cash, cheque, NEFT, RTGS, ACH, security deposit, suspense and internal 
                 {
                     "key": "branch",
@@ -43,7 +46,7 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                     },
                     "instrumentType": {
                         "title": "TRANSACTION_TYPE",
-                        "type": "string"
+                        "type": ["string","null"]
                         //"pattern": "^[0-9a-zA-Z]+$"
                     },
                     'branch': {
@@ -70,7 +73,10 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
             getSearchFormHelper: function() {
                 return formHelper;
             },
-            getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+            getResultsPromise: function(searchOptions, pageOpts){
+                if(searchOptions.instrumentType && searchOptions.instrumentType =='Cheque'){
+                    searchOptions.instrumentType = 'CHQ'
+                };      /* Should return the Promise */
                 var promise = LoanCollection.query({
                     'currentStage':"CreditValidation",
                     'accountCentreId': searchOptions.centre,
@@ -81,12 +87,16 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
 	                'per_page': pageOpts.itemsPerPage
                 }).$promise;
 
+                if(searchOptions.instrumentType && searchOptions.instrumentType == 'CHQ'){
+                    searchOptions.instrumentType ='Cheque'
+                };
+
                 return promise;
             },
             paginationOptions: {
                 "viewMode": "page",
                 "getItemsPerPage": function(response, headers){
-                    return 20;
+                    return 100;
                 },
                 "getTotalItemsCount": function(response, headers){
                     return headers && headers['x-total-count']
@@ -194,38 +204,30 @@ function($log, formHelper, LoanCollection, $state, SessionStore, $q, entityManag
                             .then(function () {
                                 var reqParams = [];
                                 var loanCollection = _.cloneDeep(items);
-                                //new
                                 var cashCollectionData = {
                                     "loanCollectionSummaryDTOs": [],
-                                    "repaymentProcessAction": "PROCEED"
-                                    //"stage": "PartialPayment"
+                                    "repaymentProcessAction": "PROCEED",
+                                    "stage": "PartialPayment"
                                 }
                                 _.each(loanCollection, function (loanCollectionDetail) {
                                     cashCollectionData.loanCollectionSummaryDTOs.push({
                                         loanCollectionId: loanCollectionDetail.id
                                     });
                                 })
-                                   //cashCollectionData.loanCollectionSummaryDTOs=loanCollection;
-                            LoanCollection.batchUpdate(cashCollectionData).$promise
-                            .then(function (res, head) {
-                                PageHelper.showProgress('BranchDeposit', 'successfully moved to preDeposit', 5000);
-                                //irfNavigator.goBack();
-                            }, function (httpres) {
-                                PageHelper.showProgress("BranchDeposit", "Error in proceeding to preDeposit", 5000);
+                                LoanCollection.batchUpdate(cashCollectionData).$promise
+                                .then(function (res, head) {
+                                    PageHelper.showProgress('BranchDeposit', 'successfully moved to Transaction Authorization', 5000);
+                                    localFormCtrl.submit();
+                                }, function (httpres) {
+                                    PageHelper.showProgress("BranchDeposit", "Error in proceeding to Transaction Authorization", 5000);
 
-                            })
-                            .finally(function () {
-                                PageHelper.hideBlockingLoader();
-                            })
-                                irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'kinara.loans.individual.collections.CreditValidationQueue',
-                                    'pageData': items
+                                })
+                                .finally(function () {
+                                    PageHelper.hideBlockingLoader();
+                                })
+                                    
                                 });
-                            });
-                         
-                         
-                            //new end
+                    
                     /* Validation for cheque and cash instrument types :
                         1) At a time only one cheque should be selected , 
                         2) cash and cheque can not be selected together

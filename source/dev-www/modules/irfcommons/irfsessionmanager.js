@@ -123,7 +123,12 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 	self.setBankId = function(id) {
 		self.session.bankId = id;
 	};
-
+	self.setPageUri = function(pageUri){
+		self.session.pageUri = pageUri
+	}
+	self.getPageUri = function(){
+		return session.pageUri;
+	}
 	self.getCentres = function() {
 		return session.centres;
 	}

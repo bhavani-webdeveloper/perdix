@@ -4648,7 +4648,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 }
 
                 if (model.currentStage == 'Application') {
-                    if (model.customer.verifications.length<2){
+                    if (!model.customer.verifications || model.customer.verifications.length<2){
                         PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
                         return false;
                     }

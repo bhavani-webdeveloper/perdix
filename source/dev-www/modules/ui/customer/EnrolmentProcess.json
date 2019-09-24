@@ -2290,7 +2290,7 @@
                         "key": "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
                         "title": "MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
                         "type": "radios",
-                        "enumCode": "decisionmaker"
+                        "enumCode": "decisionmaker1"
                     },
                     "machineBillsDocId": {
                         "key": "customer.fixedAssetsMachinaries[].machineBillsDocId",

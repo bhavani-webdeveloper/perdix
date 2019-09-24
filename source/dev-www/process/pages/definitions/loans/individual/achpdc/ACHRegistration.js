@@ -74,6 +74,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							model.ach.mandateStatus = "PENDING";
 							//model.ach.branch = model.achIndividualLoanSearch.branch;
 							model.ach.id = model.ach.loanId;
+							model.ach.partnerCode=model.achIndividualLoanSearch.partnerCode;
 							//model.ach.customerName = model.achIndividualLoanSearch.customerId;
 							model.ach.accountHolderName = model.achIndividualLoanSearch.collectionCustomerNameAsInBank;
 							model.ach.accountType = model.achIndividualLoanSearch.collectionAccountType;
@@ -108,6 +109,24 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							}, function(error) {
 
 							});
+
+							if(model.siteCode == 'kinara') {
+							Queries.getBankAccountsByPartner(
+								model.ach.partnerCode).then(
+								function(res) {
+                                for (var i = 0; i < res.body.length; i++) {
+									if (res.body[i].is_partner_default_ach_account==1) {
+                                    model.ach.sponsorBankCode=res.body[i].sponsor_bank_code;
+									model.ach.utilityCode=res.body[i].utility_code;
+									model.ach.sponsorAccountCode=res.body[i].account_code;
+									}
+								}
+							},
+							function(errQuery) {
+								PageHelper.showErrors(errQuery);
+							}
+							);
+						}
 
 
 							var custPromise = Queries.getCustomerBasicDetails({
@@ -217,6 +236,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						"key": "ach.applicantName",
 						"title": "APPLICANT_NAME",
 						"readonly": true
+					}, {
+						"key": "ach.partnerCode",
+						"title": "PARTNER_CODE",
+						"readonly": true,
+						"condition":"model.siteCode=='kinara'"
 					}]
 				}, {
 					"type": "fieldset",
@@ -375,7 +399,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							search: function(inputModel, form, model) {
 								var deferred = $q.defer();
 								Queries.getBankAccountsByPartner(
-									SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(
+									(model.siteCode=='kinara')?
+									model.ach.partnerCode:(SessionStore.getGlobalSetting("mainPartner") || "Kinara")).then(
 									function(res) {
 										$log.info("hi this is sponser!!!");
 										$log.info(res);
@@ -437,12 +462,12 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 			actions: {
 				submit: function(model, form, formName) {
 					PageHelper.clearErrors();
-					PageHelper.showLoader();
 					model.ach.bankCity = model.ach.branchName;
 					if (model.ach.sponsorAccountCode==null){
 						PageHelper.showProgress("submit", 'Selected bank doesn not have a valid account code. Please check.');
 						return;
 					}
+					PageHelper.showLoader();
 					ACH.create(model.ach, function(response) {
 						PageHelper.hideLoader();
 						PageHelper.showProgress("page-init", "ACH Registration Successful", 5000);

@@ -1284,7 +1284,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             {
                                 key:"customer.supplierDetails[].amount",
                                 title:"PAYABLE_OUTSTANDING",
-                                type:"amount"
+                                type:"amount",
+                                required:true
                             },
                          ]
                      }

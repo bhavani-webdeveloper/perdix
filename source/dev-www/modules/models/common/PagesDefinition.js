@@ -213,14 +213,48 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
         return deferred.promise;
     }
 
-    pDef.isStateAllowed = function(state, pageName) {
-        _.forEach(userAllowedPages, function(v, k){
-            if ((!pageName && v.state === state) || (pageName && v.state === state && pageName === v.stateParams.pageName))
-                return true;
-        });
-        return false;
+    pDef.isStateAllowed = function(pageUri) {
+        var isAllowed = false;
+        var deferred = $q.defer();
+        if (userAllowedPages) {
+            deferred.resolve(userAllowedPages);
+        } else {
+            pDef.getRoleAllowedPageList().then(function(response){
+                deferred.resolve(userAllowedPages);
+            }, function(errorResponse){
+                deferred.reject(errorResponse);
+            });
+        }
+            if (pageUri) {
+                if(!userAllowedPages){
+                    var localPages = SessionStore.getItem(irf.USER_ALLOWED_PAGES + SessionStore.getLoginname());
+                    userAllowedPages = localPages
+                }
+                _.forEach(userAllowedPages, (v) => {
+                        if (pageUri.includes(v.uri)) {
+                            isAllowed = true;
+                        }
+                });
+            }
+            if(!isAllowed){
+            //pageUri = pageUri.substring(2);
+            SysQueries.getPageDetailMapping(pageUri).then(function(response){
+                if (response && response.body) {
+                    _.forEach(response.body,function(v, k){
+                        if (pageUri.includes(v.uri)) {
+                            isAllowed = true;
+                        }
+                    });
+                    deferred.resolve(isAllowed);
+                }
+            }, function(httpResponse) {
+                $log.error("Error trying to load Page Detail Mapping of user.")
+                deferred.resolve();
+            });
+        }
+        return deferred.promise;
     };
-
+        
     var readOnlyFormCache = {};
     pDef.setReadOnlyByRole = function(pageUri, form) {
         var deferred = $q.defer();

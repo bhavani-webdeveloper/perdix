@@ -420,46 +420,31 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         type: "select",
                                         "condition":"model.siteCode == 'shramsarathi'",
                                         required: false,
-                                        titleMap: {
-                                            "Business not running":"Business not running",
-                                            "Hardship": "Hardship",
-                                            "Wilful default":"Wilful default",
-                                            "Can pay":"Can pay",
-                                            "Others":"Others"
-                                        },
-
+                                        titleMap: [{
+                                            "name": "Business",
+                                            "value": "Business"
+                                            },
+                                            {
+                                                "name": "Personal",
+                                                "value": "Personal"
+                                            }]
                                     },
-
-
-                                    // {
-                                    //     key: "additional.reason",
-                                    //     title: "REASON",
-                                    //     type: "select",
-                                    //     required: true,
-                                    //     condition: "model.additional.reasonType=='Business'",
-                                    //     // enumCode: "business_overdue_reasons",
-                                    //     titleMap:[
-                                    //         {
-                                    //             "value":"others",
-                                    //             "name":"Others"
-                                    //     }
-                                    //     ]
-
-                                    // },
-                                    // {
-                                    //     key: "additional.reason",
-                                    //     title: "REASON",
-                                    //     type: "select",
-                                    //     required: true,
-                                    //     condition: "model.additional.reasonType=='Personal'",
-                                    //     // enumCode: "personal_overdue_reasons",
-                                    //     titleMap:[
-                                    //         {
-                                    //             "value":"others",
-                                    //             "name":"Others"
-                                    //     }
-                                    //     ]
-                                    // },
+                                     {
+                                         key: "additional.reason",
+                                         title: "REASON",
+                                         type: "select",
+                                         required: true,
+                                         condition: "model.additional.reasonType=='Business'",
+                                     enumCode: "business_overdue_reasons"
+                                     },
+                                     {
+                                         key: "additional.reason",
+                                         title: "REASON",
+                                         type: "select",
+                                         required: true,
+                                         condition: "model.additional.reasonType=='Personal'",
+                                     enumCode: "personal_overdue_reasons"
+                                     },
                                     {
                                         key: "additional.scheduledDate",
                                         title: "FOLLOW_UP_DATE",
@@ -580,7 +565,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                     return;
                                 }
                             }
-                                
+
                         }
                         model.promise.reasonType = model.additional.reasonType;
                         if (model.additional.reason && model.additional.reason == "Others")

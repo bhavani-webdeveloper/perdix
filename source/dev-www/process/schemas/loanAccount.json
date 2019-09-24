@@ -1324,7 +1324,7 @@
                     "title": "SECURITY_EMI",
                     "enumCode": "decisionmaker"
                 },
-                "securityEmiRejectReason":{
+                "securityEmiOverrideReason":{
                     "type":["string","null"],
                     "title":"REASON"
                 },

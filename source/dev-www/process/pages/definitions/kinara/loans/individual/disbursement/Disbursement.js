@@ -97,6 +97,10 @@ irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbur
                         model.loanAccountDisbursementSchedule.normalInterestDuePayment= resp[0].normalInterestDuePayment;
                         model.loanAccountDisbursementSchedule.principalDuePayment= resp[0].principalDuePayment;
                         model.loanAccountDisbursementSchedule.linkedAccountNumber= resp[0].linkedAccountNumber;
+                        model.loanAccountDisbursementSchedule.disbursementTransactionType= resp[0].disbursementTransactionType;
+                        //model.loanAccountDisbursementSchedule.transactionType= resp[0].disbursementTransactionType;
+                        /** made default for ticket 20612 */
+                        model.loanAccountDisbursementSchedule.transactionType= 'Manual';
 
                         model.loanAccountDisbursementSchedule.linkedAccountTotalFeeDue= resp[0].linkedAccountTotalFeeDue;
                         model.loanAccountDisbursementSchedule.linkedAccountPenalInterestDue= resp[0].linkedAccountPenalInterestDue;
@@ -163,6 +167,7 @@ irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbur
 
 
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
+                        model.loanAccountDisbursementSchedule.netDisbursementAmount = model.additional.netDisbursementAmount;
 
                         if(model.siteCode == 'sambandh') {
                             model.additional.netDisbursementAmount = Number(resp[0].amount);
@@ -267,6 +272,16 @@ irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbur
                         "required": requires['modeOfDisbursement'],
                         "type": "select",
                         "enumCode": "mode_of_disbursement"
+                    },
+                    {
+                        "key": "loanAccountDisbursementSchedule.transactionType",
+                        "title": "TRANSACTION_TYPE",
+                        "type": "select",
+                        "titleMap": {
+                            "Auto": "Auto",
+                            "Manual": "Manual",
+                            "Internal" : "Internal"
+                        } 
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.referenceNumber",

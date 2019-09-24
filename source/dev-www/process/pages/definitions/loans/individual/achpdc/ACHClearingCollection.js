@@ -9,7 +9,7 @@ Methods
 Initialize : To decare the required model variables.
 onClick : To download the Domand List based on date criteria and to call "ACH.getDemandList" service
 onChange : To select/unselect all demands listed in array.
-customHandle : To upload ACH files(Excel).
+customHandle : To upload ACH files(Excel).Q
 
 Services
 --------
@@ -24,6 +24,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
         var allUpdateDemands = [];
         var branchIDArray = [];
         var demandAmount;
+        var achDemandDate;
         return {
             "type": "schema-form",
             "title": "ACH_COLLECTIONS",
@@ -46,8 +47,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                 //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
                 model.achCollections.demandDate = model.achCollections.demandDate;
                 model.bankAccountNumber = model.bankAccountNumber;
+                model.achDemand.repaymentType = 'ACH';
                 model.achDemand.demandDate = model.achCollections.demandDate || Utils.getCurrentDate();
-                model.demandAmount
                 console.log(formHelper.enum('branch_id'));
                 for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
                     branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
@@ -59,7 +60,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                 "items": [{
                         "key": "ach.achDemandListDate",
                         "title": "INSTALLMENT_DATE",
-                        "type": "date"
+                        "type": "date",
+                        onChange: function (value, form, model) {
+                            achDemandDate = model.ach.achDemandListDate;
+                            console.log(achDemandDate);
+                        }
                     },
                     {
                         "title": "",
@@ -81,16 +86,14 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                             PageHelper.showLoader();
                             ACHPDCBatchProcess.fetchDemandDetails({
                                 demandDate: model.ach.achDemandListDate,
+                                submitStatus: 'PENDING',
                                 repaymentType: 'ACH',
-                                'page': 1,
-                                'per_page': 1
+                                'offset': 1,
+                                'limit': 1
                             }).$promise.then(function (res) {
                                     PageHelper.hideLoader();
-                                    model.achSearch = res.body;
-                                    model.achSearch = $filter('filter')(model.achSearch, {
-                                        submitStatus: 'PENDING'
-                                    }, true);
-                                    if (model.achSearch.length) {
+                                    
+                                    if (res.headers['x-total-count']) {
                                         model.showUpdateSection = true;
                                         model.chosenRecordCountText = res.headers['x-total-count'] + ' Record(s) found.';
                                     } else {
@@ -99,11 +102,6 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                                     }
                                     // Clear the existing array whenever the user clicks on download,
                                     // to prevent the value getting appended to the existing
-                                    allUpdateDemands = [];
-                                    for (var i = 0; i < model.achSearch.length; i++) {
-                                        allUpdateDemands.push(model.achSearch[i]);
-                                        allUpdateDemands[i].check = true;
-                                    }
                                 },
                                 function (httpRes) {
                                     PageHelper.hideLoader();
@@ -127,19 +125,21 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         "type": "lov",
                         "lovonly": true,
                         "inputMap": {
-                            "accountNumber": "ach.accountNumber"
+                            "accountNumber": {
+                                "key": "ach.accountNumber",
+                                "required": true
+                            }
                         },
                         "searchHelper": formHelper,
                         "search": function (model, formCtrl, form) {
-                            var filteredDemandList = $filter('filter')(allUpdateDemands, {
-                                accountNumber: model.accountNumber
-                            });
-                            return $q.resolve({
-                                "header": {
-                                    "x-total-count": filteredDemandList.length
-                                },
-                                "body": filteredDemandList
-                            });
+                            return ACHPDCBatchProcess.fetchDemandDetails({
+                                accountNumber: model.accountNumber,
+                                demandDate: achDemandDate,
+                                repaymentType: 'ACH',
+                                submitStatus: 'PENDING',
+                                'offset': 1,
+                                'limit': 20
+                            }).$promise;
                         },
                         "getListDisplayItem": function (item, index) {
                             return [
@@ -196,7 +196,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                                 }
                                 if (!modelValue.searchDemarkAccountId) {
                                     modelValue.achDemand.chosenToMark.check = false;
-                                    modelValue.achDemand.demarkList =  modelValue.achDemand.demarkList || [];
+                                    modelValue.achDemand.demarkList = modelValue.achDemand.demarkList || [];
                                     modelValue.achDemand.demarkList.push(modelValue.achDemand.chosenToMark);
                                     modelValue.achDemand.reject.push(modelValue.achDemand.chosenToMark.accountNumber);
                                     modelValue.achDemand.chosenToMark = null;
@@ -229,11 +229,11 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         }
                     }
                 ]
-            },{
+            }, {
                 "type": "box",
                 "condition": "model.showUpdateSection",
                 "title": "DEMARKED_DEMANDS",
-                "items": [{ 
+                "items": [{
                     "type": "array",
                     "key": "achDemand.demarkList",
                     "condition": "!model.achDemand.demarkList[arrayIndex].check",
@@ -243,43 +243,46 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "title": "CHEQUE_DETAILS",
                     "titleExpr": "(model.achDemand.demarkList[arrayIndex].check?'⚫ ':'⚪ ') + model.achDemand.demarkList[arrayIndex].accountNumber + ' - ' + model.achDemand.demarkList[arrayIndex].demandAmount",
                     "items": [{
-                        "key": "achDemand.reject[].accountNumber",
-                        "condition": "!model.achDemand.demarkList[arrayIndex].check",
-                        "title": "ACCOUNT_NUMBER",
-                        "readonly": true
-                    },
-                    //  {
-                    //     "key": "achDemand.reject[].transactionDate",
-                    //     //"condition": "!model.achDemand.reject[arrayIndex].check",
-                    //     "title": "TRANSACTION_DATE",
-                    //     "type": "date"
-                    // }, {
-                    //     "key": "achDemand.reject[].repaymentDate",
-                    //     //"condition": "!model.achDemand.reject[arrayIndex].check",
-                    //     "title": "REPAYMENT_DATE",
-                    //     "type": "date"
-                    // },
-                    // {
-                    //     "key": "achDemand.reject[].demandAmount",
-                    //     //"condition": "!model.achDemand.reject[arrayIndex].check",
-                    //     "title": "LOAN_AMOUNT",
-                    //     "type": "number",
-                    //     "readonly": true
-                    // },
-                     {
-                        "key": "achDemand.demarkList[].demark",
-                        "condition": "!model.achDemand.demarkList[arrayIndex].check",
-                        "title": "MARK_AS_PAID",
-                        "type": "button",
-                        "schema": {
-                            "default": false
+                            "key": "achDemand.reject[].accountNumber",
+                            "condition": "!model.achDemand.demarkList[arrayIndex].check",
+                            "title": "ACCOUNT_NUMBER",
+                            "readonly": true
                         },
-                        "onClick": function(modelValue, form, modelIndex) {
-                            modelValue.achDemand.demarkList[modelIndex.arrayIndex].check = true;
-                            modelValue.achDemand.demarkList.splice(modelIndex.arrayIndex, 1);
+                        //  {
+                        //     "key": "achDemand.reject[].transactionDate",
+                        //     //"condition": "!model.achDemand.reject[arrayIndex].check",
+                        //     "title": "TRANSACTION_DATE",
+                        //     "type": "date"
+                        // }, {
+                        //     "key": "achDemand.reject[].repaymentDate",
+                        //     //"condition": "!model.achDemand.reject[arrayIndex].check",
+                        //     "title": "REPAYMENT_DATE",
+                        //     "type": "date"
+                        // },
+                        // {
+                        //     "key": "achDemand.reject[].demandAmount",
+                        //     //"condition": "!model.achDemand.reject[arrayIndex].check",
+                        //     "title": "LOAN_AMOUNT",
+                        //     "type": "number",
+                        //     "readonly": true
+                        // },
+                        {
+                            "key": "achDemand.demarkList[].demark",
+                            "condition": "!model.achDemand.demarkList[arrayIndex].check",
+                            "title": "MARK_AS_PAID",
+                            "type": "button",
+                            "schema": {
+                                "default": false
+                            },
+                            "onClick": function (modelValue, form, modelIndex) {
+                                modelValue.achDemand.demarkList[modelIndex.arrayIndex].check = true;
+                                modelValue.achDemand.demarkList.splice(modelIndex.arrayIndex, 1);
+                                modelValue.achDemand.reject[modelIndex.arrayIndex] = null;
+                                
 
+                            }
                         }
-                    }]
+                    ]
                 }]
             }, {
                 "type": "actionbox",
@@ -324,8 +327,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
 
                     accountDetailPromise.then(function () {
                         ACHPDCBatchProcess.submitLoanAndDemandForRepayment(model.achDemand).$promise.then(function (resp) {
-                                PageHelper.showProgress("page-init"," Demand Processed Successfully", 2000);
-                                $state.reload(); 
+                                PageHelper.showProgress("page-init", " Demand Processed Successfully", 2000);
+                                $state.reload();
                             },
                             function (errResp) {
                                 PageHelper.showErrors(errResp);

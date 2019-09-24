@@ -116,6 +116,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                 return [
                     "LenderInformation",
+                    "LenderInformation.alternateLenderId",
                     "LenderInformation.firstName",
                     "LenderInformation.lenderType",
                     "LenderInformation.source",
@@ -236,6 +237,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "repositoryAdditions": {
                                 "LenderInformation": {
                                     "items": {
+                                        "alternateLenderId":{
+                                            "type": "text",
+                                            "title": "ALTERNATE_LENDER_ID",
+                                            "key": "customer.udf.userDefinedFieldValues.udf3",
+                                            "orderNo": 10                                       
+                                        },
                                         "enterpriseRegistrations": {
                                             "key": "customer.enterpriseRegistrations",
                                             "type": "array",

@@ -94,8 +94,17 @@ if (isset($_GET)) {
             AND loanVersion = $loanVersion
             AND LOWER(PartnerSelf) = LOWER('Self')
             AND ApiVersion = '1'
-            AND ScoreName = :ScoreName
-        ";
+            AND ScoreName = :ScoreName";
+
+        $isScoreMasterUpdated="SELECT c.ScoreName 
+            FROM sc_calculation c , sc_master m 
+            WHERE
+            c.ApplicationId='$CustomerLoanId' 
+            AND c.ScoreName = '$ScoreName' 
+            AND c.ScoreName=m.ScoreName
+            AND c.updated_at > m.updated_at 
+            AND m.status = 'ACTIVE'
+            LIMIT 1  ";
 
         try{
             $db = ConnectDb();
@@ -105,8 +114,10 @@ if (isset($_GET)) {
             $ScoreCalcCheckParams->execute();
             $ScoreCalcCheckResults = $ScoreCalcCheckParams->fetchAll(PDO::FETCH_ASSOC);
             $db = null;
+
+            $scoreMasterQuery = (array) collect($defaultDb->select($isScoreMasterUpdated))->first();
         
-            if( sizeof($ScoreCalcCheckResults) > 0 ){
+            if( sizeof($ScoreCalcCheckResults) > 0 && sizeof($scoreMasterQuery)>0 ){
                 echo '{"ScoreDetails": [' . json_encode(['ScoreName' => $ScoreName ]) . ']}';
                 exit();
             }
@@ -420,7 +431,7 @@ if (isset($_GET)) {
                 } elseif ($applicant[$al]['business_involvement'] == 'Part Time') {
                     $weightage_manipulation = $full_involvement_weight / $part_time;
                 } else {
-                    $weightage_manipulation = 1;
+                    $weightage_manipulation = 0;
                 }
             } else {
                 $weightage_manipulation = 1;

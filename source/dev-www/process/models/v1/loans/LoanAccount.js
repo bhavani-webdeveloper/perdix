@@ -235,6 +235,10 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
         repaymentScheduleDownload:{
             method: 'GET',
             url: irf.MANAGEMENT_BASE_URL + '/server-ext/individual_loan_schedule.php'
+        },
+        findPreOpenFeeDetails:{
+            method:'POST',
+            url: endpoint+ '/findPreOpenFeeData'
         }
     });
 

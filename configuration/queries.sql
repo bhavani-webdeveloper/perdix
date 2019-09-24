@@ -95,17 +95,17 @@ customerFamilyMembers.list = SELECT family_member_first_name as `familyMemberFir
 customerNomineeMembers.list = SELECT family_member_first_name as `familyMemberFirstName`, family_member_last_name as familyMemberLastName, `gender` as gender, date_of_birth as `dateOfBirth`, relationship as `realtionShip`, enrollment_id as `enrollmentId` from family_details where customer_id = (select if( parent_customer_id != 0, parent_customer_id, id ) as  id from customer where id =:customerId) and relationship not in (:relationShip) and relationship in ('Father','Brother','Mother','Self','Son','Daughter','Sister','Wife','Husband')
 insuranceProducts.list = select distinct im.product_code as `productCode`, im.partner_code as `partnerCode`,m.id as `moduleConfigId`, im.insurance_type as insuranceType, im.premium_rate_code as `premiumRateCode` from  insurance_product_master im  inner join module_config_master m on m.module_name = im.product_code and m.bank_id = :bankId inner join product_type_master pm on m.module_name = pm.product_name inner join product_configuration pc on pc.product_id = pm.id where pc.bank_id = :bankId and branch_id = :branchId and insurance_type = :insuranceType
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
-collateralType.list=SELECT distinct machine_type as `collateralType`,depreciation_percentage as `depreciationPercentage` from machine_master 
+collateralType.list=SELECT distinct machine_type as `collateralType`,depreciation_percentage as `depreciationPercentage` from machine_master
 getBankName = SELECT bank_name from bank_master where id =:bankId
 getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
 getInsuranceDocuments.list = SELECT product_code as `productCode`,document_code as `documentCode`,is_mandatory as `isMandatory` from insurance_documents_master where product_code = :productCode
 getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id
 productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
-isLoanDisbursed = SELECT current_stage as `currentStage` from loan_account_disbursement_schedule where loan_id = :loanId 
+isLoanDisbursed = SELECT current_stage as `currentStage` from loan_account_disbursement_schedule where loan_id = :loanId
 isExistingCustomer = SELECT count(1) as oldAccounts from loan_accounts where loan_disbursement_date <= now() and customer_id = :customerId
 
 
-getProductCategoryByEMI = SELECT product_category,security_emi_required from loan_product_category_master where security_emi_required = :securityEmiRequired 
+getProductCategoryByEMI = SELECT product_category,security_emi_required from loan_product_category_master where security_emi_required = :securityEmiRequired
 customerDetails.list = SELECT l.customer_id as `customerId`,lcr.customer_id as `applicantCustomerId`,c.customer_type as `customerType` FROM `loan_accounts` l left join loan_customer_relation lcr on l.id=lcr.loan_id AND lcr.relation='Applicant' left join customer c on l.customer_id=c.id WHERE l.id = :loan_id
 customerInfo.list = SELECT * from customer where id = :customer_id
 
@@ -114,3 +114,6 @@ partnerCode.list = SELECT DISTINCT partner_code as `partnerCode` from bank_accou
 productTypeAndProductName.list = SELECT product_type as `productType`, product_name as `productName` from product_type_master
 loanRepaymentStatus.list = SELECT lr.account_number,lr.repayment_amount_in_paisa,lr.repayment_status FROM loan_repayment_details  lr WHERE lr.account_number = :account_number and lr.instrument_type IN ('ACH','PDC') and lr.repayment_status = 'Pending for Clearing'
 enterpiseCustomerDetails = SELECT c.id,c.customer_branch_id,c.centre_id,c.first_name as 'firstName',c.customer_type as 'customerType',c.mobile_phone as 'mobileNumber',CONCAT_WS(", ",c.door_no,c.street,c.locality,c.district) as 'address',e.enterprise_type FROM `customer` c LEFT JOIN enterprise e ON c.enterprise_id = e.id WHERE c.id in (select ecr.customer_id from  enterprise_customer_relations ecr where ecr.linked_to_customer_id = :individualCustomerId)
+pageDetailMapping.list = SELECT p.id,p.uri,p.parent_uri FROM page_detail_mapping p where uri = :uri
+Lender.list =SELECT c.id, c.first_name AS 'firstName',eudf.udf_3 AS 'alternateLenderId' FROM customer c LEFT JOIN enrollment_user_define_fields eudf ON eudf.id = c.udf_id WHERE customer_type = 'lender' AND current_stage = 'Completed' AND LOWER(c.first_name) LIKE concat(LOWER(:firstName), '%')
+

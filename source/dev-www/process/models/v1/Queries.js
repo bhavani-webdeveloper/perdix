@@ -115,7 +115,7 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
-	
+
     	resource.searchCollateralType = function() {
             var deferred = $q.defer();
             var request = {};
@@ -175,7 +175,7 @@ irf.models.factory('Queries', [
         resource.searchDepreciation = function(machineDescription) {
             var deferred = $q.defer();
             var request = machineDescription;
-            
+
             resource.getResult("machineDepreciation.list", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -192,7 +192,7 @@ irf.models.factory('Queries', [
          resource.searchMachineMaster = function() {
             var deferred = $q.defer();
             var request = {};
-            
+
             resource.getResult("machineMaster.list", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -428,7 +428,7 @@ irf.models.factory('Queries', [
             var deferred = $q.defer();
             var request = {};
             request.securityEmiRequired=securityEmiRequired;
-           
+
             resource.getResult("getProductCategoryByEMI", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -469,7 +469,7 @@ irf.models.factory('Queries', [
             request.productCategory=productCategory;
             request.frequency=frequency;
             request.loanType = loanType;
- 
+
             resource.getResult("loanTypeProductCode.list", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -510,7 +510,7 @@ irf.models.factory('Queries', [
             var deferred = $q.defer();
             request = {};
             request.partner_code = (_.isNull(partnerCode) || _.isUndefined(partnerCode)) ? "%" : ("%" + partnerCode + "%");
-            resource.getResult("LoanRepayBankAccountsByPartnerCode.list", request, 10).then(function(records) {
+            resource.getResult("LoanRepayBankAccountsByPartnerCode.list", request, 50).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -702,6 +702,23 @@ irf.models.factory('Queries', [
             resource.getResult("loanpurpose1.list", {
                 "product": product
             }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getPartnerCode = function() {
+            var deferred = $q.defer();
+            var request = {};
+            resource.getResult("partnerCode.list", request, 50).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -1258,7 +1275,7 @@ irf.models.factory('Queries', [
         resource.getVehicleDetails = function (){
             var deferred = $q.defer();
             var request = {};
-            resource.getResult("vehicleViability.list", request).then(function(response){   
+            resource.getResult("vehicleViability.list", request).then(function(response){
                deferred.resolve(response);
             }, deferred.reject);
             return deferred.promise;
@@ -1383,7 +1400,7 @@ irf.models.factory('Queries', [
         var branchvalue = filterFilter(branches, {
             "value": Number(branchName)
         }, true)[0].name;
-        
+
         resource.getResult("vehicleSchemeCodeDetails.list", {
                 "branch_name": branchvalue,
                 "centre_name":centrevalue
@@ -1406,11 +1423,11 @@ irf.models.factory('Queries', [
             "customer_id":customerId
         };
         resource.getResult("deseaseDetails", request).then(function(response) {
-              deferred.resolve(response);           
+              deferred.resolve(response);
         }, deferred.reject);
         return deferred.promise;
     };
-    
+
     resource.questionnaireDetails = function (moduleCode, process, stage) {
         var deferred = $q.defer();
         resource.getResult('questionnaireDetails.list', {
@@ -1457,7 +1474,7 @@ irf.models.factory('Queries', [
         )
         return deferred.promise;
     };
-    
+
     resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
         var deferred = $q.defer();
         request = {};
@@ -1487,11 +1504,11 @@ irf.models.factory('Queries', [
                 if (res && res.results && res.results.length) {
 
                     var selectType = _.filter(res.results, function(obj) {
-                        return obj.input_type == 'select';     
+                        return obj.input_type == 'select';
                     });
 
                     var nonSelectType = _.filter(res.results, function(obj) {
-                        return obj.input_type !== 'select';     
+                        return obj.input_type !== 'select';
                     });
 
                     _.forEach(selectType, function(obj) {
@@ -1529,7 +1546,7 @@ irf.models.factory('Queries', [
                     body: records.results
                 };
                 deferred.resolve(result);
-            }         
+            }
         }, deferred.reject);
         return deferred.promise;
     }
@@ -1545,7 +1562,7 @@ irf.models.factory('Queries', [
                     body: records.results
                 };
                 deferred.resolve(result);
-            }         
+            }
         }, deferred.reject);
         return deferred.promise;
     };
@@ -1556,7 +1573,7 @@ irf.models.factory('Queries', [
             "urnNo":urnNo,
         };
         resource.getResult("accountOverrideStatus.list", request).then(function(response) {
-              deferred.resolve(response);           
+              deferred.resolve(response);
         }, deferred.reject);
         return deferred.promise;
     }
@@ -1565,7 +1582,7 @@ irf.models.factory('Queries', [
         resource.getResult("goldRateDetails",{}).then(function(value){
             if(value && value.results.length > 0){
                 deferred.resolve(value.results[0].goldRate);
-            }            
+            }
         },deferred.reject);
         return deferred.promise;
     }
@@ -1609,7 +1626,7 @@ irf.models.factory('Queries', [
         resource.getResult("getBankName",{"bankId":bankId}).then(function(value){
             if(value && value.results.length > 0){
                 Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].bank_name) : deferred.resolve(value.results.bank_name)
-            }            
+            }
         },deferred.reject);
         return deferred.promise;
     };
@@ -1637,13 +1654,13 @@ irf.models.factory('Queries', [
             if (typeof flag != undefined && flag == true){
                 if(value && value.results.length > 0){
                     Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0]) : deferred.resolve(value.results)
-    
+
                 }
             }
             else{
                 if(value && value.results.length > 0){
                     Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].last_edited_at) : deferred.resolve(value.results.last_edited_at)
-    
+
                 }
             }
         },deferred.reject);
@@ -1654,6 +1671,15 @@ irf.models.factory('Queries', [
         resource.getResult("getInsuranceDocuments.list",{"productCode":productCode}).then(function(value){
             if(value && value.results.length > 0){
                 deferred.resolve(value.results);
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
+    resource.isExistingCustomer = function(customerId){
+        var deferred = $q.defer();
+        resource.getResult("isExistingCustomer",{"customerId":customerId}).then(function(value){
+            if(value && value.results.length > 0){
+                deferred.resolve(value.results[0]);
             }
         },deferred.reject);
         return deferred.promise;
@@ -1682,8 +1708,8 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     }
-    
-    
+
+
     resource.isLoanDisbursed = function(loanId){
         var deferred = $q.defer();
         resource.getResult('isLoanDisbursed',{'loanId':loanId}).then(function(resp){
@@ -1718,7 +1744,26 @@ irf.models.factory('Queries', [
         }, deferred.reject);
         return deferred.promise;
     }
+    resource.getLenderInfo = function(branchName,firstName) {
+        var deferred = $q.defer();
+        var request = {
+            "branchName": branchName || '',
+            "firstName": firstName || ''
+        };
+        resource.getResult("Lender.list", request).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
     return resource;
-    
+
     }
 ]);

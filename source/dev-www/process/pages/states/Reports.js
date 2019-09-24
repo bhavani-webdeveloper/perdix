@@ -1,8 +1,8 @@
 irf.pages.controller("ReportsCtrl",
-    ["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper", "$timeout", "irfSimpleModal", "formHelper",
-        function ($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper, $timeout, irfSimpleModal, formHelper) {
+    ["$log", "$scope", "SessionStore", "$state", "$stateParams", "$q", "BIReports", "PageHelper", "$timeout", "irfSimpleModal", "formHelper", "irfProgressMessage", "$http",
+        function ($log, $scope, SessionStore, $state, $stateParams, $q, BIReports, PageHelper, $timeout, irfSimpleModal, formHelper, irfProgressMessage, $http) {
             $log.info("ReportsCtrl loaded");
-
+            $scope.isDownloadButtonEnabled = SessionStore.getGlobalSetting('reportDashboard.isDownloadButtonEnabled') || 0;
             var pageData = {};
             var tabData = {
                 "menu_name": $stateParams.pageId
@@ -151,6 +151,71 @@ irf.pages.controller("ReportsCtrl",
                     });
                 }
             };
+
+            $scope.downloadSummaryReport = function(menuId) {
+                PageHelper.showLoader();
+                var reportData = {
+                    "menu_id": menuId,
+                    "user_id": userName,
+                    "action": "download"
+                };
+                irfProgressMessage.pop("Reports", "Downloading Report. Please wait...");
+                $http.get(
+                    irf.BI_BASE_URL + '/biportal/api/ReportDefinition.php',
+                    {params: reportData}, {
+                        responseType: 'arraybuffer'
+                    }
+                ).then(function (response) {
+                    var headers = response.headers();
+                    if (headers['content-type'].indexOf('json') != -1 && !headers["content-disposition"]) {
+                        var decodedString = String.fromCharCode.apply(null, new Uint8Array(response.data));
+                        console.log(decodedString);
+                        PageHelper.showErrors({
+                            data: {
+                                error: decodedString
+                            }
+                        });
+                        irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+                        return;
+                    }
+                    var blob = new Blob([response.data], {
+                        type: headers['content-type']
+                    });
+                    if (!$("#reportdownloader").length) {
+                        var l = document.createElement('a');
+                        l.id = "reportdownloader";
+                        document.body.appendChild(l);
+                    }
+                    $("#reportdownloader").css({
+                        "position": "absolute",
+                        "height": "-1px",
+                        "top": "-100px",
+                        "left": "-100px",
+                        "width": "-100px",
+                    });
+                    var link = document.getElementById("reportdownloader");
+                    link.href = window.URL.createObjectURL(blob);
+
+                    if (headers["content-disposition"] && headers["content-disposition"].split('filename=').length == 2) {
+                        var filename = headers["content-disposition"].split('filename=')[1];
+                        link.download = filename.replace(/"/g, "");
+                    } else {
+                        link.download = SessionStore.getLoginname() + + '_' + moment().format('YYYYMMDDhhmmss');
+                    }
+                    link.click();
+                    irfProgressMessage.pop("Reports", "Report downloaded.", 5000);
+                }, function (err) {
+                    var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.data));
+                    PageHelper.showErrors({
+                        data: {
+                            error: decodedString
+                        }
+                    });
+                    irfProgressMessage.pop("Reports", "Report download failed.", 5000);
+                }).finally(function () {
+                    PageHelper.hideLoader();
+                });
+            }
 
             var drilldownBodyHtml =
                 '<div ng-show="model.$showLoader" class="text-center">Loading...</div>' +

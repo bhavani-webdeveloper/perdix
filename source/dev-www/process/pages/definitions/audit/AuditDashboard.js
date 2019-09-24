@@ -159,7 +159,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
-           
+
 
                 if (doaq) {
                     Audit.online.findAuditInfo({
@@ -199,7 +199,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
-      
+
 
                 if (raq || ravq) {
                     Audit.online.findAuditInfo({
@@ -278,7 +278,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
-        
+
 
                 if (aiq) {
                     Audit.online.findIssues({

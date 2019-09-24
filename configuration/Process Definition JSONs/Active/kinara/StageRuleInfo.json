@@ -58,6 +58,36 @@
     "displayName": "loanChannels",
     "ruleParam": "loanAccount.?loanChannels",
     "type": "string"
+  },
+  {
+    "displayName": "loan Tenure",
+    "ruleParam": "loanAccount.?tenure",
+    "type": "number"
+  },
+  {
+    "displayName": "Business Sector",
+    "ruleParam": "business.?enterprise.?businessSector",
+    "type": "string"
+  },
+  {
+    "displayName": "Business Subsector",
+    "ruleParam": "business.?enterprise.?businessSubsector",
+    "type": "string"
+   },
+   {
+    "displayName": "Business Type",
+    "ruleParam": "business.?enterprise.?businessType",
+    "type": "string"
+   },
+  {
+    "displayName": "Distance From Branch",
+    "ruleParam": "business.?distanceFromBranch",
+    "type": "string"
+  },
+  {
+    "displayName": "Loan Purpose2",
+    "ruleParam": "loanAccount.?loanPurpose2",
+    "type": "string"
   }
 ]
 

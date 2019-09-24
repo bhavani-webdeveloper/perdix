@@ -1,10 +1,15 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
-["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition",
-    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition){
+["$log","SessionStore","$state","LoanAccount", "$stateParams", "SchemaResource","PageHelper","Enrollment","formHelper","IndividualLoan","Utils","$filter","$q","irfProgressMessage", "Queries","LoanProducts", "LoanBookingCommons", "BundleManager", "irfNavigator","PagesDefinition", "kinara.IndividualLoanHelper", 
+    function($log, SessionStore,$state,LoanAccount,$stateParams, SchemaResource,PageHelper,Enrollment,formHelper,IndividualLoan,Utils,$filter,$q,irfProgressMessage, Queries,LoanProducts, LoanBookingCommons, BundleManager,irfNavigator,PagesDefinition, KinaraIndividualLoanHelper){
         var siteCode = SessionStore.getGlobalSetting('siteCode');
+
         var nonEditable = {
             "loanAccount.interestRate" : siteCode == 'IREPDhan',
             "loanAccount.processingFeePercentage" : siteCode == 'IREPDhan'
+        }
+        var showNetDisbursmentDetails = 'N';
+        if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+            showNetDisbursmentDetails = 'Y';
         }
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
@@ -64,7 +69,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!_.hasIn(collateral, "id") || _.isNull(collateral.id)){
                         /* ITS A NEW COLLATERAL ADDED */
                         collateral.quantity = collateral.quantity || 1;
-                        collateral.loanToValue = collateral.collateralValue;
+                        if(!collateral.loanToValue){
+                            collateral.loanToValue = collateral.collateralValue;
+                        }
                         collateral.totalValue = collateral.loanToValue * collateral.quantity;
                     }
                 })
@@ -157,8 +164,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
             }
         }
-
-
+        
         var getProductDetails=function (value,model){
             if (value)
                 LoanProducts.getProductData({"productCode":value})
@@ -274,7 +280,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.loanHoldRequired = SessionStore.getGlobalSetting("loanHoldRequired");
-                model.loanAccount.scheduleStartDate=null;
+                model.pageId = $stateParams.pageId;
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
@@ -285,13 +291,33 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     model._currentDisbursement=model._currentDisbursement||{};
                     model.loanAccount.collateral=model.loanAccount.collateral || [{quantity:1}];
                     PageHelper.showLoader();
-                    var value = SessionStore.getGlobalSetting("mainPartner");
+                    Queries.getGlobalSettings("mainPartner").then(function(value) {
                     model.loanAccount.partnerCode = model.loanAccount.partnerCode||value;
                     model.mainPartner = value;
+                        $log.info("mainPartner:" + model.loanAccount.partnerCode);
+                    }, function(err) {
+                        $log.info("mainPartner is not available");
+                    }).finally(function(){
+                        PageHelper.hideLoader();
+                    });
+                    //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
                     model.loanAccount.guarantors = [];
                     model.showLoanBookingDetails = showLoanBookingDetails;
+
+                    // Newly added for security EMI new Requirements
+            Queries.getProductCategoryByEMI(1)
+            .then(function(resp){
+             console.log("getProductCategoryByEMI query response",resp);
+            model.totalProductCategoryByEMI=[];
+            _.forEach(resp.body,function(productcategory){
+                model.totalProductCategoryByEMI.push(productcategory.product_category);
+            });
+            },function(err){
+             console.log("getProductCategoryByEMI query error ",err);
+             model.totalProductCategoryByEMI=[];
+            });
 
                     if(model.siteCode == 'IREPDhan'){
                         model.loanAccount.commercialCibilCharge = 0;
@@ -332,7 +358,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
                                 model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
-                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                                customerId:model.loanAccount.loanCustomerRelations[i].customerId,
+                                relationshipWithApplicant: model.loanAccount.loanCustomerRelations[i].relationshipWithApplicant
                             });
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
@@ -340,6 +367,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 guaCustomerId:model.loanAccount.loanCustomerRelations[i].customerId,
+                                relationshipWithApplicant: model.loanAccount.loanCustomerRelations[i].relationshipWithApplicant
                                 });
                             } 
                     }
@@ -374,7 +402,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     /* 1)calling LoanAccount api to fetch the existing loan account details ,
                           yet one field is left to be mapped
                     */
-                    if(_.hasIn(model.loanAccount, 'linkedAccountNumber') && !_.isNull(model.loanAccount.linkedAccountNumber) && _.hasIn(model.loanAccount, 'transactionType') && !_.isNull(model.loanAccount.transactionType) && model.loanAccount.transactionType.toLowerCase()=='renewal'){
+                    if(_.hasIn(model.loanAccount, 'linkedAccountNumber') && !_.isNull(model.loanAccount.linkedAccountNumber) && _.hasIn(model.loanAccount, 'transactionType') && !_.isNull(model.loanAccount.transactionType) && (model.loanAccount.transactionType.toLowerCase()=='renewal' || model.loanAccount.transactionType=='Loan Transfer')){
                         var p1 = LoanAccount.get({
                             accountId: model.loanAccount.linkedAccountNumber
                             }).$promise;
@@ -406,7 +434,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         $log.info("resp");
                         model.loanAccount = resp;
                         model.currentStage = resp.currentStage;
-
+                        if (showNetDisbursmentDetails == "Y") {
+                        KinaraIndividualLoanHelper.computePreOpenFeeData(model);
+                        }
                         model.additional = model.additional || {};
 
                         if(!model.loanAccount.portfolioInsuranceUrn){
@@ -425,6 +455,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                         if (model.loanAccount.coBorrowers && model.loanAccount.coBorrowers.length > 0 && model.loanAccount.coBorrowers[0].coBorrowerUrnNo == model.loanAccount.portfolioInsuranceUrn){
                             model.additional.portfolioUrnSelector = "coapplicant";
+                        }
+
+                        if (model.allowPreEmiInterest && model.loanAccount.disbursementSchedules.length > 0 && model.loanAccount.disbursementSchedules[0] && model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays && _.isNumber(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays)  && model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate) {
+                            model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
+                            model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
 
                         model.linkedAccount={};
@@ -491,6 +526,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         condition: "model.loanAccount.transactionType != 'New Loan'"
                     },
                     {
+                        key:"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                        title:"OTHER_LINKED_ACCOUNTS",
+                        readonly:true,
+                        required: false,
+                        condition: "model.loanAccount.transactionType != 'New Loan'"
+                    },
+                    {
                     "type":"fieldset",
                     "title":"BRANCH_DETAILS",
                     "items":[
@@ -536,6 +578,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 onChange: function(value, form, model) {
                                     clearProduct(value, model);
                                     clearLoanPurpose(value,model)
+                                    var changeFlag=true;
+                            var b= model.loanAccount.productCategory.replace('–','');
+                            for(var i=0;i<model.totalProductCategoryByEMI.length;i++){
+                                var temp=model.totalProductCategoryByEMI[i].replace('–','');
+                                if(temp ==b){
+                                    model.loanAccount.securityEmiRequired='YES';
+                                    model.loanAccount.securityEmiOverrideReason=null;
+                                    changeFlag=false;
+                                    break;
+                                }  
+                            }
+                            if(changeFlag){
+                                model.loanAccount.securityEmiRequired="NO";
+                            }
                                 }
                             },
                             {
@@ -546,6 +602,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 onChange: function(value, form, model) {
                                     clearProduct(value, model);
                                 }
+                            },
+                            {
+                                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                                "title": "ELIGIBLE_FOR_HERVIKAS",
+                                "type":"select",
+                                "enumCode":"decisionmaker1",
+                                "readonly":true
                             },
                             {
                                 "key": "loanAccount.productCode",
@@ -561,7 +624,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 required: true,
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    debugger;
                                    return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.bankId);
                                 },
                                 onSelect: function(valueObj, model, context) {
@@ -1010,7 +1072,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.transactionType",
                                 "required": true,
-                                "enumCode":"restructure_loan_transaction_type",
+                                "enumCode":"transaction_type_6",
                                 "type":"select",
                                 // "titleMap":{
                                 //     "Loan Restructure":"Loan Restructure",
@@ -1059,20 +1121,31 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
                                 required: true,
-                                readonly:true,
+                                readonly:false,
                                 enumCode: "decisionmaker",
-                                "condition" : "model.siteCode=='kinara' && model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired && model.siteCode != 'shramsarathi'"
+                                "condition" : "model.siteCode=='kinara' && model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired && model.siteCode != 'shramsarathi'",
+                                onChange:function(value,form,model){
+                                    if(value === 'YES'){
+                                       model.loanAccount.securityEmiOverrideReason=null; 
+                                       model.loanAccount.estimatedEmi=model.loanAccount.expectedEmi;
+                                    }
+                                    else{
+                                        model.loanAccount.estimatedEmi=0;
+                                    }
+                                    }
                             },
                             {
-                                key:"loanAccount.securityEmiRejectReason",
+                                key:"loanAccount.securityEmiOverrideReason",
                                 type:"select",
                                 required: true,
-                                readonly:true,
                                 "title":"REASON",
                                 titleMap:{
-                                    "No Reason":"No Reason"
+                                    "Secured & Loan Amount less than 3 lacs":"Secured & Loan Amount less than 3 lacs",
+                                    "Tenure less than 12 months":"Tenure less than 12 months",
+                                    "Existing Customer":"Existing Customer",
+                                    "Waiver approval taken - allow for mail approval upload":"Waiver approval taken - allow for mail approval upload"
                                 },
-                                "condition" : "model.siteCode=='kinara' && model.loanAccount.securityEmiRequired=='No'"
+                                "condition" : "model.siteCode=='kinara' && model.loanAccount.securityEmiRequired.toLowerCase() =='no' "
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
@@ -2947,6 +3020,64 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     },
                 ]
             },
+            /**  removed for temporal fix
+            {
+                "type": "box",
+                "title": "EXPECTED_NET_DISBURSEMENT",
+                "condition": "!model.showPreOpenData && model.siteCode == 'kinara' ",
+                "order":10,
+                "items": [
+                    {
+                        key:"preOpenFeeData.loanAmount",
+                        "type": "amount",
+                        "title": "LOAN_AMOUNT",
+                        readonly: true,
+                    },
+                    {
+                       key: "preOpenFeeData.expectedProcessingFee",
+                       "type": "amount",
+                        "title": "Expected Processing Fee",
+                        readonly:true
+                    },
+                    {
+                       key: "preOpenFeeData.expectedCommercialCibilCharges",
+                       "type": "amount",
+                        "title": "CIBIL Charges",
+                       readonly:true
+                    },
+                     {
+                        key: "preOpenFeeData.expectedSecurityEMI",
+                        "type": "amount",
+                         "title": "EXPECTED_SECURITY_EMI",
+                         readonly:true
+                     },
+                     {
+                        key: "preOpenFeeData.expectedPortfolioInsuranceAmount",
+                        "type": "amount",
+                         "title": "EXPECTED_PORTFOLIO_INSUARANCE_WITH_GST",
+                         readonly:true
+                     },
+                     {
+                        key: "preOpenFeeData.payoffAmountForLinkedAccount",
+                        "type": "amount",
+                         "title": "EXPECTED_PAYOFF_FOR_LINKED_ACCOUNT",
+                         readonly:true
+                     },
+                     {
+                        key: "preOpenFeeData.documentCharges",
+                        "type": "amount",
+                         "title": "EXPECTED_DOCUMENT_CHARGES",
+                         readonly:true
+                     },
+                     {
+                        key: "preOpenFeeData.netDisbursementAmount",
+                        "type": "amount",
+                         "title": "EXPECTED_NET_DISBURSABLE_AMOUNT",
+                         readonly:true
+                     },
+                ]
+            },
+            **/
             {
                 "type": "box",
                 "title": "POST_REVIEW",
@@ -3309,7 +3440,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 save: function(model, formCtrl, form, $event){
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
-
+                    if(!model.loanAccount.productCode){
+                        PageHelper.setError({
+                            message: "Product is needed"
+                        });
+                    return;
+                    }
                     if (!_.hasIn(model.loanAccount, 'loanAmountRequested') || _.isNull(model.loanAccount.loanAmountRequested)){
                         model.loanAccount.loanAmountRequested = model.loanAccount.loanAmount;
                     }
@@ -3319,14 +3455,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
 
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara' && model.linkedAccount){
-                        if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
-                            PageHelper.setError({
-                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
-                            });
-                           return;
+                        if(model.loanAccount.disbursementSchedules.length>0){
+                            if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+                                PageHelper.setError({
+                                    message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
+                                });
+                               return;
+                            }   
                         }
+                        
                     }
-
+                        
                     if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
                         PageHelper.setError({
                                 message: "Loan Application Date should not be greater than Loan Sanction Date"
@@ -3435,7 +3574,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     if (!validateForm(formCtrl)){
                         return;
                     }
-
+                    var showNetDisbursmentDetails = 'N';
+                    if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+                        showNetDisbursmentDetails = 'Y';
+                    }
+                    if (showNetDisbursmentDetails == "Y") {
+                        if(!model.preOpenFeeData){
+                            PageHelper.setError({
+                                message: "Please save account before proceeding"
+                            });
+                           // PageHelper.hideLoader();
+                            return false;
+                           }
+                       /*removed for temoral fix
+                           if (model.preOpenFeeData.netDisbursementAmount < 0) {
+                            PageHelper.setError({
+                                message: "disubrsement amount can not be less than : 0"
+                            });
+                            return;
+                        }*/
+                        model.loanAccount.estimatedEmi=model.preOpenFeeData.expectedSecurityEMI;		                        
+                    }
                     if (model.loanAccount.loanApplicationDate > model.loanAccount.sanctionDate) {
                         PageHelper.setError({
                                 message: "Loan Application Date should not be greater than Loan Sanction Date"
@@ -3451,11 +3610,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 });
                                return;
                             }
-                        }else if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
-                            PageHelper.setError({
-                                message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
-                            });
-                           return;
+                        }else if(model.loanAccount.disbursementSchedules.length>0){
+                                if(parseInt(model.loanAccount.disbursementSchedules[0].disbursementAmount) < parseInt(model.linkedAccount.accountBalance)){
+    
+                                    PageHelper.setError({
+                                        message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Balence" +"  " + model.linkedAccount.accountBalance
+                                    });
+                                   return;
+                                }
                         }
                     }
 
@@ -3529,7 +3691,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     else
                         model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'No';*/
                     model.loanAccount.securityEmiRequired = model.loanAccount.securityEmiRequired || 'NO';
-
                     var trancheTotalAmount=0;
                     if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                         model.loanAccount.disbursementSchedules[0].customerAccountNumber = model.loanAccount.customerBankAccountNumber;

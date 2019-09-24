@@ -859,7 +859,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 key: "loanAccount.linkedAccountNumber",
                                 readonly: true,
                                 title: "LINKED_LOAN_ACCOUNT",
-                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                                condition: "(model.loanAccount.transactionType.toLowerCase() == 'renewal' || model.loanAccount.transactionType=='Internal Foreclosure' || model.loanAccount.transactionType=='Loan Transfer')"
                             },
                             {
                                 key: "loanAccount.transactionType",
@@ -1741,7 +1741,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     {
                         type: "box",
                         condition: "model.siteCode != 'sambandh'",
-                        title: "REMINDER_/_REPAYMEMT_HISTORY",
+                        title: "REMINDER_OR_REPAYMEMT_HISTORY",
                         "readonly": true,
                         items: [{
                             key: "loanRepaymentReminderHistory",

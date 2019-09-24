@@ -83,6 +83,10 @@ define([], function() {
 									data: 'lenderId'
 								},
 								{
+									title: 'ALTERNATE_LENDER_ID',
+									data: 'udf1'
+								},
+								{
 									title:'LENDER_NAME',	
 									data: 'lenderName'
 								},

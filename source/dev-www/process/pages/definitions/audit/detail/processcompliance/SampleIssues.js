@@ -50,6 +50,14 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                 });
                                 return false;
                             }
+                            if (dropdowOptions[j].option_id == id.option_id && dropdowOptions[j].option_label == 'no') {
+                                if (!id.deviation) {
+                                    PageHelper.setError({
+                                        message: "Issue <strong>#" + (Number(i) + 1) + "</strong> requires comments to be given"
+                                    });
+                                    return false;
+                                }
+                            }                       
                             if (dropdowOptions[j].marks === 0) {
                                 if (!id.assignee_det || !id.assignee_det.length || !id.assignee_det[0].assignee_id) {
                                     PageHelper.setError({
@@ -347,16 +355,29 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                     "value": dropdowOptions[j].option_id
                                 });
                                 // Default option id to NA
+                                if (model.siteCode != "kinara") {
                                 if (!optionId && dropdowOptions[j].option_label == 'NA') {
                                     model.sample.issue_details[i].option_id = dropdowOptions[j].option_id;
                                 }
+                                }
                             }
-                            issueDetailsForm.push({
-                                "key": "sample.issue_details[" + i + "].option_id",
-                                "type": "radios",
-                                "title": "OPTION",
-                                "titleMap": dropdownTitleMap
-                            });
+                            if (model.siteCode == "kinara") {
+                                issueDetailsForm.push({
+                                    "key": "sample.issue_details[" + i + "].option_id",
+                                    "type": "radios",
+                                    "title": "OPTION",
+                                    "required": true,
+                                    "titleMap": dropdownTitleMap
+                                });
+                            }
+                            else{
+                                issueDetailsForm.push({
+                                    "key": "sample.issue_details[" + i + "].option_id",
+                                    "type": "radios",
+                                    "title": "OPTION",
+                                    "titleMap": dropdownTitleMap
+                                });
+                            }
                         } else if (issue.options.type == "input") {
                             _.forOwn(issue.options.type_of_issue_options, function(v, k) {
                                 issueDetailsForm.push({
@@ -516,7 +537,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                                         "process_id": typeofissue.process_id,
                                         "sub_process_id": typeofissue.sub_process_id,
                                         "type_of_issue_id": typeofissue.type_of_issue_id,
-                                        "option_id": null,
+                                        "option_id": 0,
                                         "deviation": "",
                                         "assignee_det": [{
                                             "assignee_id": null,

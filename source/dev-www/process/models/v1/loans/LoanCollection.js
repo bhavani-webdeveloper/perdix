@@ -96,6 +96,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             method:'GET',
             //isArray: true,
             url:biEndPoint+'/server-ext/repayment_reminder.php/',
+        },
+        postCorrectionDetailsOfCollection:{
+            method:'POST',
+            url:endpoint+'/correctionDetailsOfCollection'
         }
     });
 

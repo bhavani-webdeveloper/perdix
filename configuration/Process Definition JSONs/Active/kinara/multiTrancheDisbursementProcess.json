@@ -103,7 +103,7 @@
          "code":"ReadyForDisbursement",
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"SentForDisbursement",
          "allowedRoles":[
             "WM"
@@ -140,13 +140,14 @@
          ],
          "notRequiredForTranches":[
 
-         ]
+         ],
+         "excessInterestRefund": "Yes"
       },{
          "order":11,
          "code":"Completed",
          "name":"Completed",
          "stageType":"DISBURSEMENTCONFIRMATION",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"Disbursed",
          "documentTrackingRequired":"Yes",
          "allowedRoles":[

@@ -88,6 +88,9 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                     "loanOfficerId": SessionStore.getUsername() + ''
                                 }];
                             }
+                            if(model.lead.leadSource == 'Customer Application'){
+                                model.lead.customerType = "Individual"
+                            }
                             model = Utils.removeNulls(model, true);
                             PageHelper.hideLoader();
                         }
@@ -942,12 +945,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             key: "lead.transactionType",
                             title: "TRANSACTION_TYPE",
                             type: "select",
-                            "titleMap":{
-                                "New Loan":"New Loan",
-                                "Renewal":"Renewal",
-                                "Loan Restructure":"Loan Restructure",
-                                "Internal Foreclosure":"Internal Foreclosure"
-                            },
+                            enumCode:"transaction_type_3",                            
                             "schema":{
                                 "enumCode":undefined
                             },

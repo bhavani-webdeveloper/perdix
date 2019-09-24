@@ -5,6 +5,12 @@ define({
     $pageFn: 
     function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q,PagesDefinition){
     //var branch = SessionStore.getBranch();
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
+    var isrequired =false;
+    if(siteCode != 'kinara')
+    {
+        isrequired = true;
+    }
     return {
                 "type": "schema-form",
                 "title": "CENTRE_CREATION",
@@ -322,7 +328,7 @@ define({
                                     },
                                     {
                                         key: "centre.meetingPreference",
-                                        "required":true,
+                                        "required":isrequired,
                                         title :"MEETING_FREQUENCY",
                                         type: "select",
                                         titleMap: {
@@ -335,7 +341,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingStatus",
                                         type: "radios",
-                                        "required":true,
+                                        "required":isrequired,
                                         titleMap:{
                                         "DAY":"DAY",
                                         "DATE":"DATE"
@@ -344,7 +350,7 @@ define({
                                     {
                                         key: "centre.monthlyMeetingDate",
                                         type: "select",
-                                        'required':true,
+                                        'required':isrequired,
                                         condition: "model.centre.monthlyMeetingStatus=='DATE' && model.centre.meetingPreference === 'MONTHLY'",
                                          titleMap:{
                                         "1":"1",
@@ -384,7 +390,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDateNumber",
                                         type: "select",
-                                        "required":true,
+                                        "required":isrequired,
                                         titleMap:{
                                         "1":"1",
                                         "2":"2",
@@ -396,7 +402,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDay",
                                         type: "select",
-                                        "required":true,
+                                        "required":isrequired,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -411,13 +417,13 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingTime",
                                         type: "time",
-                                        "required":true
+                                        "required":isrequired
                                     },
                                     {
                                         condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingDay",
                                         type: "select",
-                                        "required":true,
+                                        "required":isrequired,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -432,13 +438,13 @@ define({
                                         condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingTime",
                                         type: "time",
-                                        "required":true,
+                                        "required":isrequired,
                                     },
                                     {
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingDay",
                                         type: "select",
-                                        "required":true,
+                                        "required":isrequired,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -453,7 +459,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingTime",
                                         type: "time",
-                                        "required":true
+                                        "required":isrequired
                                     } 
                                  ]
                         },

@@ -16,8 +16,8 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 		var promise = Auth.getToken({
 			"username": username,
 			"password": password,
-			"macaddress":macaddress,
-			"imeinumber":imeinumber
+			"macaddress":userDeviceDetails.macaddress,
+			"imeinumber":userDeviceDetails.imeinumber
 		}).$promise;
 
 		return promise;
@@ -188,7 +188,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 }]);
 
 irf.commons.config(["$httpProvider", function($httpProvider){
-	$httpProvider.interceptors.push(function($q, AuthTokenHelper, AuthPopup, $rootScope) {
+	$httpProvider.interceptors.push(function($q, AuthTokenHelper, AuthPopup, $rootScope,SessionStore) {
 		return {
 			'request': function(config) {
 				var authToken = AuthTokenHelper.getAuthData();
@@ -198,6 +198,9 @@ irf.commons.config(["$httpProvider", function($httpProvider){
 				if (config.headers['$no_auth']) {
 					delete config.headers['$no_auth'];
 				}
+				if((_.includes(config.url, irf.BASE_URL) == true) && (!config.headers || !config.headers['page_uri'])){
+					config.headers['page_uri'] = SessionStore.getPageUri() == undefined? window.location.hash.substring(2): SessionStore.getPageUri();
+				}	
 				return config;
 			},
 			'responseError': function(rejection) {

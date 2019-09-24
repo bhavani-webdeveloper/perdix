@@ -197,7 +197,36 @@ irf.pageCollection.factory('Pages_ManagementHelper', ["$state", "$q",function($s
                                 "title": "FIELD5"
                             }
                         }
-                    }
+                    },
+                    "collections":{
+                        "type": "array",
+                        "title": "CORRECTION",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "accountNumber": {
+                                    "type": ["string", "null"],
+                                    "title": "ACCOUNT_NUMBER"
+                                },
+                                "amount": {
+                                    "type": ["integer", "null"],
+                                    "title": "AMOUNT"
+                                },
+                                'branchName': {
+                                    "title": "BRANCH",
+                                    "type": ["string", "null"],
+                                },
+                                "centreName": {
+                                    "title": "SPOKE",
+                                    "type": ["integer", "null"],
+                                },
+                                "customerName": {
+                                    "title": "CUSTOMER_NAME",
+                                    "type": ["string", "null"],
+                                },
+                            },
+                        }
+                        }
                 }
             });
         }

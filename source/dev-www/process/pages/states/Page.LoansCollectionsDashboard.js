@@ -21,6 +21,7 @@ if(siteCode=="kinara"){
             "Page/Engine/loans.individual.collections.CollectionDepositQueue",
             "Page/Engine/loans.individual.collections.BRSMultiApproval",
             "Page/Engine/kinara.loans.individual.collections.CreditValidationQueue",
+            "Page/Engine/kinara.loans.individual.collections.BounceCorrectionQueue",
             "Page/Engine/loans.individual.collections.TransactionAuthorizationQueue",
             "Page/Engine/loans.individual.collections.MonthlyDemandList",
             "Page/Engine/loans.individual.collections.offlineCollectionUpload",
@@ -158,6 +159,18 @@ else{
                     })
             }
         }
+        if(siteCode=="kinara"){
+            
+            var bcqMenu  = $scope.dashboardDefinition.$menuMap["Page/Engine/kinara.loans.individual.collections.BounceCorrectionQueue"];
+            if (bcqMenu) {
+                LoanCollection.query({
+                        'currentStage':"BounceCorrection"
+                    }).$promise.then(function(response, headerGetter){
+                        bcqMenu.data = response.headers['x-total-count'];
+                    })
+            }
+        }
+        
         // var cvqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.CreditValidationQueue"];
         // if (cvqMenu) {
         //     LoanCollection.query({
@@ -171,9 +184,11 @@ else{
         if(brdep) {
             brdep.data = 0;
             var centres = SessionStore.getCentres();
+            var centreName=Number(centres[0].centreCode);
                 LoanCollection.query({
                     'currentStage': "BranchDeposit",
-                    'accountBranchId': currentBranchId
+                    'accountBranchId': currentBranchId,
+                    'accountCentreId': centreName,
                 }).$promise.then(function(response, headerGetter){
                     brdep.data = brdep.data + parseFloat(response.headers['x-total-count']);
                 })

@@ -30,7 +30,9 @@ define({
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.getBankAccountsByPartnerForLoanRepay(model.mainPartner);
+                            /** code added to search bank accounts w/o partner_code */
+                            //return Queries.getBankAccountsByPartnerForLoanRepay(model.mainPartner);
+                            return Queries.getBankAccounts();
                         },
                         getListDisplayItem: function (item, index) {
                             return [

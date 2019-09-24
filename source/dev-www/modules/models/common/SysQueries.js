@@ -27,7 +27,20 @@ function($resource,$httpParamSerializer,BASE_URL, $q, $log){
 		}, deferred.reject);
 		return deferred.promise;
 	}
-
+	resource.getPageDetailMapping = function(pageUri){
+		var deferred = $q.defer();
+		resource.getResult('pageDetailMapping.list', {"uri":pageUri}).then(function(records) {
+			if (records && records.results) {
+				 var result = {
+					body: records.results
+				};
+				deferred.resolve(result);
+			} else {
+				deferred.reject(res);
+			}
+		}, deferred.reject);
+		return deferred.promise;	
+	}
 	resource.getUserBranches = function(userId) {
 		var deferred = $q.defer();
 		resource.getResult("userBranches.list", {"user_id": userId}).then(function(records){

@@ -887,6 +887,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
+                            "condition":"model.siteCode != 'Kinara'",
                             "items": [
                                 {
                                     type:"fieldset",

@@ -41,12 +41,22 @@ define({
                     };
 
                     model.customer.presetAddress = [
+                        model.customer.careOf,
                         model.customer.doorNo,
                         model.customer.street,
+                        model.customer.postOffice,
+                        model.customer.landmark,
                         model.customer.district,
                         model.customer.state
                     ].filter(a => a).join(', ') + ' - ' + model.customer.pincode;
 
+                    model.customer.permanentAddress = [
+                        model.customer.mailingDoorNo,
+                        model.customer.mailingStreet,
+                        model.customer.mailingDistrict,
+                        model.customer.mailingState
+                    ].filter(a => a).join(', ') + ' - ' + model.customer.mailingPincode;
+                    
                     /*Family fields*/
                     model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
                     model.UIUDF.family_fields.dependent_family_member = 0;/*
@@ -273,7 +283,7 @@ define({
                     model.cibil_highmark = res;
                     if (res.cibil != null) {
                         model.UIUDF.cibil.cibil_score = res.cibil.cibilScore[1].score;
-                        model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts;
+                        model.UIUDF.cibil.active_accounts = res.cibil.cibilLoanSummaryInfo[0].totalAccounts-res.cibil.cibilLoanSummaryInfo[0].zeroBalanceAccounts;
                         model.UIUDF.cibil.overdue_accounts = res.cibil.cibilLoanSummaryInfo[0].overDueAccounts;
                         model.UIUDF.cibil.sanctioned_amount = (res.cibil.cibilLoanDetails.length!=0)?res.cibil.cibilLoanDetails[0].highCreditOrSanctionedAmount:"";
                         model.UIUDF.cibil.current_balance = res.cibil.cibilLoanSummaryInfo[0].currentBalance;
@@ -380,6 +390,10 @@ define({
                             }, {
                                 "key": "customer.spouseDateOfBirth",
                                 "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' "
+                            }, {
+                                "key": "customer.permanentAddress",
+                                "type": "html",
+                                "title": "Permanent Address"
                             }]
                         }, {
                             "type": "grid",

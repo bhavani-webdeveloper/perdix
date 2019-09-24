@@ -1,10 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
-    ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper","PagesDefinition", "Enrollment", "Utils","Queries", "$q", "formHelper",
-    function ($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper,PagesDefinition, Enrollment, Utils,Queries, $q, formHelper) {
+    ["$log", "irfNavigator","IndividualLoan", "SessionStore", "$state", "$stateParams", "SchemaResource", "PageHelper","PagesDefinition", "Enrollment", "Utils","Queries", "$q", "formHelper","LoanAccount", "kinara.IndividualLoanHelper", 
+    function ($log, irfNavigator, IndividualLoan, SessionStore, $state, $stateParams, SchemaResource, PageHelper,PagesDefinition, Enrollment, Utils,Queries, $q, formHelper,LoanAccount, KinaraIndividualLoanHelper) {
 
         var branch = SessionStore.getBranch();
         var pendingDisbursementDays;
-
+        
+       var showNetDisbursmentDetails = 'N';
+       if (SessionStore.getGlobalSetting("loans.preOpenSummary.showNetDisbursmentDetails") == "Y") {
+           showNetDisbursmentDetails = 'Y';
+       }
         Queries.getGlobalSettings("loan.individual.booking.pendingDisbursementDays").then(function(value){
             pendingDisbursementDays = Number(value);
             $log.info("pendingDisbursementDays:" + pendingDisbursementDays);
@@ -19,7 +23,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             repaymentDaysValidationExist = false;
             $log.info(err);
         });
-
+        var preLoanAccountSave=false;
         var isCBCheckValid = function (model) {
             var deferred = $q.defer();
             var customerIdList = [model.loanAccount.customerId];
@@ -51,7 +55,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             });
             return deferred.promise;
         }
-
+        
         var doBasicLoanDedupeCheck = function (model) {
             var deferred = $q.defer();
 
@@ -161,6 +165,38 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             model.loanAccount.disbursementSchedules[0].penalInterestDuePayment = model.loanAccount.disbursementSchedules[0].penalInterestDuePayment||0;
             model.loanAccount.disbursementSchedules[0].feeAmountPayment = model.loanAccount.disbursementSchedules[0].feeAmountPayment||0;
         }
+        
+        var computeEMI = function(model){
+            var estimatedEmi  = "";
+            if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                return;
+
+            var principal = model.loanAccount.loanAmount;
+            var interest = model.loanAccount.interestRate / 100 / 12;
+            var payments;
+            if (model.loanAccount.frequencyRequested == 'Yearly')
+                payments = model.loanAccount.tenure * 12;
+            else if (model.loanAccount.frequencyRequested == 'Monthly')
+                payments = model.loanAccount.tenure;
+
+            // Now compute the monthly payment figure, using esoteric math.
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal*x*interest)/(x-1);
+
+            // Check that the result is a finite number. If so, display the results.
+            if (!isNaN(monthly) &&
+                (monthly != Number.POSITIVE_INFINITY) &&
+                (monthly != Number.NEGATIVE_INFINITY)) {
+
+                estimatedEmi = round(monthly);
+            }
+            return estimatedEmi;
+        };
+
+        // This simple method rounds a number to two decimal places.
+        function round(x) {
+          return Math.ceil(x);
+        }
 
         return {
             "type": "schema-form",
@@ -181,7 +217,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         model.allowPreEmiInterest = data.allowPreEmiInterest;
                         model.additional = model.additional || {};
                         model.additional.config = {};
-                        debugger;
                         if(data.conditionConfig){
                             for (var i=0;i<data.conditionConfig.length;i++){
                                 model.additional.config[data.conditionConfig[i].split('.').join('_')] = true;
@@ -254,7 +289,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             if (model.loanAccount.portfolioInsuranceUrn){
                                 urns.push(model.loanAccount.portfolioInsuranceUrn);
                             }
-
+                            /*to remove duplicate waiwerapproval documents */
+                                var waiverDocs=[];
+                            /** */
                             if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                 for(documents of model.loanAccount.loanDocuments){
                                   if(documents.document=='WAIVERAPPROVAL'){
@@ -262,9 +299,46 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         model.loanAccount.waiverdocumentstatus= documents.documentStatus;
                                         model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
                                         model.loanAccount.waiverdocumentremarks=documents.remarks;
+                                       
                                     }
                                 }
+                               
                             }
+
+                            
+                            
+                            
+                            var objTest=null;
+                            for(var i = 0; i < model.loanAccount.loanDocuments.length; i++){
+                                   
+                                model.loanAccount.loanDocuments = model.loanAccount.loanDocuments.filter(function(obj, index, arr){
+
+                                    if(obj.document=='WAIVERAPPROVAL'){
+                                        objTest=obj;
+                                       
+                                    }
+                                    return obj.document !='WAIVERAPPROVAL';
+                                
+                                });
+
+                            }
+                            
+                            model.waiverDocumentPreviousId=null;
+                            if (objTest) {
+                                model.loanAccount.waiverdocumentId = objTest.documentId;
+                                model.loanAccount.waiverdocumentstatus = objTest.documentStatus;
+                                model.loanAccount.waiverdocumentrejectReason = objTest.rejectReason;
+                                model.loanAccount.waiverdocumentremarks = objTest.remarks;
+                                model.waiverDocumentPreviousId = objTest.documentId;
+                                //model.loanAccount.loanDocuments.push(objTest);
+                            } else {
+                                model.loanAccount.waiverdocumentId = null;
+                                model.loanAccount.waiverdocumentstatus = null;
+                                model.loanAccount.waiverdocumentrejectReason = null;
+                                model.loanAccount.waiverdocumentremarks = null;
+                            }
+                            
+                        
                             iswaiverApplicable(model);
 
                             model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
@@ -316,6 +390,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                 function (errQuery) {
                                 }
                             );
+                            // if (showNetDisbursmentDetails == "Y") {
+                            //     KinaraIndividualLoanHelper.computePreOpenFeeData(model);
+                            // }
 
                             PageHelper.showProgress('load-loan', 'Almost Done...');
 
@@ -582,12 +659,34 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "enumCode": "hypothecation_type",
                                         "title": "HYPOTHECATION_TYPE"
                                     }, {
-                                        "key": "loanAccount.collateral[].collateralType",
-                                        "type": "select",
-                                        "enumCode": "hypothication_sub_type",
-                                        "title": "HYPOTHECATION_SUB_TYPE",
-                                        "parentEnumCode": "hypothecation_type",
-                                        "parentValueExpr": "model.loanAccount.collateral[arrayIndex].collateralCategory",
+                                        "key":"loanAccount.collateral[].collateralType",
+                                        "condition": "model.loanAccount.collateral[arrayIndex].collateralCategory != 'Machinery'",
+                                        "type":"select",
+                                        "enumCode":"hypothication_sub_type",
+                                        "title":"HYPOTHECATION_SUB_TYPE",
+                                        "parentEnumCode":"hypothecation_type",
+                                        "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
+                                    },
+                                    {
+                                        "key":"loanAccount.collateral[].collateralType",
+                                        "type":"lov",
+                                        "condition": "model.loanAccount.collateral[arrayIndex].collateralCategory == 'Machinery'",
+                                        autolov: true,
+                                        lovonly:true,
+                                        searchHelper: formHelper,
+                                        outputMap: {
+                                             "collateralType": "loanAccount.collateral[arrayIndex].collateralType"
+                                         },
+                                        search: function(inputModel, form, model, locals) {
+                                            return Queries.searchCollateralType();
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.collateralType
+                                            ];
+                                        },
+                                        onSelect: function(result, model, context) {
+                                        }
                                     },
                                     {
                                         "key":"loanAccount.collateral[].collateralDescription",
@@ -845,6 +944,61 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 ]
             }]
             },
+            //here for new
+            /** removed for temporal fix
+            {
+                "type": "box",
+                "title": "ACTUAL_NET_DISBURSEMENT",
+                "condition": "!model.showPreOpenData && model.siteCode == 'kinara'",
+                "items": [
+                    {
+                        key:"preOpenFeeData.loanAmount",
+                        "type": "amount",
+                        "title": "LOAN_AMOUNT",
+                        readonly: true,
+                    },
+                    {
+                        key: "preOpenFeeData.expectedCommercialCibilCharges",
+                        "type": "amount",
+                        "title": "ACTUAL_CIBIL_CHARGES",
+                        readonly: true,
+                    },
+                    {
+                        key: "preOpenFeeData.expectedProcessingFee",
+                        "type": "amount",
+                        "title": "ACTUAL_PROCESSSING_FEE",
+                        readonly: true
+                    },
+                    {
+                        key: "preOpenFeeData.expectedSecurityEMI",
+                        "type": "amount",
+                        "title": "ACTUAL_SECURITY_EMI",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.expectedPortfolioInsuranceAmount",
+                        "type": "amount",
+                        "title": "ACTUAL_PORTFOLIO_INSURANCE_WITH_GST",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.payoffAmountForLinkedAccount",
+                        "type": "amount",
+                        "title": "ACTUAL_PAYOFF_FOR_LINKED_ACCOUNT",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.documentCharges",
+                        "type": "amount",
+                        "title": "ACTUAL_DOCUMENTATION_CHARGES",
+                        readonly: true
+                    }, {
+                        key: "preOpenFeeData.netDisbursementAmount",
+                        "type": "amount",
+                        "title": "ACTUAL_DISBURSABLE_AMOUNT",
+                        readonly: true
+                    }
+                ]
+            },
+            **/
+            //end
             {
             "type": "box",
             "title": "Applicant & Co-Applicant Details",
@@ -929,7 +1083,146 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             {
                 "type": "box",
                 "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
-                "condition": "(model.siteCode == 'kinara' ||model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber",
+                "condition": "(model.siteCode == 'kinara' ||model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType != 'Loan Transfer'",
+                "items": [{
+                    "key": "loanAccount.linkedAccountNumber",
+                    "title":"LINKED_ACCOUNT_NUMBER",
+                    "readonly":true
+                }, 
+                {
+                    "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                    "title":"OTHER_LINKED_ACCOUNTS",
+                    "readonly":true,
+                    //"required": false,
+                    "condition": "model.siteCode == 'kinara'"
+                }, 
+                {
+                    "key": "loanAccount.transactionType",
+                    "required":false,
+                    "title":"TRANSACTION_TYPE",
+                    "readonly":true,
+                },{
+                    "key": "loanAccount.button",
+                    "required":true,
+                    "title":"SUBMIT",
+                    "type":"button",
+                    "onClick": "actions.getPreClosureDetails(model, formCtrl, form, $event)"
+                },{
+                    "type":"fieldset",
+                    "condition":"model.loanAccount.precloseuredetails",
+                    "items":[
+                    /*{
+                        "key": "loanAccount.precloseurePayOffAmount",
+                        "title": "PAYOFF_AMOUNT",
+                        "readonly": true
+                    },*/ {
+                        "key": "loanAccount.precloseurePayOffAmountWithDue",
+                        "title": "PAYOFF_AMOUNT_WITH_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseurePrincipal",
+                        "title": "TOTAL_PRINCIPAL_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccount.precloseureNormalInterest",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseurePenalInterest",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "readonly": true
+                    }, {
+                        "key": "loanAccount.precloseureTotalFee",
+                        "title": "FEE_DUE",
+                        "readonly": true,
+                    },{
+                        "key": "loanAccount.precloseureTotalPreclosureFee",
+                        "title": "PRECLOSURE_FEE_DUE",
+                        "readonly": true,
+                    },
+                    {
+                        "key": "linkedAccountCbsData.securityDeposit",
+                        "title": "SECURITY_DEPOSIT",
+                        "readonly": true,   
+                    }
+                    
+                    ]
+                },
+                {
+                    "type": "fieldset",
+                    "title": "WAIVER_DETAILS",
+                    "condition": "model.loanAccount.precloseuredetails",
+                    "items": [{
+                        "key": "loanAccount.disbursementSchedules[0].normalInterestDuePayment",
+                        "title": "TOTAL_INTEREST_DUE",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment,model.loanAccount.precloseureNormalInterest,model,modelvalue)"
+                    }, {
+                        "key": "loanAccount.disbursementSchedules[0].penalInterestDuePayment",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment,model.loanAccount.precloseurePenalInterest,model,modelvalue)"
+                    }, {
+                        "key": "loanAccount.disbursementSchedules[0].feeAmountPayment",
+                        "title": "TOTAL_FEE_DUE",
+                        "onChange": "actions.validateWaiverAmount(model.loanAccount.disbursementSchedules[0].feeAmountPayment,model.loanAccount.preTotalFee,model,modelvalue)"
+                    }]
+                },
+                {
+                    "type": "fieldset",
+                    "condition": "model.loanAccount.precloseuredetails && model.iswaiverApplicable",
+                    "title": "WAIVER_APPROVAL_DOCUMENT",
+                    "items":[
+                        {
+                            title: "Upload",
+                            "required":true,
+                            "key": "loanAccount.waiverdocumentId",
+                            type: "file",
+                            fileType: "application/pdf",
+                            category: "Loan",
+                            subCategory: "DOC1",
+                            title:"WAIVER_APPROVAL_DOCUMENT",
+                            using: "scanner"
+                        },
+                        {
+                            "type": "fieldset",
+                            "readonly":true,
+                            "condition": "model.loanAccount.waiverdocumentstatus =='APPROVED'||model.loanAccount.waiverdocumentstatus =='REJECTED'",
+                            "items":[
+                                {
+                                    "key": "loanAccount.waiverdocumentstatus",
+                                    title:"WAIVER_APPROVAL_STATUS",
+                                    "required":true,
+                                    "type": "select",
+                                    "titleMap": [{
+                                        value: "REJECTED",
+                                        name: "Rejected"
+                                    }, {
+                                        value: "APPROVED",
+                                        name: "Approved"
+                                    }]
+                                },
+                                {
+                                    "key": "loanAccount.waiverdocumentrejectReason",
+                                    "required":true,
+                                    "condition":"model.loanAccount.waiverdocumentstatus=='REJECTED'",
+                                    title: "Reason"
+                                },
+                                {
+                                    "key": "loanAccount.waiverdocumentremarks",
+                                    "required":true,
+                                    title: "Remarks"
+                                }
+                            ]
+                        }
+                        
+                    ]
+                },
+                ]
+            },
+            {
+                "type": "box",
+                "title": "LOAN_TRANSFER_DETAILS", 
+                    "key": "loanAccount.transactionType",
+                "condition": "(model.siteCode == 'kinara' ||model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType == 'Loan Transfer'",
                 "items": [{
                     "key": "loanAccount.linkedAccountNumber",
                     "title":"LINKED_ACCOUNT_NUMBER",
@@ -977,6 +1270,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "key": "loanAccount.precloseureTotalPreclosureFee",
                         "title": "PRECLOSURE_FEE_DUE",
                         "readonly": true,
+                    },
+                    {
+                        "key": "linkedAccountCbsData.securityDeposit",
+                        "title": "SECURITY_DEPOSIT",
+                        "readonly": true,   
                     }
                     ]
                 },
@@ -1066,6 +1364,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 {
                     "type": "submit",
                     "title": "CONFIRM_LOAN_CREATION"
+                },
+                {
+                     "condition": "model.loanAccount.customerId && model.siteCode == 'kinara'",
+                        "type": "button",
+                        "icon": "fa fa-circle-o",
+                       "title": "SAVE",
+                        "onClick": "actions.save(model, formCtrl, form, $event)"  
                 }]
             },
             {
@@ -1263,13 +1568,35 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "type": "submit",
                     "title": "Submit"
                 }*/]
-            }],
+            },
+            
+        ],
+            
             schema: function () {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             actions: {
                 submit: function (model, form, formName) {
                     $log.info("submitting");
+                    if(showNetDisbursmentDetails =="Y"){
+                        if(!preLoanAccountSave){
+                            PageHelper.setError({
+                                message: "Please save account before proceeding"
+                            });
+                            PageHelper.hideLoader();
+                            return false;
+                        }
+                       /* removed for temporal fix for kinara 
+                       if(model.preOpenFeeData.netDisbursementAmount<0){
+                            PageHelper.setError({
+                                message: "disubrsement amount can not be less than : 0" 
+                            });
+                           return;
+                          
+                        }*/
+                        model.loanAccount.estimatedEmi=computeEMI(model);	                        
+                        
+                    }
                     var cbsdate=SessionStore.getCBSDate();
                     if(model._currentDisbursement.scheduledDisbursementDate)
                         var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
@@ -1342,14 +1669,21 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         if (loanfee) {
                             var netdisbursementamount = model.loanAccount.disbursementSchedules[0].disbursementAmount - loanfee;
                         }
-                        var linkedaccountoutstanding=(parseInt(model.loanAccount.precloseurePrincipal) +parseInt(model.loanAccount.precloseureNormalInterest)+parseInt(model.loanAccount.precloseurePenalInterest)+parseInt(model.loanAccount.precloseureTotalFee))-(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment+model.loanAccount.disbursementSchedules[0].penalInterestDuePayment+model.loanAccount.disbursementSchedules[0].feeAmountPayment);
-                        if(parseInt(netdisbursementamount) < parseInt(linkedaccountoutstanding)){
+                        var linkedaccountoutstanding = (parseInt(model.loanAccount.precloseurePrincipal) + parseInt(model.loanAccount.precloseureNormalInterest) + parseInt(model.loanAccount.precloseurePenalInterest) + parseInt(model.loanAccount.precloseureTotalFee)) -
+                            (
+                                parseInt(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment) +
+                                parseInt(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment) +
+                                parseInt(model.loanAccount.disbursementSchedules[0].feeAmountPayment)
+                            );
+                        
+                        
+                            if(parseInt(netdisbursementamount) < parseInt(linkedaccountoutstanding)){
                             PageHelper.setError({
                                 message: "New loan First schedule disbursement amount with fees" + " " +netdisbursementamount+ " "+ "should  be greater then Linked Account Balence with Waiver amount" +"  " + linkedaccountoutstanding
                             });
                            return;
                         }
-    
+
                             if(model.loanAccount.waiverdocumentstatus){
                                 if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                     for(documents of model.loanAccount.loanDocuments){
@@ -1447,7 +1781,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         .then(function(){
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
-
+                            if(model.linkedAccountCbsData)
+                                model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].linkedAccountSecurityDeposit=model.linkedAccountCbsData.securityDeposit;    
                             var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED'};
                             PageHelper.showProgress('update-loan', 'Working...');
                             return IndividualLoan.update(reqData)
@@ -1473,7 +1808,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                 },
                 getPreClosureDetails:function(model,form,formname){
                     PageHelper.showLoader();
-                    PageHelper.showProgress('preclosure', 'Getting PreClosure Details', 2000);
+                    //PageHelper.showProgress('preclosure', 'Getting PreClosure Details', 2000);
+                    if(model._currentDisbursement.scheduledDisbursementDate==null){
+                        PageHelper.hideLoader();
+                        PageHelper.showProgress('preclosure', 'Scheduled Disbursement Date is mandatory', 2000);
+                        return false
+                    }
                     var reqData={
                         linkedAccountId:model.loanAccount.linkedAccountNumber,
                         valueDate:moment(model._currentDisbursement.scheduledDisbursementDate).format("YYYY-MM-DD")
@@ -1483,14 +1823,27 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.showProgress('preclosure', 'Preclosure loan details are generated', 2000);
                         model.loanAccount.precloseuredetails=true;
                         model.loanAccount.precloseurePayOffAmount=response.part1;
-                        model.loanAccount.precloseurePayOffAmountWithDue=(response.part2?accounting.unformat(response.part2.slice(3)): 0) +  (response.part7?accounting.unformat(response.part7.slice(3)):0);
-                        model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= response.part3?accounting.unformat(response.part3.slice(3)):0;
-                        model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=response.part4?accounting.unformat(response.part4.slice(3)):0;
-                        model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5.slice(3)):0;
-                        model.loanAccount.precloseureTotalPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0);
-                        model.loanAccount.precloseureTotalFee=((response.part6?accounting.unformat(response.part6.slice(3)):0) - (response.part7?accounting.unformat(response.part7.slice(3)):0));
-                        model.loanAccount.precloseureTotalPreclosureFee=model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0);
+                        model.loanAccount.precloseurePayOffAmountWithDue=(response.amount1?accounting.unformat(response.amount1): 0) +  (response.part7?accounting.unformat(response.part7):0);
+                        model.loanAccount.precloseurePrincipal=model.loanAccount.disbursementSchedules[0].linkedAccountTotalPrincipalDue= response.part3?accounting.unformat(response.part3):0;
+                        model.loanAccount.precloseureNormalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountNormalInterestDue=response.part4?accounting.unformat(response.part4):0;
+                        model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5):0;
+                        model.loanAccount.precloseureTotalPreclosureFee=(response.part7?accounting.unformat(response.part7):0); 
+                        model.loanAccount.precloseureTotalFee=((response.part6?accounting.unformat(response.part6):0) - (response.part7?accounting.unformat(response.part7):0));
+                        model.loanAccount.precloseureTotalPreclosureFee=model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee=(response.part7?accounting.unformat(response.part7):0);
                         model.loanAccount.preTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue= (model.loanAccount.precloseureTotalFee + model.loanAccount.precloseureTotalPreclosureFee);
+                        model.loanAccount.disbursementSchedules[0].linkedAccountPayOffAmountWithDue=model.loanAccount.precloseurePayOffAmountWithDue;
+                        model.linkedAccountCbsData={};
+                        
+                        if (!(_.isNull(model.loanAccount.transactionType))) {
+                            LoanAccount.get({
+                               accountId: model.loanAccount.linkedAccountNumber
+                           })
+                           .$promise.then(function(res){
+                               model.linkedAccountCbsData=res;
+                           },function(err){
+                               $log.info("loan request Individual/find api failure" + err);
+                           });
+                        }
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
                         PageHelper.showProgress('preclosure', 'Error Getting Preclosure loan details', 2000);
@@ -1595,6 +1948,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                     }
+                    if(showNetDisbursmentDetails =="Y"){
+                        /* removed for temporal fix for kinara 
+                        if(model.preOpenFeeData.netDisbursementAmount<0){
+                            PageHelper.setError({
+                                message: "disubrsement amount can not be less than : 0" 
+                            });
+                           return;
+                          
+                        }*/
+                        if(!preLoanAccountSave){
+                            PageHelper.setError({
+                                message: "Please save account before proceeding"
+                            });
+                            PageHelper.hideLoader();
+                            return false;
+                        }
+                        model.loanAccount.estimatedEmi=computeEMI(model);	                        
+
+                    }
                     var cbsdate=SessionStore.getCBSDate();
                     if(model._currentDisbursement.scheduledDisbursementDate)
                         var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
@@ -1609,11 +1981,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         var diffDays = scheduledDisbursementDate.diff(sanctionDate, "days");
                     if(model.loanAccount.firstRepaymentDate)
                         var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
-                    if (model.loanAccount.firstRepaymentDate && repaymentDaysValidationExist) {
-                        if (_.isArray(repaymentDates)) {
+                    if (model.loanAccount.firstRepaymentDate && repaymentDaysValidationExist){
+                        if(_.isArray(repaymentDates)){
                             var date = firstRepaymentDate.get("date");
-                            if (!_.includes(repaymentDates, date)) {
-                                PageHelper.showProgress("loan-create", "First repayment date should be " + repaymentDates, 10000);
+                            if(!_.includes(repaymentDates, date)){
+                                PageHelper.showProgress("loan-create","First repayment date should be " + repaymentDates ,10000);
                                 return false;
                             }
                         }
@@ -1667,14 +2039,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         if (loanfee) {
                             var netdisbursementamount = model.loanAccount.disbursementSchedules[0].disbursementAmount - loanfee;
                         }
-                        var linkedaccountoutstanding=(parseInt(model.loanAccount.precloseurePrincipal) +parseInt(model.loanAccount.precloseureNormalInterest)+parseInt(model.loanAccount.precloseurePenalInterest)+parseInt(model.loanAccount.precloseureTotalFee))-(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment+model.loanAccount.disbursementSchedules[0].penalInterestDuePayment+model.loanAccount.disbursementSchedules[0].feeAmountPayment);
+                        var linkedaccountoutstanding = (parseInt(model.loanAccount.precloseurePrincipal) + parseInt(model.loanAccount.precloseureNormalInterest) + parseInt(model.loanAccount.precloseurePenalInterest) + parseInt(model.loanAccount.precloseureTotalFee)) -
+                            (
+                                parseInt(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment) +
+                                parseInt(model.loanAccount.disbursementSchedules[0].penalInterestDuePayment) +
+                                parseInt(model.loanAccount.disbursementSchedules[0].feeAmountPayment)
+                            );
                         if(parseInt(netdisbursementamount) < parseInt(linkedaccountoutstanding)){
                             PageHelper.setError({
                                 message: "New loan First schedule disbursement amount with fees" + " " +netdisbursementamount+ " "+ "should  be greater then Linked Account Balence with Waiver amount" +"  " + linkedaccountoutstanding
                             });
                            return;
                         }
-    
+            
                             if(model.loanAccount.waiverdocumentstatus){
                                 if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                     for(documents of model.loanAccount.loanDocuments){
@@ -1726,7 +2103,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                             PageHelper.showProgress("loan-create", "Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days", 5000);
                             return false;
                         }
-                        
+                
                         if(model.siteCode != 'witfin'){
                             if (customerSignatureDate.isBefore(sanctionDate)) {
                                 PageHelper.showProgress("loan-create", "Customer sign date should be greater than the Loan sanction date", 5000);
@@ -1772,7 +2149,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         .then(function(){
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
                             model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
-
+                            model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].linkedAccountSecurityDeposit=model.loanAccount.totalSecurityDepositDue;
                             var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED'};
                             PageHelper.showProgress('update-loan', 'Working...');
                             return IndividualLoan.update(reqData)
@@ -1795,6 +2172,133 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
                         PageHelper.showErrors(httpRes);
                     });
+                },
+                save: function(model, formCtrl, form, $event){
+
+                    
+                    if (model.loanAccount.precloseuredetails) {
+                        /**checking the waiver document details */
+                        if(!model.loanAccount.waiverdocumentId && model.iswaiverApplicable){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "Upload the waiver document"
+                            });
+                            return;
+                        }
+                        /**checking the waiver details amount adjustment is correct or wrong */
+                        if (model.loanAccount.disbursementSchedules[0].normalInterestDuePayment && model.loanAccount.disbursementSchedules[0].normalInterestDuePayment > 0) {
+                            if (model.loanAccount.precloseureNormalInterest < model.loanAccount.disbursementSchedules[0].normalInterestDuePayment) {
+                                PageHelper.clearErrors();
+                                PageHelper.setError({
+                                    message: "Amount should not be greater then" + " " + model.loanAccount.precloseureNormalInterest
+                                });
+                                return;
+                            }
+                        }
+                        if (model.loanAccount.disbursementSchedules[0].penalInterestDuePayment && model.loanAccount.disbursementSchedules[0].penalInterestDuePayment > 0) {
+                            if (model.loanAccount.precloseurePenalInterest < model.loanAccount.disbursementSchedules[0].penalInterestDuePayment) {
+                                PageHelper.clearErrors();
+                                PageHelper.setError({
+                                    message: "Waiver Details: Total Penal Interest due Amount should not be greater then" + " " + model.loanAccount.precloseurePenalInterest
+                                });
+                                return;
+                            }
+                        }
+                        if (model.loanAccount.disbursementSchedules[0].feeAmountPayment && model.loanAccount.disbursementSchedules[0].feeAmountPayment > 0)
+                            if ((model.loanAccount.precloseureTotalFee + model.loanAccount.precloseureTotalPreclosureFee) < model.loanAccount.disbursementSchedules[0].feeAmountPayment) {
+                                PageHelper.clearErrors();
+                                PageHelper.setError({
+                                    message: "Waiver Details: Total Fee due Amount should not be greater then" + " " + model.loanAccount.precloseureTotalFee + loanAccount.precloseureTotalPreclosureFee
+                                });
+                                return;
+                            }
+                    }
+
+                    if(model.loanAccount.waiverdocumentstatus){
+                        if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                            for(documents of model.loanAccount.loanDocuments){
+                                if(documents.document=='WAIVERAPPROVAL'){
+                                    documents.documentId=model.loanAccount.waiverdocumentId;
+                                    documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                    documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                    documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                }
+                            }
+                    }else{
+                        model.loanAccount.loanDocuments.push({
+                            loanId:model.loanAccount.id,
+                            documentId:model.loanAccount.waiverdocumentId,
+                            document:"WAIVERAPPROVAL",
+                            accountNumber:model.loanAccount.accountNumber,
+                            documentStatus:"PENDING",
+                        });
+                    }
+                }
+
+                    if(model.loanAccount.waiverdocumentId){
+                        model.loanAccount.loanDocuments.push({
+                            loanId:model.loanAccount.id,
+                            documentId:model.loanAccount.waiverdocumentId,
+                            document:"WAIVERAPPROVAL",
+                            accountNumber:model.loanAccount.accountNumber,
+                            documentStatus:"PENDING",
+                        });
+                    }
+        
+                    if(model.loanAccount.firstRepaymentDate)
+                        var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                    if (model.loanAccount.firstRepaymentDate && repaymentDaysValidationExist){
+                        if(_.isArray(repaymentDates)){
+                            var date = firstRepaymentDate.get("date");
+                            if(!_.includes(repaymentDates, date)){
+                                PageHelper.showProgress("loan-create","First repayment date should be " + repaymentDates ,10000);
+                                return false;
+                            }
+                        }
+                    }
+
+                    var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'SAVE'};
+                    PageHelper.showProgress('update-loan', 'Working...');
+                    return IndividualLoan.update(reqData)
+                        .$promise
+                        .then(
+                            function(res){
+                                PageHelper.showProgress('update-loan', 'Done', 2000);
+                                model.loanAccount.version=res.loanAccount.version;
+                                var objTest1=null;
+                                model.loanAccount.loanDocuments=res.loanAccount.loanDocuments;
+                                model.loanAccount.loanDocuments = model.loanAccount.loanDocuments.filter(function(obj, index, arr){
+                                   
+                                    if(obj.document=='WAIVERAPPROVAL'){
+                                        objTest1=obj;
+                                       
+                                    }
+                                    return obj.document !='WAIVERAPPROVAL';
+                                
+                                });
+                                if(objTest1){
+                                    model.loanAccount.loanDocuments.push(objTest1);
+                                }
+                                if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                    for(documents of model.loanAccount.loanDocuments){
+                                      if(documents.document=='WAIVERAPPROVAL'){
+                                            model.loanAccount.waiverdocumentId= documents.documentId;
+                                            model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                            model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
+                                            model.loanAccount.waiverdocumentremarks=documents.remarks;
+                                        }
+                                    }
+                                }
+                                if(showNetDisbursmentDetails =="Y"){
+                                    KinaraIndividualLoanHelper.computePreOpenFeeData(model);
+                                }
+                                preLoanAccountSave=true;
+                              
+                            }, function(httpRes){
+                                PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                                PageHelper.showErrors(httpRes);
+                            }
+                    )
                 },
             }
         };

@@ -1,18 +1,29 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
     ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator","Locking",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, 
-            Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator,Locking) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator","Locking","CollectionHelper",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter,
+            Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator,Locking,CollectionHelper) {
 
             var titleMapConfig = function(config,model){
                 var additional = model.additional || {};
                 additional.titleMap = additional.titleMap || {};
-                for (var i=0; i< config.length; i++){   
+                for (var i=0; i< config.length; i++){
                     additional.titleMap[config[i][0]] = config[i][1];
                 }
                 model.additional = additional;
                 return;
+            }
+            var mobileNumberValidation= function(phone){
+                if(!phone)
+                    return true;
+                phone=phone.toString();
+                var phoneNum = phone.replace(/[^\d]/g, '');
+                if( phoneNum.length == 10) {  
+                    return true;  
+                }else{
+                    return false;  
+                }
             }
                 function backToLoansList(){
                 try {
@@ -60,6 +71,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         ShowPayerInfo: false,
                         repaymentDateIsReadonly: false
                     };
+                    model.currentStage=model.currentStage || {};
                     PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
                     .then(function(data){
                         _.defaults(data, model.pageConfig);
@@ -87,7 +99,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         "Fee Payment":"Fee Payment",
                         "Pre-closure":"Pre-closure",
                         "Prepayment":"Prepayment",
-                        "PenalInterestPayment":"PenalInterestPayment"
+                        "PenalInterestPayment":"PenalInterestPayment",
+                        "Recovery" : "Writeoff Recovery",
+                       "Settlement" : "Partial Settlement",
+                        "FullSettlement" : "FullSettlement",
+                        "Writeoff_Settlement" : "Writeoff Settlement"
+
                     }
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     model.additional.suspenseCode = SessionStore.getGlobalSetting("loan.individual.collection.suspenseCollectionAccount");
@@ -97,7 +114,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     model.$pageConfig = config;
                     model._pageGlobals = _pageGlobals;
                     model.repayment = {};
-
+                   
                     if (_pageGlobals.hideTransactionName == true && !_.isNull(_pageGlobals.transactionName)){
                         model.repayment.transactionName = _pageGlobals.transactionName;
                     }
@@ -108,6 +125,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                     irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
                     //PageHelper
                     var loanAccountNo = ($stateParams.pageId.split("."))[0];
+                    var paramsArray = $stateParams.pageId.split(".");
                     var promise = LoanAccount.get({accountId: loanAccountNo}).$promise;
                     promise.then(function (data) { /* SUCCESS */
                         model.cbsLoanData = data;
@@ -119,6 +137,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.accountNumber = data.accountId;
                         //model.repayment.amount = 0;
                         model.repayment.customerName = data.customer1FirstName;
+
+                        model.repayment.writeOffDate=data.writeOffDate;
+                        model.repayment.principalWriteOff=data.principalWriteOff;
+                        model.repayment.normalInterestWriteOff=data.normalInterestWriteOff;
+                        model.repayment.penalInterestWriteOff=data.penalInterestWriteOff;
+                        model.repayment.feeWriteOff=data.feeWriteOff;
+                        model.repayment.principalRecovery=data.principalRecovery;
+                        model.repayment.normalInterestRecovery=data.normalInterestRecovery;
+                        model.repayment.penalInterestRecovery=data.penalInterestRecovery;
+                        model.repayment.feeRecovery=data.feeRecovery;
 
                         model.repayment.productCode = data.productCode;
                         model.repayment.visitedDate=SessionStore.getCBSDate();
@@ -145,6 +173,10 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             if (model.repayment.bookedNotDuePenalInterest) {
                                 model.repayment.totalDueWithPenal = Utils.roundToDecimal(model.repayment.totalDue) + Utils.roundToDecimal(model.repayment.bookedNotDuePenalInterest);
                             }
+                        }
+                        /** added for defaulting the value of transaction type */
+                        if(model.cbsLoanData.operationalStatus =="Write_off"){
+                            model.repayment.transactionName="Recovery";
                         }
                         //_pageGlobals.totalDemandDue = data.totalDemandDue;
 
@@ -176,12 +208,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     if(rows[i].current_stage!="RejectedProcess"){
                                         rowsCount++;
                                         totalAmount= totalAmount + rows[i].repayment_amount;
-                                    }   
+                                    }
                                 }
                                 model.additional.unapprovedAmount = totalAmount;
                                 model.additional.unapprovedTransactionsCount = rowsCount;
                             }
-                        )
+                        );
+
 
                     var defaultAccountPromise = Queries.getBankAccountsByPartnerForLoanRepay(
                         SessionStore.getGlobalSetting('mainPartner') || "Kinara").then(function(res){
@@ -288,6 +321,19 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "html":"<h4><i class='icon fa fa-warning'></i>{{model.additional.unapprovedTransactionsCount}} Unapproved Payment(s) Found!</h4>Payment(s) of {{ model.additional.unapprovedAmount | currency:'Rs.':2 }} is not yet approved for this account."
                             },
                             {
+                                "type": "section",
+                                "htmlClass": "alert alert-warning",
+                                "condition": "model.cbsLoanData.operationalStatus == 'Settled'",
+                                "html":"<h4><i class='icon fa fa-warning'></i>{{model.cbsLoanData.operationalStatus}}  : This Account is Settled </h4>Can't able to do any collections"
+                            },
+                            {
+                                "type": "section",
+                                "htmlClass": "alert alert-warning",
+                                "condition": "model.cbsLoanData.operationalStatus == 'Closed'",
+                                "html":"<h4><i class='icon fa fa-warning'></i>{{model.cbsLoanData.operationalStatus}}  : This Account is Closed </h4>Can't able to do any collections"
+                            },
+                            
+                            {
                                 key:"repayment.accountNumber",
                                 title: "LOAN_ACCOUNT_NUMBER",
                                 readonly:true
@@ -356,13 +402,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin' && model.siteCode != 'shramsarathi'",
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin' && model.siteCode != 'shramsarathi' && model.siteCode != 'kinara'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment",
-                                    "PenalInterestPayment":"PenalInterestPayment"
+                                    "PenalInterestPayment":"PenalInterestPayment",
+                                    "Recovery" : "Writeoff Recovery"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
@@ -383,8 +430,47 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'witfin'",
-                                enumCode: "transaction_name",
+                                condition: "(!model._pageGlobals.hideTransactionName) && (model.siteCode == 'witfin' || model.siteCode == 'kinara')  && model.cbsLoanData.operationalStatus=='Active'",
+                               // enumCode: "transaction_name",
+                                titleMap: {
+                                    "Scheduled Demand": "Scheduled Demand",
+                                    "Fee Payment": "Fee Payment",
+                                    "Pre-closure": "Pre-closure",
+                                    "Prepayment": "Prepayment",
+                                    "PenalInterestPayment": "PenalInterestPayment",
+                                    "Settlement": "Partial Settlement",
+                                    "FullSettlement": "FullSettlement",
+                                },
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
+                                    }else if(value == 'FullSettlement'){
+                                        model.repayment.amount =  model.repayment.totalPrincipalDue;
+                                        model.repayment.amount = model.repayment.amount + model.repayment.totalNormalInterestDue
+                                        model.repayment.amount = model.repayment.amount + model.repayment.totalPenalInterestDue
+
+                                    } 
+                                    else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "(!model._pageGlobals.hideTransactionName) && (model.siteCode == 'witfin' || model.siteCode == 'kinara')  && model.cbsLoanData.operationalStatus=='Write_off'",
+                                titleMap: {
+                                    "Recovery" : "Writeoff Recovery",
+                                    "Writeoff_Settlement": "Writeoff Settlement"
+                                },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
                                         model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
@@ -397,6 +483,21 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     } else {
                                         model.repayment.amount = null;
                                     }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "(model._pageGlobals.hideTransactionName) && (model.siteCode == 'witfin' || model.siteCode == 'kinara') && model.cbsLoanData.operationalStatus=='Write_off'",
+                                titleMap: {
+                                    //"Scheduled Demand":"Scheduled Demand",
+                                    "Recovery" : "Writeoff Recovery",
+                                    "Writeoff_Settlement": "Writeoff Settlement"
+                                },
+                                onChange: function(value ,form, model){
+                                    model.repayment.amount = null;
                                     model.repayment.demandAmount = model.repayment.amount || 0;
                                 }
                             },
@@ -545,6 +646,98 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 ]
                             },
                             {
+                                type: "fieldset",
+                                title: "DETAILS",
+                                condition: "model.repayment.transactionName =='Recovery'",
+                                items: [
+                                    {
+                                        key: "repayment.writeOffDate",
+                                        readonly: true,
+                                        title: "WRITE_OFF_DATE",
+                                        type: "date"
+                                    },
+                                    {
+                                        key: "repayment.principalWriteOff",
+                                        readonly: true,
+                                        title: "PRINCIPAL_WRITE_OFF",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.normalInterestWriteOff",
+                                        readonly: true,
+                                        title: "NORMAL_INTEREST_WRITE_OFF",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.penalInterestWriteOff",
+                                        readonly: true,
+                                        title: "PENAL_INTEREST_WRITE_OFF",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.feeWriteOff",
+                                        readonly: true,
+                                        title: "FEE_WRITE_OFF",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.principalRecovery",
+                                        readonly: true,
+                                        title: "PRINCIPAL_RECOVERY",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.normalInterestRecovery",
+                                        readonly: true,
+                                        title: "NORMAL_INTEREST_RECOVERY",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.penalInterestRecovery",
+                                        readonly: true,
+                                        title: "PENAL_INTEREST_RECOVERY",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.feeRecovery",
+                                        readonly: true,
+                                        title: "FEE_RECOVERY",
+                                        type: "amount"
+                                    },
+                                    
+                                ]
+                            },
+                            /* new box added for Settlement **/
+                            {
+                                type: "fieldset",
+                                title: "DETAILS",
+                                condition: "model.repayment.transactionName =='Settlement' || model.repayment.transactionName =='FullSettlement' || model.repayment.transactionName =='Writeoff_Settlement'",
+                                items: [
+                                    {
+                                        key: "repayment.totalPrincipalDue",
+                                        readonly: true,
+                                        title: "TOTAL_PRINCIPAL_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalNormalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_NORMAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalPenalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_PENAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    
+                                    
+                                ]
+                            },
+                            //end for settlement
+
+                            {
                                 key: "repayment.totalDemandDue",
                                 readonly: true,
                                 condition: "model.repayment.transactionName=='Scheduled Demand'",
@@ -576,14 +769,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.amount",
                                 "required":true,
                                 type: "number",
-
                                 condition:"!model.repayment.chequeNumber"
                             },
                             {
                                 key: "repayment.amount",
                                 type: "number",
                                 "readonly":true,
-
                                 condition:"model.repayment.chequeNumber"
                             },
                             {
@@ -656,45 +847,29 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "value": "SECURITY_DEPOSIT"
                                 }
                                 ],
-                                /*onChange: function(value, form, model) {
-                                    if (value == 'PDC') {
-                                        PageHelper.showLoader();
-                                        Queries.getPDCDemands({
-                                            "accountNumber": model.repayment.accountNumber
-                                        }).then(
-                                            function(resQuery) {
-                                                $log.info(resQuery);
-                                                if (resQuery && resQuery.length && resQuery.length > 0) {
-                                                    model.repayment.amount = resQuery[0].repayment_amount;
-                                                    model.repayment.chequeNumber = resQuery[0].cheque_number;
-                                                }
-                                                PageHelper.hideLoader();
-                                            },
-                                            function(errQuery) {
-                                                PageHelper.hideLoader();
-                                            }
-                                        )
-                                    }
-                                    else {
-                                        model.repayment.chequeNumber = "";
-                                        model.repayment.amount = "";
-                                        if (model.repayment.transactionName) {
-                                            if (model.repayment.transactionName == 'Pre-closure') {
-                                                if(model.repayment.totalPayoffAmountToBePaid){
-                                                    model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
-                                                }
-                                            } else if (model.repayment.transactionName == 'Scheduled Demand') {
-                                                if(model.repayment.totalDue){
-                                                    model.repayment.amount = Utils.ceil(model.repayment.totalDue);
-                                                }
-                                            } else {
-                                                model.repayment.amount = null;
-                                            }
-                                            model.repayment.demandAmount = model.repayment.amount || 0;
-                                        }
-
-                                    }
-                                }*/
+                             },
+                            {
+                                "type": "fieldset",
+                                "title": "PAYERS_INFORMATION",
+                                "condition" : "model.pageConfig.ShowPayerInfo==true && model.repayment.instrument == 'CASH'",
+                                "items": [{
+                                    "key": "repayment.payeeName",
+									"condition" : "model.siteCode != 'kinara'",
+                                    "title": "PAYER_NAME",
+                                    "type" :"string"
+                                },
+                                {
+                                    "key": "repayment.payeeMobileNumber",
+                                    "title": "PAYER_MOBILE_NUMBER",
+                                    "type": "number"
+                                },
+                                {
+                                    "key": "repayment.payeeRelationToApplicant",
+                                    "title": "RELATIONSHIP_TO_APPLICANT",
+                                    "condition" : "model.siteCode != 'kinara'",
+                                    "type": "select",
+                                    "enumCode": "payerRelation"
+                                }]
                             },
                             {
                                 key: "repayment.securityDeposit",
@@ -890,7 +1065,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
-                                condition:"model.siteCode != 'witfin' && model.siteCode != 'shramsarathi' && model.siteCode == 'KGFS'",
+                                condition:"model.siteCode == 'KGFS' && model.siteCode != 'shramsarathi' && model.siteCode == 'KGFS'",
                                 titleMap: {
                                     "Business not running":"Business not running",
                                     "Hardship": "Hardship",
@@ -1095,6 +1270,36 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         return deferred.promise;
                     },
                     submit: function (model, formCtrl, formName) {
+                        if(model.cbsLoanData.operationalStatus == 'Settled'){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "This Account is Settled can't able to do any collections"
+                            });
+                            
+                            return false;
+                        }
+                        if(model.cbsLoanData.operationalStatus == 'Closed'){
+                            PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "This Account is Closed can't able to do any collections"
+                            });
+
+                                return false;
+                        }
+                        if (model.repayment.transactionName == 'Recovery'){
+                            model.repayment.bookedNotDuePenalInterest = model.repayment.amount;
+                            if(model.cbsLoanData.operationalStatus!="Write_off"){
+                                PageHelper.clearErrors();
+                            PageHelper.setError({
+                                message: "Repayment operation status is not " +"Write_off"
+                            });
+
+                                return false;
+                            }
+                            else{
+                                console.log(model.cbsLoanData.operationalStatus);
+                            }
+                        }
                         if (model.repayment.demandAmount > 0 && model.repayment.transactionName == "Advance Repayment"){
                             PageHelper.showProgress("loan-repay","Advance Repayment is not allowed for an outstanding Loan",5000);
                             return false;
@@ -1110,6 +1315,11 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                         if (model.repayment.transactionName == 'PenalInterestPayment'){
                             model.repayment.bookedNotDuePenalInterest = model.repayment.amount;
+                        }
+
+                        if(!mobileNumberValidation(model.repayment.payeeMobileNumber)){
+                            PageHelper.showProgress("user-validate", "Invalide  Payee Mobile Number", 5000);
+                            return;
                         }
 
                         if (Utils.compareDates(model.repayment.repaymentDate, model.workingDate) == 1){
@@ -1136,7 +1346,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         }
 
                         var cashPerDayLimit = new Number(SessionStore.getGlobalSetting("perDayLimit") || "0");
-                        if (model.repayment.instrument=='CASH' && 
+                        if (model.repayment.instrument=='CASH' &&
                                 model.repayment.amount>cashPerDayLimit ){
                             PageHelper.showProgress("loan-repay","Cash payments more than " + cashPerDayLimit + " is not allowed",5000);
                             return;
@@ -1189,7 +1399,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
 
                                     postData.loanCollection.accountNumber = model.repayment.accountNumber;
                                     postData.loanCollection.bankAccountNumber = model.repayment.bankAccountNumber;
-
+                                    postData.loanCollection.normalInterest=0;
                                     if (model.repayment.transactionName == 'Scheduled Demand') {
                                         postData.loanCollection.demandAmount = model.repayment.totalDue;
                                     } else if (model.repayment.transactionName == 'Pre-closure') {
@@ -1266,6 +1476,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         });
                                     } else {
                                         postData.repaymentProcessAction = "SAVE";
+                                        if(postData.loanCollection.transactionName=='Recovery'){
+                                            CollectionHelper.allocateAmountForWriteOffRecovery(postData.loanCollection,model.cbsLoanData)
+                                        }
+                                        else if(postData.loanCollection.transactionName=='Settlement'){
+                                            CollectionHelper.allocateAmountForSettlement(postData.loanCollection,model.cbsLoanData);
+                                        }
                                         LoanCollection.save(postData, function(resp, header) {
                                             $log.info(resp);
                                             try {
@@ -1309,6 +1525,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }).$promise.finally(function() {
                                             PageHelper.hideBlockingLoader();
                                         });
+
                                     }
                                 })
                     }

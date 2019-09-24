@@ -32,8 +32,7 @@
                     "doorNo",
                     "district",
                     "state",
-                    "pincode",
-                    "email"
+                    "pincode"
                 ],
                 "properties":
                 {

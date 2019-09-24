@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAuthorization"),
     ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'entityManager', 'PageHelper', 'formHelper', 'irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils","Queries","Locking","irfNavigator",
+        'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils","Queries","Locking","irfNavigator","CollectionHelper",
         function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, entityManager, PageHelper, formHelper, irfProgressMessage,
-            SessionStore, $state, $stateParams, Masters, authService, Utils,Queries,Locking,irfNavigator) {
+            SessionStore, $state, $stateParams, Masters, authService, Utils,Queries,Locking,irfNavigator,CollectionHelper) {
 
             return {
                 "type": "schema-form",
@@ -82,7 +82,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     model.transAuth.archiveDate = data.lastArchiveDate;
                                     model.transAuth.fromDate = data.lastArchiveDate;
                                     model.transAuth.fee = data.totalFeeDue;
-                                    model.transAuth.amountCollected = model._transAuth.repaymentAmount;
+                                    model.transAuth.amountCollected = model._transAuth.repaymentAmount;  
                                     model.loanCollection = _.cloneDeep(model._transAuth);
 
                                     /* Resetting the dues based on Current Loan Account Details */
@@ -97,6 +97,19 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     model._transAuth.scheduleDemandAmount = 0;
                                     model._transAuth.securityEmiAmount = 0;
                                     model._transAuth.bookedNotDuePenalInterest = 0;
+
+                                    model._transAuth.writeOffDate=data.writeOffDate;
+                                    model._transAuth.principalWriteOff=data.principalWriteOff;
+                                    model._transAuth.normalInterestWriteOff=data.normalInterestWriteOff;
+                                    model._transAuth.penalInterestWriteOff=data.penalInterestWriteOff;
+                                    model._transAuth.feeWriteOff=data.feeWriteOff;
+                                    model._transAuth.principalRecovery=data.principalRecovery;
+                                    model._transAuth.normalInterestRecovery=data.normalInterestRecovery;
+                                    model._transAuth.penalInterestRecovery=data.penalInterestRecovery;
+                                    model._transAuth.feeRecovery=data.feeRecovery;
+                                    model._transAuth.totalPrincipalDue=data.totalPrincipalDue;
+                                    model._transAuth.totalNormalInterestDue=data.totalNormalInterestDue;
+                                    model._transAuth.totalPenalInterestDue=data.totalPenalInterestDue;
 
                                     if(model._transAuth.excessAmount==undefined){
                                         model._transAuth.excessAmount=0;
@@ -151,6 +164,13 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                             }
                                             
                                         }
+                                    }
+
+                                    if(model.loanCollection.transactionName=='Recovery'){
+                                        CollectionHelper.allocateAmountForWriteOffRecovery(model._transAuth,model.loanAccount);
+                                    }
+                                    if(model._transAuth.transactionName == 'FullSettlement' || model._transAuth.transactionName == 'Settlement'){
+                                        CollectionHelper.allocateAmountForSettlement(model._transAuth,model.loanAccount);
                                     }
 
                                     irfProgressMessage.pop('loading-loan-details', 'Loaded.', 2000);
@@ -212,15 +232,130 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     title: "ENTERPRISE_NAME",
                                     readonly: true
                                 },
+                                // {
+                                //     key: "_transAuth.transactionName",
+                                //     title: "TRANSACTION_NAME",
+                                //     readonly: true
+                                // },
                                 {
-                                    key: "_transAuth.transactionName",
+                                    key:"_transAuth.transactionName",
                                     title: "TRANSACTION_NAME",
-                                    readonly: true
+                                    type:"select",
+                                    readonly: true,
+                                    titleMap : {
+                                        "Scheduled Demand":"Scheduled Demand",
+                                        "Fee Payment":"Fee Payment",
+                                        "Pre-closure":"Pre-closure",
+                                        "Prepayment":"Prepayment",
+                                        "PenalInterestPayment":"PenalInterestPayment",
+                                        "Recovery" : "Writeoff Recovery",
+                                       "Settlement" : "Partial Settlement",
+                                        "FullSettlement" : "FullSettlement",
+                                        "Writeoff_Settlement" : "Writeoff Settlement"
+                
+                                    }
                                 },
                                 {
                                     key: "_transAuth.repaymentDate",
                                     title: "REPAYMENT_DATE",
                                     type: "date"
+                                },
+                                //here
+                                {
+                                    type: "fieldset",
+                                    title: "DETAILS",
+                                    condition: "model._transAuth.transactionName =='Recovery'",
+                                    items: [
+                                        {
+                                            key: "_transAuth.writeOffDate",
+                                            readonly: true,
+                                            title: "WRITE_OFF_DATE",
+                                            type: "date"
+                                        },
+                                        {
+                                            key: "_transAuth.principalWriteOff",
+                                            readonly: true,
+                                            title: "PRINCIPAL_WRITE_OFF",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.normalInterestWriteOff",
+                                            readonly: true,
+                                            title: "NORMAL_INTEREST_WRITE_OFF",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.penalInterestWriteOff",
+                                            readonly: true,
+                                            title: "PENAL_INTEREST_WRITE_OFF",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.feeWriteOff",
+                                            readonly: true,
+                                            title: "FEE_WRITE_OFF",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.principalRecovery",
+                                            readonly: true,
+                                            title: "PRINCIPAL_RECOVERY",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.normalInterestRecovery",
+                                            readonly: true,
+                                            title: "NORMAL_INTEREST_RECOVERY",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.penalInterestRecovery",
+                                            readonly: true,
+                                            title: "PENAL_INTEREST_RECOVERY",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.feeRecovery",
+                                            readonly: true,
+                                            title: "FEE_RECOVERY",
+                                            type: "amount"
+                                        },
+                                        
+                                    ]
+                                },
+                                //here ends
+                                  /* box  for settlement **/
+                                  {
+                                    type: "fieldset",
+                                    title: "DETAILS",
+                                    condition: "model._transAuth.transactionName == 'FullSettlement' || model._transAuth.transactionName == 'Settlement' ",
+                                    items: [
+                                        {
+                                            key: "_transAuth.totalPrincipalDue",
+                                            readonly: true,
+                                            title: "TOTAL_PRINCIPAL_DUE",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.totalNormalInterestDue",
+                                            readonly: true,
+                                            title: "TOTAL_NORMAL_INTEREST_DUE",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.totalPenalInterestDue",
+                                            readonly: true,
+                                            title: "TOTAL_PENAL_INTEREST_DUE",
+                                            type: "amount"
+                                        },
+                                        {
+                                            key: "_transAuth.repaymentAmount",
+                                            readonly: true,
+                                            title: "AMOUNT_COLLECTED",
+                                            type: "amount"
+                                            
+                                        }
+                                    ]
                                 },
                                 {
                                     title: "DETAILS",

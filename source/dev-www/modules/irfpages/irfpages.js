@@ -193,10 +193,11 @@ irf.pages.provider("irfNavigator", function() {
 		}
 	};
 
-	this.$get = ["$log", "$q", "$http", "$state", "PagesDefinition", "$rootScope",
-	function($log, $q, $http, $state, PagesDefinition, $rootScope) {
+	this.$get = ["$log", "$q", "$http", "$state", "PagesDefinition", "$rootScope","SessionStore",
+	function($log, $q, $http, $state, PagesDefinition, $rootScope,SessionStore) {
 		$this.$state = $state;
 		$this.getDefinition = function(stateName, pageName) {
+			SessionStore.setPageUri(PagesDefinition.convertToUri(stateName, pageName));
 			var definition = PagesDefinition.getPageDefinition(PagesDefinition.convertToUri(stateName, pageName));
 			if (!definition) {
 				definition = {};
@@ -216,8 +217,8 @@ irf.pages.provider("irfNavigator", function() {
 			}
 			return definition;
 		};
-
 		$rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams, options) {
+			SessionStore.setPageUri(PagesDefinition.convertToUri(toState.name, toParams && toParams.pageName));
 			var uri = PagesDefinition.convertToUri(toState.name, toParams && toParams.pageName);
 			// goBackTo OR browser back
 			for (var i = callstack.length - 1; i >= 0; i--) {

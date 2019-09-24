@@ -7,7 +7,10 @@ irf.models.factory('PayeeValidation',[
             validation: {
                 method: 'POST',
                 url: endpoint+ '/validate'
+            },
+            getBenificiaryValidationDetails:{
+                method: 'GET',
+                url:BASE_URL+'/api/getBenificiaryValidationDetail/:id',
             }
         });
     }]);
-    
